@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(storedToken);
         axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         try {
-          const res = await axios.get('http://localhost:5000/api/auth/me');
+          const res = await axios.get('https://backend-1-5cs8.onrender.com/api/auth/me');
           if (res.data.success) {
              setUser(res.data.data);
           } else {
