@@ -21,7 +21,7 @@ export default function CreateCoursePage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/courses', formData);
+      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/courses', formData);
       if (res.data.success) {
         alert('Course created successfully! Waiting for Admin approval.');
         router.push('/dashboard/teacher');

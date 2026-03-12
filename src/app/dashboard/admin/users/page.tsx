@@ -15,7 +15,7 @@ export default function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://backend-1-5cs8.onrender.com/api/users');
       if (res.data.success) {
         setUsers(res.data.data);
       }
@@ -34,7 +34,7 @@ export default function UserManagement() {
 
   const approveTeacher = async (id: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/approve-teacher/${id}`);
+      await axios.put(`https://backend-1-5cs8.onrender.com/api/users/approve-teacher/${id}`);
       alert("Teacher approved successfully!");
       fetchUsers();
     } catch (err) {

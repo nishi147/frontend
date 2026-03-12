@@ -48,7 +48,7 @@ export default function Home() {
     setIsProcessing(true);
     try {
       // 1. Create Order on Backend
-      const res = await axios.post('http://localhost:5000/api/payments/intro-order', introData);
+      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/payments/intro-order', introData);
       
       const { id: orderId, amount, currency } = res.data.data;
 
@@ -69,7 +69,7 @@ export default function Home() {
         order_id: orderId,
         handler: async function (response: any) {
           try {
-            const verifyRes = await axios.post('http://localhost:5000/api/payments/intro-verify', {
+            const verifyRes = await axios.post('https://backend-1-5cs8.onrender.com/api/payments/intro-verify', {
               ...response,
               ...introData
             });

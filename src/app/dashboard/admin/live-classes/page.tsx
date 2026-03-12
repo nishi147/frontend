@@ -19,8 +19,8 @@ export default function AdminLiveClasses() {
   const fetchData = async () => {
     try {
       const [classRes, courseRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/live-classes/teacher'), // Admin can use teacher route or we need admin route
-        axios.get('http://localhost:5000/api/courses/admin/all')
+        axios.get('https://backend-1-5cs8.onrender.com/api/live-classes/teacher'), // Admin can use teacher route or we need admin route
+        axios.get('https://backend-1-5cs8.onrender.com/api/courses/admin/all')
       ]);
       setLiveClasses(classRes.data.data);
       setCourses(courseRes.data.data);
@@ -38,7 +38,7 @@ export default function AdminLiveClasses() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/live-classes', formData);
+      await axios.post('https://backend-1-5cs8.onrender.com/api/live-classes', formData);
       alert("Live Class Scheduled!");
       setIsModalOpen(false);
       fetchData();
@@ -50,7 +50,7 @@ export default function AdminLiveClasses() {
   const deleteClass = async (id: string) => {
     if (!confirm("Delete this session?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/live-classes/${id}`);
+      await axios.delete(`https://backend-1-5cs8.onrender.com/api/live-classes/${id}`);
       fetchData();
     } catch (err) {
       alert("Failed to delete.");

@@ -27,7 +27,7 @@ export default function AdminCourseManagement() {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/courses/admin/all');
+      const res = await axios.get('https://backend-1-5cs8.onrender.com/api/courses/admin/all');
       if (res.data.success) {
         setCourses(res.data.data);
       }
@@ -48,10 +48,10 @@ export default function AdminCourseManagement() {
     e.preventDefault();
     try {
       if (editingCourse) {
-        await axios.put(`http://localhost:5000/api/courses/${editingCourse._id}`, formData);
+        await axios.put(`https://backend-1-5cs8.onrender.com/api/courses/${editingCourse._id}`, formData);
         alert("Course Updated!");
       } else {
-        await axios.post('http://localhost:5000/api/courses', formData);
+        await axios.post('https://backend-1-5cs8.onrender.com/api/courses', formData);
         alert("Course Created!");
       }
       setIsModalOpen(false);
@@ -79,7 +79,7 @@ export default function AdminCourseManagement() {
 
   const approveCourse = async (id: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/courses/admin/approve/${id}`);
+      await axios.put(`https://backend-1-5cs8.onrender.com/api/courses/admin/approve/${id}`);
       alert("Course Approved!");
       fetchCourses();
     } catch (err) {
@@ -90,7 +90,7 @@ export default function AdminCourseManagement() {
   const deleteCourse = async (id: string) => {
     if (!confirm("Are you sure?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`);
+      await axios.delete(`https://backend-1-5cs8.onrender.com/api/courses/${id}`);
       alert("Course Deleted");
       fetchCourses();
     } catch (err) {

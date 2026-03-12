@@ -17,7 +17,7 @@ export default function StudentDashboard() {
     // Fetch student data later
     const fetchData = async () => {
       try {
-        const classRes = await axios.get('http://localhost:5000/api/live-classes');
+        const classRes = await axios.get('https://backend-1-5cs8.onrender.com/api/live-classes');
         if (classRes.data.success) {
           setLiveClasses(classRes.data.data);
         }

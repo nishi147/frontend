@@ -24,7 +24,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role });
+      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/auth/register', { name, email, password, role });
       if (res.data.success) {
         setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
         setTimeout(() => {

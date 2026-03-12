@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/analytics');
+        const res = await axios.get('https://backend-1-5cs8.onrender.com/api/users/analytics');
         if (res.data.success) {
           setAnalytics(res.data.data);
         }
