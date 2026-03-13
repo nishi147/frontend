@@ -3,6 +3,8 @@ import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { CurrencyProvider } from "@/context/CurrencyContext";
+import { IntroOfferProvider } from "@/context/IntroOfferContext";
+import { IntroOfferModal } from "@/components/IntroOfferModal";
 
 const baloo = Baloo_2({ 
   subsets: ["latin"],
@@ -31,7 +33,10 @@ export default function RootLayout({
       <body className={`${baloo.variable} ${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}>
         <AuthProvider>
           <CurrencyProvider>
-            {children}
+            <IntroOfferProvider>
+              {children}
+              <IntroOfferModal />
+            </IntroOfferProvider>
           </CurrencyProvider>
         </AuthProvider>
       </body>

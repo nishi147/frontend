@@ -31,6 +31,8 @@ export const Sidebar = () => {
       { name: 'Overview', href: base, icon: BarChart },
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
       { name: 'Course Approvals', href: `${base}/courses`, icon: BookOpen },
+      { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
+      { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Settings', href: `${base}/settings`, icon: Settings },
     ];
 

@@ -12,16 +12,32 @@ export default function CreateCoursePage() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    category: '',
     numberOfSessions: 1,
     pricePerSession: 0,
   });
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/courses', formData);
+      const data = new FormData();
+      data.append('title', formData.title);
+      data.append('description', formData.description);
+      data.append('category', formData.category);
+      data.append('numberOfSessions', formData.numberOfSessions.toString());
+      data.append('pricePerSession', formData.pricePerSession.toString());
+      if (thumbnail) {
+        data.append('thumbnail', thumbnail);
+      }
+
+      const res = await axios.post('/api/courses', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       if (res.data.success) {
         alert('Course created successfully! Waiting for Admin approval.');
         router.push('/dashboard/teacher');
@@ -33,6 +49,7 @@ export default function CreateCoursePage() {
       setLoading(false);
     }
   };
+
 
   return (
     <DashboardLayout allowedRoles={['teacher', 'admin']}>
@@ -53,6 +70,29 @@ export default function CreateCoursePage() {
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-secondary-500 font-semibold focus:outline-none"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-bold text-gray-700">Course Thumbnail (Optional)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-secondary-500 font-semibold focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-secondary-50 file:text-secondary-700 hover:file:bg-secondary-100"
+                  onChange={(e) => setThumbnail(e.target.files ? e.target.files[0] : null)}
+                />
+              </div>
+
+
+              <div className="flex flex-col gap-2">
+                <label className="font-bold text-gray-700">Category</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="e.g. Coding, Math, Science"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-secondary-500 font-semibold focus:outline-none"
+                  value={formData.category}
+                  onChange={(e) => setFormData({...formData, category: e.target.value})}
                 />
               </div>
 

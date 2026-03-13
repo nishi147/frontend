@@ -25,7 +25,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/auth/login', { email, password });
+      const res = await axios.post('/api/auth/login', { email, password });
       if (res.data.success) {
         setSuccessMsg('Login Successful! Redirecting you to your dashboard...');
         setTimeout(() => {
@@ -85,6 +85,11 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors"
                 placeholder="••••••••"
               />
+              <div className="flex justify-end pr-2 pt-1">
+                <Link href="/forgot-password" className="text-sm font-bold text-primary-500 hover:text-primary-600 hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
 
             <Button type="submit" size="lg" isLoading={isLoading} fullWidth>

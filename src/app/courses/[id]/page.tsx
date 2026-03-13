@@ -20,7 +20,7 @@ export default function CourseDetailPage() {
   useEffect(() => {
     const fetchDoc = async () => {
       try {
-        const res = await axios.get(`https://backend-1-5cs8.onrender.com/api/courses/${id}`);
+        const res = await axios.get(`/api/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -48,7 +48,7 @@ export default function CourseDetailPage() {
     setIsProcessing(true);
     try {
       // 1. Create order
-      const orderRes = await axios.post('https://backend-1-5cs8.onrender.com/api/payments/order', { courseId: course._id });
+      const orderRes = await axios.post('/api/payments/order', { courseId: course._id });
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -62,7 +62,7 @@ export default function CourseDetailPage() {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post('https://backend-1-5cs8.onrender.com/api/payments/verify', {
+            const verifyRes = await axios.post('/api/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -70,8 +70,7 @@ export default function CourseDetailPage() {
             });
 
             if (verifyRes.data.success) {
-              alert("Payment Successful! Welcome to the course.");
-              router.push('/dashboard/student');
+              router.push('/payment-success');
             }
           } catch (err) {
              alert("Payment verification failed. Please contact support.");

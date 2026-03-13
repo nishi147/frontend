@@ -20,8 +20,8 @@ export default function TeacherDashboard() {
     const fetchData = async () => {
       try {
         const [classRes, courseRes] = await Promise.all([
-          axios.get('https://backend-1-5cs8.onrender.com/api/live-classes/teacher'),
-          axios.get('https://backend-1-5cs8.onrender.com/api/courses/teacher/my-courses')
+          axios.get('/api/live-classes/teacher'),
+          axios.get('/api/courses/teacher/my-courses')
         ]);
         
         if (classRes.data.success) {
@@ -41,16 +41,16 @@ export default function TeacherDashboard() {
     e.preventDefault();
     setIsScheduling(true);
     try {
-      const res = await axios.post('https://backend-1-5cs8.onrender.com/api/live-classes', scheduleData);
+      const res = await axios.post('/api/live-classes', scheduleData);
       if (res.data.success) {
         alert('Class scheduled successfully!');
         setLiveClasses([...liveClasses, res.data.data] as any);
         setIsScheduleModalOpen(false);
         setScheduleData({ title: '', course: '', scheduledDate: '', meetingLink: '' });
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to schedule class');
+      alert(`Failed to schedule class: ${err.response?.data?.message || err.message}`);
     } finally {
       setIsScheduling(false);
     }

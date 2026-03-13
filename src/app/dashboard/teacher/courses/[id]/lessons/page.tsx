@@ -18,7 +18,7 @@ export default function LessonsPage() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(`https://backend-1-5cs8.onrender.com/api/courses/${id}`);
+        const res = await axios.get(`/api/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -79,7 +79,7 @@ export default function LessonsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await axios.put(`https://backend-1-5cs8.onrender.com/api/courses/${id}`, { modules: course.modules });
+      const res = await axios.put(`/api/courses/${id}`, { modules: course.modules });
       if (res.data.success) {
         alert('Lessons saved successfully!');
       }

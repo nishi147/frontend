@@ -16,7 +16,7 @@ export default function CoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('https://backend-1-5cs8.onrender.com/api/courses');
+        const res = await axios.get('/api/courses');
         if (res.data.success) {
           setCourses(res.data.data);
         }
@@ -58,7 +58,7 @@ export default function CoursesPage() {
               <Card key={course._id} hoverEffect className="flex flex-col h-full bg-white/80">
                 <div className="h-48 rounded-2xl bg-gray-200 mb-4 overflow-hidden border-4 border-white shadow-sm">
                   {course.thumbnail ? (
-                    <img src={`https://backend-1-5cs8.onrender.com/${course.thumbnail}`} alt={course.title} className="w-full h-full object-cover" />
+                    <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/${course.thumbnail}`} alt={course.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-primary-200 to-secondary-200 flex items-center justify-center">
                       <span className="text-4xl">🎓</span>

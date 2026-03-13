@@ -15,7 +15,7 @@ export default function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('https://backend-1-5cs8.onrender.com/api/users');
+      const res = await axios.get('/api/users');
       if (res.data.success) {
         setUsers(res.data.data);
       }
@@ -34,11 +34,24 @@ export default function UserManagement() {
 
   const approveTeacher = async (id: string) => {
     try {
-      await axios.put(`https://backend-1-5cs8.onrender.com/api/users/approve-teacher/${id}`);
+      await axios.put(`/api/users/approve-teacher/${id}`);
       alert("Teacher approved successfully!");
       fetchUsers();
     } catch (err) {
       alert("Action failed.");
+    }
+  };
+
+  const approveStudent = async (id: string) => {
+    try {
+      const res = await axios.put(`/api/users/approve-student/${id}`);
+      if (res.data.success) {
+        alert("Student approved successfully!");
+        fetchUsers();
+      }
+    } catch (err: any) {
+      console.error("Student approval failed:", err.response?.data || err.message);
+      alert(`Action failed: ${err.response?.data?.message || err.message}`);
     }
   };
 
@@ -91,6 +104,12 @@ export default function UserManagement() {
                       ) : (
                         <span className="text-amber-500 flex items-center gap-2 animate-pulse"><UserX className="w-4 h-4" /> Pending</span>
                       )
+                    ) : u.role === 'student' ? (
+                      u.isApprovedStudent ? (
+                        <span className="text-green-500 flex items-center gap-2"><UserCheck className="w-4 h-4" /> Approved</span>
+                      ) : (
+                        <span className="text-amber-500 flex items-center gap-2 animate-pulse"><UserX className="w-4 h-4" /> Pending Approval</span>
+                      )
                     ) : (
                       <span className="text-gray-400">—</span>
                     )}
@@ -99,6 +118,9 @@ export default function UserManagement() {
                     <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                       {u.role === 'teacher' && !u.isApprovedTeacher && (
                         <Button size="sm" variant="secondary" onClick={() => approveTeacher(u._id)} className="font-black text-xs uppercase px-4">Approve</Button>
+                      )}
+                      {u.role === 'student' && !u.isApprovedStudent && (
+                        <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-xs uppercase px-4">Approve Child</Button>
                       )}
                       <Button size="sm" variant="outline" className="text-red-500 border-red-500 hover:bg-red-50 p-2"><Trash2 className="w-4 h-4" /></Button>
                     </div>

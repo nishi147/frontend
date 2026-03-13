@@ -12,23 +12,29 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6', // playful blue
-          600: '#2563eb',
+          50: '#fdf4f2',
+          100: '#fbe9e4',
+          200: '#f8d2c9',
+          300: '#f4b8a8',
+          400: '#f09a80',
+          500: '#f4693a', // Ruzann Coral
+          600: '#dc5f34',
         },
         secondary: {
-          500: '#a855f7', // playful purple
+          500: '#6b4fbb', // Ruzann Purple
+          600: '#5a42a0',
         },
         accent: {
-          500: '#eab308', // playful yellow
+          500: '#0d9488', // Ruzann Teal
+        },
+        navy: {
+          900: '#0f172a', // Hero Navy
+          800: '#1e293b',
         }
       },
       fontFamily: {
-        sans: ['var(--font-baloo)', 'var(--font-nunito)', 'sans-serif'],
+        sans: ['var(--font-nunito)', 'sans-serif'],
+        baloo: ['var(--font-baloo)', 'cursive'],
       },
       borderRadius: {
         'xl': '1rem',

@@ -29,6 +29,8 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
 });
 
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -42,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(storedToken);
         axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         try {
-          const res = await axios.get('https://backend-1-5cs8.onrender.com/api/auth/me');
+          const res = await axios.get('/api/auth/me');
           if (res.data.success) {
              setUser(res.data.data);
           } else {
