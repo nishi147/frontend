@@ -1,5 +1,5 @@
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
 export const Logo = ({ className = "" }: { className?: string }) => {
   return (
@@ -7,14 +7,11 @@ export const Logo = ({ className = "" }: { className?: string }) => {
       <Image
         src="/ruzann_logo.png"
         alt="Ruzann Logo"
-        width={130}
-        height={60}
-        className="object-contain mix-blend-multiply"
+        width={105}
+        height={50}
+        className="h-25 w-33 object-contain"
         priority
       />
     </div>
   );
 };
-
-
-
