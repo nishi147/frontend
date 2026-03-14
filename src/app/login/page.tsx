@@ -19,24 +19,28 @@ export default function LoginPage() {
   const isAdminHint = searchParams?.get('admin') === 'true';
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccessMsg('');
-    setIsLoading(true);
+  e.preventDefault();
+  setError('');
+  setSuccessMsg('');
+  setIsLoading(true);
 
-    try {
-      const res = await axios.post('/api/auth/login', { email, password });
-      if (res.data.success) {
-        setSuccessMsg('Login Successful! Redirecting you to your dashboard...');
-        setTimeout(() => {
-          login(res.data.token, res.data.user);
-        }, 1500);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Try again.');
-      setIsLoading(false);
+  try {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+      { email, password }
+    );
+
+    if (res.data.success) {
+      setSuccessMsg('Login Successful! Redirecting you to your dashboard...');
+      setTimeout(() => {
+        login(res.data.token, res.data.user);
+      }, 1500);
     }
-  };
+  } catch (err: any) {
+    setError(err.response?.data?.message || 'Login failed. Try again.');
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
