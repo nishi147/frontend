@@ -19,38 +19,38 @@ export default function RegisterPage() {
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccessMsg('');
-    setIsLoading(true);
+  e.preventDefault();
+  setError('');
+  setSuccessMsg('');
+  setIsLoading(true);
 
-    try {
-      const data = new FormData();
-      data.append('name', name);
-      data.append('email', email);
-      data.append('password', password);
-      data.append('role', role);
-      if (profilePicture) {
-        data.append('profilePicture', profilePicture);
-      }
+  try {
+    const data = new FormData();
+    data.append('name', name);
+    data.append('email', email);
+    data.append('password', password);
+    data.append('role', role);
 
-      const res = await axios.post('/api/auth/register', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      if (res.data.success) {
-        setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
-        setTimeout(() => {
-          login(res.data.token, res.data.user);
-        }, 1500);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Try again.');
-      setIsLoading(false);
+    if (profilePicture) {
+      data.append('profilePicture', profilePicture);
     }
-  };
 
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+      data
+    );
+
+    if (res.data.success) {
+      setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
+      setTimeout(() => {
+        login(res.data.token, res.data.user);
+      }, 1500);
+    }
+  } catch (err: any) {
+    setError(err.response?.data?.message || 'Registration failed. Try again.');
+    setIsLoading(false);
+  }
+};
 
 
   return (
