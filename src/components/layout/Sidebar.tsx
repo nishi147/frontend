@@ -17,6 +17,7 @@ export const Sidebar = () => {
     const studentLinks = [
       { name: 'My Dashboard', href: base, icon: Home },
       { name: 'My Courses', href: `${base}/courses`, icon: BookOpen },
+      { name: 'My Projects', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Classes', href: `${base}/live-classes`, icon: Video },
     ];
 
@@ -32,6 +33,7 @@ export const Sidebar = () => {
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
       { name: 'Course Approvals', href: `${base}/courses`, icon: BookOpen },
       { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
+      { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Settings', href: `${base}/settings`, icon: Settings },
     ];

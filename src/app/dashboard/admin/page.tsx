@@ -96,7 +96,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Management Links */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-12 px-2 sm:px-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8 mb-12 px-2 sm:px-0">
          <ManagementCard 
            title="User Management"
            description="Manage students and teacher accounts, approve new registrations."
@@ -233,14 +233,14 @@ export default function AdminDashboard() {
 
 function StatCard({ title, value, icon, color }: { title: string, value: string | number, icon: any, color: string }) {
   return (
-    <Card className="hover:scale-[1.02] transition-transform border-none shadow-md overflow-hidden bg-white">
-      <CardContent className="p-3 md:p-6 flex items-center gap-3 md:gap-6">
-        <div className={`${color} p-2.5 md:p-4 rounded-xl md:rounded-2xl shrink-0`}>
+    <Card className="hover:scale-[1.02] transition-transform border-none shadow-md overflow-hidden bg-white group">
+      <CardContent className="p-4 md:p-6 flex flex-col items-center text-center gap-3">
+        <div className={`${color} p-4 rounded-3xl shrink-0 group-hover:rotate-6 transition-transform`}>
           {icon}
         </div>
-        <div className="min-w-0">
-          <p className="text-gray-400 font-black text-[9px] md:text-sm uppercase tracking-widest truncate md:whitespace-normal mb-0.5">{title}</p>
-          <p className="text-lg md:text-3xl font-black text-gray-800 truncate md:whitespace-normal leading-tight">{value}</p>
+        <div className="w-full">
+          <p className="text-gray-400 font-black text-[10px] md:text-xs uppercase tracking-[0.2em] mb-1">{title}</p>
+          <p className="text-xl md:text-3xl font-black text-gray-800 leading-tight">{value}</p>
         </div>
       </CardContent>
     </Card>
@@ -250,15 +250,19 @@ function StatCard({ title, value, icon, color }: { title: string, value: string 
 function ManagementCard({ title, description, href, icon }: { title: string, description: string, href: string, icon: any }) {
   return (
     <Link href={href} className="block group">
-      <Card className="p-5 md:p-8 h-full bg-white border-none shadow-md group-hover:shadow-xl transition-all border-l-8 border-transparent group-hover:border-accent-500">
-        <div className="flex items-start gap-4 md:gap-6">
-           <div className="bg-gray-50 p-3 md:p-4 rounded-2xl md:rounded-3xl shrink-0 group-hover:scale-110 transition-transform">
+      <Card className="p-6 md:p-8 h-full bg-white border-none shadow-md group-hover:shadow-2xl transition-all border-b-8 border-transparent group-hover:border-accent-500 rounded-[2.5rem]">
+        <div className="flex flex-col items-center text-center gap-6">
+           <div className="bg-gray-50 p-5 md:p-6 rounded-[2rem] shrink-0 group-hover:scale-110 group-hover:bg-accent-50 transition-all duration-500">
              {icon}
            </div>
-           <div className="min-w-0">
-             <h3 className="text-lg md:text-2xl font-black text-gray-800 mb-1 md:mb-2 group-hover:text-accent-600 transition-colors truncate md:whitespace-normal leading-tight">{title}</h3>
-             <p className="text-gray-400 font-bold text-xs md:text-base leading-relaxed line-clamp-2 md:line-clamp-none md:text-gray-500 md:font-medium">{description}</p>
-             <div className="mt-4 md:mt-6 inline-flex items-center gap-2 text-accent-500 font-black uppercase tracking-widest text-[10px] md:text-sm">
+           <div className="w-full flex flex-col items-center">
+             <h3 className="text-xl md:text-2xl font-black text-gray-800 mb-3 group-hover:text-accent-600 transition-colors leading-tight">
+               {title}
+             </h3>
+             <p className="text-gray-500 font-bold text-xs md:text-sm leading-relaxed max-w-[250px]">
+               {description}
+             </p>
+             <div className="mt-6 inline-flex items-center gap-2 text-accent-500 font-black uppercase tracking-widest text-[10px] md:text-xs bg-accent-50 px-4 py-2 rounded-full group-hover:bg-accent-500 group-hover:text-white transition-all">
                Control Panel <span>→</span>
              </div>
            </div>

@@ -7,16 +7,17 @@ import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle, PlayCircle, FileText } from 'lucide-react';
+import { CheckCircle, PlayCircle, FileText, X } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedSessions, setSelectedSessions] = useState(1);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -42,6 +43,8 @@ export default function CourseDetailPage() {
   }, [id]);
 
   const handleEnroll = async () => {
+    if (authLoading) return; // Wait for auth to settle
+
     if (!user) {
       router.push('/login');
       return;
@@ -50,7 +53,10 @@ export default function CourseDetailPage() {
     setIsProcessing(true);
     try {
       // 1. Create order
-      const orderRes = await axios.post('/api/payments/order', { courseId: course._id });
+      const orderRes = await axios.post('/api/payments/order', { 
+        courseId: course._id,
+        sessions: selectedSessions 
+      });
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -68,7 +74,9 @@ export default function CourseDetailPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              courseId: course._id
+              courseId: course._id,
+              sessions: selectedSessions,
+              amount: order.amount / 100 // passing original amount in INR
             });
 
             if (verifyRes.data.success) {
@@ -110,7 +118,16 @@ export default function CourseDetailPage() {
       <Header />
       
       {/* Course Hero Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16">
+      <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-16 relative">
+        {/* Mobile Close Button */}
+        <button 
+          onClick={() => router.back()}
+          className="lg:hidden absolute top-4 left-4 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors z-20"
+          title="Close and go back"
+        >
+          <X size={20} />
+        </button>
+
         <div className="container mx-auto px-4 flex flex-col md:flex-row gap-8 items-center">
           <div className="flex-1">
             <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold tracking-wider mb-4 inline-block">NEW COURSE</span>
@@ -130,9 +147,27 @@ export default function CourseDetailPage() {
           <div className="w-full md:w-[400px]">
             <Card className="bg-white text-gray-800 p-8 shadow-2xl">
               <div className="text-center mb-6 border-b-2 border-gray-100 pb-6">
-                <div className="text-gray-500 font-bold uppercase tracking-widest text-sm mb-2">Session Pricing</div>
-                <div className="text-4xl font-black text-secondary-600 mb-1">₹{course.totalCoursePrice}</div>
-                <div className="text-gray-500 font-medium">₹{course.pricePerSession} × {course.numberOfSessions} Sessions</div>
+                <div className="text-gray-500 font-bold uppercase tracking-widest text-sm mb-2">Total Amount</div>
+                <div className="text-4xl font-black text-secondary-600 mb-1">₹{selectedSessions * course.pricePerSession}</div>
+                <div className="text-gray-500 font-medium">₹{course.pricePerSession} × {selectedSessions} {selectedSessions === 1 ? 'Session' : 'Sessions'}</div>
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="session-select" className="block text-sm font-bold text-gray-700 mb-2">
+                  Select Sessions:
+                </label>
+                <select
+                  id="session-select"
+                  value={selectedSessions}
+                  onChange={(e) => setSelectedSessions(parseInt(e.target.value))}
+                  className="w-full p-3 rounded-xl border-2 border-gray-100 font-bold text-gray-700 bg-gray-50 focus:border-secondary-400 focus:outline-none"
+                >
+                  {Array.from({ length: course.numberOfSessions }, (_, i) => i + 1).map((num) => (
+                    <option key={num} value={num}>
+                      {num} {num === 1 ? 'Session' : 'Sessions'}
+                    </option>
+                  ))}
+                </select>
               </div>
               
               <Button size="lg" fullWidth className="text-lg shadow-primary-500/50" onClick={handleEnroll} isLoading={isProcessing}>

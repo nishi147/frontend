@@ -4,29 +4,41 @@ import React, { useState } from 'react';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import axios from 'axios';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
-    // Simulate network delay for sending email
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsLoading(false);
-    setIsSubmitted(true);
+    try {
+      const res = await axios.post('/api/auth/forgotpassword', { email });
+      if (res.data.success) {
+        setIsSubmitted(true);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Something went wrong. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-bold text-3xl border-4 border-primary-500 mx-auto mb-4 animate-bounce-slow">
-            R
+          <div className="relative w-32 h-20 mx-auto mb-4">
+            <img 
+              src="/ruzann_logo.png" 
+              alt="Ruzann Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <CardTitle className="text-3xl text-primary-600">Password Reset</CardTitle>
           <p className="text-gray-500 mt-2">Enter your email to receive a reset link</p>
@@ -35,6 +47,7 @@ export default function ForgotPasswordPage() {
         <CardContent>
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {error && <div className="p-3 bg-red-100 text-red-600 rounded-xl text-center font-bold text-sm">{error}</div>}
               <div className="flex flex-col gap-1 mb-4">
                 <label className="font-bold text-gray-700 ml-2">Email Address</label>
                 <input 

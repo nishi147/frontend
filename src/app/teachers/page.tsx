@@ -7,10 +7,31 @@ import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function TeachersPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const [mentors, setMentors] = useState<any[]>([]);
+  const [loadingMentors, setLoadingMentors] = useState(true);
+
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const res = await axios.get(`${apiUrl}/api/mentors`);
+        if (res.data.success) {
+          setMentors(res.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      } finally {
+        setLoadingMentors(false);
+      }
+    };
+    fetchMentors();
+  }, []);
 
   // If already a teacher, maybe redirect to dashboard
   const handleJoinClick = () => {
@@ -42,6 +63,51 @@ export default function TeachersPage() {
             <Button size="lg" variant="secondary" onClick={handleJoinClick} className="px-12 py-8 text-2xl shadow-xl shadow-secondary-200 animate-bounce-slow">
               Become a Teacher 🚀
             </Button>
+          </div>
+        </section>
+
+        {/* Global Experts Section */}
+        <section className="py-20 px-4 container mx-auto" id="experts">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-800 mb-4">Our Global <span className="text-primary-500">Experts</span></h2>
+            <p className="text-gray-500 font-bold max-w-2xl mx-auto">Learn from verified professionals who are passionate about teaching kids.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {loadingMentors ? (
+              [1, 2, 3, 4].map(i => (
+                <div key={i} className="h-64 rounded-3xl bg-gray-50 animate-pulse border-2 border-gray-100" />
+              ))
+            ) : mentors.length === 0 ? (
+              <div className="col-span-full text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
+                <div className="text-5xl mb-4">🌟</div>
+                <p className="text-gray-400 font-black italic text-xl">Our expert roster is being updated. Check back soon!</p>
+              </div>
+            ) : (
+              mentors.map((mentor, i) => {
+                const bgColors = ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'];
+                const bgColor = bgColors[i % bgColors.length];
+                return (
+                  <Card key={mentor._id} className="group bg-white border-2 border-gray-100 rounded-[2.5rem] p-8 text-center hover:border-primary-300 transition-all cursor-pointer hover:-translate-y-2 hover:shadow-2xl shadow-primary-100 overflow-hidden relative">
+                    <div className={`w-32 h-32 ${bgColor} rounded-full flex items-center justify-center text-6xl mx-auto mb-6 group-hover:scale-110 transition-transform overflow-hidden relative border-8 border-white shadow-md`}>
+                      {mentor.profilePicture ? (
+                        <img 
+                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${mentor.profilePicture}`} 
+                          alt={mentor.name} 
+                          className="w-full h-full object-cover" 
+                        />
+                      ) : (
+                        <span className="font-baloo text-primary-600 font-black">{mentor.name[0]}</span>
+                      )}
+                    </div>
+                    <h3 className="text-2xl font-black text-gray-800 mb-2">{mentor.name}</h3>
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-[10px] font-black uppercase tracking-widest">
+                      {mentor.specialization || "Expert Mentor"}
+                    </div>
+                  </Card>
+                );
+              })
+            )}
           </div>
         </section>
 

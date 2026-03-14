@@ -58,6 +58,19 @@ export default function UserManagement() {
     }
   };
 
+  const deleteUser = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
+    try {
+      const res = await axios.delete(`/api/users/${id}`);
+      if (res.data.success) {
+        showToast("User deleted successfully!", "success");
+        fetchUsers();
+      }
+    } catch (err: any) {
+      showToast(`Delete failed: ${err.response?.data?.message || err.message}`, "error");
+    }
+  };
+
   if (loading || isLoading) return <div className="p-20 text-center font-bold text-accent-500 text-2xl animate-pulse">Managing Souls... 🧙</div>;
 
   return (
@@ -128,7 +141,7 @@ export default function UserManagement() {
                       {u.role === 'student' && !u.isApprovedStudent && (
                         <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-4 py-2">Approve</Button>
                       )}
-                      <Button size="sm" variant="outline" className="text-red-500 border-red-100 hover:bg-red-50 p-2"><Trash2 className="w-4 h-4" /></Button>
+                      <Button size="sm" variant="outline" onClick={() => deleteUser(u._id)} className="text-red-500 border-red-100 hover:bg-red-50 p-2"><Trash2 className="w-4 h-4" /></Button>
                     </div>
                   </td>
                 </tr>
@@ -164,7 +177,7 @@ export default function UserManagement() {
                   {!u.isApprovedStudent && u.role === 'student' && (
                     <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-3 py-2">Approve</Button>
                   )}
-                  <Button size="sm" variant="outline" className="text-red-500 border-red-100 p-2"><Trash2 className="w-4 h-4" /></Button>
+                  <Button size="sm" variant="outline" onClick={() => deleteUser(u._id)} className="text-red-500 border-red-100 p-2"><Trash2 className="w-4 h-4" /></Button>
                 </div>
              </div>
 

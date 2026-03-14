@@ -42,8 +42,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-bold text-3xl border-4 border-primary-500 mx-auto mb-4 animate-bounce-slow">
-            R
+          <div className="relative w-32 h-20 mx-auto mb-4">
+            <img 
+              src="/ruzann_logo.png" 
+              alt="Ruzann Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <CardTitle className="text-3xl text-primary-600">Welcome Back!</CardTitle>
           <p className="text-gray-500 mt-2">Login to continue learning</p>
@@ -85,11 +89,6 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors"
                 placeholder="••••••••"
               />
-              <div className="flex justify-end pr-2 pt-1">
-                <Link href="/forgot-password" className="text-sm font-bold text-primary-500 hover:text-primary-600 hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
             </div>
 
             <Button type="submit" size="lg" isLoading={isLoading} fullWidth>

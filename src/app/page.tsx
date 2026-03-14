@@ -24,7 +24,7 @@ const WorkshopSection = () => {
   const { user } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
-  const [workshops, setWorkshops] = useState([]);
+  const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -119,7 +119,7 @@ const WorkshopSection = () => {
      <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
        <span className="text-6xl block mb-6">🗓️</span>
        <h3 className="text-3xl font-black text-gray-400 mb-2">No Workshops Scheduled</h3>
-       <p className="text-gray-400 font-bold">New magical adventures are being planned. Check back soon!</p>
+       <p className="text-gray-400 font-bold">New magical learning sessions are being planned. Check back soon!</p>
      </div>
   );
 
@@ -172,11 +172,178 @@ const WorkshopSection = () => {
   );
 };
 
+interface Project {
+  _id: string;
+  title: string;
+  description: string;
+  url: string;
+  studentName: string;
+  isApproved: boolean;
+}
+
+const ProjectSection = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await axios.get('/api/projects');
+        if (res.data.success) {
+          setProjects(res.data.data);
+        }
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  if (loading) return (
+    <div className="flex justify-center py-20">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+    </div>
+  );
+
+  if (projects.length === 0) return null;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {projects.map((project) => {
+        // Extract Scratch ID if it's a scratch URL
+        const scratchId = project.url.split('/').filter(Boolean).pop();
+        const embedUrl = `https://scratch.mit.edu/projects/${scratchId}/embed`;
+
+        return (
+          <Card key={project._id} className="group border-2 border-gray-100 rounded-[2.5rem] overflow-hidden hover:border-primary-300 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-100 flex flex-col h-full bg-white">
+            <div className="relative aspect-video bg-gray-50 overflow-hidden">
+               <iframe
+                src={embedUrl}
+                className="w-full h-full border-0"
+                allowTransparency={true}
+                allowFullScreen={true}
+                scrolling="no"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+            
+            <CardContent className="p-8 flex flex-col flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-xl">👤</div>
+                <div>
+                   <h4 className="font-black text-gray-800 text-sm leading-none">{project.studentName}</h4>
+                   <span className="text-[10px] text-primary-500 font-bold uppercase tracking-wider">Superstar Student</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-baloo font-black text-gray-800 mb-3 group-hover:text-primary-600 transition-colors">{project.title}</h3>
+              <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
+              
+              <div className="mt-auto pt-6 border-t border-gray-50">
+                <Link href={project.url} target="_blank">
+                  <Button variant="outline" className="w-full rounded-2xl py-6 font-black text-primary-600 border-primary-100 hover:bg-primary-50 transition-colors">
+                    View Project on Scratch 🚀
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+};
+
+const CourseSection = () => {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const res = await axios.get(`${apiUrl}/api/courses`);
+        if (res.data.success) {
+          setCourses(res.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching homepage courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  if (loading) return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {[1, 2, 3].map(i => <div key={i} className="h-[450px] rounded-[2.5rem] bg-gray-50 animate-pulse border-2 border-gray-100" />)}
+    </div>
+  );
+
+  if (courses.length === 0) return (
+    <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
+      <div className="text-6xl mb-6">📚</div>
+      <h3 className="text-2xl font-black text-gray-400 mb-2">Course Library Coming Soon</h3>
+      <p className="text-gray-400 font-bold">New educational paths are being curated. Check back shortly!</p>
+    </div>
+  );
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {courses.map((course: any) => (
+        <Card key={course._id} className="group bg-white rounded-[2.5rem] border-2 border-gray-50 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
+          <div className="h-64 relative overflow-hidden flex items-center justify-center bg-gray-50 group-hover:scale-105 transition-transform duration-500">
+            {course.thumbnail ? (
+              <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
+            ) : (
+              <div className="text-8xl filter drop-shadow-lg opacity-20 grayscale">📚</div>
+            )}
+            <div className="absolute top-6 left-6 flex gap-2">
+              <span className="bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-700 shadow-sm">{course.category}</span>
+              <span className="bg-[#6C5CE7] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">Hot</span>
+            </div>
+            <div className="absolute bottom-6 right-6 bg-navy-900/80 backdrop-blur-sm text-white px-4 py-2 rounded-2xl flex items-center gap-2 text-xs font-black">
+              <BookOpen size={14} /> {course.numberOfSessions} Sessions
+            </div>
+          </div>
+          <CardContent className="p-8 flex flex-col flex-1">
+            <h3 className="text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-[#6C5CE7] transition-colors">{course.title}</h3>
+            <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 leading-relaxed">{course.description}</p>
+            
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-2 text-yellow-500 font-black">
+                <Star size={16} fill="currentColor" /> 5.0
+              </div>
+              <div className="w-px h-4 bg-gray-200" />
+              <div className="text-gray-400 font-black text-xs uppercase tracking-tighter">Verified Course</div>
+            </div>
+
+            <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
+              <div>
+                <div className="text-3xl font-black text-gray-900">₹{course.totalCoursePrice}</div>
+                <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.pricePerSession}/session</div>
+              </div>
+              <Link href={`/courses/${course._id}`}>
+                <Button className="rounded-2xl px-8 py-6 font-black text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
 export default function Home() {
   const router = useRouter();
   const { user } = useAuth();
   const { openIntroModal } = useIntroOffer();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [mentors, setMentors] = useState<any[]>([]);
+  const [loadingMentors, setLoadingMentors] = useState(true);
 
 
   useEffect(() => {
@@ -192,6 +359,22 @@ export default function Home() {
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
+
+    // Fetch Approved Mentors
+    const fetchMentors = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const res = await axios.get(`${apiUrl}/api/mentors`);
+        if (res.data.success) {
+          setMentors(res.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      } finally {
+        setLoadingMentors(false);
+      }
+    };
+    fetchMentors();
   }, []);
 
 
@@ -233,7 +416,7 @@ export default function Home() {
 
         <div className="relative z-20 max-w-6xl mx-auto text-center px-4">
           <div className="inline-flex items-center gap-2 mb-6 px-5 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl text-primary-300 font-black uppercase tracking-widest text-sm shadow-xl">
-            <span className="text-xl animate-spin-slow">✨</span> THE MOST FUN LEARNING ADVENTURE!
+            <span className="text-xl animate-spin-slow">✨</span> THE MOST FUN LEARNING EXPERIENCE!
           </div>
           
           <h1 className="text-4xl md:text-7xl font-baloo font-black text-white tracking-tight leading-tight mb-6 drop-shadow-[0_6px_6px_rgba(0,0,0,0.5)]">
@@ -247,7 +430,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/courses">
               <Button size="lg" className="text-lg px-10 py-4 rounded-full bg-primary-500 hover:bg-primary-600 shadow-lg font-black">
-                Start Adventure 🚀
+                Start Learning 🚀
               </Button>
             </Link>
             <Button 
@@ -315,41 +498,78 @@ export default function Home() {
       </section>
 
 
+      {/* 4. MAGIC CODE EDITOR PREVIEW SECTION */}
+      <section className="py-12 px-4 bg-gray-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 rounded-full mix-blend-screen filter blur-[80px] opacity-20" />
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 relative z-10">
+          <div className="flex-1">
+            <div className="bg-gray-800 text-xs font-mono px-4 py-2 inline-flex rounded-lg mb-4 border border-gray-700 text-green-400">
+              {">"} print("Hello World")
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black mb-4">Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Magic Editor</span></h2>
+            <p className="text-base text-gray-300 font-bold mb-6">
+              A built-in sandbox where kids can write real code, run it instantly, and see their imaginations come to life on the screen.
+            </p>
+            <ul className="space-y-3 font-semibold text-base text-gray-400 mb-8">
+               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Python & JavaScript support</li>
+               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Visual block-to-code switching</li>
+               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Instant browser preview</li>
+            </ul>
+            <Link href={user ? "/editor" : "/register"}>
+              <Button size="lg" className="bg-green-500 text-white hover:bg-green-600 border-none font-black text-xl px-10 py-6 rounded-2xl shadow-lg shadow-green-500/30">
+                Try it out now! 🪄
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="flex-1 w-full">
+            <div className="bg-[#1e1e1e] rounded-2xl p-4 shadow-2xl border border-gray-700 transform lg:rotate-2 hover:rotate-0 transition-all duration-500">
+               <div className="flex gap-2 mb-4">
+                 <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
+               </div>
+               <div className="font-mono text-sm leading-relaxed text-gray-300">
+                 <p><span className="text-purple-400">function</span> <span className="text-blue-400">drawRainbow</span>() {'{'}</p>
+                 <p className="ml-4"><span className="text-orange-400">const</span> colors = [<span className="text-green-300">'red'</span>, <span className="text-green-300">'orange'</span>, <span className="text-green-300">'yellow'</span>, <span className="text-green-300">'green'</span>, <span className="text-green-300">'blue'</span>];</p>
+                 <p className="ml-4">colors.<span className="text-blue-400">forEach</span>(color =&gt; {'{'}</p>
+                 <p className="ml-8"><span className="text-yellow-200">magicBrush</span>.<span className="text-blue-400">paint</span>(color);</p>
+                 <p className="ml-4">{'}'});</p>
+                 <p>{'}'}</p>
+                 <p className="mt-4"><span className="text-blue-400">drawRainbow</span>(); <span className="text-gray-500 animate-pulse">|</span></p>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      {/* 2.5 FEATURED DUMMY COURSES SECTION */}
-      <section className="py-12 px-4 container mx-auto" id="featured-courses">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-5xl font-black text-gray-800 mb-3">Popular <span className="text-secondary-500">Adventures</span> 🌈</h2>
-          <p className="text-base font-bold text-gray-500">Pick a path and start your magical journey today!</p>
+      <section className="py-20 px-4 container mx-auto" id="featured-courses">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-4">Explore Our <span className="text-secondary-500">Courses</span> 🎓</h2>
+          <p className="text-lg font-bold text-gray-500 max-w-2xl mx-auto">High-quality programs added by our educators and approved for your child's success.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[
-            { title: "Generative AI for Kids", desc: "Learn how to talk to AI and create amazing art and stories!", price: 499, sessions: 8, color: "bg-blue-100", border: "border-primary-400" },
-            { title: "Introduction to Coding", desc: "The basics of logic and building your very first programs.", price: 599, sessions: 10, color: "bg-purple-100", border: "border-secondary-400" },
-            { title: "Scratch Programming", desc: "Drag, drop, and build your own interactive games!", price: 399, sessions: 6, color: "bg-orange-100", border: "border-accent-400" },
-            { title: "Fun Math & Logic", desc: "Solve puzzles and riddles that make math your superpower.", price: 299, sessions: 5, color: "bg-green-100", border: "border-green-400" },
-            { title: "Web Dev for Kids", desc: "Build your very own website from scratch using HTML & CSS.", price: 699, sessions: 12, color: "bg-yellow-100", border: "border-yellow-400" },
-            { title: "Creative Storytelling", desc: "Use digital tools to bring your imagination to life.", price: 349, sessions: 6, color: "bg-pink-100", border: "border-pink-400" },
-          ].map((course, i) => (
-            <Card key={i} className={`p-8 hover:-translate-y-4 transition-all duration-300 border-b-8 ${course.border} flex flex-col h-full bg-white`}>
-              <div className={`h-40 rounded-3xl ${course.color} mb-6 flex items-center justify-center text-6xl shadow-inner`}>
-                {i === 0 ? "🤖" : i === 1 ? "💻" : i === 2 ? "🐱" : i === 3 ? "🧩" : i === 4 ? "🌐" : "📚"}
-              </div>
-              <h3 className="text-2xl font-black text-gray-800 mb-4">{course.title}</h3>
-              <p className="text-gray-500 font-bold mb-6 flex-1 line-clamp-3">{course.desc}</p>
-              <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-black text-gray-400 uppercase tracking-widest">{course.sessions} Sessions</div>
-                  <div className="text-2xl font-black text-secondary-600">₹{course.price}</div>
-                </div>
-                <Link href="/register">
-                  <Button size="sm" variant="secondary" className="font-black px-6">Enrol 🚀</Button>
-                </Link>
-              </div>
-            </Card>
-          ))}
+        <CourseSection />
+      </section>
+
+      {/* 2.5 STUDENT PROJECTS SECTION */}
+      <section className="py-20 px-4 container mx-auto" id="student-projects">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 text-center md:text-left">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full text-primary-600 font-bold mb-3">
+              <Star size={16} />
+              <span className="text-sm">Student Creations</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black text-gray-800 leading-tight">
+              Built by our <span className="text-primary-500">Superstars</span> 🎨
+            </h2>
+          </div>
+          <p className="text-lg font-bold text-gray-400 md:max-w-xs">
+            See the magic students create after just a few sessions!
+          </p>
         </div>
+
+        <ProjectSection />
       </section>
 
       {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
@@ -403,50 +623,6 @@ export default function Home() {
           </div>
       </section>
 
-      {/* 4. MAGIC CODE EDITOR PREVIEW SECTION */}
-      <section className="py-12 px-4 bg-gray-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600 rounded-full mix-blend-screen filter blur-[80px] opacity-20" />
-        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 relative z-10">
-          <div className="flex-1">
-            <div className="bg-gray-800 text-xs font-mono px-4 py-2 inline-flex rounded-lg mb-4 border border-gray-700 text-green-400">
-              {">"} print("Hello World")
-            </div>
-            <h2 className="text-3xl md:text-5xl font-black mb-4">Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Magic Editor</span></h2>
-            <p className="text-base text-gray-300 font-bold mb-6">
-              A built-in sandbox where kids can write real code, run it instantly, and see their imaginations come to life on the screen.
-            </p>
-            <ul className="space-y-3 font-semibold text-base text-gray-400 mb-8">
-               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Python & JavaScript support</li>
-               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Visual block-to-code switching</li>
-               <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Instant browser preview</li>
-            </ul>
-            <Link href={user ? "/editor" : "/register"}>
-              <Button size="lg" className="bg-green-500 text-white hover:bg-green-600 border-none font-black text-xl px-10 py-6 rounded-2xl shadow-lg shadow-green-500/30">
-                Try it out now! 🪄
-              </Button>
-            </Link>
-          </div>
-          
-          <div className="flex-1 w-full">
-            <div className="bg-[#1e1e1e] rounded-2xl p-4 shadow-2xl border border-gray-700 transform lg:rotate-2 hover:rotate-0 transition-all duration-500">
-               <div className="flex gap-2 mb-4">
-                 <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
-               </div>
-               <div className="font-mono text-sm leading-relaxed text-gray-300">
-                 <p><span className="text-purple-400">function</span> <span className="text-blue-400">drawRainbow</span>() {'{'}</p>
-                 <p className="ml-4"><span className="text-orange-400">const</span> colors = [<span className="text-green-300">'red'</span>, <span className="text-green-300">'orange'</span>, <span className="text-green-300">'yellow'</span>, <span className="text-green-300">'green'</span>, <span className="text-green-300">'blue'</span>];</p>
-                 <p className="ml-4">colors.<span className="text-blue-400">forEach</span>(color =&gt; {'{'}</p>
-                 <p className="ml-8"><span className="text-yellow-200">magicBrush</span>.<span className="text-blue-400">paint</span>(color);</p>
-                 <p className="ml-4">{'}'});</p>
-                 <p>{'}'}</p>
-                 <p className="mt-4"><span className="text-blue-400">drawRainbow</span>(); <span className="text-gray-500 animate-pulse">|</span></p>
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 5. TESTIMONIALS SECTION */}
       <section className="py-12 px-4 bg-primary-50">
@@ -468,7 +644,7 @@ export default function Home() {
 
             <Card className="bg-white text-left p-8 md:-translate-y-8">
                <div className="flex gap-1 text-accent-500 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
-               <p className="text-gray-600 font-bold text-lg mb-6">"As a parnt, I love how secure and structured it is. My daughter genuinely looks forward to her classes."</p>
+               <p className="text-gray-600 font-bold text-lg mb-6">"As a parent, I love how secure and structured it is. My daughter genuinely looks forward to her classes."</p>
                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-secondary-200 rounded-full flex items-center justify-center text-xl">👩🏽</div>
                   <div>
@@ -500,28 +676,49 @@ export default function Home() {
              <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-2">Meet Our Cool <span className="text-primary-500">Mentors</span></h2>
              <p className="text-base font-bold text-gray-500">Learn from the very best! Our verified experts know exactly how to guide young minds.</p>
            </div>
-           <Link href="/teachers">
+           <Link href="/teachers#experts">
              <Button variant="outline" className="hidden md:flex font-bold">See all Mentors</Button>
            </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-           {[
-             { name: "Rahul Sharma", role: "Coding Expert", emoji: "👨‍💻", bg: "bg-blue-100" },
-             { name: "Anita Desai", role: "Math Wizard", emoji: "🧮", bg: "bg-purple-100" },
-             { name: "Vikram Singh", role: "Science Geek", emoji: "🔬", bg: "bg-green-100" },
-             { name: "Sneha Patel", role: "Art & Design", emoji: "🎨", bg: "bg-yellow-100" },
-           ].map((t, i) => (
-             <div key={i} className="bg-white border-2 border-gray-100 rounded-2xl p-5 text-center hover:border-primary-300 transition-colors cursor-pointer group">
-               <div className={`w-20 h-20 ${t.bg} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                 {t.emoji}
-               </div>
-               <h3 className="text-2xl font-black text-gray-800">{t.name}</h3>
-               <p className="text-gray-500 font-bold mb-4">{t.role}</p>
+           {loadingMentors ? (
+             [1,2,3,4].map(i => (
+               <div key={i} className="h-48 rounded-2xl bg-gray-50 animate-pulse border-2 border-gray-100" />
+             ))
+           ) : mentors.length === 0 ? (
+             <div className="col-span-full text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                <p className="text-gray-400 font-bold italic">Adding our expert mentors shortly! Stay tuned. ✨</p>
              </div>
-           ))}
+           ) : (
+             mentors.map((mentor, i) => {
+               const bgColors = ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'];
+               const bgColor = bgColors[i % bgColors.length];
+               return (
+                 <div key={mentor._id} className="bg-white border-2 border-gray-100 rounded-2xl p-5 text-center hover:border-primary-300 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-xl shadow-primary-100">
+                   <div className={`w-24 h-24 ${bgColor} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform overflow-hidden relative border-4 border-white shadow-sm`}>
+                     {mentor.profilePicture ? (
+                       <img 
+                        src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${mentor.profilePicture}`} 
+                        alt={mentor.name} 
+                        className="w-full h-full object-cover" 
+                       />
+                     ) : (
+                       <span className="font-baloo text-primary-600 font-black">{mentor.name[0]}</span>
+                     )}
+                   </div>
+                   <h3 className="text-2xl font-black text-gray-800 mb-1">{mentor.name}</h3>
+                   <p className="text-gray-500 font-bold mb-2 uppercase tracking-tight text-sm">
+                     {mentor.specialization || "Expert Mentor"}
+                   </p>
+                 </div>
+               );
+             })
+           )}
         </div>
-        <Button variant="outline" className="md:hidden w-full font-bold mt-8">See all Mentors</Button>
+        <Link href="/teachers#experts">
+          <Button variant="outline" className="md:hidden w-full font-bold mt-8">See all Mentors</Button>
+        </Link>
       </section>
 
       <Footer />
@@ -536,7 +733,7 @@ const CourseCatalog = () => {
     const [typeFilter, setTypeFilter] = useState('All');
 
     const courses = [
-        { id: 1, title: "Robotics Adventure", category: "Robotics", type: "Group", grade: "Ages 6–9", desc: "For Young Inventors ages 6–9. 18 sessions, beginner friendly, activity-based.", lessons: 18, rating: 4.8, students: "375+", total: 41175, perClass: 2287, icon: "🤖", color: "bg-[#6C5CE710]" },
+        { id: 1, title: "Robotics Mastery", category: "Robotics", type: "Group", grade: "Ages 6–9", desc: "For Young Inventors ages 6–9. 18 sessions, beginner friendly, activity-based.", lessons: 18, rating: 4.8, students: "375+", total: 41175, perClass: 2287, icon: "🤖", color: "bg-[#6C5CE710]" },
         { id: 2, title: "Beginner Robotics", category: "Robotics", type: "Group", grade: "Ages 10–12", desc: "For Curious Kids Ages 10–12. Learn by Doing, Play, Build and Explore!", lessons: 18, rating: 4.7, students: "400+", total: 41175, perClass: 2287, icon: "⚙️", color: "bg-[#00CECA10]" },
         { id: 3, title: "Intermediate Robotics", category: "Robotics", type: "Group", grade: "Ages 10–12", desc: "Build. Try. Fix. Improve. For Smart Kids Ages 10–12. 24 sessions.", lessons: 24, rating: 4.9, students: "400+", total: 30744, perClass: 1281, icon: "🛠️", color: "bg-[#FD79A810]" },
         { id: 4, title: "Generative AI for Kids", category: "AI", type: "1:1 Classes", grade: "Ages 13–16", desc: "Learn how to use AI tools responsibly and creatively. Deep dive into prompts.", lessons: 12, rating: 5.0, students: "120+", total: 15999, perClass: 1333, icon: "🧠", color: "bg-[#FDCB6E10]" },
@@ -615,7 +812,7 @@ const CourseCatalog = () => {
                                     <div className="text-3xl font-black text-gray-900">₹{course.total.toLocaleString()}</div>
                                     <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.perClass}/class</div>
                                 </div>
-                                <Link href="/register">
+                                <Link href={`/courses/${course.id}`}>
                                     <Button className="rounded-2xl px-8 py-6 font-black text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
                                 </Link>
                             </div>
