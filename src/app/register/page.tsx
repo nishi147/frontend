@@ -36,10 +36,9 @@ export default function RegisterPage() {
     }
 
     const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
-      data
-    );
-
+  "https://backend-olive-five-70.vercel.app/api/auth/register",
+  data
+);
     if (res.data.success) {
       setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
       setTimeout(() => {
