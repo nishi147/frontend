@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import Link from 'next/link';
+import { useToast } from '@/context/ToastContext';
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
@@ -15,6 +16,7 @@ export default function TeacherDashboard() {
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [scheduleData, setScheduleData] = useState({ title: '', course: '', scheduledDate: '', meetingLink: '' });
   const [isScheduling, setIsScheduling] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,14 +45,14 @@ export default function TeacherDashboard() {
     try {
       const res = await axios.post('/api/live-classes', scheduleData);
       if (res.data.success) {
-        alert('Class scheduled successfully!');
+        showToast('Class scheduled successfully!', 'success');
         setLiveClasses([...liveClasses, res.data.data] as any);
         setIsScheduleModalOpen(false);
         setScheduleData({ title: '', course: '', scheduledDate: '', meetingLink: '' });
       }
     } catch (err: any) {
       console.error(err);
-      alert(`Failed to schedule class: ${err.response?.data?.message || err.message}`);
+      showToast(`Failed to schedule class: ${err.response?.data?.message || err.message}`, 'error');
     } finally {
       setIsScheduling(false);
     }
@@ -59,10 +61,10 @@ export default function TeacherDashboard() {
   return (
     <DashboardLayout allowedRoles={['teacher', 'admin']}>
       <div className="flex flex-col gap-8">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-4xl font-extrabold text-secondary-600 mb-2">Welcome Teacher {user?.name}! 🍎</h1>
-            <p className="text-xl text-gray-500 font-bold">Manage your courses and students from here.</p>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-secondary-600 mb-2">Welcome Teacher {user?.name}! 🍎</h1>
+            <p className="text-lg md:text-xl text-gray-500 font-bold">Manage your courses and students from here.</p>
           </div>
           <Link href="/dashboard/teacher/courses/new">
             <Button size="lg" variant="secondary">Create New Course</Button>
@@ -92,8 +94,8 @@ export default function TeacherDashboard() {
            </Card>
         </div>
 
-        <div className="flex justify-between items-end mt-8">
-          <h2 className="text-3xl font-bold text-gray-800">Your Courses 📘</h2>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-8 gap-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Your Courses 📘</h2>
           <Link href="/dashboard/teacher/courses/new">
             <Button size="sm" variant="outline">Add Course</Button>
           </Link>
@@ -142,8 +144,8 @@ export default function TeacherDashboard() {
           </div>
         )}
 
-        <div className="flex justify-between items-end mt-12">
-          <h2 className="text-3xl font-bold text-gray-800">Your Scheduled Classes 🎥</h2>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-12 gap-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Your Scheduled Classes 🎥</h2>
           <Button variant="outline" size="sm" onClick={() => setIsScheduleModalOpen(true)}>Schedule Class</Button>
         </div>
 

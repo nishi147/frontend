@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CheckCircle, PlayCircle, FileText } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ export default function CourseDetailPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchDoc = async () => {
@@ -73,7 +75,7 @@ export default function CourseDetailPage() {
               router.push('/payment-success');
             }
           } catch (err) {
-             alert("Payment verification failed. Please contact support.");
+             showToast("Payment verification failed. Please contact support.", "error");
           }
         },
         prefill: {
@@ -89,12 +91,12 @@ export default function CourseDetailPage() {
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){
-        alert("Payment failed: " + response.error.description);
+        showToast("Payment failed: " + response.error.description, "error");
       });
 
     } catch (err) {
       console.error(err);
-      alert("Failed to initiate payment");
+      showToast("Failed to initiate payment", "error");
     } finally {
       setIsProcessing(false);
     }

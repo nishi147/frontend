@@ -6,6 +6,7 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
 
 
 export default function TeacherLiveClassesPage() {
@@ -14,6 +15,7 @@ export default function TeacherLiveClassesPage() {
     const [sessions, setSessions] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [isScheduling, setIsScheduling] = React.useState(false);
+    const { showToast } = useToast();
     const [formData, setFormData] = React.useState({
         title: '',
         course: '',
@@ -46,13 +48,13 @@ export default function TeacherLiveClassesPage() {
         try {
             const res = await axios.post('/api/live-classes', formData);
             if (res.data.success) {
-                alert('Session scheduled successfully! 🚀');
+                showToast('Session scheduled successfully! 🚀', 'success');
                 setIsScheduling(false);
                 setFormData({ title: '', course: '', scheduledDate: '', meetingLink: '' });
                 fetchData();
             }
         } catch (error) {
-            alert('Failed to schedule session');
+            showToast('Failed to schedule session', 'error');
         } finally {
             setLoading(false);
         }

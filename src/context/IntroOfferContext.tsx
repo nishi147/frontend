@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 interface IntroOfferContextType {
   isModalOpen: boolean;
@@ -18,6 +19,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
+  const { showToast } = useToast();
 
   const openIntroModal = () => setIsModalOpen(true);
   const closeIntroModal = () => setIsModalOpen(false);
@@ -52,7 +54,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
             }
           } catch (err) {
             console.error(err);
-            alert("Verification failed. Please contact support.");
+            showToast("Verification failed. Please contact support.", "error");
           }
         },
         prefill: {
@@ -69,7 +71,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
       rzp1.open();
     } catch (error: any) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to initiate payment. Please try again.");
+      showToast(error.response?.data?.message || "Failed to initiate payment. Please try again.", "error");
     } finally {
       setIsProcessing(false);
     }

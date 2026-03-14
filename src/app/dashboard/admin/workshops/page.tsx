@@ -6,10 +6,12 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { Plus, Trash2, Calendar, MapPin, Tag } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 export default function AdminWorkshops() {
   const [workshops, setWorkshops] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { showToast, confirm } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -46,28 +48,30 @@ export default function AdminWorkshops() {
         fetchWorkshops();
       }
     } catch (err) {
-      alert("Failed to create workshop");
+      showToast("Failed to create workshop", "error");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure?")) return;
+    const isConfirmed = await confirm("Delete Workshop?", "Do you really want to remove this workshop from the schedule?");
+    if (!isConfirmed) return;
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${id}`);
       fetchWorkshops();
+      showToast("Workshop deleted successfully", "success");
     } catch (err) {
-      alert("Failed to delete workshop");
+      showToast("Failed to delete workshop", "error");
     }
   };
 
   return (
     <DashboardLayout allowedRoles={['admin']}>
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-4">
         <div>
-          <h1 className="text-4xl font-black text-gray-800">Workshop Management 🎟️</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-gray-800">Workshop Management 🎟️</h1>
           <p className="text-gray-500 font-bold">Create and manage upcoming magical bootcamps.</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="font-black">
+        <Button onClick={() => setIsModalOpen(true)} className="font-black w-full md:w-auto">
           <Plus className="mr-2" /> Add Workshop
         </Button>
       </div>

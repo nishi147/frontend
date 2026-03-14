@@ -29,17 +29,16 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
       {/* Playful background blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-[40%] left-[20%] w-72 h-72 bg-accent-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float" style={{ animationDelay: '4s' }} />
+      <div className="fixed top-[-10%] left-[-10%] w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none" />
 
       <Header />
       
-      <div className="flex flex-1 relative z-10 w-full max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row flex-1 relative z-10 w-full">
         <Sidebar />
-        <main className="flex-1 p-8 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 md:p-8 lg:p-12 pb-24 md:pb-8 w-full">
           {children}
         </main>
       </div>

@@ -31,10 +31,10 @@ export default function StudentDashboard() {
   return (
     <DashboardLayout allowedRoles={['student']}>
       <div className="flex flex-col gap-8">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-4xl font-extrabold text-primary-600 mb-2">Hello, {user?.name}! 👋</h1>
-            <p className="text-xl text-gray-500 font-bold">Ready to learn something new today?</p>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-primary-600 mb-2">Hello, {user?.name}! 👋</h1>
+            <p className="text-lg md:text-xl text-gray-500 font-bold">Ready to learn something new today?</p>
           </div>
           <Link href="/courses">
             <Button size="lg" className="animate-bounce-slow">Explore Courses</Button>

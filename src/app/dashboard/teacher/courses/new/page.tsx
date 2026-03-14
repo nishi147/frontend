@@ -6,6 +6,7 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 export default function CreateCoursePage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function CreateCoursePage() {
   });
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +41,12 @@ export default function CreateCoursePage() {
         },
       });
       if (res.data.success) {
-        alert('Course created successfully! Waiting for Admin approval.');
+        showToast('Course created successfully! Waiting for Admin approval.', 'success');
         router.push('/dashboard/teacher');
       }
     } catch (error) {
        console.error(error);
-       alert('Failed to create course');
+       showToast('Failed to create course', 'error');
     } finally {
       setLoading(false);
     }

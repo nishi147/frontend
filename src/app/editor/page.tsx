@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Play, RotateCcw, Save } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 export default function MagicEditorPage() {
   const { user, loading } = useAuth();
@@ -13,13 +14,14 @@ export default function MagicEditorPage() {
   const [code, setCode] = useState('// Welcome to the Magic Editor! ✨\n// Write your JavaScript code here 🐝\n\nfunction sayHello() {\n  return "Hello, RUZANN Superstars! 🌟";\n}\n\nconsole.log("Starting up...");\nsayHello();');
   const [output, setOutput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const { showToast } = useToast();
 
   const saveCode = () => {
     setIsSaving(true);
     // Simulate saving to local storage or similar
     localStorage.setItem('magic_code_save', code);
     setTimeout(() => {
-      alert("Magic Code Saved Successfully! ✨");
+      showToast("Magic Code Saved Successfully! ✨", "success");
       setIsSaving(false);
     }, 1000);
   };

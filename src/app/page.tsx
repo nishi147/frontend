@@ -11,6 +11,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useIntroOffer } from '@/context/IntroOfferContext';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
+import { useToast } from '@/context/ToastContext';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Users as UsersIcon } from 'lucide-react';
 
 const HERO_IMAGES = [
@@ -22,6 +23,7 @@ const HERO_IMAGES = [
 const WorkshopSection = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
   const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -80,7 +82,7 @@ const WorkshopSection = () => {
             }
           } catch (err: any) {
             console.error("Verification error:", err);
-            alert("Payment verification failed: " + (err.response?.data?.message || err.message));
+            showToast("Payment verification failed: " + (err.response?.data?.message || err.message), "error");
           }
         },
         prefill: {
@@ -96,12 +98,12 @@ const WorkshopSection = () => {
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){
-        alert("Payment failed: " + response.error.description);
+        showToast("Payment failed: " + response.error.description, "error");
       });
 
     } catch (err: any) {
       console.error("Payment initiation error:", err);
-      alert("Failed to initiate payment: " + (err.response?.data?.message || err.message));
+      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
       setIsProcessing(false);
     }
@@ -360,7 +362,7 @@ export default function Home() {
                 <span className="text-sm">Space Bootcamps</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-black text-gray-800 leading-tight">
-                Magical <span className="text-accent-500">Workshops</span> & Bootcamps 🎟️
+                Magical <span className="text-accent-500">Workshops</span>  🎟️
               </h2>
             </div>
             <p className="text-base font-bold text-gray-400 md:max-w-xs">

@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { IntroOfferProvider } from "@/context/IntroOfferContext";
 import { IntroOfferModal } from "@/components/IntroOfferModal";
+import { ToastProvider } from "@/context/ToastContext";
 
 const baloo = Baloo_2({ 
   subsets: ["latin"],
@@ -32,12 +33,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${baloo.variable} ${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}>
         <AuthProvider>
-          <CurrencyProvider>
-            <IntroOfferProvider>
-              {children}
-              <IntroOfferModal />
-            </IntroOfferProvider>
-          </CurrencyProvider>
+          <ToastProvider>
+            <CurrencyProvider>
+              <IntroOfferProvider>
+                {children}
+                <IntroOfferModal />
+              </IntroOfferProvider>
+            </CurrencyProvider>
+          </ToastProvider>
         </AuthProvider>
       </body>
     </html>

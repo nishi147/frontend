@@ -10,10 +10,12 @@ import { Calendar, MapPin, ArrowRight, Rocket, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 export default function WorkshopsPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -83,7 +85,7 @@ export default function WorkshopsPage() {
             }
           } catch (err: any) {
             console.error("Verification error:", err);
-            alert("Payment verification failed: " + (err.response?.data?.message || err.message));
+            showToast("Payment verification failed: " + (err.response?.data?.message || err.message), "error");
           }
         },
         prefill: {
@@ -99,12 +101,12 @@ export default function WorkshopsPage() {
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){
-        alert("Payment failed: " + response.error.description);
+        showToast("Payment failed: " + response.error.description, "error");
       });
 
     } catch (err: any) {
       console.error("Payment initiation error:", err);
-      alert("Failed to initiate payment: " + (err.response?.data?.message || err.message));
+      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
       setIsProcessing(false);
     }

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { Plus, Trash2, Video, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 export default function LessonsPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function LessonsPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -81,11 +83,11 @@ export default function LessonsPage() {
     try {
       const res = await axios.put(`/api/courses/${id}`, { modules: course.modules });
       if (res.data.success) {
-        alert('Lessons saved successfully!');
+        showToast('Lessons saved successfully!', 'success');
       }
     } catch (err) {
       console.error(err);
-      alert('Failed to save lessons');
+      showToast('Failed to save lessons', 'error');
     } finally {
       setIsSaving(false);
     }
