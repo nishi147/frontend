@@ -188,7 +188,7 @@ const ProjectSection = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('/api/projects');
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);
         if (res.data.success) {
           setProjects(res.data.data);
         }
