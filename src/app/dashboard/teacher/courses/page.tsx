@@ -14,24 +14,29 @@ export default function TeacherCourses() {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const API = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await axios.get('/api/courses/teacher/my-courses');
-        if (res.data.success) {
-          setCourses(res.data.data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch teacher courses", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchCourses = async () => {
+    try {
+      const res = await axios.get(
+        `${API}/api/courses/teacher/my-courses`,
+        { withCredentials: true }
+      );
 
-    if (user?.role === 'teacher' || user?.role === 'admin') {
-      fetchCourses();
+      if (res.data.success) {
+        setCourses(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch teacher courses", err);
+    } finally {
+      setIsLoading(false);
     }
-  }, [user]);
+  };
+
+  if (user?.role === "teacher" || user?.role === "admin") {
+    fetchCourses();
+  }
+}, [user]);
 
   if (loading || isLoading) return <div className="p-20 text-center font-bold text-primary-500 text-2xl animate-pulse">Loading your academy... 📚</div>;
 
@@ -66,11 +71,11 @@ export default function TeacherCourses() {
               <Card key={course._id} className="group hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500 overflow-hidden bg-white">
                 <div className="h-48 bg-gray-100 relative overflow-hidden">
                   {course.thumbnail ? (
-                    <img 
-                        src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${course.thumbnail}`} 
-                        alt={course.title} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
+                    <img
+  src={course.thumbnail ? `${API}${course.thumbnail}` : "/placeholder-course.png"}
+  alt={course.title}
+  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+/>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-6xl bg-primary-50">
                         📚

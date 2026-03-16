@@ -261,7 +261,9 @@ export default function AdminCourseManagement() {
   // FETCH COURSES
   const fetchCourses = async () => {
     try {
-      const res = await axios.get(`${API}/api/courses/admin/all`);
+      const res = await axios.get(`${API}/api/courses/admin/all`, {
+  withCredentials: true
+});
       if (res.data.success) {
         setCourses(res.data.data);
       }
@@ -284,13 +286,14 @@ export default function AdminCourseManagement() {
 
     try {
       if (editingCourse) {
-        await axios.put(
-          `${API}/api/courses/${editingCourse._id}`,
-          formData
-        );
+        await axios.put(`${API}/api/courses/${editingCourse._id}`, formData, {
+  withCredentials: true
+});
         showToast("Course Updated!", "success");
       } else {
-        await axios.post(`${API}/api/courses`, formData);
+        await axios.post(`${API}/api/courses`, formData, {
+  withCredentials: true
+});
         showToast("Course Created!", "success");
       }
 
@@ -330,9 +333,9 @@ export default function AdminCourseManagement() {
   // APPROVE
   const approveCourse = async (id: string) => {
     try {
-      await axios.put(`${API}/api/courses/admin/approve/${id}`);
-      showToast("Course Approved!", "success");
-      fetchCourses();
+      await axios.put(`${API}/api/courses/admin/approve/${id}`, {}, {
+  withCredentials: true
+});
     } catch {
       showToast("Error approving course", "error");
     }
@@ -348,7 +351,9 @@ export default function AdminCourseManagement() {
     if (!isConfirmed) return;
 
     try {
-      await axios.delete(`${API}/api/courses/${id}`);
+      await axios.delete(`${API}/api/courses/${id}`, {
+  withCredentials: true
+});
       showToast("Course Deleted", "success");
       fetchCourses();
     } catch {

@@ -20,7 +20,7 @@ export default function CreateCoursePage() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
-
+const API = process.env.NEXT_PUBLIC_API_URL;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -35,14 +35,19 @@ export default function CreateCoursePage() {
         data.append('thumbnail', thumbnail);
       }
 
-      const res = await axios.post('/api/courses', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const res = await axios.post(
+  `${API}/api/courses`,
+  data,
+  {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }
+);
       if (res.data.success) {
         showToast('Course created successfully! Waiting for Admin approval.', 'success');
-        router.push('/dashboard/teacher');
+       router.push('/dashboard/teacher/courses');
       }
     } catch (error) {
        console.error(error);

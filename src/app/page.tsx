@@ -261,21 +261,21 @@ const CourseSection = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const res = await axios.get(`${apiUrl}/api/courses`);
-        if (res.data.success) {
-          setCourses(res.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching homepage courses:", error);
-      } finally {
-        setLoading(false);
+  const fetchCourses = async () => {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`);
+      if (res.data.success) {
+        setCourses(res.data.data);
       }
-    };
-    fetchCourses();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching homepage courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchCourses();
+}, []);
 
   if (loading) return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

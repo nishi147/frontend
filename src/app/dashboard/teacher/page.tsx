@@ -18,46 +18,65 @@ export default function TeacherDashboard() {
   const [isScheduling, setIsScheduling] = useState(false);
   const { showToast } = useToast();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [classRes, courseRes] = await Promise.all([
-          axios.get('/api/live-classes/teacher'),
-          axios.get('/api/courses/teacher/my-courses')
-        ]);
-        
-        if (classRes.data.success) {
-          setLiveClasses(classRes.data.data);
-        }
-        if (courseRes.data.success) {
-          setMyCourses(courseRes.data.data);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchData();
-  }, []);
+ const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleScheduleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsScheduling(true);
+useEffect(() => {
+  const fetchData = async () => {
     try {
-      const res = await axios.post('/api/live-classes', scheduleData);
-      if (res.data.success) {
-        showToast('Class scheduled successfully!', 'success');
-        setLiveClasses([...liveClasses, res.data.data] as any);
-        setIsScheduleModalOpen(false);
-        setScheduleData({ title: '', course: '', scheduledDate: '', meetingLink: '' });
+      const [classRes, courseRes] = await Promise.all([
+        axios.get(`${API}/api/live-classes/teacher`, { withCredentials: true }),
+        axios.get(`${API}/api/courses/teacher/my-courses`, { withCredentials: true })
+      ]);
+
+      if (classRes.data.success) {
+        setLiveClasses(classRes.data.data);
       }
-    } catch (err: any) {
-      console.error(err);
-      showToast(`Failed to schedule class: ${err.response?.data?.message || err.message}`, 'error');
-    } finally {
-      setIsScheduling(false);
+
+      if (courseRes.data.success) {
+        setMyCourses(courseRes.data.data);
+      }
+
+    } catch (e) {
+      console.error(e);
     }
   };
 
+  fetchData();
+}, []);
+
+ const handleScheduleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsScheduling(true);
+
+  try {
+    const res = await axios.post(
+      `${API}/api/live-classes`,
+      scheduleData,
+      { withCredentials: true }
+    );
+
+    if (res.data.success) {
+      showToast('Class scheduled successfully!', 'success');
+      setLiveClasses([...liveClasses, res.data.data] as any);
+      setIsScheduleModalOpen(false);
+      setScheduleData({
+        title: '',
+        course: '',
+        scheduledDate: '',
+        meetingLink: ''
+      });
+    }
+
+  } catch (err: any) {
+    console.error(err);
+    showToast(
+      `Failed to schedule class: ${err.response?.data?.message || err.message}`,
+      'error'
+    );
+  } finally {
+    setIsScheduling(false);
+  }
+};
   return (
     <DashboardLayout allowedRoles={['teacher', 'admin']}>
       <div className="flex flex-col gap-8">

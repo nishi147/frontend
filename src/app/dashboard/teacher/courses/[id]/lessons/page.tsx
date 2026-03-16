@@ -17,10 +17,14 @@ export default function LessonsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const { showToast } = useToast();
 
+  const API = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(`/api/courses/${id}`);
+        const res = await axios.get(
+  `${API}/api/courses/${id}`,
+  { withCredentials: true }
+);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -81,7 +85,11 @@ export default function LessonsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await axios.put(`/api/courses/${id}`, { modules: course.modules });
+      const res = await axios.put(
+  `${API}/api/courses/${id}`,
+  { modules: course.modules },
+  { withCredentials: true }
+);
       if (res.data.success) {
         showToast('Lessons saved successfully!', 'success');
       }
