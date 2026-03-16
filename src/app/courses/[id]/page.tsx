@@ -23,7 +23,7 @@ export default function CourseDetailPage() {
   useEffect(() => {
     const fetchDoc = async () => {
       try {
-        const res = await axios.get(`/api/courses/${id}`);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -53,7 +53,9 @@ export default function CourseDetailPage() {
     setIsProcessing(true);
     try {
       // 1. Create order
-      const orderRes = await axios.post('/api/payments/order', { 
+      const orderRes = await axios.post(
+  `${process.env.NEXT_PUBLIC_API_URL}/payments/order`,
+  {
         courseId: course._id,
         sessions: selectedSessions 
       });
@@ -63,6 +65,7 @@ export default function CourseDetailPage() {
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD', // fallback for now
         amount: order.amount,
+        
         currency: order.currency,
         name: "RUZANN",
         description: `Enrollment for ${course.title}`,
@@ -70,7 +73,9 @@ export default function CourseDetailPage() {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post('/api/payments/verify', {
+            const verifyRes = await axios.post(
+  `${process.env.NEXT_PUBLIC_API_URL}/payments/verify`,
+  {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
