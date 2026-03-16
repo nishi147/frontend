@@ -23,7 +23,7 @@ export default function CourseDetailPage() {
   useEffect(() => {
     const fetchDoc = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/courses/${id}`);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -54,7 +54,7 @@ export default function CourseDetailPage() {
     try {
       // 1. Create order
       const orderRes = await axios.post(
-  `${process.env.NEXT_PUBLIC_API_URL}/payments/order`,
+  `${process.env.NEXT_PUBLIC_API_URL}/api/payments/order`,
   {
         courseId: course._id,
         sessions: selectedSessions 
@@ -74,7 +74,7 @@ export default function CourseDetailPage() {
           try {
             // 3. Verify Payment
             const verifyRes = await axios.post(
-  `${process.env.NEXT_PUBLIC_API_URL}/payments/verify`,
+  `${process.env.NEXT_PUBLIC_API_URL}/api/payments/verify`,
   {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
