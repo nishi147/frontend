@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
-          <div className="relative w-32 h-20 mx-auto mb-4">
+          <div className="relative w-56 h-32 mx-auto mb-4">
             <img 
               src="/ruzann_logo.png" 
               alt="Ruzann Logo" 

@@ -31,7 +31,7 @@ export const Sidebar = () => {
     const adminLinks = [
       { name: 'Overview', href: base, icon: BarChart },
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
-      { name: 'Course Approvals', href: `${base}/courses`, icon: BookOpen },
+      { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
       { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
       { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },

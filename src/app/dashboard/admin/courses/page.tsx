@@ -1,230 +1,3 @@
-// "use client";
-
-// import React, { useEffect, useState } from 'react';
-// import { useAuth } from '@/context/AuthContext';
-// import { Header } from '@/components/layout/Header';
-// import { DashboardLayout } from '@/components/layout/DashboardLayout';
-// import { Card, CardContent } from '@/components/ui/Card';
-// import { Button } from '@/components/ui/Button';
-// import axios from 'axios';
-// import { Check, X, Eye, FileText, Trash2, BookOpen, Plus, Edit2 } from 'lucide-react';
-// import { useToast } from '@/context/ToastContext';
-
-// export default function AdminCourseManagement() {
-//   const { user, loading } = useAuth();
-//   const [courses, setCourses] = useState([]);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [editingCourse, setEditingCourse] = useState<any>(null);
-//   const { showToast, confirm } = useToast();
-//   const [formData, setFormData] = useState({
-//     title: '',
-//     description: '',
-//     category: '',
-//     pricePerSession: 0,
-//     numberOfSessions: 0,
-//     thumbnail: '',
-//     isPublished: true,
-//     isApproved: true
-//   });
-
-//   const fetchCourses = async () => {
-//     try {
-//       const res = await axios.get('/api/courses/admin/all');
-//       if (res.data.success) {
-//         setCourses(res.data.data);
-//       }
-//     } catch (err) {
-//       console.error("Failed to fetch courses", err);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (user?.role === 'admin') {
-//       fetchCourses();
-//     }
-//   }, [user]);
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     try {
-//       if (editingCourse) {
-//         await axios.put(`/api/courses/${editingCourse._id}`, formData);
-//         showToast("Course Updated!", "success");
-//       } else {
-//         await axios.post('/api/courses', formData);
-//         showToast("Course Created!", "success");
-//       }
-//       setIsModalOpen(false);
-//       setEditingCourse(null);
-//       fetchCourses();
-//     } catch (err: any) {
-//       console.error("Error saving course:", err.response?.data || err.message);
-//       showToast(`Error saving course: ${err.response?.data?.error || "Check console for details"}`, "error");
-//     }
-//   };
-
-//   const openEdit = (course: any) => {
-//     setEditingCourse(course);
-//     setFormData({
-//       title: course.title,
-//       description: course.description,
-//       category: course.category,
-//       pricePerSession: course.pricePerSession,
-//       numberOfSessions: course.numberOfSessions,
-//       thumbnail: course.thumbnail,
-//       isPublished: course.isPublished,
-//       isApproved: course.isApproved
-//     });
-//     setIsModalOpen(true);
-//   };
-
-//   const approveCourse = async (id: string) => {
-//     try {
-//       await axios.put(`/api/courses/admin/approve/${id}`);
-//       showToast("Course Approved!", "success");
-//       fetchCourses();
-//     } catch (err) {
-//       showToast("Error approving course", "error");
-//     }
-//   };
-
-//   const deleteCourse = async (id: string) => {
-//     const isConfirmed = await (confirm as any)("Delete Course?", "This will remove the course and all its modules. You cannot undo this.");
-//     if (!isConfirmed) return;
-//     try {
-//       await axios.delete(`/api/courses/${id}`);
-//       showToast("Course Deleted", "success");
-//       fetchCourses();
-//     } catch (err) {
-//       showToast("Error deleting course", "error");
-//     }
-//   };
-
-//   if (loading || isLoading) return <div className="p-20 text-center font-bold text-secondary-500 text-2xl animate-pulse">Auditing Library... 📚</div>;
-
-//   return (
-//     <DashboardLayout>
-//       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4 px-2 sm:px-0">
-//         <div>
-//           <h1 className="text-3xl md:text-4xl font-black text-gray-800 tracking-tight">Course <span className="text-secondary-500">Oversight</span> 🎓</h1>
-//           <p className="text-gray-400 font-bold mt-1 uppercase text-[10px] tracking-[0.2em]">Curriculum Control Center</p>
-//         </div>
-//         <Button onClick={() => { setEditingCourse(null); setFormData({ title: '', description: '', category: '', pricePerSession: 0, numberOfSessions: 0, thumbnail: '', isPublished: true, isApproved: true }); setIsModalOpen(true); }} className="flex items-center gap-3 w-full md:w-auto justify-center py-4 px-8 rounded-2xl shadow-lg shadow-primary-100 font-black">
-//           <Plus className="w-5 h-5" /> Deploy Course
-//         </Button>
-//       </div>
-
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-//         {courses.map((course: any) => (
-//           <Card key={course._id} className="relative group overflow-hidden border-none shadow-xl bg-white rounded-[2.5rem] transform transition-all hover:scale-[1.02] hover:shadow-2xl">
-//             <div className="relative h-48 overflow-hidden">
-//               <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-//               <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg ${course.isApproved ? 'bg-green-500 text-white' : 'bg-amber-500 text-white animate-pulse'}`}>
-//                 {course.isApproved ? 'Live' : 'Draft'}
-//               </div>
-//             </div>
-
-//             <CardContent className="p-8">
-//               <div className="flex items-center gap-2 text-gray-400 text-[10px] font-black uppercase tracking-widest mb-3">
-//                 <BookOpen className="w-3.5 h-3.5 text-primary-500" /> {course.category}
-//               </div>
-//               <h3 className="text-2xl font-black text-gray-800 mb-2 truncate">{course.title}</h3>
-//               <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 min-h-[2.5rem] opacity-70">{course.description}</p>
-              
-//               <div className="flex items-center gap-3 mb-8 pt-6 border-t border-gray-50">
-//                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-white shadow-md ${course.isApproved ? 'bg-primary-500' : 'bg-gray-300'}`}>
-//                   {course.teacher?.name?.[0] || 'T'}
-//                 </div>
-//                 <div>
-//                   <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Instructor</p>
-//                   <p className="font-black text-gray-700 text-sm">{course.teacher?.name || 'Academic Lead'}</p>
-//                 </div>
-//               </div>
-
-//               <div className="flex gap-2">
-//                 {!course.isApproved && (
-//                   <Button 
-//                     className="flex-[2] font-black bg-accent-500 hover:bg-accent-600 shadow-lg shadow-accent-200" 
-//                     onClick={() => approveCourse(course._id)}
-//                   >
-//                     Verify
-//                   </Button>
-//                 )}
-//                 <Button 
-//                   variant="outline" 
-//                   className="flex-1 text-primary-500 border-primary-200 hover:bg-primary-50 font-black p-3" 
-//                   onClick={() => openEdit(course)}
-//                 >
-//                   <Edit2 className="w-4 h-4" />
-//                 </Button>
-//                 <Button 
-//                   variant="outline" 
-//                   className="flex-1 text-red-500 border-red-200 hover:bg-red-50 font-black p-3" 
-//                   onClick={() => deleteCourse(course._id)}
-//                 >
-//                   <Trash2 className="w-4 h-4" />
-//                 </Button>
-//               </div>
-//             </CardContent>
-//           </Card>
-//         ))}
-//       </div>
-
-//       {/* Course Modal */}
-//       {isModalOpen && (
-//         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-//            <Card className="w-full max-w-2xl bg-white rounded-[2.5rem] overflow-hidden max-h-[90vh] overflow-y-auto shadow-2xl">
-//               <div className="bg-primary-500 p-6 md:p-8 text-white flex justify-between items-center sticky top-0 z-10">
-//                  <h3 className="text-2xl font-black">{editingCourse ? 'Studio: Edit Mode' : 'Creation Lab 🧪'}</h3>
-//                  <button onClick={() => setIsModalOpen(false)} className="text-2xl font-bold bg-white/20 w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/30 transition-all">✕</button>
-//               </div>
-//               <CardContent className="p-6 md:p-10">
-//                  <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-//                     <div className="md:col-span-2">
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Hero Title</label>
-//                       <input required value={formData.title} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-black text-gray-800" onChange={e => setFormData({...formData, title: e.target.value})} />
-//                     </div>
-//                     <div className="md:col-span-2">
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Mission Description</label>
-//                       <textarea required value={formData.description} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-bold h-32 text-gray-600 resize-none" onChange={e => setFormData({...formData, description: e.target.value})} />
-//                     </div>
-//                     <div className="md:col-span-1">
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Category</label>
-//                       <input required value={formData.category} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-black text-gray-800" onChange={e => setFormData({...formData, category: e.target.value})} />
-//                     </div>
-//                     <div className="md:col-span-1">
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Visual URL</label>
-//                       <input value={formData.thumbnail} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-black text-gray-800" onChange={e => setFormData({...formData, thumbnail: e.target.value})} />
-//                     </div>
-//                     <div>
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Tuition (₹)</label>
-//                       <input type="number" required value={formData.pricePerSession} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-black text-gray-800" onChange={e => setFormData({...formData, pricePerSession: Number(e.target.value)})} />
-//                     </div>
-//                     <div>
-//                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Total Milestones</label>
-//                       <input type="number" required value={formData.numberOfSessions} className="w-full p-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:border-primary-500 outline-none font-black text-gray-800" onChange={e => setFormData({...formData, numberOfSessions: Number(e.target.value)})} />
-//                     </div>
-//                     <Button type="submit" variant="primary" className="md:col-span-2 font-black text-lg py-5 rounded-3xl mt-4 shadow-xl shadow-primary-100">
-//                       {editingCourse ? 'SYNCHRONIZE UPDATE 💾' : 'LAUNCH MISSION 🚀'}
-//                     </Button>
-//                  </form>
-//               </CardContent>
-//            </Card>
-//         </div>
-//       )}
-//     </DashboardLayout>
-//   );
-// }
-
-
-
-
-
-
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -233,10 +6,22 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import axios from "axios";
-import { Trash2, BookOpen, Plus, Edit2 } from "lucide-react";
+import { Trash2, BookOpen, Plus, Edit2, ChevronLeft, ChevronRight, PlayCircle, CheckCircle } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
+
+interface Session {
+  title: string;
+  videoUrl: string;
+  duration: string;
+}
+
+interface Module {
+  _id?: string;
+  title: string;
+  lessons: Session[];
+}
 
 export default function AdminCourseManagement() {
   const { user, loading } = useAuth();
@@ -246,26 +31,51 @@ export default function AdminCourseManagement() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<any>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
+    slug: "",
+    regularPrice: 0,
+    offerPrice: 0,
     category: "",
+    level: "Beginner",
+    language: "English",
+    totalLessons: 0,
+    totalDuration: "",
+    shortDescription: "",
+    description: "",
+    thumbnail: "",
     pricePerSession: 0,
     numberOfSessions: 0,
-    thumbnail: "",
     isPublished: true,
     isApproved: true,
+    modules: [] as Module[],
   });
+
+  // UI state for module/session addition
+  const [newModuleTitle, setNewModuleTitle] = useState("");
+  const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null);
+  const [newSessionData, setNewSessionData] = useState({ title: "", videoUrl: "", duration: "" });
+  const [isAddingModule, setIsAddingModule] = useState(false);
 
   // FETCH COURSES
   const fetchCourses = async () => {
     try {
       const res = await axios.get(`${API}/api/courses/admin/all`, {
-  withCredentials: true
-});
-      if (res.data.success) {
+        withCredentials: true,
+      });
+      // Fallback handlers to ensure state is array no matter what
+      if (res.data?.success) {
+        setCourses(res.data.data || res.data.courses || []);
+      } else if (Array.isArray(res.data)) {
+        setCourses(res.data);
+      } else if (res.data?.data) {
         setCourses(res.data.data);
+      } else {
+        setCourses([]);
       }
     } catch (err) {
       console.error("Failed to fetch courses", err);
@@ -275,58 +85,115 @@ export default function AdminCourseManagement() {
   };
 
   useEffect(() => {
+    // Also fetch if user is not fully loaded just to be fail-safe, or check user role accurately
     if (user?.role === "admin") {
       fetchCourses();
+    } else if (user) {
+      // If user exists but is not admin, still stop loading to prevent infinite spinner
+      setIsLoading(false);
     }
   }, [user]);
 
+  // RESET FORM
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      slug: "",
+      regularPrice: 0,
+      offerPrice: 0,
+      category: "",
+      level: "Beginner",
+      language: "English",
+      totalLessons: 0,
+      totalDuration: "",
+      shortDescription: "",
+      description: "",
+      thumbnail: "",
+      pricePerSession: 0,
+      numberOfSessions: 0,
+      isPublished: true,
+      isApproved: true,
+      modules: [],
+    });
+    setCurrentStep(1);
+    setEditingCourse(null);
+    setImagePreview("");
+  };
+
   // CREATE / UPDATE COURSE
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    // Frontend Validation
+    if (!formData.title?.trim()) {
+      showToast("Course Title is required", "error");
+      setCurrentStep(1);
+      return;
+    }
+    if (!formData.category?.trim()) {
+      showToast("Course Category is required", "error");
+      setCurrentStep(1);
+      return;
+    }
+    if (!formData.description?.trim()) {
+      showToast("Course Description is required", "error");
+      setCurrentStep(1);
+      return;
+    }
 
     try {
-      if (editingCourse) {
-        await axios.put(`${API}/api/courses/${editingCourse._id}`, formData, {
-  withCredentials: true
-});
-        showToast("Course Updated!", "success");
-      } else {
-        await axios.post(`${API}/api/courses`, formData, {
-  withCredentials: true
-});
-        showToast("Course Created!", "success");
-      }
+        const createData: any = {
+           ...formData,
+           pricePerSession: formData.offerPrice,
+           numberOfSessions: formData.totalLessons > 0 ? formData.totalLessons : 1,
+        };
 
-      setIsModalOpen(false);
-      setEditingCourse(null);
-      fetchCourses();
+        const config = { 
+          headers: { "Content-Type": "application/json" }, 
+          withCredentials: true 
+        };
+
+        if (editingCourse) {
+          await axios.put(`${API}/api/courses/${editingCourse._id}`, createData, config);
+          showToast("Course Updated!", "success");
+        } else {
+          await axios.post(`${API}/api/courses`, createData, config);
+          showToast("Course Created!", "success");
+        }
+
+        setIsModalOpen(false);
+        resetForm();
+        fetchCourses();
     } catch (err: any) {
-      console.error("Error saving course:", err.response?.data || err.message);
-
-      showToast(
-        `Error: ${
-          err.response?.data?.error || "Check console"
-        }`,
-        "error"
-      );
+        console.error("Error saving course:", err.response?.data || err.message);
+        showToast(`Error: ${err.response?.data?.message || err.response?.data?.error || "Check console"}`, "error");
     }
   };
 
   // EDIT
   const openEdit = (course: any) => {
     setEditingCourse(course);
-
     setFormData({
-      title: course.title,
-      description: course.description,
-      category: course.category,
-      pricePerSession: course.pricePerSession,
-      numberOfSessions: course.numberOfSessions,
-      thumbnail: course.thumbnail,
+      title: course.title || "",
+      slug: course.slug || "",
+      regularPrice: course.regularPrice || 0,
+      offerPrice: course.offerPrice || course.pricePerSession || 0,
+      category: course.category || "",
+      level: course.level || "Beginner",
+      language: course.language || "English",
+      totalLessons: course.totalLessons || course.numberOfSessions || 0,
+      totalDuration: course.totalDuration || "",
+      shortDescription: course.shortDescription || "",
+      description: course.description || "",
+      thumbnail: course.thumbnail || "",
+      pricePerSession: course.pricePerSession || 0,
+      numberOfSessions: course.numberOfSessions || 0,
       isPublished: course.isPublished,
       isApproved: course.isApproved,
+      modules: course.modules || [],
     });
-
+    setImagePreview(course.thumbnail || "");
+    setCurrentStep(1);
     setIsModalOpen(true);
   };
 
@@ -334,8 +201,10 @@ export default function AdminCourseManagement() {
   const approveCourse = async (id: string) => {
     try {
       await axios.put(`${API}/api/courses/admin/approve/${id}`, {}, {
-  withCredentials: true
-});
+        withCredentials: true,
+      });
+      fetchCourses();
+      showToast("Course Approved!", "success");
     } catch {
       showToast("Error approving course", "error");
     }
@@ -343,17 +212,13 @@ export default function AdminCourseManagement() {
 
   // DELETE
   const deleteCourse = async (id: string) => {
-    const isConfirmed = await (confirm as any)(
-      "Delete Course?",
-      "This will remove the course permanently."
-    );
-
+    const isConfirmed = await (confirm as any)("Delete Course?", "This will remove the course permanently.");
     if (!isConfirmed) return;
 
     try {
       await axios.delete(`${API}/api/courses/${id}`, {
-  withCredentials: true
-});
+        withCredentials: true,
+      });
       showToast("Course Deleted", "success");
       fetchCourses();
     } catch {
@@ -361,186 +226,397 @@ export default function AdminCourseManagement() {
     }
   };
 
-  if (loading || isLoading)
-    return (
-      <div className="p-20 text-center font-bold text-2xl animate-pulse">
-        Loading Courses...
-      </div>
-    );
+  // CURRICULUM HANDLERS
+  const handleAddModule = () => {
+    if (!newModuleTitle.trim()) return;
+    setFormData({
+      ...formData,
+      modules: [...formData.modules, { title: newModuleTitle, lessons: [] }],
+      totalLessons: formData.totalLessons, // Optional: Update total lessons if auto-counting
+    });
+    setNewModuleTitle("");
+    setIsAddingModule(false);
+  };
+
+  const handleAddSession = (moduleIndex: number) => {
+    if (!newSessionData.title.trim()) return;
+    const updatedModules = [...formData.modules];
+    updatedModules[moduleIndex].lessons.push({
+      title: newSessionData.title,
+      videoUrl: newSessionData.videoUrl,
+      duration: newSessionData.duration,
+    });
+
+    setFormData({
+      ...formData,
+      modules: updatedModules,
+      totalLessons: formData.totalLessons + 1, // Optional auto-increment
+    });
+    setNewSessionData({ title: "", videoUrl: "", duration: "" });
+    setActiveModuleIndex(null);
+  };
+
+  const removeModule = (mIdx: number) => {
+    const updatedModules = formData.modules.filter((_, idx) => idx !== mIdx);
+    setFormData({ ...formData, modules: updatedModules });
+  };
+
+  const removeSession = (mIdx: number, sIdx: number) => {
+    const updatedModules = [...formData.modules];
+    updatedModules[mIdx].lessons = updatedModules[mIdx].lessons.filter((_, idx) => idx !== sIdx);
+    setFormData({ ...formData, modules: updatedModules });
+  };
+
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+
+  if (loading || isLoading) return <div className="p-20 text-center font-bold text-2xl animate-pulse">Loading Courses...</div>;
 
   return (
     <DashboardLayout>
-      <div className="flex justify-between mb-8">
-        <h1 className="text-3xl font-black">
-          Course Management 🎓
-        </h1>
-
-        <Button
-          onClick={() => {
-            setEditingCourse(null);
-            setFormData({
-              title: "",
-              description: "",
-              category: "",
-              pricePerSession: 0,
-              numberOfSessions: 0,
-              thumbnail: "",
-              isPublished: true,
-              isApproved: true,
-            });
-            setIsModalOpen(true);
-          }}
-        >
-          <Plus /> Create Course
+      <div className="flex justify-between mb-8 items-center">
+        <div>
+           <h1 className="text-3xl font-black text-gray-800 tracking-tight">Manage Courses</h1>
+           <p className="text-gray-500 font-bold uppercase text-[10px] tracking-widest mt-1">Curriculum & Catalogue</p>
+        </div>
+        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="gap-2 px-6 shadow-xl w-full md:w-auto">
+          <Plus size={18} /> Create Course
         </Button>
       </div>
 
-      {/* COURSES */}
+      {/* COURSES TABLE/GRID */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
-          <Card key={course._id}>
-            <img
-              src={course.thumbnail}
-              className="w-full h-40 object-cover"
-            />
+          <Card key={course._id} className="overflow-hidden border-2 border-transparent hover:border-primary-100 transition-all shadow-lg">
+            <div className="relative h-40 group bg-gray-100">
+               {course.thumbnail ? (
+                  <img src={course.thumbnail} className="w-full h-full object-cover group-hover:scale-105 transition-all" alt="Course" />
+               ) : (
+                  <div className="flex items-center justify-center w-full h-full text-5xl opacity-40">📚</div>
+               )}
+               <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-md ${course.isApproved ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}>
+                  {course.isApproved ? 'Live' : 'Pending'}
+               </div>
+            </div>
 
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 text-xs mb-2">
-                <BookOpen size={14} />
-                {course.category}
+            <CardContent className="p-6 relative">
+              <div className="flex items-center justify-between mb-3 text-xs uppercase font-black text-gray-400 tracking-widest">
+                <span className="flex items-center gap-1 text-primary-500"><BookOpen size={14} /> {course.category}</span>
+                <span className={course.level === 'Advanced' ? 'text-red-500' : course.level === 'Intermediate' ? 'text-orange-500' : 'text-green-500'}>{course.level}</span>
               </div>
 
-              <h3 className="text-xl font-bold">
-                {course.title}
-              </h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-1 leading-tight line-clamp-1 truncate">{course.title}</h3>
+              <p className="text-sm text-gray-500 mb-4 line-clamp-2">By {course.teacher?.name || 'Administrator'}</p>
 
-              <p className="text-sm text-gray-500 mb-4">
-                {course.description}
-              </p>
+              <div className="flex items-center gap-4 mb-6 border-t border-gray-100 pt-4">
+                 <div>
+                    <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Price</span>
+                    <span className="font-black text-secondary-600">₹{course.totalCoursePrice || course.offerPrice || course.pricePerSession}</span>
+                 </div>
+                 <div className="w-px h-8 bg-gray-200"></div>
+                 <div>
+                    <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Lessons</span>
+                    <span className="font-black text-gray-600">{course.totalLessons || course.numberOfSessions || 0}</span>
+                 </div>
+              </div>
 
               <div className="flex gap-2">
                 {!course.isApproved && (
-                  <Button
-                    onClick={() => approveCourse(course._id)}
-                  >
-                    Approve
-                  </Button>
+                  <Button onClick={() => approveCourse(course._id)} className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold">Approve</Button>
                 )}
-
-                <Button
-                  variant="outline"
-                  onClick={() => openEdit(course)}
-                >
-                  <Edit2 size={16} />
-                </Button>
-
-                <Button
-                  variant="outline"
-                  onClick={() => deleteCourse(course._id)}
-                >
-                  <Trash2 size={16} />
-                </Button>
+                <Button variant="outline" onClick={() => openEdit(course)} className="flex-1 font-bold"><Edit2 size={16} className="mr-2" /> Edit</Button>
+                <Button variant="outline" onClick={() => deleteCourse(course._id)} className="flex-none px-4 text-red-500 border-red-200 hover:bg-red-50"><Trash2 size={16} /></Button>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* MODAL */}
+      {/* WIZARD MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60">
-          <Card className="w-full max-w-xl bg-white">
-            <CardContent className="p-8">
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-4"
-              >
-                <input
-                  required
-                  placeholder="Title"
-                  value={formData.title}
-                  className="w-full p-3 border rounded"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      title: e.target.value,
-                    })
-                  }
-                />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <Card className="w-full max-w-4xl bg-white shadow-2xl rounded-3xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]">
+            
+            {/* Header & Stepper */}
+            <div className="bg-gray-50 border-b border-gray-100 p-6 flex flex-col items-center justify-center relative">
+               <button onClick={() => setIsModalOpen(false)} className="absolute right-6 top-6 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 font-bold transition-colors">✕</button>
+               <h2 className="text-2xl font-black text-gray-800 mb-6">{editingCourse ? 'Editing Course' : 'Create New Course'}</h2>
+               
+               <div className="flex items-center gap-2 w-full max-w-2xl px-4">
+                  {[1, 2, 3, 4].map((step) => (
+                    <React.Fragment key={step}>
+                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm z-10 transition-colors ${currentStep >= step ? 'bg-primary-500 text-white shadow-md shadow-primary-200' : 'bg-gray-200 text-gray-500'}`}>
+                         {step}
+                       </div>
+                       {step < 4 && <div className={`flex-1 h-1 rounded-full transition-colors ${currentStep > step ? 'bg-primary-500' : 'bg-gray-200'}`} />}
+                    </React.Fragment>
+                  ))}
+               </div>
+               <div className="flex justify-between w-full max-w-2xl px-4 mt-2 text-[10px] font-black uppercase text-gray-400 tracking-widest">
+                  <span className={currentStep >= 1 ? 'text-primary-600' : ''}>Basic Info</span>
+                  <span className={currentStep >= 2 ? 'text-primary-600' : ''}>Media</span>
+                  <span className={currentStep >= 3 ? 'text-primary-600' : ''}>Curriculum</span>
+                  <span className={currentStep >= 4 ? 'text-primary-600' : ''}>Review</span>
+               </div>
+            </div>
 
-                <textarea
-                  required
-                  placeholder="Description"
-                  value={formData.description}
-                  className="w-full p-3 border rounded"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      description: e.target.value,
-                    })
-                  }
-                />
+            {/* Scrollable Content Body */}
+            <CardContent className="p-6 md:p-8 overflow-y-auto flex-1 bg-white">
+               
+               {/* STEP 1: BASIC INFORMATION */}
+               {currentStep === 1 && (
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Title</label>
+                      <input required placeholder="Enter course title" value={formData.title} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Slug (URL)</label>
+                      <input placeholder="e.g. generative-ai-kids" value={formData.slug} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, slug: e.target.value })} />
+                    </div>
 
-                <input
-                  required
-                  placeholder="Category"
-                  value={formData.category}
-                  className="w-full p-3 border rounded"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      category: e.target.value,
-                    })
-                  }
-                />
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Regular Price (₹)</label>
+                      <input type="number" value={formData.regularPrice} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, regularPrice: Number(e.target.value) })} />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Offer Price (₹)</label>
+                      <input type="number" value={formData.offerPrice} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold text-green-600 focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, offerPrice: Number(e.target.value) })} />
+                    </div>
 
-                <input
-                  placeholder="Thumbnail URL"
-                  value={formData.thumbnail}
-                  className="w-full p-3 border rounded"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      thumbnail: e.target.value,
-                    })
-                  }
-                />
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Category</label>
+                      <input placeholder="e.g. Coding" value={formData.category} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Level</label>
+                      <select value={formData.level} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none appearance-none" onChange={(e) => setFormData({ ...formData, level: e.target.value })}>
+                         <option value="Beginner">Beginner 🟢</option>
+                         <option value="Intermediate">Intermediate 🟡</option>
+                         <option value="Advanced">Advanced 🔴</option>
+                      </select>
+                    </div>
 
-                <input
-                  type="number"
-                  required
-                  placeholder="Price per Session"
-                  className="w-full p-3 border rounded"
-                  value={formData.pricePerSession}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      pricePerSession: Number(e.target.value),
-                    })
-                  }
-                />
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Language</label>
+                      <select value={formData.language} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none appearance-none" onChange={(e) => setFormData({ ...formData, language: e.target.value })}>
+                         <option value="English">English</option>
+                         <option value="Hindi">Hindi</option>
+                         <option value="Spanish">Spanish</option>
+                      </select>
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Total Lessons/Sessions</label>
+                      <input type="number" value={formData.totalLessons} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, totalLessons: Number(e.target.value) })} />
+                    </div>
+                    
+                    <div className="col-span-2">
+                       <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Total Duration</label>
+                       <input placeholder="e.g. 10 hours 30 minutes" value={formData.totalDuration} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, totalDuration: e.target.value })} />
+                    </div>
 
-                <input
-                  type="number"
-                  required
-                  placeholder="Number of Sessions"
-                  className="w-full p-3 border rounded"
-                  value={formData.numberOfSessions}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      numberOfSessions: Number(e.target.value),
-                    })
-                  }
-                />
+                    <div className="col-span-2">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Short Description</label>
+                      <textarea placeholder="Brief summary (max 150 chars)" value={formData.shortDescription} rows={2} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold resize-none focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })} />
+                    </div>
+                    
+                    <div className="col-span-2">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Full Description</label>
+                      <textarea placeholder="Detailed course description" value={formData.description} rows={4} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold resize-none focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                    </div>
+                 </div>
+               )}
 
-                <Button type="submit">
-                  {editingCourse
-                    ? "Update Course"
-                    : "Create Course"}
-                </Button>
-              </form>
+               {/* STEP 2: IMAGE & VIDEO */}
+               {currentStep === 2 && (
+                 <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-200 py-10">
+                    <div className="w-full max-w-lg bg-gray-50 p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center hover:border-primary-300 transition-colors">
+                       <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-sm mb-6">📷</div>
+                       <h3 className="text-xl font-black text-gray-800 mb-2">Course Thumbnail</h3>
+                       
+                       <div className="space-y-4 relative w-full text-left">
+                          <div>
+                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 text-center">Paste image link</p>
+                            <input 
+                              placeholder="https://example.com/image.jpg" 
+                              value={formData.thumbnail} 
+                              className="w-full p-4 border bg-white border-gray-100 rounded-xl font-bold focus:border-primary-500 outline-none text-center" 
+                              onChange={(e) => { 
+                                setFormData({ ...formData, thumbnail: e.target.value });
+                                setImagePreview(e.target.value);
+                              }} 
+                            />
+                          </div>
+                       </div>
+                       
+                       {imagePreview && (
+                         <div className="mt-8 border-4 border-white shadow-xl rounded-xl overflow-hidden aspect-video bg-gray-200">
+                           <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                         </div>
+                       )}
+                    </div>
+                 </div>
+               )}
+
+               {/* STEP 3: CURRICULUM */}
+               {currentStep === 3 && (
+                 <div className="animate-in fade-in zoom-in-95 duration-200 space-y-6">
+                    <div className="flex justify-between items-center bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
+                      <div>
+                         <h3 className="font-black text-slate-800 text-lg">Curriculum Builder</h3>
+                         <p className="text-xs font-bold text-slate-500">Structure your course into modules and sessions.</p>
+                      </div>
+                      <Button onClick={() => setIsAddingModule(true)} className="bg-slate-800 hover:bg-slate-900 text-white font-bold gap-2 rounded-xl">
+                        <Plus size={16} /> Add Module
+                      </Button>
+                    </div>
+
+                    {isAddingModule && (
+                      <div className="bg-gray-50 border-2 border-primary-200 p-6 rounded-2xl flex gap-4">
+                         <input 
+                           autoFocus
+                           placeholder="Enter Module Title (e.g. Introduction to React)" 
+                           value={newModuleTitle} 
+                           onChange={(e) => setNewModuleTitle(e.target.value)}
+                           className="flex-1 p-3 rounded-xl border border-gray-200 font-bold focus:border-primary-500 outline-none"
+                         />
+                         <Button onClick={handleAddModule} className="font-bold shrink-0">Save Module</Button>
+                         <Button variant="outline" onClick={() => setIsAddingModule(false)} className="shrink-0 font-bold">Cancel</Button>
+                      </div>
+                    )}
+
+                    {formData.modules.length === 0 && !isAddingModule ? (
+                      <div className="text-center py-16 px-4 border-2 border-dashed border-gray-200 rounded-3xl">
+                        <span className="text-5xl opacity-40 mb-4 block">📑</span>
+                        <h4 className="font-black text-xl text-gray-400 mb-2">No Modules Yet</h4>
+                        <p className="text-gray-400 font-bold text-sm">Organize your course content by adding the first module.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        {formData.modules.map((module, mIdx) => (
+                          <div key={mIdx} className="border-2 border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                            {/* Module Header */}
+                            <div className="bg-slate-50 p-5 flex justify-between items-center border-b border-slate-100">
+                               <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-black text-sm">{mIdx + 1}</div>
+                                  <h4 className="font-black text-slate-800 text-lg">{module.title}</h4>
+                               </div>
+                               <Button variant="outline" onClick={() => removeModule(mIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-full"><Trash2 size={14}/></Button>
+                            </div>
+
+                            {/* Module Content */}
+                            <div className="p-5 space-y-3 bg-white">
+                               {module.lessons.map((session, sIdx) => (
+                                 <div key={sIdx} className="flex justify-between items-center p-4 border border-slate-100 rounded-xl hover:border-primary-200 transition-colors bg-white group shadow-sm">
+                                    <div className="flex items-center gap-4">
+                                       <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-500 flex items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                                          <PlayCircle size={20} />
+                                       </div>
+                                       <div>
+                                          <h5 className="font-bold text-slate-800 text-sm leading-tight">{session.title}</h5>
+                                          <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1 flex gap-3">
+                                            {session.duration && <span>⏱️ {session.duration}</span>}
+                                            {session.videoUrl && <span>🔗 Video Linked</span>}
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <Button variant="outline" onClick={() => removeSession(mIdx, sIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"><Trash2 size={14}/></Button>
+                                 </div>
+                               ))}
+
+                               {activeModuleIndex === mIdx ? (
+                                 <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4 mt-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      <div className="md:col-span-2">
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Session Title</label>
+                                        <input autoFocus placeholder="e.g. Getting Started" value={newSessionData.title} onChange={(e) => setNewSessionData({...newSessionData, title: e.target.value})} className="w-full p-3 rounded-lg border border-slate-200 font-bold focus:border-primary-500 outline-none text-sm" />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Video URL (Optional)</label>
+                                        <input placeholder="https://youtube.com/..." value={newSessionData.videoUrl} onChange={(e) => setNewSessionData({...newSessionData, videoUrl: e.target.value})} className="w-full p-3 rounded-lg border border-slate-200 font-bold focus:border-primary-500 outline-none text-sm" />
+                                      </div>
+                                      <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Duration (Optional)</label>
+                                        <input placeholder="e.g. 15m" value={newSessionData.duration} onChange={(e) => setNewSessionData({...newSessionData, duration: e.target.value})} className="w-full p-3 rounded-lg border border-slate-200 font-bold focus:border-primary-500 outline-none text-sm" />
+                                      </div>
+                                    </div>
+                                    <div className="flex gap-2 justify-end pt-2 border-t border-slate-200">
+                                      <Button variant="outline" onClick={() => setActiveModuleIndex(null)} className="h-9 px-4 text-xs font-bold">Cancel</Button>
+                                      <Button onClick={() => handleAddSession(mIdx)} className="h-9 px-6 text-xs font-bold hover:bg-primary-600">Save Session</Button>
+                                    </div>
+                                 </div>
+                               ) : (
+                                 <Button variant="outline" onClick={() => setActiveModuleIndex(mIdx)} className="w-full border-dashed border-2 border-slate-200 text-slate-500 hover:border-primary-300 hover:text-primary-600 font-bold flex gap-2">
+                                    <Plus size={16} /> Add Session to {module.title}
+                                 </Button>
+                               )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                 </div>
+               )}
+
+               {/* STEP 4: REVIEW */}
+               {currentStep === 4 && (
+                 <div className="animate-in fade-in zoom-in-95 duration-200 p-6 md:p-10 border border-slate-100 rounded-3xl bg-slate-50/50">
+                    <div className="text-center mb-10">
+                       <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 scale-110">
+                         <CheckCircle className="w-10 h-10" />
+                       </div>
+                       <h3 className="text-2xl font-black text-slate-800 mb-2">Ready for Lift-Off! 🚀</h3>
+                       <p className="text-slate-500 font-bold text-sm max-w-sm mx-auto">Please review the course details before launching it into the global catalogue.</p>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm grid grid-cols-1 sm:grid-cols-2 flex-wrap gap-8 text-sm">
+                       <div>
+                          <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Course Title</span>
+                          <span className="font-black text-slate-800 text-lg">{formData.title || <span className="text-red-400">Missing</span>}</span>
+                       </div>
+                       <div>
+                          <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Price / Offer Price</span>
+                          <div className="flex items-center gap-2 font-black">
+                            <span className="text-slate-400 line-through">₹{formData.regularPrice}</span>
+                            <span className="text-green-600 text-lg">₹{formData.offerPrice}</span>
+                          </div>
+                       </div>
+                       <div>
+                          <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Category & Level</span>
+                          <span className="font-bold text-slate-600">{formData.category || 'N/A'} • {formData.level}</span>
+                       </div>
+                       <div>
+                          <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Curriculum Details</span>
+                          <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.totalLessons} Sessions Total</span>
+                       </div>
+                    </div>
+                 </div>
+               )}
+               
             </CardContent>
+
+            {/* Footer Navigation */}
+            <div className="bg-white border-t border-gray-100 p-6 flex justify-between items-center rounded-b-3xl shrink-0 z-10">
+               <Button 
+                variant="outline" 
+                onClick={prevStep} 
+                disabled={currentStep === 1}
+                className="font-black gap-2 border-gray-200 text-gray-500 hover:text-gray-800 w-28"
+               >
+                 <ChevronLeft size={18} /> Back
+               </Button>
+
+               {currentStep < 4 ? (
+                 <Button onClick={nextStep} className="font-black text-lg gap-2 px-10 shadow-lg shadow-primary-200 w-48 hover:-translate-y-0.5 transition-transform">
+                   Next <ChevronRight size={18} />
+                 </Button>
+               ) : (
+                 <Button onClick={() => handleSubmit()} className="font-black text-lg gap-2 px-10 bg-green-500 hover:bg-green-600 shadow-lg shadow-green-200 w-48 hover:-translate-y-0.5 transition-transform">
+                   <CheckCircle size={18} /> {editingCourse ? 'Save Changes' : 'Publish Course'}
+                 </Button>
+               )}
+            </div>
           </Card>
         </div>
       )}

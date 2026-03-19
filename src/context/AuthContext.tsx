@@ -11,6 +11,7 @@ interface User {
   email: string;
   role: 'student' | 'teacher' | 'admin';
   profilePicture?: string;
+  enrollments?: Array<{ course: string; status: string }>;
 }
 
 interface AuthContextType {

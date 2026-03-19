@@ -12,7 +12,7 @@ import { useIntroOffer } from '@/context/IntroOfferContext';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
-import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Users as UsersIcon } from 'lucide-react';
+import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -334,6 +334,149 @@ const CourseSection = () => {
         </Card>
       ))}
     </div>
+  );
+};
+
+const ContactSection = () => {
+  const { showToast } = useToast();
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, form);
+      showToast("Message sent! We'll get back to you soon. ✨", "success");
+      setForm({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong. Please try again later.", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section className="relative py-24 px-4 overflow-hidden" id="contact">
+      {/* Playful Background Elements */}
+      <div className="absolute inset-0 bg-slate-50 z-0" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
+      
+      {/* Floating Icons */}
+      <div className="absolute top-20 left-10 text-4xl opacity-20 animate-bounce">🎈</div>
+      <div className="absolute bottom-20 right-10 text-4xl opacity-20 animate-bounce" style={{ animationDelay: '1s' }}>🚀</div>
+      <div className="absolute top-1/2 right-[5%] text-4xl opacity-10 animate-pulse">✨</div>
+
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+        <div className="flex-1 text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-secondary-600 font-bold mb-6 shadow-sm border border-gray-100">
+            <MessageCircle size={16} />
+            <span className="text-sm">Have a Question?</span>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-6 leading-tight">
+            Let's Start a <br/><span className="text-primary-500">Magical</span> Conversation!
+          </h2>
+          <p className="text-lg font-bold text-gray-500 mb-10 max-w-xl leading-relaxed">
+            Whether you're curious about our courses, need a demo, or just want to say hi, we're all ears!
+          </p>
+          
+          <div className="space-y-6 max-w-md mx-auto lg:mx-0">
+             <div className="flex items-center gap-6 p-4 bg-white rounded-3xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
+               <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center shadow-inner">
+                 <Mail size={24} />
+               </div>
+               <div className="text-left">
+                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Email Us</p>
+                 <p className="font-bold text-gray-800">support@ruzann.com</p>
+               </div>
+             </div>
+             <div className="flex items-center gap-6 p-4 bg-white rounded-3xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
+               <div className="w-14 h-14 bg-secondary-100 text-secondary-600 rounded-2xl flex items-center justify-center shadow-inner">
+                 <Phone size={24} />
+               </div>
+               <div className="text-left">
+                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Call Us</p>
+                 <p className="font-bold text-gray-800">+91 9960559894</p>
+               </div>
+             </div>
+          </div>
+        </div>
+
+        <Card className="w-full lg:w-[500px] bg-white p-8 md:p-12 rounded-[3.5rem] shadow-2xl border-none relative">
+           <div className="absolute -top-6 -left-6 bg-yellow-400 text-white w-16 h-16 rounded-3xl flex items-center justify-center text-3xl shadow-lg rotate-12 animate-wiggle">✍️</div>
+           
+           <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Your Name</label>
+                <input 
+                  required
+                  type="text"
+                  placeholder="Superstar's Name"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  value={form.name}
+                  onChange={(e) => setForm({...form, name: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Email Address</label>
+                <input 
+                  required
+                  type="email"
+                  placeholder="parent@example.com"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  value={form.email}
+                  onChange={(e) => setForm({...form, email: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">What's on your mind?</label>
+                <div className="relative group">
+                  <select 
+                    required
+                    className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 appearance-none pr-12"
+                    value={form.subject}
+                    onChange={(e) => setForm({...form, subject: e.target.value})}
+                  >
+                    <option value="">Choose a Magic Topic</option>
+                    <option value="Courses">Course Enquiry 📚</option>
+                    <option value="Demo">Free Demo Session 🎁</option>
+                    <option value="Feedback">Just Saying Hi 👋</option>
+                  </select>
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <ChevronDown size={20} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Message</label>
+                <textarea 
+                  required
+                  rows={4}
+                  placeholder="Share your magic thoughts..."
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 resize-none"
+                  value={form.message}
+                  onChange={(e) => setForm({...form, message: e.target.value})}
+                />
+              </div>
+
+              <Button 
+                type="submit" 
+                size="lg" 
+                fullWidth 
+                className="py-8 rounded-[2rem] font-black text-xl bg-[#F2643D] hover:bg-[#E0532C] border-none shadow-xl shadow-[#F2643D]/20 transition-all flex items-center justify-center gap-3 active:scale-95"
+                isLoading={isSubmitting}
+              >
+                Send Some Magic! <Send size={20} />
+              </Button>
+           </form>
+        </Card>
+      </div>
+    </section>
   );
 };
 
@@ -721,6 +864,7 @@ export default function Home() {
         </Link>
       </section>
 
+      <ContactSection />
       <Footer />
       <ScrollToTop />
     </div>
