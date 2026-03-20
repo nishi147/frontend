@@ -161,7 +161,7 @@ export default function CourseDetailPage() {
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <span className="bg-primary-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-primary-500/30">FEATURED PATH</span>
-              <span className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary-300 border border-white/10">{course.category}</span>
+              <span className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary-300 border border-white/10">{course.category?.name}</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-md">{course.title}</h1>

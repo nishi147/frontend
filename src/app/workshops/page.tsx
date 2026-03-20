@@ -168,12 +168,29 @@ export default function WorkshopsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((ws: any) => (
                 <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-                  <div className="h-48 bg-gray-50 relative overflow-hidden flex items-center justify-center text-7xl rounded-t-[2.5rem]">
-                    {ws.image && ws.image !== 'no-image.jpg' ? (
-                      <img src={ws.image} alt={ws.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    ) : (
-                      <div className="text-gray-300 opacity-50 font-sans font-black uppercase tracking-tighter mix-blend-multiply">{ws.title.substring(0, 8)}</div>
-                    )}
+                  <div className={`h-48 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2.5rem] ${
+                    ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
+                    ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
+                    ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
+                    'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
+                  }`}>
+                    {/* Decorative Elements */}
+                    <div className="absolute inset-0 opacity-20 pointer-events-none">
+                      <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-3px] transition-transform duration-500">
+                      <div className="text-6xl mb-3 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
+                        {ws.title.toLowerCase().includes('space') ? '🚀' : 
+                         ws.title.toLowerCase().includes('robot') ? '🤖' : 
+                         ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
+                      </div>
+                      <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+                          Workshop Event
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="absolute top-[10rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">

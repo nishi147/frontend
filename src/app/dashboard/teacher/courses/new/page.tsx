@@ -29,6 +29,21 @@ export default function CreateCoursePage() {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [categories, setCategories] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${API}/api/categories`);
+        if (res.data.success) {
+          setCategories(res.data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -176,7 +191,17 @@ export default function CreateCoursePage() {
 
                     <div>
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block ml-1">Learning Category</label>
-                      <input placeholder="e.g. Coding" value={formData.category} className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-bold text-slate-800 transition-all" onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
+                      <select 
+                        required
+                        value={formData.category} 
+                        className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-bold text-slate-800 transition-all appearance-none" 
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map((cat) => (
+                          <option key={cat._id} value={cat._id}>{cat.name}</option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block ml-1">Difficulty Level</label>
@@ -362,7 +387,7 @@ export default function CreateCoursePage() {
                           <div>
                              <span className="block text-[10px] uppercase font-black tracking-[0.3em] text-slate-300 mb-2 ml-1">Classification</span>
                              <div className="flex gap-2">
-                                <span className="bg-white px-5 py-2 rounded-2xl text-slate-600 font-black text-xs shadow-sm border border-slate-100">{formData.category || 'GENERAL'}</span>
+                                <span className="bg-white px-5 py-2 rounded-2xl text-slate-600 font-black text-xs shadow-sm border border-slate-100">{categories.find(c => c._id === formData.category)?.name || 'GENERAL'}</span>
                                 <span className="bg-white px-5 py-2 rounded-2xl text-slate-600 font-black text-xs shadow-sm border border-slate-100">{formData.level}</span>
                              </div>
                           </div>

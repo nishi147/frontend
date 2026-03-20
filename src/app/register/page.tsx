@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
 import Link from 'next/link';
+import { Logo } from '@/components/ui/Logo';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -56,6 +57,9 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-accent-200 via-primary-200 to-secondary-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
+          <div className="flex justify-center mb-4">
+            <Logo />
+          </div>
           <CardTitle className="text-3xl text-secondary-600">Join RUZANN!</CardTitle>
           <p className="text-gray-500 mt-2">Create an account to start your journey</p>
         </div>

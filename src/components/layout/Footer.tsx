@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Logo } from '../ui/Logo';
-import { Facebook, Instagram, Twitter, Youtube, Phone, Mail, MapPin } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube, Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 
 export const Footer = () => {
   return (
@@ -18,10 +18,16 @@ export const Footer = () => {
             <p className="text-gray-300 font-bold leading-relaxed max-w-xs">
               "We nurture a natural interest in coding and other learning areas, empowering your child to learn, explore, and reach their highest potential."
             </p>
-            <div className="flex gap-4">
-              {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
-                <Link key={i} href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary-500 transition-all hover:-translate-y-1">
-                  <Icon size={20} />
+            <div className="flex flex-wrap gap-4">
+              {[
+                { Icon: Instagram, href: 'https://www.instagram.com/learn_wd_ruzann?igsh=MWU0YnA2aTFwenJ1MA==' },
+                { Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/' },
+                { Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad' },
+                { Icon: Facebook, href: 'https://www.facebook.com/share/1Ddf5fZuXE/' },
+                { Icon: MessageCircle, href: 'https://wa.me/919960559894' }
+              ].map((social, i) => (
+                <Link key={i} href={social.href} target="_blank" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary-500 transition-all hover:-translate-y-1">
+                  <social.Icon size={18} />
                 </Link>
               ))}
             </div>
@@ -31,7 +37,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-xl font-black mb-8 border-b-4 border-primary-500 pb-2 inline-block">Quick Links</h4>
             <ul className="flex flex-col gap-4 font-bold text-gray-400">
-              {['Home', 'About Us', 'Courses', 'Reviews', 'Our Impact'].map(link => (
+              {['Home', 'About Us', 'Courses', 'Reviews', 'Blog'].map(link => (
                 <li key={link}>
                   <Link href="#" className="hover:text-white transition-colors flex items-center gap-2 group">
                     <span className="w-2 h-2 rounded-full bg-primary-500 opacity-0 group-hover:opacity-100 transition-opacity" />

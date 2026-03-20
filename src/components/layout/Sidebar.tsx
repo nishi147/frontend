@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {
@@ -31,10 +31,14 @@ export const Sidebar = () => {
     const adminLinks = [
       { name: 'Overview', href: base, icon: BarChart },
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
+      { name: 'Cool Mentors', href: `${base}/mentors`, icon: UserCheck },
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
+      { name: 'Course Categories', href: `${base}/categories`, icon: BookOpen },
+      { name: 'Global Currencies', href: `${base}/currencies`, icon: BookOpen },
       { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
       { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
+      { name: 'Manage Blogs', href: `${base}/blogs`, icon: BookOpen },
       { name: 'Settings', href: `${base}/settings`, icon: Settings },
     ];
 

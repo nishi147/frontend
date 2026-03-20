@@ -5,6 +5,7 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import axios from 'axios';
+import { Logo } from '@/components/ui/Logo';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -33,12 +34,8 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
-          <div className="relative w-56 h-32 mx-auto mb-4">
-            <img 
-              src="/ruzann_logo.png" 
-              alt="Ruzann Logo" 
-              className="w-full h-full object-contain"
-            />
+          <div className="flex justify-center mb-4">
+            <Logo />
           </div>
           <CardTitle className="text-3xl text-primary-600">Password Reset</CardTitle>
           <p className="text-gray-500 mt-2">Enter your email to receive a reset link</p>

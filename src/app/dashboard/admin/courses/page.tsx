@@ -32,6 +32,7 @@ export default function AdminCourseManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<any>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [categories, setCategories] = useState<any[]>([]);
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -88,11 +89,23 @@ export default function AdminCourseManagement() {
     // Also fetch if user is not fully loaded just to be fail-safe, or check user role accurately
     if (user?.role === "admin") {
       fetchCourses();
+      fetchCategories();
     } else if (user) {
       // If user exists but is not admin, still stop loading to prevent infinite spinner
       setIsLoading(false);
     }
   }, [user]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${API}/api/categories`);
+      if (res.data.success) {
+        setCategories(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch categories", err);
+    }
+  };
 
   // RESET FORM
   const resetForm = () => {
@@ -178,7 +191,7 @@ export default function AdminCourseManagement() {
       slug: course.slug || "",
       regularPrice: course.regularPrice || 0,
       offerPrice: course.offerPrice || course.pricePerSession || 0,
-      category: course.category || "",
+      category: course.category?._id || course.category || "",
       level: course.level || "Beginner",
       language: course.language || "English",
       totalLessons: course.totalLessons || course.numberOfSessions || 0,
@@ -302,7 +315,9 @@ export default function AdminCourseManagement() {
 
             <CardContent className="p-6 relative">
               <div className="flex items-center justify-between mb-3 text-xs uppercase font-black text-gray-400 tracking-widest">
-                <span className="flex items-center gap-1 text-primary-500"><BookOpen size={14} /> {course.category}</span>
+                <span className="flex items-center gap-1 text-primary-500">
+                  <BookOpen size={14} /> {course.category?.name || 'General'}
+                </span>
                 <span className={course.level === 'Advanced' ? 'text-red-500' : course.level === 'Intermediate' ? 'text-orange-500' : 'text-green-500'}>{course.level}</span>
               </div>
 
@@ -387,7 +402,17 @@ export default function AdminCourseManagement() {
 
                     <div className="col-span-2 md:col-span-1">
                       <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Category</label>
-                      <input placeholder="e.g. Coding" value={formData.category} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
+                      <select 
+                        required
+                        value={formData.category} 
+                        className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none appearance-none" 
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map((cat) => (
+                          <option key={cat._id} value={cat._id}>{cat.name}</option>
+                        ))}
+                      </select>
                     </div>
                     <div className="col-span-2 md:col-span-1">
                       <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Level</label>
@@ -582,10 +607,12 @@ export default function AdminCourseManagement() {
                             <span className="text-green-600 text-lg">₹{formData.offerPrice}</span>
                           </div>
                        </div>
-                       <div>
+                        <div>
                           <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Category & Level</span>
-                          <span className="font-bold text-slate-600">{formData.category || 'N/A'} • {formData.level}</span>
-                       </div>
+                          <span className="font-bold text-slate-600">
+                            {categories.find(c => c._id === formData.category)?.name || 'N/A'} • {formData.level}
+                          </span>
+                        </div>
                        <div>
                           <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Curriculum Details</span>
                           <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.totalLessons} Sessions Total</span>

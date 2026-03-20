@@ -10,16 +10,18 @@ import { useIntroOffer } from '@/context/IntroOfferContext';
 import axios from 'axios';
 
 import { useCurrency } from '@/context/CurrencyContext';
+import { MovingBanner } from './MovingBanner';
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
 const CurrencySwitcher = ({ isMobile = false }) => {
-  const { currency, setCurrency } = useCurrency();
-  const currencies: ('INR' | 'USD' | 'EUR' | 'GBP')[] = ['INR', 'USD', 'EUR', 'GBP'];
+  const { currency, setCurrency, availableCurrencies } = useCurrency();
+  
+  if (!availableCurrencies || availableCurrencies.length === 0) return null;
   
   return (
     <div className={`flex items-center gap-1 ${isMobile ? 'bg-gray-50 p-1 rounded-xl border border-gray-100' : ''}`}>
-      {currencies.map((curr) => (
+      {availableCurrencies.map((curr: string) => (
         <button
           key={curr}
           onClick={() => setCurrency(curr)}
@@ -63,6 +65,7 @@ export const Header = () => {
     { href: '/', label: 'Home' },
     { href: '/courses', label: 'Courses', hasDropdown: true },
     { href: '/about', label: 'About Us' },
+    { href: '/blog', label: 'Blog' },
     { href: '/workshops', label: 'Workshops' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -70,8 +73,10 @@ export const Header = () => {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="bg-white sticky top-0 z-[100] border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 sm:h-24 md:h-28 flex items-center justify-between gap-2 md:gap-6">
+    <>
+      <MovingBanner />
+      <header className="bg-white sticky top-0 z-[100] border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-24 sm:h-28 md:h-32 flex items-center justify-between gap-2 md:gap-6">
 
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 flex items-center">
@@ -117,16 +122,18 @@ export const Header = () => {
                             href={`/courses/${course._id}`}
                             className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition-colors group/item"
                           >
-                            <div className="w-12 h-12 rounded-xl bg-secondary-50 flex items-center justify-center text-xl shadow-sm group-hover/item:scale-110 transition-transform overflow-hidden relative border border-gray-100">
-                              {course.thumbnail ? (
-                                <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
-                              ) : (
-                                <span className="text-secondary-500 font-black">📚</span>
-                              )}
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm group-hover/item:scale-110 transition-transform overflow-hidden relative border border-white/20 ${
+                              typeof course.category === 'object' && course.category?.name?.toLowerCase().includes('space') ? 'bg-indigo-600' :
+                              typeof course.category === 'object' && course.category?.name?.toLowerCase().includes('programming') ? 'bg-cyan-500' :
+                              'bg-primary-500'
+                            }`}>
+                              <span className="filter drop-shadow-sm">
+                                {typeof course.category === 'object' ? course.category?.icon : '📚'}
+                              </span>
                             </div>
                             <div className="flex-1 min-w-0">
                                <p className="font-bold text-gray-800 text-sm truncate">{course.title}</p>
-                               <span className="text-[10px] font-black text-secondary-500 uppercase tracking-tighter">{course.category} • {course.numberOfSessions} Sessions</span>
+                               <span className="text-[10px] font-black text-secondary-500 uppercase tracking-tighter">{typeof course.category === 'object' ? course.category?.name : course.category} • {course.numberOfSessions} Sessions</span>
                             </div>
                             <Star size={14} className="text-yellow-400 opacity-0 group-hover/item:opacity-100 transition-opacity" fill="currentColor" />
                           </Link>
@@ -152,15 +159,9 @@ export const Header = () => {
 
         {/* Right Section (Desktop & Mobile Actions) */}
         <div className="flex items-center gap-2 md:gap-4 shrink-0">
-          {/* Currency Switcher (Hidden on mobile, shown on desktop/tablet) */}
-          <div className="hidden lg:block">
-            <CurrencySwitcher />
-          </div>
+          {/* Currency Switcher Temporarily Removed */}
 
-          {/* Mobile Specific View: Currency placed BEFORE other actions */}
-          <div className="lg:hidden">
-            <CurrencySwitcher isMobile />
-          </div>
+          {/* Mobile Specific View: Currency Removed */}
 
           {!user ? (
             <div className="flex items-center gap-2">
@@ -270,5 +271,6 @@ export const Header = () => {
         </div>
       )}
     </header>
+    </>
   );
 };

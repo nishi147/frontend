@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
 import Link from 'next/link';
 import { Shield } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -46,12 +47,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-200 via-secondary-200 to-accent-200 p-4">
       <Card className="w-full max-w-md bg-white/80">
         <div className="text-center mb-6">
-          <div className="relative w-32 h-20 mx-auto mb-4">
-            <img 
-              src="/ruzann_logo.png" 
-              alt="Ruzann Logo" 
-              className="w-full h-full object-contain"
-            />
+          <div className="flex justify-center mb-4">
+            <Logo />
           </div>
           <CardTitle className="text-3xl text-primary-600">Welcome Back!</CardTitle>
           <p className="text-gray-500 mt-2">Login to continue learning</p>

@@ -13,6 +13,8 @@ import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
+import CourseSelection from '@/components/sections/CourseSelection';
+import { BlogSection } from '@/components/sections/BlogSection';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -127,13 +129,30 @@ const WorkshopSection = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {workshops.map((ws: any) => (
         <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-          <div className="h-56 bg-gray-50 relative overflow-hidden flex items-center justify-center text-7xl rounded-t-[2.5rem]">
-             {ws.image && ws.image !== 'no-image.jpg' ? (
-                <img src={ws.image} alt={ws.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-             ) : (
-                <div className="text-gray-300 opacity-50 font-sans font-black uppercase tracking-tighter mix-blend-multiply">{ws.title.substring(0, 8)}</div>
-             )}
-          </div>
+          <div className={`h-56 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2.5rem] ${
+                    ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
+                    ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
+                    ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
+                    'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
+                  }`}>
+                    {/* Decorative Elements */}
+                    <div className="absolute inset-0 opacity-20 pointer-events-none">
+                      <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-3px] transition-transform duration-500">
+                      <div className="text-7xl mb-3 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
+                        {ws.title.toLowerCase().includes('space') ? '🚀' : 
+                         ws.title.toLowerCase().includes('robot') ? '🤖' : 
+                         ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
+                      </div>
+                      <div className="px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <span className="text-xs font-black text-white uppercase tracking-[0.2em]">
+                          Special Bootcamp
+                        </span>
+                      </div>
+                    </div>
+                  </div>
           
           <div className="absolute top-[12rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
             <span className="text-slate-900 font-black text-4xl tracking-tight">₹{ws.price}</span>
@@ -256,86 +275,6 @@ const ProjectSection = () => {
   );
 };
 
-const CourseSection = () => {
-  const [courses, setCourses] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-  const fetchCourses = async () => {
-    try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`);
-      if (res.data.success) {
-        setCourses(res.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching homepage courses:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchCourses();
-}, []);
-
-  if (loading) return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      {[1, 2, 3].map(i => <div key={i} className="h-[450px] rounded-[2.5rem] bg-gray-50 animate-pulse border-2 border-gray-100" />)}
-    </div>
-  );
-
-  if (courses.length === 0) return (
-    <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
-      <div className="text-6xl mb-6">📚</div>
-      <h3 className="text-2xl font-black text-gray-400 mb-2">Course Library Coming Soon</h3>
-      <p className="text-gray-400 font-bold">New educational paths are being curated. Check back shortly!</p>
-    </div>
-  );
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      {courses.map((course: any) => (
-        <Card key={course._id} className="group bg-white rounded-[2.5rem] border-2 border-gray-50 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
-          <div className="h-64 relative overflow-hidden flex items-center justify-center bg-gray-50 group-hover:scale-105 transition-transform duration-500">
-            {course.thumbnail ? (
-              <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
-            ) : (
-              <div className="text-8xl filter drop-shadow-lg opacity-20 grayscale">📚</div>
-            )}
-            <div className="absolute top-6 left-6 flex gap-2">
-              <span className="bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-700 shadow-sm">{course.category}</span>
-              <span className="bg-[#6C5CE7] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">Hot</span>
-            </div>
-            <div className="absolute bottom-6 right-6 bg-navy-900/80 backdrop-blur-sm text-white px-4 py-2 rounded-2xl flex items-center gap-2 text-xs font-black">
-              <BookOpen size={14} /> {course.numberOfSessions} Sessions
-            </div>
-          </div>
-          <CardContent className="p-8 flex flex-col flex-1">
-            <h3 className="text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-[#6C5CE7] transition-colors">{course.title}</h3>
-            <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 leading-relaxed">{course.description}</p>
-            
-            <div className="flex items-center gap-4 mb-8">
-              <div className="flex items-center gap-2 text-yellow-500 font-black">
-                <Star size={16} fill="currentColor" /> 5.0
-              </div>
-              <div className="w-px h-4 bg-gray-200" />
-              <div className="text-gray-400 font-black text-xs uppercase tracking-tighter">Verified Course</div>
-            </div>
-
-            <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
-              <div>
-                <div className="text-3xl font-black text-gray-900">₹{course.totalCoursePrice}</div>
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.pricePerSession}/session</div>
-              </div>
-              <Link href={`/courses/${course._id}`}>
-                <Button className="rounded-2xl px-8 py-6 font-black text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-};
 
 const ContactSection = () => {
   const { showToast } = useToast();
@@ -686,14 +625,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 px-4 container mx-auto" id="featured-courses">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-4">Explore Our <span className="text-secondary-500">Courses</span> 🎓</h2>
-          <p className="text-lg font-bold text-gray-500 max-w-2xl mx-auto">High-quality programs added by our educators and approved for your child's success.</p>
-        </div>
-
-        <CourseSection />
-      </section>
+      <CourseSelection />
 
       {/* 2.5 STUDENT PROJECTS SECTION */}
       <section className="py-20 px-4 container mx-auto" id="student-projects">
@@ -765,6 +697,8 @@ export default function Home() {
             </div>
           </div>
       </section>
+
+      <BlogSection />
 
 
       {/* 5. TESTIMONIALS SECTION */}
