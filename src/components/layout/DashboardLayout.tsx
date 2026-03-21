@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Loader2, X } from 'lucide-react';
+import { RewardsWidget } from '../ui/RewardsWidget';
 
 export const DashboardLayout = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) => {
   const { user, loading } = useAuth();
@@ -39,6 +40,7 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
       <div className="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none" />
 
       <Header />
+      <RewardsWidget />
       
       <div className="flex flex-col md:flex-row flex-1 relative z-[110] w-full">
         <Sidebar />

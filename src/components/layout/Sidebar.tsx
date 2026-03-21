@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {
@@ -15,10 +15,15 @@ export const Sidebar = () => {
     const base = `/dashboard/${role}`;
 
     const studentLinks = [
-      { name: 'My Dashboard', href: base, icon: Home },
+      { name: 'Dashboard', href: base, icon: Home },
       { name: 'My Courses', href: `${base}/courses`, icon: BookOpen },
-      { name: 'My Projects', href: `${base}/projects`, icon: CheckSquare },
+      { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },
+      { name: 'Quizzes', href: `${base}/quizzes`, icon: FileQuestion },
       { name: 'Live Classes', href: `${base}/live-classes`, icon: Video },
+      { name: 'Progress', href: `${base}/progress`, icon: BarChart },
+      { name: 'Messages', href: `${base}/messages`, icon: MessageSquare },
+      { name: 'Billing', href: `${base}/billing`, icon: Tag },
+      { name: 'Feedback', href: `${base}/feedback`, icon: Star },
     ];
 
     const teacherLinks = [
