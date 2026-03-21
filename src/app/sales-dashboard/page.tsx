@@ -8,17 +8,18 @@ export default function SalesDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get('/api/analytics');
+      setStats(res.data.data);
+    } catch (err) {
+      console.error("Error fetching sales stats:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await axios.get('/api/analytics');
-        setStats(res.data.data);
-      } catch (err) {
-        console.error("Error fetching sales stats:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchStats();
   }, []);
 
