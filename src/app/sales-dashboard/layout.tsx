@@ -1,0 +1,10 @@
+"use client";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+
+export default function SalesLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <DashboardLayout allowedRoles={['sales', 'admin']}>
+      {children}
+    </DashboardLayout>
+  );
+}

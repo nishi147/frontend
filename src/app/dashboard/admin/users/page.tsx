@@ -71,7 +71,26 @@ export default function UserManagement() {
     }
   };
 
-  if (loading || isLoading) return <div className="p-20 text-center font-bold text-accent-500 text-2xl animate-pulse">Managing Souls... 🧙</div>;
+  const updateRole = async (id: string, newRole: string) => {
+    try {
+      await axios.put(`/api/users/${id}/role`, { role: newRole });
+      showToast(`Role updated to ${newRole}`, "success");
+      fetchUsers();
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || 'Unknown error';
+      showToast(`Role update failed: ${msg}`, "error");
+      console.error("Role update error:", err.response?.data || err);
+    }
+  };
+
+  const roleStyles: any = {
+    admin: 'text-accent-600 bg-accent-50 border-accent-100',
+    teacher: 'text-secondary-600 bg-secondary-50 border-secondary-100',
+    sales: 'text-purple-600 bg-purple-50 border-purple-100',
+    student: 'text-primary-600 bg-primary-50 border-primary-100'
+  };
+
+  if (loading || isLoading) return <div className="p-20 text-center font-bold text-accent-500 text-2xl animate-pulse uppercase tracking-[0.2em]">Synchronizing Souls... 🧙</div>;
 
   return (
     <DashboardLayout>
@@ -111,37 +130,49 @@ export default function UserManagement() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-8 py-6 font-bold uppercase tracking-widest text-xs">
-                     <span className={`px-4 py-1.5 rounded-xl font-black ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
-                        {u.role}
-                     </span>
+                  <td className="px-8 py-6">
+                     <select 
+                       value={u.role}
+                       onChange={(e) => updateRole(u._id, e.target.value)}
+                       className={`px-3 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-widest border-2 outline-none cursor-pointer transition-all ${roleStyles[u.role] || roleStyles.student}`}
+                     >
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="sales">Sales</option>
+                        <option value="admin">Admin</option>
+                     </select>
                   </td>
                   <td className="px-8 py-6 font-black">
                     {u.role === 'teacher' ? (
                       u.isApprovedTeacher ? (
-                        <span className="text-green-500 flex items-center gap-2"><UserCheck className="w-4 h-4" /> Rooted</span>
+                        <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Rooted</span>
                       ) : (
-                        <span className="text-amber-500 flex items-center gap-2 animate-pulse"><UserX className="w-4 h-4" /> Pending</span>
+                        <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Pending Approval</span>
                       )
                     ) : u.role === 'student' ? (
                       u.isApprovedStudent ? (
-                        <span className="text-green-500 flex items-center gap-2"><UserCheck className="w-4 h-4" /> Approved</span>
+                        <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Verified Identity</span>
                       ) : (
-                        <span className="text-amber-500 flex items-center gap-2 animate-pulse"><UserX className="w-4 h-4" /> Waitlist</span>
+                        <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Admissions Waitlist</span>
                       )
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-gray-400 text-xs italic opacity-50 px-2">— System Core —</span>
                     )}
                   </td>
                   <td className="px-8 py-6 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       {u.role === 'teacher' && !u.isApprovedTeacher && (
-                        <Button size="sm" variant="secondary" onClick={() => approveTeacher(u._id)} className="font-black text-[10px] uppercase px-4 py-2">Approve</Button>
+                        <Button size="sm" variant="secondary" onClick={() => approveTeacher(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-secondary-100">Approve</Button>
                       )}
                       {u.role === 'student' && !u.isApprovedStudent && (
-                        <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-4 py-2">Approve</Button>
+                        <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-primary-100">Approve</Button>
                       )}
-                      <Button size="sm" variant="outline" onClick={() => deleteUser(u._id)} className="text-red-500 border-red-100 hover:bg-red-50 p-2"><Trash2 className="w-4 h-4" /></Button>
+                      <button 
+                        onClick={() => deleteUser(u._id)} 
+                        className="p-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-md active:scale-95 border-2 border-red-100"
+                      >
+                         <Trash2 size={18} />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -165,10 +196,17 @@ export default function UserManagement() {
                 </div>
              </div>
              
-             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-50 pt-5">
-                <span className={`px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-widest ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
-                  {u.role}
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-50 pt-5">
+                 <select 
+                   value={u.role}
+                   onChange={(e) => updateRole(u._id, e.target.value)}
+                   className={`px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-widest border-2 outline-none cursor-pointer transition-all ${roleStyles[u.role] || roleStyles.student}`}
+                 >
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="sales">Sales</option>
+                    <option value="admin">Admin</option>
+                 </select>
                 
                 <div className="flex items-center gap-2">
                   {!u.isApprovedTeacher && u.role === 'teacher' && (

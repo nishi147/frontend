@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {
@@ -31,6 +31,7 @@ export const Sidebar = () => {
     const adminLinks = [
       { name: 'Overview', href: base, icon: BarChart },
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
+      { name: 'Sales CRM', href: '/sales-dashboard', icon: BarChart },
       { name: 'Cool Mentors', href: `${base}/mentors`, icon: UserCheck },
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
       { name: 'Course Categories', href: `${base}/categories`, icon: BookOpen },
@@ -39,11 +40,20 @@ export const Sidebar = () => {
       { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Manage Blogs', href: `${base}/blogs`, icon: BookOpen },
+      { name: 'Coupon Center', href: `${base}/coupons`, icon: Tag },
+      { name: 'Testimonials', href: `${base}/testimonials`, icon: MessageSquare },
       { name: 'Settings', href: `${base}/settings`, icon: Settings },
+    ];
+
+    const salesLinks = [
+      { name: 'Leads Dashboard', href: '/sales-dashboard', icon: BarChart },
+      { name: 'My Referrals', href: '/sales-dashboard/referrals', icon: Users },
+      { name: 'Settings', href: '/sales-dashboard/settings', icon: Settings },
     ];
 
     if (role === 'admin') return adminLinks;
     if (role === 'teacher') return teacherLinks;
+    if (role === 'sales') return salesLinks;
     return studentLinks;
   };
 

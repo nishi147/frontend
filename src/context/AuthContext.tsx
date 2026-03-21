@@ -9,8 +9,9 @@ interface User {
   _id: string;
   name: string;
   email: string;
-  role: 'student' | 'teacher' | 'admin';
+  role: 'student' | 'teacher' | 'admin' | 'sales';
   profilePicture?: string;
+  referralCode?: string;
   enrollments?: Array<{ course: string; status: string }>;
 }
 

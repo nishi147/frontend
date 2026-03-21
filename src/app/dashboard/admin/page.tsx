@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import axios from 'axios';
-import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings } from 'lucide-react';
+import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift } from 'lucide-react';
 
 interface Analytics {
   totalStudents: number;
@@ -20,18 +20,21 @@ interface Analytics {
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
+  const [salesStats, setSalesStats] = useState<any>(null);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [analyticsRes, usersRes] = await Promise.all([
+        const [analyticsRes, usersRes, salesRes] = await Promise.all([
           axios.get('/api/users/analytics'),
-          axios.get('/api/users')
+          axios.get('/api/users'),
+          axios.get('/api/analytics/sales')
         ]);
         if (analyticsRes.data.success) setAnalytics(analyticsRes.data.data);
         if (usersRes.data.success) setUsers(usersRes.data.data);
+        if (salesRes.data.success) setSalesStats(salesRes.data.data);
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
       } finally {
@@ -93,6 +96,12 @@ export default function AdminDashboard() {
           icon={<IndianRupee className="w-6 h-6 md:w-8 md:h-8 text-green-600" />} 
           color="bg-green-50" 
         />
+        <StatCard 
+          title="Conv. Rate" 
+          value={`${salesStats?.conversionRate?.toFixed(1) || 0}%`} 
+          icon={<TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-secondary-500" />} 
+          color="bg-secondary-50" 
+        />
       </div>
 
       {/* Management Links */}
@@ -122,8 +131,20 @@ export default function AdminDashboard() {
            icon={<Video className="w-10 h-10 md:w-12 md:h-12 text-green-500" />}
          />
          <ManagementCard 
+           title="Sales CRM"
+           description="Manage leads, track conversions, and assign counsellors."
+           href="/sales-dashboard"
+           icon={<Target className="w-10 h-10 md:w-12 md:h-12 text-secondary-500" />}
+         />
+         <ManagementCard 
+           title="Coupon Center"
+           description="Create discount codes and track marketing performance."
+           href="/dashboard/admin/coupons"
+           icon={<Gift className="w-10 h-10 md:w-12 md:h-12 text-purple-500" />}
+         />
+         <ManagementCard 
            title="System Settings"
-           description="Configure platform branding, payments, SEO, and comms."
+           description="Configure platform branding, payments, and SEO."
            href="/dashboard/admin/settings"
            icon={<Settings className="w-10 h-10 md:w-12 md:h-12 text-primary-600" />}
          />
