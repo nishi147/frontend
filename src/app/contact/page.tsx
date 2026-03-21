@@ -21,13 +21,18 @@ export default function ContactPage() {
     setLoading(true);
     setError('');
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, form);
+      await axios.post('/api/leads', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || 'Not provided',
+        source: 'Website',
+        notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
+      });
       setSuccess(true);
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err: any) {
-      // If backend not available, show a success message anyway for UX
       console.error(err);
-      setSuccess(true);
+      setError('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -100,8 +105,8 @@ export default function ContactPage() {
                 <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
                   <CheckCircle size={44} className="text-green-500" />
                 </div>
-                <h2 className="text-2xl font-black text-gray-800 mb-2">Message Sent! 🎉</h2>
-                <p className="text-gray-500 font-bold mb-6">Thank you for reaching out. Our team will contact you within 24 hours.</p>
+                <h2 className="text-2xl font-black text-gray-800 mb-2">Thanks! Our team will contact you soon 🎉</h2>
+                <p className="text-gray-500 font-bold mb-6">We have received your details safely.</p>
                 <button
                   onClick={() => setSuccess(false)}
                   className="px-8 py-3 rounded-xl bg-[#6C5CE7] text-white font-black hover:bg-[#5B4BCB] transition-all"

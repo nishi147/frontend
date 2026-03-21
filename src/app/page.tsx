@@ -278,16 +278,22 @@ const ProjectSection = () => {
 
 const ContactSection = () => {
   const { showToast } = useToast();
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, form);
-      showToast("Message sent! We'll get back to you soon. ✨", "success");
-      setForm({ name: '', email: '', subject: '', message: '' });
+      await axios.post('/api/leads', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || 'Not provided',
+        source: 'Website',
+        notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
+      });
+      showToast("Thanks! Our team will contact you soon 🎉", "success");
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
       console.error(err);
       showToast("Something went wrong. Please try again later.", "error");
@@ -368,6 +374,18 @@ const ContactSection = () => {
                   className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
                   value={form.email}
                   onChange={(e) => setForm({...form, email: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Phone Number</label>
+                <input 
+                  required
+                  type="tel"
+                  placeholder="+91 00000 00000"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  value={form.phone}
+                  onChange={(e) => setForm({...form, phone: e.target.value})}
                 />
               </div>
 
