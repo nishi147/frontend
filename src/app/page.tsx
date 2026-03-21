@@ -278,7 +278,7 @@ const ProjectSection = () => {
 
 const ContactSection = () => {
   const { showToast } = useToast();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -290,10 +290,11 @@ const ContactSection = () => {
         email: form.email,
         phone: form.phone || 'Not provided',
         source: 'Website',
+        referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
       });
       showToast("Thanks! Our team will contact you soon 🎉", "success");
-      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      setForm({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
     } catch (err) {
       console.error(err);
       showToast("Something went wrong. Please try again later.", "error");
@@ -407,6 +408,17 @@ const ContactSection = () => {
                     <ChevronDown size={20} />
                   </div>
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Referral Code (Optional)</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. RUZ-X4K"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 uppercase"
+                  value={form.referralCode}
+                  onChange={(e) => setForm({...form, referralCode: e.target.value})}
+                />
               </div>
 
               <div className="space-y-2">

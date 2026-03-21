@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -26,10 +26,11 @@ export default function ContactPage() {
         email: form.email,
         phone: form.phone || 'Not provided',
         source: 'Website',
+        referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
       });
       setSuccess(true);
-      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      setForm({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
     } catch (err: any) {
       console.error(err);
       setError('Something went wrong. Please try again later.');
@@ -173,6 +174,18 @@ export default function ContactPage() {
                       <option value="partnership">Partnership</option>
                       <option value="other">Other</option>
                     </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1 md:col-span-1">
+                    <label className="text-sm font-bold text-gray-600">Referral Code (Optional)</label>
+                    <input
+                      name="referralCode"
+                      type="text"
+                      value={form.referralCode}
+                      onChange={handleChange}
+                      placeholder="e.g. RUZ-X4K"
+                      className="px-4 py-3 rounded-xl border-2 border-gray-100 focus:border-[#6C5CE7] focus:outline-none font-semibold text-gray-800 transition-colors uppercase"
+                    />
                   </div>
 
                   <div className="flex flex-col gap-1 md:col-span-2">
