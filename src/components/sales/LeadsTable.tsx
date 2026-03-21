@@ -7,7 +7,7 @@ import { useToast } from '@/context/ToastContext';
 import { useAuth } from '@/context/AuthContext';
 import { Trash2 } from 'lucide-react';
 
-export const LeadsTable = () => {
+export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
   const { user } = useAuth();
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,10 +60,16 @@ export const LeadsTable = () => {
     e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this lead?")) return;
     try {
-      await axios.delete(`/api/leads/${id}`);
-      showToast("Lead deleted successfully", "success");
-      fetchLeads();
+      const res = await axios.delete(`/api/leads/${id}`);
+      if (res.data.success) {
+        showToast("Lead successfully vaporized! 🚀", "success");
+        fetchLeads();
+        if (onLeadUpdate) onLeadUpdate();
+      } else {
+        showToast(res.data.message || "Failed to delete lead", "error");
+      }
     } catch (err) {
+      console.error("Error deleting lead:", err);
       showToast("Failed to delete lead", "error");
     }
   };
@@ -80,8 +86,11 @@ export const LeadsTable = () => {
       {selectedLead && (
         <LeadModal 
           lead={selectedLead} 
-          onClose={() => setSelectedLead(null)} 
-          onUpdate={fetchLeads} 
+          onClose={() => setSelectedLead(null)}
+          onUpdate={() => {
+            fetchLeads();
+            if (onLeadUpdate) onLeadUpdate();
+          }}
         />
       )}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">

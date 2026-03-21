@@ -11,7 +11,7 @@ export default function SalesDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('/api/analytics/sales');
+        const res = await axios.get('/api/analytics');
         setStats(res.data.data);
       } catch (err) {
         console.error("Error fetching sales stats:", err);
@@ -112,14 +112,16 @@ export default function SalesDashboard() {
               <Target className="text-primary-500" /> Source Analytics
             </h2>
             <div className="space-y-6">
-              {stats?.sourceStats?.sort((a: any, b: any) => b.count - a.count).map((src: any) => {
+              {stats?.leadsBySource && Object.entries(stats.leadsBySource)
+                 .sort(([, countA]: any, [, countB]: any) => countB - countA)
+                 .map(([source, count]: any) => {
                  const total = stats.totalLeads || 1;
-                 const percent = ((src.count / total) * 100).toFixed(1);
+                 const percent = ((count / total) * 100).toFixed(1);
                  return (
-                   <div key={src._id} className="relative group">
+                   <div key={source} className="relative group">
                      <div className="flex justify-between text-sm font-bold text-gray-600 mb-2">
-                       <span className="uppercase tracking-widest text-xs">{src._id}</span>
-                       <span className="text-gray-400">{src.count} Leads ({percent}%)</span>
+                       <span className="uppercase tracking-widest text-xs">{source}</span>
+                       <span className="text-gray-400">{count} Leads ({percent}%)</span>
                      </div>
                      <div className="w-full h-3 bg-gray-50 rounded-full overflow-hidden">
                        <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full group-hover:from-secondary-400 group-hover:to-secondary-600 transition-all duration-500" style={{ width: `${percent}%` }} />
@@ -127,7 +129,7 @@ export default function SalesDashboard() {
                    </div>
                  );
               })}
-              {(!stats?.sourceStats || stats.sourceStats.length === 0) && (
+              {(!stats?.leadsBySource || Object.keys(stats.leadsBySource).length === 0) && (
                 <div className="text-center py-8 text-gray-400 font-bold uppercase tracking-widest text-xs">No source data available</div>
               )}
             </div>
@@ -154,7 +156,7 @@ export default function SalesDashboard() {
               Showing {stats?.totalLeads || 0} Leads
            </span>
         </div>
-        <LeadsTable />
+        <LeadsTable onLeadUpdate={fetchStats} />
       </div>
     </div>
   );
