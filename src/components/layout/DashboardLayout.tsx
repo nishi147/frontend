@@ -15,7 +15,11 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
       if (!user) {
         router.push('/login');
       } else if (allowedRoles && !allowedRoles.includes(user.role)) {
-        router.push(`/dashboard/${user.role}`);
+        if (user.role === 'sales' || user.role === 'admin') {
+            router.push(user.role === 'sales' ? '/sales-dashboard' : '/dashboard/admin');
+        } else {
+            router.push(`/dashboard/${user.role}`);
+        }
       }
     }
   }, [user, loading, router, allowedRoles]);

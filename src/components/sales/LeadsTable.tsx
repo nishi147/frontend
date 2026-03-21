@@ -4,14 +4,19 @@ import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, 
 import axios from 'axios';
 import { LeadModal } from './LeadModal';
 import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/AuthContext';
+import { Trash2 } from 'lucide-react';
 
 export const LeadsTable = () => {
+  const { user } = useAuth();
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [source, setSource] = useState('');
   const [followUp, setFollowUp] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const { showToast } = useToast();
 
@@ -19,9 +24,10 @@ export const LeadsTable = () => {
     try {
       setLoading(true);
       const res = await axios.get('/api/leads', {
-        params: { search, status, source, followUp }
+        params: { search, status, source, followUp, page, limit: 15 }
       });
       setLeads(res.data.data);
+      setTotalPages(res.data.pages || 1);
     } catch (err) {
       console.error("Error fetching leads:", err);
     } finally {
@@ -30,11 +36,15 @@ export const LeadsTable = () => {
   };
 
   useEffect(() => {
+    setPage(1); // Reset page on filter change
+  }, [search, status, source, followUp]);
+
+  useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchLeads();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [search, status, source, followUp]);
+  }, [search, status, source, followUp, page]);
 
   const handleExport = () => {
     window.open(`/api/leads/export`, '_blank');
@@ -44,6 +54,25 @@ export const LeadsTable = () => {
     const message = `Hello ${lead.name}, this is from Ruzann. We received your inquiry and would love to help you with our courses!`;
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=${encodedMessage}`, '_blank');
+  };
+
+  const handleDelete = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this lead?")) return;
+    try {
+      await axios.delete(`/api/leads/${id}`);
+      showToast("Lead deleted successfully", "success");
+      fetchLeads();
+    } catch (err) {
+      showToast("Failed to delete lead", "error");
+    }
+  };
+
+  const isOverdue = (dateStr: string) => {
+    if (!dateStr) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(dateStr) < today;
   };
 
   return (
@@ -128,7 +157,7 @@ export const LeadsTable = () => {
               ) : leads.map((lead: any) => (
                 <tr 
                   key={lead._id} 
-                  className="hover:bg-primary-50/30 transition-colors group cursor-pointer"
+                  className={`hover:bg-primary-50/30 transition-colors group cursor-pointer ${isOverdue(lead.followUpDate) && lead.status !== 'Converted' && lead.status !== 'Lost' ? 'border-l-4 border-l-red-500 bg-red-50/10' : ''}`}
                   onClick={() => setSelectedLead(lead)}
                 >
                   <td className="px-8 py-6">
@@ -183,11 +212,20 @@ export const LeadsTable = () => {
                          </a>
                        )}
                        <button 
-                         onClick={() => setSelectedLead(lead)}
+                         onClick={(e) => { e.stopPropagation(); setSelectedLead(lead); }}
                          className="p-2.5 bg-gray-50 text-gray-400 hover:bg-primary-500 hover:text-white rounded-xl transition-all shadow-sm"
                        >
                           <ExternalLink size={18} />
                        </button>
+                       {user?.role === 'admin' && (
+                         <button 
+                           onClick={(e) => handleDelete(e, lead._id)}
+                           className="p-2.5 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm"
+                           title="Delete Lead"
+                         >
+                            <Trash2 size={18} />
+                         </button>
+                       )}
                     </div>
                   </td>
                 </tr>
@@ -195,6 +233,31 @@ export const LeadsTable = () => {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-8 py-4 border-t-2 border-gray-50 bg-gray-50/50">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              Page {page} of {totalPages}
+            </span>
+            <div className="flex gap-2">
+              <button 
+                disabled={page === 1}
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                className="px-4 py-2 bg-white rounded-xl font-bold text-xs text-gray-600 border-2 border-gray-100 hover:border-primary-500 disabled:opacity-50 transition-all"
+              >
+                Previous
+              </button>
+              <button 
+                disabled={page === totalPages}
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                className="px-4 py-2 bg-white rounded-xl font-bold text-xs text-gray-600 border-2 border-gray-100 hover:border-primary-500 disabled:opacity-50 transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
   const [status, setStatus] = useState(lead.status);
   const [assignedTo, setAssignedTo] = useState(lead.assignedTo?._id || '');
   const [followUpDate, setFollowUpDate] = useState(lead.followUpDate ? lead.followUpDate.split('T')[0] : '');
+  const [revenue, setRevenue] = useState(lead.revenue || 0);
   const [counsellors, setCounsellors] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,7 +34,9 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await axios.put(`/api/leads/${lead._id}`, { status, assignedTo, followUpDate });
+      const payload: any = { status, assignedTo, followUpDate };
+      if (status === 'Converted') payload.revenue = revenue;
+      await axios.put(`/api/leads/${lead._id}`, payload);
       if (note.trim()) {
         await axios.post(`/api/leads/${lead._id}/notes`, { text: note });
       }
@@ -93,6 +96,19 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
                        <option value="Lost">Lost</option>
                     </select>
                  </div>
+                 {status === 'Converted' && (
+                    <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <label className="text-[10px] font-black uppercase text-green-500 tracking-widest ml-4">Revenue (₹)</label>
+                      <input 
+                        type="number"
+                        className="w-full p-4 rounded-2xl border-2 border-green-100 focus:border-green-500 font-black text-green-600 outline-none bg-green-50/30"
+                        value={revenue}
+                        onChange={(e) => setRevenue(Number(e.target.value))}
+                        placeholder="e.g. 5000"
+                        required
+                      />
+                    </div>
+                 )}
                  <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-4">Assign To</label>
                     <select 

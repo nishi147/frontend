@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LeadsTable } from '@/components/sales/LeadsTable';
-import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare } from 'lucide-react';
+import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare, Bell } from 'lucide-react';
 
 export default function SalesDashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -103,6 +103,42 @@ export default function SalesDashboard() {
           color="bg-purple-500" 
           trend="+15.0%" 
         />
+      </div>
+
+      {/* Secondary Dashboard Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         <div className="lg:col-span-2 bg-white p-8 rounded-[2.5rem] shadow-xl border-2 border-gray-50">
+            <h2 className="text-xl font-black text-gray-800 tracking-tight mb-6 flex items-center gap-3">
+              <Target className="text-primary-500" /> Source Analytics
+            </h2>
+            <div className="space-y-6">
+              {stats?.sourceStats?.sort((a: any, b: any) => b.count - a.count).map((src: any) => {
+                 const total = stats.totalLeads || 1;
+                 const percent = ((src.count / total) * 100).toFixed(1);
+                 return (
+                   <div key={src._id} className="relative group">
+                     <div className="flex justify-between text-sm font-bold text-gray-600 mb-2">
+                       <span className="uppercase tracking-widest text-xs">{src._id}</span>
+                       <span className="text-gray-400">{src.count} Leads ({percent}%)</span>
+                     </div>
+                     <div className="w-full h-3 bg-gray-50 rounded-full overflow-hidden">
+                       <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full group-hover:from-secondary-400 group-hover:to-secondary-600 transition-all duration-500" style={{ width: `${percent}%` }} />
+                     </div>
+                   </div>
+                 );
+              })}
+              {(!stats?.sourceStats || stats.sourceStats.length === 0) && (
+                <div className="text-center py-8 text-gray-400 font-bold uppercase tracking-widest text-xs">No source data available</div>
+              )}
+            </div>
+         </div>
+         <div className="bg-purple-50 p-8 rounded-[2.5rem] shadow-xl border-2 border-purple-100 flex flex-col justify-center items-center text-center group hover:bg-purple-100 transition-colors cursor-pointer">
+            <div className="w-16 h-16 bg-white text-purple-600 rounded-2xl flex justify-center items-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+               <Bell size={32} />
+            </div>
+            <h3 className="text-purple-400 text-xs font-black uppercase tracking-widest mb-2">Required Follow-ups Today</h3>
+            <p className="text-7xl font-black text-purple-600 tracking-tighter">{stats?.followUpToday || 0}</p>
+         </div>
       </div>
 
       {/* Main Table Section */}
