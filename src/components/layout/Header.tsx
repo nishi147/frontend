@@ -76,7 +76,7 @@ export const Header = () => {
     <>
       <MovingBanner />
       <header className="bg-white sticky top-0 z-[100] border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-32 sm:h-44 md:h-52 flex items-center justify-between gap-2 md:gap-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-28 lg:h-32 flex items-center justify-between gap-2 md:gap-6">
 
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 flex items-center">
