@@ -77,32 +77,32 @@ export default function SalesDashboard() {
       {/* Analytics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <StatCard 
-          title="Total Potential Leads" 
+          title="Potential Leads" 
           value={stats?.totalLeads} 
           icon={Users} 
           color="bg-primary-500" 
-          trend="+12.5%" 
+          trend="Active Pipeline" 
         />
         <StatCard 
-          title="Successfully Converted" 
+          title="My Conversions" 
           value={stats?.convertedLeads} 
           icon={Target} 
           color="bg-green-500" 
-          trend="+8.2%" 
+          trend="Lifetime" 
         />
         <StatCard 
-          title="Conversion Rate" 
+          title="My Conv. Rate" 
           value={stats?.conversionRate?.toFixed(1)} 
           icon={TrendingUp} 
           color="bg-secondary-500" 
-          trend="+2.1%" 
+          trend="Efficiency" 
         />
         <StatCard 
-          title="Total Revenue Generated" 
+          title="Revenue Generated" 
           value={stats?.totalRevenue} 
-          icon={DollarSign} 
+          icon={IndianRupee} 
           color="bg-purple-500" 
-          trend="+15.0%" 
+          trend="My Contribution" 
         />
       </div>
 

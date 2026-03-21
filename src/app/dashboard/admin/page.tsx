@@ -97,12 +97,44 @@ export default function AdminDashboard() {
           color="bg-green-50" 
         />
         <StatCard 
+          title="Coupon Rev." 
+          value={`₹${salesStats?.revenueFromCoupons || 0}`} 
+          icon={<Gift className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />} 
+          color="bg-purple-50" 
+        />
+        <StatCard 
           title="Conv. Rate" 
           value={`${salesStats?.conversionRate?.toFixed(1) || 0}%`} 
           icon={<TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-secondary-500" />} 
           color="bg-secondary-50" 
         />
       </div>
+
+      {salesStats?.salesUserPerformance?.length > 0 && (
+        <div className="mb-12 px-2 sm:px-0">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-2xl font-black text-gray-800">Sales Leaderboard 🚀</h2>
+            <span className="bg-primary-100 text-primary-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Top Performers</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {salesStats.salesUserPerformance.map((performer: any, i: number) => (
+              <div key={i} className="bg-white p-6 rounded-[2.5rem] shadow-xl border-2 border-gray-50 flex items-center gap-5 transform hover:-translate-y-1 transition-all">
+                <div className="w-14 h-14 bg-navy-900 text-white rounded-2xl flex items-center justify-center font-black text-xl shadow-lg">
+                  {i + 1}
+                </div>
+                <div className="flex-1">
+                  <p className="font-black text-gray-800 truncate">{performer.name}</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{performer.totalSales} Conversions</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-black text-green-600 tracking-tight">₹{performer.totalRevenue}</p>
+                  <p className="text-[9px] font-bold text-gray-400 uppercase">Revenue</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Management Links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8 mb-12 px-2 sm:px-0">

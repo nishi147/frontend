@@ -19,6 +19,32 @@ export default function CourseDetailPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedSessions, setSelectedSessions] = useState(1);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [couponError, setCouponError] = useState('');
+  
+  const originalPrice = selectedSessions * (course?.pricePerSession || 0);
+  const discountAmount = appliedCoupon ? (
+    appliedCoupon.discountType === 'percent' 
+      ? (originalPrice * appliedCoupon.discountValue) / 100 
+      : appliedCoupon.discountValue
+  ) : 0;
+  const finalPrice = Math.max(0, originalPrice - discountAmount);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    setCouponError('');
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/coupons/validate`, { code: couponCode });
+      if (res.data.success) {
+        setAppliedCoupon(res.data.data);
+        showToast("Coupon applied successfully! ✨", "success");
+      }
+    } catch (err: any) {
+      setAppliedCoupon(null);
+      setCouponError(err.response?.data?.message || "Invalid coupon");
+    }
+  };
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -69,7 +95,8 @@ export default function CourseDetailPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/payments/order`,
         {
           courseId: course._id,
-          sessions: selectedSessions 
+          sessions: selectedSessions,
+          couponCode: appliedCoupon?.code
         }
       );
       const order = orderRes.data.data;
@@ -91,9 +118,8 @@ export default function CourseDetailPage() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                courseId: course._id,
-                sessions: selectedSessions,
-                amount: order.amount / 100
+                amount: finalPrice,
+                couponCode: appliedCoupon?.code
               }
             );
 
@@ -200,12 +226,43 @@ export default function CourseDetailPage() {
               
               <div className="text-center mb-8 border-b border-gray-50 pb-8">
                 <div className="text-gray-400 font-black uppercase tracking-widest text-xs mb-3 italic">Total Course Access</div>
-                <div className="flex items-end justify-center gap-2 mb-2">
-                   <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{selectedSessions * course.pricePerSession}</span>
+                <div className="flex flex-col items-center gap-1 mb-2">
+                   {appliedCoupon && (
+                       <span className="text-lg font-bold text-gray-400 line-through tracking-tighter">₹{originalPrice}</span>
+                   )}
+                   <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{finalPrice}</span>
                 </div>
                 <div className="text-secondary-500 font-black text-xs uppercase tracking-tight bg-secondary-50 inline-block px-4 py-1.5 rounded-full mt-2">
                   ₹{course.pricePerSession} per amazing session!
                 </div>
+              </div>
+
+              <div className="mb-8">
+                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                  Promo Code:
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="SUMMER25"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    className="flex-1 p-4 rounded-2xl border-2 border-gray-50 font-bold bg-gray-50/30 focus:border-primary-400 focus:bg-white focus:outline-none transition-all"
+                  />
+                  <button 
+                    onClick={handleApplyCoupon}
+                    type="button"
+                    className="bg-navy-900 text-white px-6 rounded-2xl font-black text-xs hover:bg-black transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponError && <p className="text-red-500 text-[10px] font-bold mt-2 ml-2">{couponError}</p>}
+                {appliedCoupon && (
+                    <p className="text-green-600 text-[10px] font-bold mt-2 ml-2 flex items-center gap-1">
+                        <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved ₹{discountAmount}
+                    </p>
+                )}
               </div>
 
               <div className="mb-8">
