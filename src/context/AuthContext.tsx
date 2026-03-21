@@ -71,7 +71,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     setToken(newToken);
     setUser(newUser);
-    router.push(`/dashboard/${newUser.role}`);
+    const dashboardPath = newUser.role === 'sales' ? '/sales-dashboard' : `/dashboard/${newUser.role}`;
+    router.push(dashboardPath);
   };
 
   const logout = () => {
