@@ -6,16 +6,16 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function ReferralsPage() {
   const { user } = useAuth();
-  const [referrals, setReferrals] = useState([]);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const fetchReferrals = async () => {
     try {
       setLoading(true);
-      const endpoint = user?.role === 'admin' ? '/api/referrals' : '/api/referrals/my';
+      const endpoint = user?.role === 'admin' ? '/api/referrals' : '/api/referrals/me';
       const res = await axios.get(endpoint);
-      setReferrals(res.data.data);
+      setStats(res.data.data);
     } catch (err) {
       console.error("Error fetching referrals:", err);
     } finally {
@@ -28,8 +28,9 @@ export default function ReferralsPage() {
   }, [user]);
 
   const copyToClipboard = () => {
-    if (user?.referralCode) {
-      navigator.clipboard.writeText(user.referralCode);
+    const code = stats?.referralCode || user?.referralCode;
+    if (code && code !== 'ADMIN-GLOBAL') {
+      navigator.clipboard.writeText(code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -60,7 +61,7 @@ export default function ReferralsPage() {
           <div className="bg-white px-6 py-4 rounded-[1.8rem] flex items-center gap-4">
              <div className="flex flex-col">
                 <span className="text-[10px] font-black text-secondary-500 uppercase tracking-widest">Your Code</span>
-                <span className="text-2xl font-black text-gray-800 tracking-wider font-mono">{user?.referralCode || 'N/A'}</span>
+                <span className="text-2xl font-black text-gray-800 tracking-wider font-mono">{stats?.referralCode || user?.referralCode || 'N/A'}</span>
              </div>
              <button 
                onClick={copyToClipboard}
@@ -73,9 +74,9 @@ export default function ReferralsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <StatCard title="Total Referrals" value={referrals.length} icon={Share2} color="bg-secondary-500" />
-        <StatCard title="Successful Conversions" value={referrals.filter((r: any) => r.status === 'Successful').length} icon={Award} color="bg-green-500" />
-        <StatCard title="Pending Rewards" value={referrals.filter((r: any) => r.status === 'Pending').length} icon={Gift} color="bg-primary-500" />
+        <StatCard title="Total Referrals" value={stats?.totalReferrals || 0} icon={Share2} color="bg-secondary-500" />
+        <StatCard title="Successful Conversions" value={stats?.conversions || 0} icon={Award} color="bg-green-500" />
+        <StatCard title="Total Rewards (₹)" value={`₹${stats?.rewards || 0}`} icon={Gift} color="bg-primary-500" />
       </div>
 
       <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-gray-50 border-2 border-gray-50 overflow-hidden">
@@ -99,9 +100,9 @@ export default function ReferralsPage() {
             <tbody className="divide-y divide-gray-50 text-gray-600">
               {loading ? (
                 <tr><td colSpan={5} className="text-center py-20 animate-pulse">Scanning the stars...</td></tr>
-              ) : referrals.length === 0 ? (
+              ) : (!stats?.history || stats.history.length === 0) ? (
                 <tr><td colSpan={5} className="text-center py-20 uppercase text-xs tracking-widest text-gray-400">No referrals found yet. Share your code!</td></tr>
-              ) : referrals.map((ref: any, index) => (
+              ) : stats.history.map((ref: any, index: number) => (
                 <tr key={ref._id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-8 py-5 text-[10px] text-gray-300">00{index + 1}</td>
                   <td className="px-8 py-5 font-black text-gray-800">{ref.referredLead?.name || 'Anonymous User'}</td>
