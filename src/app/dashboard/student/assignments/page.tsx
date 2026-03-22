@@ -10,7 +10,7 @@ import { FileText, Clock, CheckCircle, Upload } from 'lucide-react';
 
 export default function AssignmentsPage() {
   const { user } = useAuth();
-  const [assignments, setAssignments] = useState([]);
+  const [assignments, setAssignments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

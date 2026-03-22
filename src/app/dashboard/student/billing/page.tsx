@@ -10,7 +10,7 @@ import { CreditCard, Download, ExternalLink, Calendar, CheckCircle2 } from 'luci
 
 export default function BillingPage() {
   const { user } = useAuth();
-  const [payments, setPayments] = useState([]);
+  const [payments, setPayments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

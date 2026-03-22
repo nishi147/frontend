@@ -7,11 +7,11 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import axios from 'axios';
-import { MessageSquare, Send, User, Search } from 'lucide-react';
+import { MessageSquare, Send, Search } from 'lucide-react';
 
 export default function MessagesPage() {
   const { user } = useAuth();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -115,7 +115,7 @@ export default function MessagesPage() {
             <form onSubmit={handleSendMessage} className="p-4 border-t flex gap-2 bg-white">
               <Input 
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
                 placeholder="Type your message..." 
                 className="flex-1 rounded-xl border-gray-200 focus:border-primary-500"
               />

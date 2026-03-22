@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion, Star } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {

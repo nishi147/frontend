@@ -6,10 +6,13 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import axios from 'axios';
-import { Star, MessageCircle, Send } from 'lucide-react';
+import { Star, Send } from 'lucide-react';
+
+import { useToast } from '@/context/ToastContext';
 
 export default function FeedbackPage() {
-  const [courses, setCourses] = useState([]);
+  const { showToast } = useToast();
+  const [courses, setCourses] = useState<any[]>([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -40,12 +43,12 @@ export default function FeedbackPage() {
         comment
       });
       if (res.data.success) {
-        alert('Thank you for your feedback! ❤️');
+        showToast('Thank you for your feedback! ❤️', 'success');
         setComment('');
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to submit feedback. Please try again.');
+      showToast('Failed to submit feedback. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }

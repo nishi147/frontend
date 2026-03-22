@@ -6,11 +6,11 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
-import { FileQuestion, Play, CheckCircle, AlertCircle } from 'lucide-react';
+import { FileQuestion, Play, CheckCircle } from 'lucide-react';
 
 export default function QuizzesPage() {
   const { user } = useAuth();
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

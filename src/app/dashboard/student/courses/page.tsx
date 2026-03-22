@@ -9,7 +9,7 @@ import axios from 'axios';
 import { BookOpen, Video, PlayCircle, FileText } from 'lucide-react';
 
 export default function MyCoursesPage() {
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
