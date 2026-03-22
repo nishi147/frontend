@@ -10,7 +10,7 @@ export const RewardsWidget = () => {
   if (user?.role !== 'student') return null;
 
   return (
-    <div className="fixed top-24 right-6 z-[90] flex flex-col gap-3">
+    <div className="fixed top-20 right-6 z-[200] flex flex-col gap-3">
       <div className="bg-white/80 backdrop-blur-md border border-yellow-200 shadow-lg shadow-yellow-100/50 flex items-center gap-3 px-4 py-2 rounded-2xl animate-bounce-slow">
         <div className="bg-yellow-400 p-2 rounded-xl">
           <Star className="w-5 h-5 text-white fill-white" />

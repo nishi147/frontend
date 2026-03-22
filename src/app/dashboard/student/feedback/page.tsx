@@ -71,9 +71,13 @@ export default function FeedbackPage() {
                 onChange={(e) => setSelectedCourse(e.target.value)}
                 className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold text-gray-700 focus:ring-4 focus:ring-primary-100 transition-all outline-none appearance-none"
               >
-                {courses.map((c: any) => (
-                  <option key={c._id} value={c._id}>{c.title}</option>
-                ))}
+                {courses.length > 0 ? (
+                  courses.map((c: any) => (
+                    <option key={c._id} value={c._id}>{c.title}</option>
+                  ))
+                ) : (
+                  <option value="" disabled>No courses found to give feedback on</option>
+                )}
               </select>
             </div>
 

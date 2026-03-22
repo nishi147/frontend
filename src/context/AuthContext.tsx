@@ -12,6 +12,8 @@ interface User {
   role: 'student' | 'teacher' | 'admin' | 'sales';
   profilePicture?: string;
   referralCode?: string;
+  stars?: number;
+  gems?: number;
   enrollments?: Array<{ course: string; status: string }>;
 }
 

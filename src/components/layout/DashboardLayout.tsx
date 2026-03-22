@@ -40,10 +40,9 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
       <div className="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none" />
 
       <Header />
-      <RewardsWidget />
-      
       <div className="flex flex-col md:flex-row flex-1 relative z-[110] w-full">
         <Sidebar />
+        <RewardsWidget />
         <main className="flex-1 p-3 sm:p-6 md:p-8 lg:p-12 pb-24 md:pb-8 w-full">
           {/* Mobile Back Button */}
           <button 

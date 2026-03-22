@@ -36,9 +36,9 @@ export default function MessagesPage() {
     if (!newMessage.trim()) return;
 
     try {
-      // For demo, sending to a mock teacher ID if none selected
+      // Send to Admin for Support Team
       const res = await axios.post('/api/messages', {
-        receiverId: 'teacher_id_here', 
+        receiverId: '69b27a9a81687b34e3a5c845', 
         content: newMessage
       });
       if (res.data.success) {

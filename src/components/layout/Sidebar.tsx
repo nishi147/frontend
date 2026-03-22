@@ -31,6 +31,7 @@ export const Sidebar = () => {
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },
+      { name: 'Quizzes', href: `${base}/quizzes`, icon: FileQuestion },
     ];
 
     const adminLinks = [
@@ -44,6 +45,8 @@ export const Sidebar = () => {
       { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
       { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
+      { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },
+      { name: 'Quizzes', href: `${base}/quizzes`, icon: FileQuestion },
       { name: 'Manage Blogs', href: `${base}/blogs`, icon: BookOpen },
       { name: 'Coupon Center', href: `${base}/coupons`, icon: Tag },
       { name: 'Testimonials', href: `${base}/testimonials`, icon: MessageSquare },
