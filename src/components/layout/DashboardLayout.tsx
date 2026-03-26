@@ -11,6 +11,8 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  const allowedRolesString = JSON.stringify(allowedRoles);
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
@@ -23,7 +25,7 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
         }
       }
     }
-  }, [user, loading, router, allowedRoles]);
+  }, [user, loading, router, allowedRolesString]);
 
   // Shifted blocking logic to main content area to allow layout to render immediately
   const isAuthBlocked = loading || !user;
