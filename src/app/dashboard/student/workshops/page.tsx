@@ -5,6 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import axios from 'axios';
 import { Calendar, MapPin, Link as LinkIcon } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function StudentWorkshops() {
   const { token, logout } = useAuth();
