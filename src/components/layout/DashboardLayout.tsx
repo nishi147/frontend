@@ -25,13 +25,8 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
     }
   }, [user, loading, router, allowedRoles]);
 
-  if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="w-12 h-12 text-primary-500 animate-spin" />
-      </div>
-    );
-  }
+  // Shifted blocking logic to main content area to allow layout to render immediately
+  const isAuthBlocked = loading || !user;
 
   return (
     <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
@@ -51,7 +46,15 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
           >
             <X size={16} strokeWidth={3} className="text-secondary-500" /> Back to Home
           </button>
-          {children}
+          
+          {isAuthBlocked ? (
+            <div className="h-[60vh] flex flex-col items-center justify-center text-primary-500 gap-4">
+              <Loader2 className="w-12 h-12 animate-spin" />
+              <p className="font-black uppercase tracking-widest text-xs opacity-50">Authenticating Access...</p>
+            </div>
+          ) : (
+            children
+          )}
         </main>
       </div>
     </div>

@@ -284,7 +284,9 @@ export default function AdminCourseManagement() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
 
-  if (loading || isLoading) return <div className="p-20 text-center font-bold text-2xl animate-pulse">Loading Courses...</div>;
+  if (user?.role !== "admin" && !loading) {
+    return <div className="p-20 text-center text-red-500 font-bold">Access Denied</div>;
+  }
 
   return (
     <DashboardLayout>
@@ -300,52 +302,58 @@ export default function AdminCourseManagement() {
 
       {/* COURSES TABLE/GRID */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <Card key={course._id} className="overflow-hidden border-2 border-transparent hover:border-primary-100 transition-all shadow-lg">
-            <div className="relative h-40 group bg-gray-100">
-               {course.thumbnail ? (
-                  <img src={course.thumbnail} className="w-full h-full object-cover group-hover:scale-105 transition-all" alt="Course" />
-               ) : (
-                  <div className="flex items-center justify-center w-full h-full text-5xl opacity-40">📚</div>
-               )}
-               <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-md ${course.isApproved ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}>
-                  {course.isApproved ? 'Live' : 'Pending'}
-               </div>
-            </div>
-
-            <CardContent className="p-6 relative">
-              <div className="flex items-center justify-between mb-3 text-xs uppercase font-black text-gray-400 tracking-widest">
-                <span className="flex items-center gap-1 text-primary-500">
-                  <BookOpen size={14} /> {course.category?.name || 'General'}
-                </span>
-                <span className={course.level === 'Advanced' ? 'text-red-500' : course.level === 'Intermediate' ? 'text-orange-500' : 'text-green-500'}>{course.level}</span>
-              </div>
-
-              <h3 className="text-xl font-bold text-gray-800 mb-1 leading-tight line-clamp-1 truncate">{course.title}</h3>
-              <p className="text-sm text-gray-500 mb-4 line-clamp-2">By {course.teacher?.name || 'Administrator'}</p>
-
-              <div className="flex items-center gap-4 mb-6 border-t border-gray-100 pt-4">
-                 <div>
-                    <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Price</span>
-                    <span className="font-black text-secondary-600">₹{course.totalCoursePrice || course.offerPrice || course.pricePerSession}</span>
-                 </div>
-                 <div className="w-px h-8 bg-gray-200"></div>
-                 <div>
-                    <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Lessons</span>
-                    <span className="font-black text-gray-600">{course.totalLessons || course.numberOfSessions || 0}</span>
-                 </div>
-              </div>
-
-              <div className="flex gap-2">
-                {!course.isApproved && (
-                  <Button onClick={() => approveCourse(course._id)} className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold">Approve</Button>
+        {isLoading ? (
+          [1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-64 rounded-3xl bg-gray-100 animate-pulse" />
+          ))
+        ) : (
+          courses.map((course) => (
+            <Card key={course._id} className="overflow-hidden border-2 border-transparent hover:border-primary-100 transition-all shadow-lg">
+              <div className="relative h-40 group bg-gray-100">
+                {course.thumbnail ? (
+                    <img src={course.thumbnail} className="w-full h-full object-cover group-hover:scale-105 transition-all" alt="Course" />
+                ) : (
+                    <div className="flex items-center justify-center w-full h-full text-5xl opacity-40">📚</div>
                 )}
-                <Button variant="outline" onClick={() => openEdit(course)} className="flex-1 font-bold"><Edit2 size={16} className="mr-2" /> Edit</Button>
-                <Button variant="outline" onClick={() => deleteCourse(course._id)} className="flex-none px-4 text-red-500 border-red-200 hover:bg-red-50"><Trash2 size={16} /></Button>
+                <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-md ${course.isApproved ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}>
+                    {course.isApproved ? 'Live' : 'Pending'}
+                </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+
+              <CardContent className="p-6 relative">
+                <div className="flex items-center justify-between mb-3 text-xs uppercase font-black text-gray-400 tracking-widest">
+                  <span className="flex items-center gap-1 text-primary-500">
+                    <BookOpen size={14} /> {course.category?.name || 'General'}
+                  </span>
+                  <span className={course.level === 'Advanced' ? 'text-red-500' : course.level === 'Intermediate' ? 'text-orange-500' : 'text-green-500'}>{course.level}</span>
+                </div>
+
+                <h3 className="text-xl font-bold text-gray-800 mb-1 leading-tight line-clamp-1 truncate">{course.title}</h3>
+                <p className="text-sm text-gray-500 mb-4 line-clamp-2">By {course.teacher?.name || 'Administrator'}</p>
+
+                <div className="flex items-center gap-4 mb-6 border-t border-gray-100 pt-4">
+                  <div>
+                      <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Price</span>
+                      <span className="font-black text-secondary-600">₹{course.totalCoursePrice || course.offerPrice || course.pricePerSession}</span>
+                  </div>
+                  <div className="w-px h-8 bg-gray-200"></div>
+                  <div>
+                      <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Lessons</span>
+                      <span className="font-black text-gray-600">{course.totalLessons || course.numberOfSessions || 0}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  {!course.isApproved && (
+                    <Button onClick={() => approveCourse(course._id)} className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold">Approve</Button>
+                  )}
+                  <Button variant="outline" onClick={() => openEdit(course)} className="flex-1 font-bold"><Edit2 size={16} className="mr-2" /> Edit</Button>
+                  <Button variant="outline" onClick={() => deleteCourse(course._id)} className="flex-none px-4 text-red-500 border-red-200 hover:bg-red-50"><Trash2 size={16} /></Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       {/* WIZARD MODAL */}

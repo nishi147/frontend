@@ -90,7 +90,9 @@ export default function UserManagement() {
     student: 'text-primary-600 bg-primary-50 border-primary-100'
   };
 
-  if (loading || isLoading) return <div className="p-20 text-center font-bold text-accent-500 text-2xl animate-pulse uppercase tracking-[0.2em]">Synchronizing Souls... 🧙</div>;
+  if (user?.role !== 'admin' && !loading) {
+    return <div className="p-20 text-center text-red-500 font-bold">Access Denied</div>;
+  }
 
   return (
     <DashboardLayout>
@@ -104,83 +106,93 @@ export default function UserManagement() {
         </div>
       </div>
 
-      {/* Desktop Table View */}
-      <div className="hidden md:block bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 transform hover:scale-[1.005] transition-all duration-500">
-        <div className="overflow-x-auto scrollbar-hide font-sans">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gray-50/80 border-b border-gray-100 font-black text-gray-400 uppercase text-xs tracking-[0.2em] px-8">
-                <th className="px-8 py-6">Identity</th>
-                <th className="px-8 py-6">Privileges</th>
-                <th className="px-8 py-6">Verification</th>
-                <th className="px-8 py-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u: any) => (
-                <tr key={u._id} className="border-b border-gray-50 hover:bg-primary-50/30 transition-all group">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg ${u.role === 'teacher' ? 'bg-secondary-500' : u.role === 'admin' ? 'bg-accent-500' : 'bg-primary-500'}`}>
-                        {u.name[0]}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-black text-gray-800 truncate">{u.name}</p>
-                        <p className="text-gray-400 flex items-center gap-1 text-sm font-bold truncate tracking-tight"><Mail className="w-3 h-3" /> {u.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                     <select 
-                       value={u.role}
-                       onChange={(e) => updateRole(u._id, e.target.value)}
-                       className={`px-3 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-widest border-2 outline-none cursor-pointer transition-all ${roleStyles[u.role] || roleStyles.student}`}
-                     >
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="sales">Sales</option>
-                        <option value="admin">Admin</option>
-                     </select>
-                  </td>
-                  <td className="px-8 py-6 font-black">
-                    {u.role === 'teacher' ? (
-                      u.isApprovedTeacher ? (
-                        <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Rooted</span>
-                      ) : (
-                        <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Pending Approval</span>
-                      )
-                    ) : u.role === 'student' ? (
-                      u.isApprovedStudent ? (
-                        <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Verified Identity</span>
-                      ) : (
-                        <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Admissions Waitlist</span>
-                      )
-                    ) : (
-                      <span className="text-gray-400 text-xs italic opacity-50 px-2">— System Core —</span>
-                    )}
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {u.role === 'teacher' && !u.isApprovedTeacher && (
-                        <Button size="sm" variant="secondary" onClick={() => approveTeacher(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-secondary-100">Approve</Button>
-                      )}
-                      {u.role === 'student' && !u.isApprovedStudent && (
-                        <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-primary-100">Approve</Button>
-                      )}
-                      <button 
-                        onClick={() => deleteUser(u._id)} 
-                        className="p-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-md active:scale-95 border-2 border-red-100"
-                      >
-                         <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {isLoading ? (
+        <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 animate-pulse p-12 space-y-4">
+           {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="h-12 bg-gray-50 rounded-xl" />
+           ))}
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 transform hover:scale-[1.005] transition-all duration-500">
+            <div className="overflow-x-auto scrollbar-hide font-sans">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50/80 border-b border-gray-100 font-black text-gray-400 uppercase text-xs tracking-[0.2em] px-8">
+                    <th className="px-8 py-6">Identity</th>
+                    <th className="px-8 py-6">Privileges</th>
+                    <th className="px-8 py-6">Verification</th>
+                    <th className="px-8 py-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u: any) => (
+                    <tr key={u._id} className="border-b border-gray-50 hover:bg-primary-50/30 transition-all group">
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg ${u.role === 'teacher' ? 'bg-secondary-500' : u.role === 'admin' ? 'bg-accent-500' : 'bg-primary-500'}`}>
+                            {u.name[0]}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-black text-gray-800 truncate">{u.name}</p>
+                            <p className="text-gray-400 flex items-center gap-1 text-sm font-bold truncate tracking-tight"><Mail className="w-3 h-3" /> {u.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                        <select 
+                          value={u.role}
+                          onChange={(e) => updateRole(u._id, e.target.value)}
+                          className={`px-3 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-widest border-2 outline-none cursor-pointer transition-all ${roleStyles[u.role] || roleStyles.student}`}
+                        >
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="sales">Sales</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                      </td>
+                      <td className="px-8 py-6 font-black">
+                        {u.role === 'teacher' ? (
+                          u.isApprovedTeacher ? (
+                            <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Rooted</span>
+                          ) : (
+                            <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Pending Approval</span>
+                          )
+                        ) : u.role === 'student' ? (
+                          u.isApprovedStudent ? (
+                            <span className="text-green-500 flex items-center gap-2 text-xs"><UserCheck className="w-4 h-4" /> Verified Identity</span>
+                          ) : (
+                            <span className="text-amber-500 flex items-center gap-2 animate-pulse text-xs"><UserX className="w-4 h-4" /> Admissions Waitlist</span>
+                          )
+                        ) : (
+                          <span className="text-gray-400 text-xs italic opacity-50 px-2">— System Core —</span>
+                        )}
+                      </td>
+                      <td className="px-8 py-6 text-right">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {u.role === 'teacher' && !u.isApprovedTeacher && (
+                            <Button size="sm" variant="secondary" onClick={() => approveTeacher(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-secondary-100">Approve</Button>
+                          )}
+                          {u.role === 'student' && !u.isApprovedStudent && (
+                            <Button size="sm" variant="primary" onClick={() => approveStudent(u._id)} className="font-black text-[10px] uppercase px-4 py-2 shadow-lg shadow-primary-100">Approve</Button>
+                          )}
+                          <button 
+                            onClick={() => deleteUser(u._id)} 
+                            className="p-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-md active:scale-95 border-2 border-red-100"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4 mb-12 px-2">

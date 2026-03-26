@@ -22,33 +22,53 @@ export default function AdminDashboard() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [salesStats, setSalesStats] = useState<any>(null);
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingSales, setLoadingSales] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAnalytics = async () => {
       try {
-        const [analyticsRes, usersRes, salesRes] = await Promise.all([
-          axios.get('/api/users/analytics'),
-          axios.get('/api/users'),
-          axios.get('/api/analytics/sales')
-        ]);
-        if (analyticsRes.data.success) setAnalytics(analyticsRes.data.data);
-        if (usersRes.data.success) setUsers(usersRes.data.data);
-        if (salesRes.data.success) setSalesStats(salesRes.data.data);
+        const res = await axios.get('/api/users/analytics');
+        if (res.data.success) setAnalytics(res.data.data);
       } catch (err) {
-        console.error("Failed to fetch dashboard data", err);
+        console.error("Failed to fetch analytics", err);
       } finally {
-        setIsLoading(false);
+        setLoadingAnalytics(false);
+      }
+    };
+
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get('/api/users');
+        if (res.data.success) setUsers(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch users", err);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    const fetchSales = async () => {
+      try {
+        const res = await axios.get('/api/analytics/sales');
+        if (res.data.success) setSalesStats(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch sales stats", err);
+      } finally {
+        setLoadingSales(false);
       }
     };
 
     if (user?.role === 'admin') {
-      fetchData();
+      fetchAnalytics();
+      fetchUsers();
+      fetchSales();
     }
   }, [user]);
 
-  if (loading || isLoading) {
-    return <div className="min-h-screen flex items-center justify-center font-bold text-2xl text-accent-500 animate-pulse">Scanning Platform... 🔍</div>;
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center font-bold text-2xl text-accent-500 animate-pulse">Initializing Security... 🔐</div>;
   }
 
   if (user?.role !== 'admin') {
@@ -72,45 +92,62 @@ export default function AdminDashboard() {
 
       {/* Analytics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 px-2 sm:px-0">
-        <StatCard 
-          title="Students" 
-          value={analytics?.totalStudents || 0} 
-          icon={<Users className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />} 
-          color="bg-blue-50" 
-        />
-        <StatCard 
-          title="Teachers" 
-          value={analytics?.totalTeachers || 0} 
-          icon={<GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />} 
-          color="bg-purple-50" 
-        />
-        <StatCard 
-          title="Courses" 
-          value={analytics?.totalCourses || 0} 
-          icon={<BookOpen className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />} 
-          color="bg-orange-50" 
-        />
-        <StatCard 
-          title="Revenue" 
-          value={`₹${analytics?.totalRevenue || 0}`} 
-          icon={<IndianRupee className="w-6 h-6 md:w-8 md:h-8 text-green-600" />} 
-          color="bg-green-50" 
-        />
-        <StatCard 
-          title="Coupon Rev." 
-          value={`₹${salesStats?.revenueFromCoupons || 0}`} 
-          icon={<Gift className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />} 
-          color="bg-purple-50" 
-        />
-        <StatCard 
-          title="Conv. Rate" 
-          value={`${salesStats?.conversionRate?.toFixed(1) || 0}%`} 
-          icon={<TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-secondary-500" />} 
-          color="bg-secondary-50" 
-        />
+        {loadingAnalytics ? (
+          [1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-32 rounded-3xl bg-gray-100 animate-pulse" />
+          ))
+        ) : (
+          <>
+            <StatCard 
+              title="Students" 
+              value={analytics?.totalStudents || 0} 
+              icon={<Users className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />} 
+              color="bg-blue-50" 
+            />
+            <StatCard 
+              title="Teachers" 
+              value={analytics?.totalTeachers || 0} 
+              icon={<GraduationCap className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />} 
+              color="bg-purple-50" 
+            />
+            <StatCard 
+              title="Courses" 
+              value={analytics?.totalCourses || 0} 
+              icon={<BookOpen className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />} 
+              color="bg-orange-50" 
+            />
+            <StatCard 
+              title="Revenue" 
+              value={`₹${analytics?.totalRevenue || 0}`} 
+              icon={<IndianRupee className="w-6 h-6 md:w-8 md:h-8 text-green-600" />} 
+              color="bg-green-50" 
+            />
+            <StatCard 
+              title="Coupon Rev." 
+              value={`₹${salesStats?.revenueFromCoupons || 0}`} 
+              icon={<Gift className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />} 
+              color="bg-purple-50" 
+            />
+            <StatCard 
+              title="Conv. Rate" 
+              value={`${salesStats?.conversionRate?.toFixed(1) || 0}%`} 
+              icon={<TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-secondary-500" />} 
+              color="bg-secondary-50" 
+            />
+          </>
+        )}
       </div>
 
-      {salesStats?.salesUserPerformance?.length > 0 && (
+      {loadingSales ? (
+        <div className="mb-12 px-2 sm:px-0">
+          <div className="h-8 w-48 bg-gray-100 animate-pulse rounded-full mb-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-24 bg-gray-100 animate-pulse rounded-[2rem]" />
+            ))}
+          </div>
+        </div>
+      ) : salesStats?.salesUserPerformance?.length > 0 && (
         <div className="mb-12 px-2 sm:px-0">
           <div className="flex items-center gap-3 mb-6">
             <h2 className="text-2xl font-black text-gray-800">Sales Leaderboard 🚀</h2>
@@ -188,98 +225,108 @@ export default function AdminDashboard() {
         <p className="text-gray-400 font-bold mt-1 uppercase text-[10px] tracking-[0.2em]">Platform Access Monitoring</p>
       </div>
       
-      {/* Desktop Table View */}
-      <div className="hidden md:block bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 transform hover:scale-[1.005] transition-all duration-500 mx-1">
-        <div className="overflow-x-auto scrollbar-hide font-sans">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gray-50/80 border-b border-gray-100 font-black text-gray-400 uppercase text-xs tracking-[0.2em] px-8">
-                <th className="px-8 py-6">Identity</th>
-                <th className="px-8 py-6">Privileges</th>
-                <th className="px-8 py-6 text-right">Verification</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u: any) => (
-                <tr key={u._id} className="border-b border-gray-50 hover:bg-primary-50/30 transition-all group">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg ${u.role === 'teacher' ? 'bg-secondary-500' : u.role === 'admin' ? 'bg-accent-500' : 'bg-primary-500'}`}>
-                        {u.name[0]}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-black text-gray-800 truncate">{u.name}</p>
-                        <p className="text-gray-400 flex items-center gap-1 text-xs font-bold truncate tracking-tight"><Mail className="w-3 h-3" /> {u.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6 font-bold uppercase tracking-widest text-[10px]">
-                     <span className={`px-3 py-1.5 rounded-xl font-black ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
-                        {u.role}
-                     </span>
-                  </td>
-                  <td className="px-8 py-6 text-right font-black">
-                    {u.role === 'teacher' ? (
-                      u.isApprovedTeacher ? (
-                        <span className="text-green-500 flex items-center justify-end gap-2 text-xs"><UserCheck className="w-4 h-4" /> Rooted</span>
-                      ) : (
-                        <span className="text-amber-500 flex items-center justify-end gap-2 text-xs animate-pulse tracking-tighter"><UserX className="w-4 h-4" /> Pending Approval</span>
-                      )
-                    ) : u.role === 'student' ? (
-                      u.isApprovedStudent ? (
-                        <span className="text-green-500 flex items-center justify-end gap-2 text-xs"><UserCheck className="w-4 h-4" /> Verified Identity</span>
-                      ) : (
-                        <span className="text-amber-500 flex items-center justify-end gap-2 text-xs animate-pulse tracking-tighter"><UserX className="w-4 h-4" /> On Platform Waitlist</span>
-                      )
-                    ) : (
-                      <span className="text-gray-400">—</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {loadingUsers ? (
+        <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 animate-pulse p-12 space-y-4">
+          {[1, 2, 3, 4, 5].map(i => (
+             <div key={i} className="h-12 bg-gray-50 rounded-xl" />
+          ))}
         </div>
-      </div>
-
-      {/* Mobile Card View */}
-      <div className="md:hidden space-y-4 mb-24 px-3">
-        {users.map((u: any) => (
-          <div key={u._id} className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col gap-4">
-             <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0 ${u.role === 'teacher' ? 'bg-secondary-500 shadow-lg' : u.role === 'admin' ? 'bg-accent-500 shadow-lg' : 'bg-primary-500 shadow-lg'}`}>
-                  {u.name[0]}
-                </div>
-                <div className="min-w-0">
-                  <p className="font-black text-gray-800 text-lg truncate tracking-tight">{u.name}</p>
-                  <p className="text-gray-400 text-[11px] font-bold truncate opacity-70">{u.email}</p>
-                </div>
-             </div>
-             <div className="flex items-center justify-between border-t border-gray-50 pt-4">
-                <span className={`px-4 py-1.5 rounded-xl font-black uppercase text-[9px] tracking-widest ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
-                  {u.role}
-                </span>
-                <div>
-                  {u.role === 'teacher' ? (
-                    u.isApprovedTeacher ? (
-                      <span className="text-green-500 font-black text-[11px] flex items-center gap-1.5 tracking-tight"><UserCheck className="w-3.5 h-3.5" /> Identity Rooted</span>
-                    ) : (
-                      <span className="text-amber-500 font-black text-[11px] animate-pulse tracking-tight">Access Pending Approval</span>
-                    )
-                  ) : u.role === 'student' ? (
-                    u.isApprovedStudent ? (
-                      <span className="text-green-500 font-black text-[11px] flex items-center gap-1.5 tracking-tight"><UserCheck className="w-3.5 h-3.5" /> Identity Verified</span>
-                    ) : (
-                      <span className="text-amber-500 font-black text-[11px] animate-pulse tracking-tight tracking-tight">On Admission Waitlist</span>
-                    )
-                  ) : (
-                    <span className="text-gray-400">—</span>
-                  )}
-                </div>
-             </div>
+      ) : (
+        <>
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 mb-12 transform hover:scale-[1.005] transition-all duration-500 mx-1">
+            <div className="overflow-x-auto scrollbar-hide font-sans">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50/80 border-b border-gray-100 font-black text-gray-400 uppercase text-xs tracking-[0.2em] px-8">
+                    <th className="px-8 py-6">Identity</th>
+                    <th className="px-8 py-6">Privileges</th>
+                    <th className="px-8 py-6 text-right">Verification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u: any) => (
+                    <tr key={u._id} className="border-b border-gray-50 hover:bg-primary-50/30 transition-all group">
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg ${u.role === 'teacher' ? 'bg-secondary-500' : u.role === 'admin' ? 'bg-accent-500' : 'bg-primary-500'}`}>
+                            {u.name[0]}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-black text-gray-800 truncate">{u.name}</p>
+                            <p className="text-gray-400 flex items-center gap-1 text-xs font-bold truncate tracking-tight"><Mail className="w-3 h-3" /> {u.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6 font-bold uppercase tracking-widest text-[10px]">
+                        <span className={`px-3 py-1.5 rounded-xl font-black ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
+                            {u.role}
+                        </span>
+                      </td>
+                      <td className="px-8 py-6 text-right font-black">
+                        {u.role === 'teacher' ? (
+                          u.isApprovedTeacher ? (
+                            <span className="text-green-500 flex items-center justify-end gap-2 text-xs"><UserCheck className="w-4 h-4" /> Rooted</span>
+                          ) : (
+                            <span className="text-amber-500 flex items-center justify-end gap-2 text-xs animate-pulse tracking-tighter"><UserX className="w-4 h-4" /> Pending Approval</span>
+                          )
+                        ) : u.role === 'student' ? (
+                          u.isApprovedStudent ? (
+                            <span className="text-green-500 flex items-center justify-end gap-2 text-xs"><UserCheck className="w-4 h-4" /> Verified Identity</span>
+                          ) : (
+                            <span className="text-amber-500 flex items-center justify-end gap-2 text-xs animate-pulse tracking-tighter"><UserX className="w-4 h-4" /> On Platform Waitlist</span>
+                          )
+                        ) : (
+                          <span className="text-gray-400">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        ))}
-      </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-4 mb-24 px-3">
+            {users.map((u: any) => (
+              <div key={u._id} className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0 ${u.role === 'teacher' ? 'bg-secondary-500 shadow-lg' : u.role === 'admin' ? 'bg-accent-500 shadow-lg' : 'bg-primary-500 shadow-lg'}`}>
+                      {u.name[0]}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-black text-gray-800 text-lg truncate tracking-tight">{u.name}</p>
+                      <p className="text-gray-400 text-[11px] font-bold truncate opacity-70">{u.email}</p>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between border-t border-gray-50 pt-4">
+                    <span className={`px-4 py-1.5 rounded-xl font-black uppercase text-[9px] tracking-widest ${u.role === 'teacher' ? 'text-secondary-600 bg-secondary-50' : u.role === 'admin' ? 'text-accent-600 bg-accent-50' : 'text-primary-600 bg-primary-50'}`}>
+                      {u.role}
+                    </span>
+                    <div>
+                      {u.role === 'teacher' ? (
+                        u.isApprovedTeacher ? (
+                          <span className="text-green-500 font-black text-[11px] flex items-center gap-1.5 tracking-tight"><UserCheck className="w-3.5 h-3.5" /> Identity Rooted</span>
+                        ) : (
+                          <span className="text-amber-500 font-black text-[11px] animate-pulse tracking-tight">Access Pending Approval</span>
+                        )
+                      ) : u.role === 'student' ? (
+                        u.isApprovedStudent ? (
+                          <span className="text-green-500 font-black text-[11px] flex items-center gap-1.5 tracking-tight"><UserCheck className="w-3.5 h-3.5" /> Identity Verified</span>
+                        ) : (
+                          <span className="text-amber-500 font-black text-[11px] animate-pulse tracking-tight tracking-tight">On Admission Waitlist</span>
+                        )
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </DashboardLayout>
   );
 }

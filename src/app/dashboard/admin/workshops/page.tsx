@@ -103,68 +103,74 @@ export default function AdminWorkshops() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {workshops.map((ws: any) => (
-          <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-            <div className="h-48 bg-gray-50 relative overflow-hidden flex items-center justify-center text-7xl rounded-t-[2.5rem]">
-               {ws.image && ws.image !== 'no-image.jpg' ? (
-                  <img src={ws.image} alt={ws.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-               ) : (
-                  <div className="text-gray-300 opacity-50 font-sans font-black uppercase tracking-tighter mix-blend-multiply">{ws.title.substring(0, 8)}</div>
-               )}
-            </div>
-            
-            <div className="absolute top-[10rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
-              <span className="text-slate-900 font-black text-3xl tracking-tight">₹{ws.price}</span>
-            </div>
-
-            <CardContent className="p-8 pt-10">
-              <h3 className="text-xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
-              <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{ws.description}</p>
-              
-              <div className="space-y-4 mb-10 pl-1">
-                <div className="flex items-center gap-4 text-slate-700">
-                   <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                     <Calendar size={18} className="text-teal-600" />
-                   </div>
-                   <span className="font-bold text-[15px]">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                </div>
-                <div className="flex items-center gap-4 text-slate-700">
-                   <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                     <MapPin size={18} className="text-teal-600" />
-                   </div>
-                   <span className="font-bold text-[15px] uppercase line-clamp-1">{ws.venue}</span>
-                </div>
-                {ws.meetingLink && (
-                  <div className="flex items-center gap-4 text-slate-700">
-                     <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                       <LinkIcon size={18} className="text-teal-600" />
-                     </div>
-                     <a href={ws.meetingLink} target="_blank" rel="noopener noreferrer" className="font-bold text-[15px] text-primary-500 hover:text-primary-600 hover:underline line-clamp-1 truncate block" title={ws.meetingLink}>
-                        Join Meeting
-                     </a>
-                  </div>
+        {isLoading ? (
+          [1, 2, 3].map(i => (
+            <div key={i} className="h-[400px] rounded-[2.5rem] bg-gray-100 animate-pulse" />
+          ))
+        ) : (
+          workshops.map((ws: any) => (
+            <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
+              <div className="h-48 bg-gray-50 relative overflow-hidden flex items-center justify-center text-7xl rounded-t-[2.5rem]">
+                {ws.image && ws.image !== 'no-image.jpg' ? (
+                    <img src={ws.image} alt={ws.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                ) : (
+                    <div className="text-gray-300 opacity-50 font-sans font-black uppercase tracking-tighter mix-blend-multiply">{ws.title.substring(0, 8)}</div>
                 )}
               </div>
-
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => openEditModal(ws)}
-                  className="flex-1 py-6 rounded-full font-black text-lg text-primary-600 hover:bg-primary-50 border-2 border-primary-100 transition-all flex items-center justify-center gap-2"
-                >
-                  <Edit size={20} /> Edit
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  onClick={() => handleDelete(ws._id)}
-                  className="flex-1 py-6 rounded-full font-black text-lg text-red-500 hover:text-white hover:bg-red-500 border-2 border-red-100 hover:border-red-500 transition-all flex items-center justify-center gap-2"
-                >
-                  <Trash2 size={20} /> Delete
-                </Button>
+              
+              <div className="absolute top-[10rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
+                <span className="text-slate-900 font-black text-3xl tracking-tight">₹{ws.price}</span>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+
+              <CardContent className="p-8 pt-10">
+                <h3 className="text-xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
+                <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{ws.description}</p>
+                
+                <div className="space-y-4 mb-10 pl-1">
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
+                      <Calendar size={18} className="text-teal-600" />
+                    </div>
+                    <span className="font-bold text-[15px]">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
+                      <MapPin size={18} className="text-teal-600" />
+                    </div>
+                    <span className="font-bold text-[15px] uppercase line-clamp-1">{ws.venue}</span>
+                  </div>
+                  {ws.meetingLink && (
+                    <div className="flex items-center gap-4 text-slate-700">
+                      <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
+                        <LinkIcon size={18} className="text-teal-600" />
+                      </div>
+                      <a href={ws.meetingLink} target="_blank" rel="noopener noreferrer" className="font-bold text-[15px] text-primary-500 hover:text-primary-600 hover:underline line-clamp-1 truncate block" title={ws.meetingLink}>
+                          Join Meeting
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => openEditModal(ws)}
+                    className="flex-1 py-6 rounded-full font-black text-lg text-primary-600 hover:bg-primary-50 border-2 border-primary-100 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Edit size={20} /> Edit
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => handleDelete(ws._id)}
+                    className="flex-1 py-6 rounded-full font-black text-lg text-red-500 hover:text-white hover:bg-red-500 border-2 border-red-100 hover:border-red-500 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Trash2 size={20} /> Delete
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       {isModalOpen && (
