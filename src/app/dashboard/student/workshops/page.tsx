@@ -7,28 +7,37 @@ import axios from 'axios';
 import { Calendar, MapPin, Link as LinkIcon } from 'lucide-react';
 
 export default function StudentWorkshops() {
+  const { token, logout } = useAuth();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMyWorkshops = async () => {
+      if (!token) {
+          setLoading(false);
+          return;
+      }
+
       try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/my-workshops`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${token}`
           }
         });
         if (res.data.success) {
           setBookings(res.data.data);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching my workshops:", error);
+        if (error.response?.status === 401) {
+          logout();
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchMyWorkshops();
-  }, []);
+  }, [token]);
 
   return (
     <DashboardLayout allowedRoles={['student']}>
