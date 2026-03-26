@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
-import { Plus, Trash2, Calendar, MapPin, Tag } from 'lucide-react';
+import { Plus, Trash2, Calendar, MapPin, Tag, Edit, Link as LinkIcon } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
 export default function AdminWorkshops() {
@@ -13,12 +13,14 @@ export default function AdminWorkshops() {
   const [isLoading, setIsLoading] = useState(true);
   const { showToast, confirm } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     date: '',
     price: 0,
     venue: '',
+    meetingLink: '',
   });
 
   const fetchWorkshops = async () => {
@@ -41,15 +43,35 @@ export default function AdminWorkshops() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops`, formData);
+      let res;
+      if (editingId) {
+        res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${editingId}`, formData);
+      } else {
+        res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops`, formData);
+      }
       if (res.data.success) {
         setIsModalOpen(false);
-        setFormData({ title: '', description: '', date: '', price: 0, venue: '' });
+        setEditingId(null);
+        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '' });
         fetchWorkshops();
+        showToast(`Workshop ${editingId ? 'updated' : 'created'} successfully`, "success");
       }
     } catch (err) {
-      showToast("Failed to create workshop", "error");
+      showToast(`Failed to ${editingId ? 'update' : 'create'} workshop`, "error");
     }
+  };
+
+  const openEditModal = (ws: any) => {
+    setEditingId(ws._id);
+    setFormData({
+      title: ws.title,
+      description: ws.description,
+      date: new Date(ws.date).toISOString().split('T')[0],
+      price: ws.price,
+      venue: ws.venue,
+      meetingLink: ws.meetingLink || '',
+    });
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -71,7 +93,11 @@ export default function AdminWorkshops() {
           <h1 className="text-3xl md:text-4xl font-black text-gray-800">Workshop Management 🎟️</h1>
           <p className="text-gray-500 font-bold">Create and manage upcoming magical bootcamps.</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="font-black w-full md:w-auto">
+        <Button onClick={() => {
+          setEditingId(null);
+          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '' });
+          setIsModalOpen(true);
+        }} className="font-black w-full md:w-auto">
           <Plus className="mr-2" /> Add Workshop
         </Button>
       </div>
@@ -106,17 +132,36 @@ export default function AdminWorkshops() {
                    <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
                      <MapPin size={18} className="text-teal-600" />
                    </div>
-                   <span className="font-bold text-[15px] uppercase">{ws.venue}</span>
+                   <span className="font-bold text-[15px] uppercase line-clamp-1">{ws.venue}</span>
                 </div>
+                {ws.meetingLink && (
+                  <div className="flex items-center gap-4 text-slate-700">
+                     <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
+                       <LinkIcon size={18} className="text-teal-600" />
+                     </div>
+                     <a href={ws.meetingLink} target="_blank" rel="noopener noreferrer" className="font-bold text-[15px] text-primary-500 hover:text-primary-600 hover:underline line-clamp-1 truncate block" title={ws.meetingLink}>
+                        Join Meeting
+                     </a>
+                  </div>
+                )}
               </div>
 
-              <Button 
-                variant="ghost" 
-                onClick={() => handleDelete(ws._id)}
-                className="w-full py-6 rounded-full font-black text-lg text-red-500 hover:text-white hover:bg-red-500 border-2 border-red-100 hover:border-red-500 transition-all flex items-center justify-center gap-2"
-              >
-                <Trash2 size={20} /> Delete Workshop
-              </Button>
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={() => openEditModal(ws)}
+                  className="flex-1 py-6 rounded-full font-black text-lg text-primary-600 hover:bg-primary-50 border-2 border-primary-100 transition-all flex items-center justify-center gap-2"
+                >
+                  <Edit size={20} /> Edit
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => handleDelete(ws._id)}
+                  className="flex-1 py-6 rounded-full font-black text-lg text-red-500 hover:text-white hover:bg-red-500 border-2 border-red-100 hover:border-red-500 transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 size={20} /> Delete
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -126,7 +171,7 @@ export default function AdminWorkshops() {
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <Card className="w-full max-w-lg overflow-hidden bg-white">
             <div className="bg-accent-500 p-6 text-white flex justify-between items-center">
-              <h2 className="text-2xl font-black">New Workshop 🚀</h2>
+              <h2 className="text-2xl font-black">{editingId ? 'Edit Workshop ✏️' : 'New Workshop 🚀'}</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-white hover:scale-110">✕</button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
@@ -153,12 +198,17 @@ export default function AdminWorkshops() {
                 />
               </div>
               <input 
-                type="text" required placeholder="Venue (or Online Link)"
+                type="text" required placeholder="Venue (e.g. Online - Zoom Live)"
                 className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
                 value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})}
               />
-              <Button type="submit" className="w-full py-6 font-black text-lg bg-accent-500 hover:bg-accent-600">
-                Create Workshop ✨
+              <input 
+                type="url" placeholder="Meeting Link (Optional, e.g. https://zoom.us/j/...)"
+                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
+              />
+              <Button type="submit" className="w-full py-6 font-black text-lg bg-accent-500 hover:bg-accent-600 mt-2">
+                {editingId ? 'Save Changes ✨' : 'Create Workshop ✨'}
               </Button>
             </form>
           </Card>

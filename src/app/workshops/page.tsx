@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Calendar, MapPin, ArrowRight, Rocket, Search } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Rocket, Search, Link as LinkIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -54,7 +54,9 @@ export default function WorkshopsPage() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
       
       // 1. Create order
-      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, { workshopId: workshop._id });
+      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, { workshopId: workshop._id }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
       
       if (!orderRes.data.success) {
         throw new Error(orderRes.data.message || "Failed to create order");
@@ -78,6 +80,8 @@ export default function WorkshopsPage() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               workshopId: workshop._id
+            }, {
+              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
 
             if (verifyRes.data.success) {
@@ -212,8 +216,18 @@ export default function WorkshopsPage() {
                         <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
                           <MapPin size={18} className="text-teal-600" />
                         </div>
-                        <span className="font-bold text-[15px] uppercase">{ws.venue}</span>
+                        <span className="font-bold text-[15px] uppercase line-clamp-1">{ws.venue}</span>
                       </div>
+                      {ws.meetingLink && (
+                        <div className="flex items-center gap-4 text-slate-700">
+                           <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
+                             <LinkIcon size={18} className="text-teal-600" />
+                           </div>
+                           <a href={ws.meetingLink} target="_blank" rel="noopener noreferrer" className="font-bold text-[15px] text-primary-500 hover:text-primary-600 hover:underline line-clamp-1 truncate block" title={ws.meetingLink}>
+                              Join Meeting
+                           </a>
+                        </div>
+                      )}
                     </div>
 
                     <Button 
