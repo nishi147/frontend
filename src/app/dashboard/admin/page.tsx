@@ -67,9 +67,8 @@ export default function AdminDashboard() {
     }
   }, [user]);
 
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center font-bold text-2xl text-accent-500 animate-pulse">Initializing Security... 🔐</div>;
-  }
+  // Removed redundant top-level loading check. DashboardLayout handles auth-level loading.
+  // This prevents the "Initializing Security..." hang.
 
   if (user?.role !== 'admin') {
     return <div className="min-h-screen flex items-center justify-center text-red-500 font-bold">Access Denied</div>;

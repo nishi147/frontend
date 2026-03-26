@@ -51,8 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(storedToken);
         axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-          const res = await axios.get(`${apiUrl}/api/auth/me`);
+          const res = await axios.get(`/api/auth/me`);
           if (res.data.success) {
              setUser(res.data.data);
           } else {
@@ -60,13 +59,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         } catch (error: any) {
           console.error("Auth init error:", error);
-          // Only logout on 401 Unauthorized, to prevent logout on network/server blips
           if (error.response?.status === 401) {
             logout();
           }
+        } finally {
+          setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
