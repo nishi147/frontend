@@ -12,21 +12,22 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 
+import api from '@/utils/api';
 import Cookies from 'js-cookie';
 
 export default function WorkshopsPage() {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingId, setProcessingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWorkshops = async () => {
       try {
-        const res = await axios.get('/api/workshops');
+        const res = await api.get('/api/workshops');
         if (res.data.success) {
           setWorkshops(res.data.data);
         }
@@ -51,14 +52,10 @@ export default function WorkshopsPage() {
       return;
     }
 
-    setIsProcessing(true);
+    setProcessingId(workshop._id);
     try {
-      const activeToken = token || Cookies.get('token');
-      
       // 1. Create order
-      const orderRes = await axios.post('/api/payments/workshop-order', { workshopId: workshop._id }, {
-        headers: { Authorization: `Bearer ${activeToken}` }
-      });
+      const orderRes = await api.post('/api/payments/workshop-order', { workshopId: workshop._id });
       
       if (!orderRes.data.success) {
         throw new Error(orderRes.data.message || "Failed to create order");
@@ -77,13 +74,11 @@ export default function WorkshopsPage() {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post('/api/payments/workshop-verify', {
+            const verifyRes = await api.post('/api/payments/workshop-verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               workshopId: workshop._id
-            }, {
-              headers: { Authorization: `Bearer ${activeToken}` }
             });
 
             if (verifyRes.data.success) {
@@ -114,7 +109,7 @@ export default function WorkshopsPage() {
       console.error("Payment initiation error:", err.response?.data || err);
       showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
-      setIsProcessing(false);
+      setProcessingId(null);
     }
   };
 
@@ -234,7 +229,7 @@ export default function WorkshopsPage() {
 
                     <Button 
                       onClick={() => handleBookWorkshop(ws)}
-                      isLoading={isProcessing}
+                      isLoading={processingId === ws._id}
                       className="w-full py-6 rounded-full font-black text-lg bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-lg shadow-[#F2643D]/30 transition-all flex items-center justify-center gap-2"
                     >
                       Book Seat <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />

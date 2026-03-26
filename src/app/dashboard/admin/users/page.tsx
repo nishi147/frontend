@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { UserCheck, UserX, Trash2, Mail, Shield } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -18,7 +18,7 @@ export default function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('/api/users');
+      const res = await api.get('/api/users');
       if (res.data.success) {
         setUsers(res.data.data);
       }
@@ -37,7 +37,7 @@ export default function UserManagement() {
 
   const approveTeacher = async (id: string) => {
     try {
-      await axios.put(`/api/users/approve-teacher/${id}`);
+      await api.put(`/api/users/approve-teacher/${id}`);
       showToast("Teacher approved successfully!", "success");
       fetchUsers();
     } catch (err) {
@@ -47,7 +47,7 @@ export default function UserManagement() {
 
   const approveStudent = async (id: string) => {
     try {
-      const res = await axios.put(`/api/users/approve-student/${id}`);
+      const res = await api.put(`/api/users/approve-student/${id}`);
       if (res.data.success) {
         showToast("Student approved successfully!", "success");
         fetchUsers();
@@ -61,7 +61,7 @@ export default function UserManagement() {
   const deleteUser = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
     try {
-      const res = await axios.delete(`/api/users/${id}`);
+      const res = await api.delete(`/api/users/${id}`);
       if (res.data.success) {
         showToast("User deleted successfully!", "success");
         fetchUsers();
@@ -73,7 +73,7 @@ export default function UserManagement() {
 
   const updateRole = async (id: string, newRole: string) => {
     try {
-      await axios.put(`/api/users/${id}/role`, { role: newRole });
+      await api.put(`/api/users/${id}/role`, { role: newRole });
       showToast(`Role updated to ${newRole}`, "success");
       fetchUsers();
     } catch (err: any) {

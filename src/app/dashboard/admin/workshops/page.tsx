@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Plus, Trash2, Calendar, MapPin, Tag, Edit, Link as LinkIcon } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -25,7 +25,7 @@ export default function AdminWorkshops() {
 
   const fetchWorkshops = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops`);
+      const res = await api.get('/api/workshops');
       if (res.data.success) {
         setWorkshops(res.data.data);
       }
@@ -45,9 +45,9 @@ export default function AdminWorkshops() {
     try {
       let res;
       if (editingId) {
-        res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${editingId}`, formData);
+        res = await api.put(`/api/workshops/${editingId}`, formData);
       } else {
-        res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops`, formData);
+        res = await api.post('/api/workshops', formData);
       }
       if (res.data.success) {
         setIsModalOpen(false);
@@ -78,7 +78,7 @@ export default function AdminWorkshops() {
     const isConfirmed = await confirm("Delete Workshop?", "Do you really want to remove this workshop from the schedule?");
     if (!isConfirmed) return;
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${id}`);
+      await api.delete(`/api/workshops/${id}`);
       fetchWorkshops();
       showToast("Workshop deleted successfully", "success");
     } catch (err) {

@@ -5,11 +5,9 @@ import { useAuth } from "@/context/AuthContext";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import axios from "axios";
+import api from "@/utils/api";
 import { Trash2, BookOpen, Plus, Edit2, ChevronLeft, ChevronRight, PlayCircle, CheckCircle } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
-
-const API = process.env.NEXT_PUBLIC_API_URL;
 
 interface Session {
   title: string;
@@ -65,9 +63,7 @@ export default function AdminCourseManagement() {
   // FETCH COURSES
   const fetchCourses = async () => {
     try {
-      const res = await axios.get(`${API}/api/courses/admin/all`, {
-        withCredentials: true,
-      });
+      const res = await api.get('/api/courses/admin/all');
       // Fallback handlers to ensure state is array no matter what
       if (res.data?.success) {
         setCourses(res.data.data || res.data.courses || []);
@@ -98,7 +94,7 @@ export default function AdminCourseManagement() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${API}/api/categories`);
+      const res = await api.get('/api/categories');
       if (res.data.success) {
         setCategories(res.data.data);
       }
@@ -167,10 +163,10 @@ export default function AdminCourseManagement() {
         };
 
         if (editingCourse) {
-          await axios.put(`${API}/api/courses/${editingCourse._id}`, createData, config);
+          await api.put(`/api/courses/${editingCourse._id}`, createData);
           showToast("Course Updated!", "success");
         } else {
-          await axios.post(`${API}/api/courses`, createData, config);
+          await api.post('/api/courses', createData);
           showToast("Course Created!", "success");
         }
 

@@ -33,11 +33,7 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
 });
 
-// Use relative path '/api' to trigger Next.js rewrites in dev, or direct URL in production
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || ''; 
-axios.defaults.withCredentials = true;
-// NOTE: Setting baseURL and withCredentials here ensures that all relative calls 
-// like axios.get('/api/users') correctly point to the backend server and send cookies.
+import api from '@/utils/api';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -50,9 +46,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const storedToken = Cookies.get('token');
       if (storedToken) {
         setToken(storedToken);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         try {
-          const res = await axios.get(`/api/auth/me`);
+          const res = await api.get('/api/auth/me');
           if (res.data.success) {
              setUser(res.data.data);
           } else {

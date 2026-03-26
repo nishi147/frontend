@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift } from 'lucide-react';
 
 interface Analytics {
@@ -29,7 +29,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await axios.get('/api/users/analytics');
+        const res = await api.get('/api/users/analytics');
         if (res.data.success) setAnalytics(res.data.data);
       } catch (err) {
         console.error("Failed to fetch analytics", err);
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('/api/users');
+        const res = await api.get('/api/users');
         if (res.data.success) setUsers(res.data.data);
       } catch (err) {
         console.error("Failed to fetch users", err);
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
 
     const fetchSales = async () => {
       try {
-        const res = await axios.get('/api/analytics/sales');
+        const res = await api.get('/api/analytics/sales');
         if (res.data.success) setSalesStats(res.data.data);
       } catch (err) {
         console.error("Failed to fetch sales stats", err);
