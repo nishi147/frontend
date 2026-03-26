@@ -8,16 +8,22 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Request Interceptor: Automatically attach Bearer Token from Cookies
+// Request Interceptor: Automatically attach Bearer Token and handle URLs
 api.interceptors.request.use((config) => {
   const token = Cookies.get('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   
-  // Safety check: Never prefix absolute URLs
+  // Robust Path Handling:
+  // 1. If absolute URL (starts with http) -> Remove baseURL to avoid double-prefixing
+  // 2. If relative URL (starts with /) -> Ensure baseURL is applied
   if (config.url && (config.url.startsWith('http://') || config.url.startsWith('https://'))) {
-    config.baseURL = '';
+    config.baseURL = ''; 
+  } else if (config.url && config.url.startsWith('/') && API_URL) {
+    // Ensure we don't double-slash
+    config.url = `${API_URL.replace(/\/$/, '')}${config.url}`;
+    config.baseURL = ''; 
   }
   
   return config;

@@ -12,14 +12,6 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://backend-olive-five-70.vercel.app/api/:path*',
-      },
-    ];
-  },
 };
 
 export default nextConfig;
