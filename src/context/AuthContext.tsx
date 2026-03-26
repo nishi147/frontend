@@ -35,8 +35,9 @@ const AuthContext = createContext<AuthContextType>({
 
 // Use relative path '/api' to trigger Next.js rewrites in dev, or direct URL in production
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || ''; 
-// NOTE: Setting baseURL here ensures that all relative calls like axios.get('/api/users')
-// correctly point to the backend server even on Vercel.
+axios.defaults.withCredentials = true;
+// NOTE: Setting baseURL and withCredentials here ensures that all relative calls 
+// like axios.get('/api/users') correctly point to the backend server and send cookies.
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);

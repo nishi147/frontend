@@ -12,8 +12,10 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 
+import Cookies from 'js-cookie';
+
 export default function WorkshopsPage() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
   const [workshops, setWorkshops] = useState<any[]>([]);
@@ -24,7 +26,7 @@ export default function WorkshopsPage() {
   useEffect(() => {
     const fetchWorkshops = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops`);
+        const res = await axios.get('/api/workshops');
         if (res.data.success) {
           setWorkshops(res.data.data);
         }
@@ -45,17 +47,17 @@ export default function WorkshopsPage() {
 
   const handleBookWorkshop = async (workshop: any) => {
     if (!user) {
-      router.push('/register');
+      router.push('/login');
       return;
     }
 
     setIsProcessing(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const activeToken = token || Cookies.get('token');
       
       // 1. Create order
-      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, { workshopId: workshop._id }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      const orderRes = await axios.post('/api/payments/workshop-order', { workshopId: workshop._id }, {
+        headers: { Authorization: `Bearer ${activeToken}` }
       });
       
       if (!orderRes.data.success) {
@@ -75,13 +77,13 @@ export default function WorkshopsPage() {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, {
+            const verifyRes = await axios.post('/api/payments/workshop-verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               workshopId: workshop._id
             }, {
-              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+              headers: { Authorization: `Bearer ${activeToken}` }
             });
 
             if (verifyRes.data.success) {
@@ -109,7 +111,7 @@ export default function WorkshopsPage() {
       });
 
     } catch (err: any) {
-      console.error("Payment initiation error:", err);
+      console.error("Payment initiation error:", err.response?.data || err);
       showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
       setIsProcessing(false);
