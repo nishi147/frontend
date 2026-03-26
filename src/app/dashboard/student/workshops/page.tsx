@@ -57,15 +57,23 @@ export default function StudentWorkshops() {
 
             return (
               <Card key={booking._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-                <div className={`h-40 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 bg-gradient-to-br from-[#6C5CE7] to-[#FD79A8] rounded-t-[2.5rem]`}>
+                <div className={`h-40 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 ${booking.isTrial ? 'bg-gradient-to-br from-[#FF9F43] to-[#FF6B6B]' : 'bg-gradient-to-br from-[#6C5CE7] to-[#FD79A8]'} rounded-t-[2.5rem]`}>
                   <div className="relative z-10 flex flex-col items-center text-center transform group-hover:scale-105 transition-transform duration-500">
                     <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)]">
-                      {ws.title.toLowerCase().includes('space') ? '🚀' : 
+                      {booking.isTrial ? '✨' : 
+                       ws.title.toLowerCase().includes('space') ? '🚀' : 
                        ws.title.toLowerCase().includes('robot') ? '🤖' : 
                        ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
                     </div>
-                    <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-xl border border-white/20">
-                      <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{booking.status}</span>
+                    <div className="flex gap-2">
+                        <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-xl border border-white/20">
+                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{booking.status || 'Active'}</span>
+                        </div>
+                        {booking.isTrial && (
+                            <div className="px-3 py-1 bg-yellow-400 rounded-xl shadow-lg border border-yellow-300">
+                                <span className="text-[10px] font-black text-slate-800 uppercase tracking-[0.2em]">Trial Session</span>
+                            </div>
+                        )}
                     </div>
                   </div>
                 </div>
