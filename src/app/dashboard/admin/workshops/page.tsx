@@ -5,14 +5,16 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
-import { Plus, Trash2, Calendar, MapPin, Tag, Edit, Link as LinkIcon } from 'lucide-react';
+import { Calendar, MapPin, Tag, Edit, Link as LinkIcon, Plus, Trash2, Clock } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { WorkshopSlotModal } from '@/components/admin/WorkshopSlotModal';
 
 export default function AdminWorkshops() {
   const [workshops, setWorkshops] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { showToast, confirm } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeWorkshopForSlots, setActiveWorkshopForSlots] = useState<any>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
@@ -151,6 +153,16 @@ export default function AdminWorkshops() {
                   )}
                 </div>
 
+                <div className="flex gap-3 mb-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveWorkshopForSlots(ws)}
+                    className="w-full py-5 rounded-2xl font-black text-sm text-secondary-600 hover:bg-secondary-50 border-2 border-secondary-100/50 hover:border-secondary-500 transition-all flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    <Clock size={18} /> Manage Time Slots
+                  </Button>
+                </div>
+
                 <div className="flex gap-3">
                   <Button 
                     variant="outline" 
@@ -219,6 +231,13 @@ export default function AdminWorkshops() {
             </form>
           </Card>
         </div>
+      )}
+
+      {activeWorkshopForSlots && (
+        <WorkshopSlotModal 
+           workshop={activeWorkshopForSlots} 
+           onClose={() => setActiveWorkshopForSlots(null)} 
+        />
       )}
     </DashboardLayout>
   );

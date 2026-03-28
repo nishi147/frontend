@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Calendar, MapPin, Link as LinkIcon } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -20,11 +20,7 @@ export default function StudentWorkshops() {
       }
 
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/my-workshops`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const res = await api.get('/api/workshops/my-workshops');
         if (res.data.success) {
           setBookings(res.data.data);
         }

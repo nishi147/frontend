@@ -15,6 +15,8 @@ import { useToast } from '@/context/ToastContext';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
 import { BlogSection } from '@/components/sections/BlogSection';
+import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
+import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -29,6 +31,8 @@ const WorkshopSection = () => {
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeWorkshopForSlots, setActiveWorkshopForSlots] = useState<any>(null);
+  const [workshopSlots, setWorkshopSlots] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchWorkshops = async () => {
@@ -56,9 +60,33 @@ const WorkshopSection = () => {
     setIsProcessing(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const slotRes = await axios.get(`${apiUrl}/api/workshops/${workshop._id}/slots`);
+      const slots = slotRes.data.success ? slotRes.data.data : [];
+      
+      if (slots.length > 0) {
+        setWorkshopSlots(slots);
+        setActiveWorkshopForSlots(workshop);
+        setIsProcessing(false);
+      } else {
+        // Legacy flow: No slots set up
+        proceedToPayment(workshop, null);
+      }
+    } catch (err) {
+      console.error("Error fetching slots", err);
+      proceedToPayment(workshop, null); // fallback
+    }
+  };
+
+  const proceedToPayment = async (workshop: any, slotId: string | null) => {
+    setIsProcessing(true);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
       
       // 1. Create order
-      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, { workshopId: workshop._id });
+      const payload: any = { workshopId: workshop._id };
+      if (slotId) payload.slotId = slotId;
+
+      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, payload);
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -72,12 +100,15 @@ const WorkshopSection = () => {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, {
+            const verifyPayload: any = {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               workshopId: workshop._id
-            });
+            };
+            if (slotId) verifyPayload.slotId = slotId;
+
+            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, verifyPayload);
 
             if (verifyRes.data.success) {
               router.push('/payment-success');
@@ -108,6 +139,7 @@ const WorkshopSection = () => {
       showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
       setIsProcessing(false);
+      setActiveWorkshopForSlots(null);
     }
   };
 
@@ -187,6 +219,16 @@ const WorkshopSection = () => {
           </CardContent>
         </Card>
       ))}
+
+      {activeWorkshopForSlots && (
+        <WorkshopSlotSelectorModal
+          workshop={activeWorkshopForSlots}
+          slots={workshopSlots}
+          onClose={() => setActiveWorkshopForSlots(null)}
+          onProceed={(slotId) => proceedToPayment(activeWorkshopForSlots, slotId)}
+          isProcessing={isProcessing}
+        />
+      )}
     </div>
   );
 };
@@ -564,6 +606,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* NEW PLAY & LEARN SECTION */}
+      <PlayAndLearnSection />
+
       {/* 2. ₹1 ATTRACTIVE SECTION */}
       <section className="relative py-16 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-accent-500 -skew-y-3 origin-left z-0" />
@@ -728,9 +773,6 @@ export default function Home() {
           </div>
       </section>
 
-      <BlogSection />
-
-
       {/* 5. TESTIMONIALS SECTION */}
       <section className="py-12 px-4 bg-primary-50">
         <div className="max-w-6xl mx-auto text-center">
@@ -829,6 +871,11 @@ export default function Home() {
       </section>
 
       <ContactSection />
+      
+      <div className="mt-12">
+        <BlogSection />
+      </div>
+      
       <Footer />
       <ScrollToTop />
     </div>

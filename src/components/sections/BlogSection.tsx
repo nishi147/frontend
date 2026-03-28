@@ -179,51 +179,6 @@ export const BlogSection = () => {
             </Link>
           ))}
         </div>
-
-        {/* Student Video Clips Section */}
-        <div className="bg-slate-900 rounded-[3.5rem] p-8 md:p-16 relative overflow-hidden group/star">
-          {/* Decorative Background */}
-          <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-secondary-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-primary-500/10 rounded-full blur-3xl" />
-          
-          <div className="relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-                Student <span className="text-secondary-400">Superstars</span> in Action! 🎬
-              </h2>
-              <p className="text-gray-400 font-bold text-lg max-w-2xl mx-auto">
-                Watch our students master real technical skills through hands-on, high-energy projects.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {STUDENT_VIDEOS.map((video) => (
-                <div key={video.id} onClick={() => setActiveVideo(video)} className="relative group cursor-pointer">
-                  <div className="relative aspect-video rounded-3xl overflow-hidden border-2 border-white/10 group-hover:border-secondary-400 transition-all duration-500">
-                    <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover brightness-75 group-hover:brightness-50 group-hover:scale-105 transition-all duration-700" />
-                    {/* Video Overlay Removed as per user request */}
-                    {/* Floating Info Overlay */}
-                    <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                        <h4 className="text-white font-black text-sm">{video.title}</h4>
-                        <p className="text-secondary-400 text-[10px] font-black uppercase tracking-widest">{video.student}</p>
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <h3 className="text-xl font-black text-white mb-2">{video.title}</h3>
-                    <p className="text-gray-400 font-bold text-sm px-2 leading-relaxed">{video.description}</p>
-                  </div>
-                  
-                  {/* Student Badge */}
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-secondary-400 rounded-2xl flex items-center justify-center text-white rotate-12 group-hover:rotate-0 transition-all duration-500 shadow-xl border-4 border-slate-900 font-black text-lg">
-                    <Star size={20} fill="currentColor" />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Watch All Stories Button Removed */}
-          </div>
-        </div>
       </div>
     </section>
   );
