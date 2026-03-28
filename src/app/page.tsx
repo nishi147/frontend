@@ -25,7 +25,7 @@ const HERO_IMAGES = [
 ];
 
 const WorkshopSection = () => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
   const [workshops, setWorkshops] = useState<any[]>([]);
@@ -60,7 +60,9 @@ const WorkshopSection = () => {
     setIsProcessing(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const slotRes = await axios.get(`${apiUrl}/api/workshops/${workshop._id}/slots`);
+      const slotRes = await axios.get(`${apiUrl}/api/workshops/${workshop._id}/slots`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const slots = slotRes.data.success ? slotRes.data.data : [];
       
       if (slots.length > 0) {
@@ -69,11 +71,15 @@ const WorkshopSection = () => {
         setIsProcessing(false);
       } else {
         // Legacy flow: No slots set up
-        proceedToPayment(workshop, null);
+        await proceedToPayment(workshop, null);
       }
     } catch (err) {
       console.error("Error fetching slots", err);
-      proceedToPayment(workshop, null); // fallback
+      try {
+        await proceedToPayment(workshop, null); // fallback
+      } catch (fallbackErr) {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -86,7 +92,9 @@ const WorkshopSection = () => {
       const payload: any = { workshopId: workshop._id };
       if (slotId) payload.slotId = slotId;
 
-      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, payload);
+      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -108,7 +116,9 @@ const WorkshopSection = () => {
             };
             if (slotId) verifyPayload.slotId = slotId;
 
-            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, verifyPayload);
+            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, verifyPayload, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
 
             if (verifyRes.data.success) {
               router.push('/payment-success');
