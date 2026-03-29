@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { useToast } from '@/context/ToastContext';
 
@@ -18,14 +18,13 @@ export default function TeacherDashboard() {
   const [isScheduling, setIsScheduling] = useState(false);
   const { showToast } = useToast();
 
- const API = process.env.NEXT_PUBLIC_API_URL;
 
 useEffect(() => {
   const fetchData = async () => {
     try {
       const [classRes, courseRes] = await Promise.all([
-        axios.get(`${API}/api/live-classes/teacher`, { withCredentials: true }),
-        axios.get(`${API}/api/courses/teacher/my-courses`, { withCredentials: true })
+        api.get('/api/live-classes/teacher'),
+        api.get('/api/courses/teacher/my-courses')
       ]);
 
       if (classRes.data.success) {
@@ -49,10 +48,9 @@ useEffect(() => {
   setIsScheduling(true);
 
   try {
-    const res = await axios.post(
-      `${API}/api/live-classes`,
-      scheduleData,
-      { withCredentials: true }
+    const res = await api.post(
+      '/api/live-classes',
+      scheduleData
     );
 
     if (res.data.success) {

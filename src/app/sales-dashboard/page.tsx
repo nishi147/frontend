@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { LeadsTable } from '@/components/sales/LeadsTable';
-import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare, Bell } from 'lucide-react';
+import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare, Bell, IndianRupee } from 'lucide-react';
 
 export default function SalesDashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -10,7 +10,7 @@ export default function SalesDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get('/api/analytics');
+      const res = await api.get('/api/analytics');
       setStats(res.data.data);
     } catch (err) {
       console.error("Error fetching sales stats:", err);

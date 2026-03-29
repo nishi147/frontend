@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent, CardHeader } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 
 export default function StudentDashboard() {
@@ -17,7 +17,7 @@ export default function StudentDashboard() {
     // Fetch student data later
     const fetchData = async () => {
       try {
-        const classRes = await axios.get('/api/live-classes');
+        const classRes = await api.get('/api/live-classes');
         if (classRes.data.success) {
           setLiveClasses(classRes.data.data);
         }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { BookOpen, Video, PlayCircle, FileText } from 'lucide-react';
 
 export default function MyCoursesPage() {
@@ -15,7 +15,7 @@ export default function MyCoursesPage() {
     useEffect(() => {
         const fetchMyCourses = async () => {
             try {
-                const res = await axios.get('/api/courses/student/my-courses');
+                const res = await api.get('/api/courses/student/my-courses');
                 if (res.data.success) {
                     setCourses(res.data.data);
                 }

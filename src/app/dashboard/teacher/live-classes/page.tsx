@@ -4,7 +4,7 @@ import { Plus, Video, Calendar, Link as LinkIcon, Trash2, Clock, CheckCircle2, L
 import { Button } from '@/components/ui/Button';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 
@@ -26,8 +26,8 @@ export default function TeacherLiveClassesPage() {
     const fetchData = async () => {
         try {
             const [coursesRes, sessionsRes] = await Promise.all([
-                axios.get('/api/live-classes/courses'),
-                axios.get('/api/live-classes/teacher')
+                api.get('/api/live-classes/courses'),
+                api.get('/api/live-classes/teacher')
             ]);
             if (coursesRes.data.success) setCourses(coursesRes.data.data);
             if (sessionsRes.data.success) setSessions(sessionsRes.data.data);
@@ -46,7 +46,7 @@ export default function TeacherLiveClassesPage() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post('/api/live-classes', formData);
+            const res = await api.post('/api/live-classes', formData);
             if (res.data.success) {
                 showToast('Session scheduled successfully! 🚀', 'success');
                 setIsScheduling(false);
