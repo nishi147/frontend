@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Calendar, Video, Trash2, Plus, Clock, User } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -22,8 +22,8 @@ export default function AdminLiveClasses() {
   const fetchData = async () => {
     try {
       const [classRes, courseRes] = await Promise.all([
-        axios.get('/api/live-classes/teacher'), // Admin can use teacher route or we need admin route
-        axios.get('/api/courses/admin/all')
+        api.get('/api/live-classes/teacher'), // Admin can use teacher route or we need admin route
+        api.get('/api/courses/admin/all')
       ]);
       setLiveClasses(classRes.data.data);
       setCourses(courseRes.data.data);
@@ -41,7 +41,7 @@ export default function AdminLiveClasses() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('/api/live-classes', formData);
+      await api.post('/api/live-classes', formData);
       showToast("Live Class Scheduled!", "success");
       setIsModalOpen(false);
       fetchData();
@@ -54,7 +54,7 @@ export default function AdminLiveClasses() {
     const isConfirmed = await (confirm as any)("Cancel Session?", "Are you sure you want to delete this live class?");
     if (!isConfirmed) return;
     try {
-      await axios.delete(`/api/live-classes/${id}`);
+      await api.delete(`/api/live-classes/${id}`);
       fetchData();
     } catch (err) {
       showToast("Failed to delete.", "error");

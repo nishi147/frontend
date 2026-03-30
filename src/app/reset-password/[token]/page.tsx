@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Logo } from '@/components/ui/Logo';
 import { Lock, CheckCircle2, ShieldCheck, Sparkles, Brain, ArrowRight } from 'lucide-react';
 
@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
     setIsLoading(true);
 
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/resetpassword/${token}`, { password });
+      const res = await api.put(`/api/auth/resetpassword/${token}`, { password });
       if (res.data.success) {
         setSuccess(true);
         setTimeout(() => {

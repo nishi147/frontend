@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { AssignmentForm } from '@/components/dashboard/AssignmentForm';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Plus, BookOpen, Calendar, Trash2, Edit3, Loader2 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -16,12 +16,10 @@ export default function AdminAssignmentsPage() {
     const [showForm, setShowForm] = useState(false);
     const [selectedAssignment, setSelectedAssignment] = useState(null);
 
-    const API = process.env.NEXT_PUBLIC_API_URL || '';
-
     const fetchAssignments = async () => {
         try {
             // Admin endpoint (or filter handled in controller)
-            const res = await axios.get(`${API}/api/assignments/teacher/my-assignments`, { withCredentials: true });
+            const res = await api.get('/api/assignments/teacher/my-assignments');
             if (res.data.success) {
                 setAssignments(res.data.data);
             }
@@ -34,12 +32,12 @@ export default function AdminAssignmentsPage() {
 
     useEffect(() => {
         fetchAssignments();
-    }, [API]);
+    }, []);
 
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this mission?')) return;
         try {
-            const res = await axios.delete(`${API}/api/assignments/${id}`, { withCredentials: true });
+            const res = await api.delete(`/api/assignments/${id}`);
             if (res.data.success) {
                 showToast('Mission deleted successfully!', 'success');
                 fetchAssignments();

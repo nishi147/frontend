@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {DashboardLayout} from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Plus, Edit2, Trash2, X, Check, Search, User, Briefcase, Mail, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import api from '@/utils/api';
 
 interface Mentor {
     _id: string;
@@ -42,8 +42,7 @@ export default function AdminMentorsPage() {
 
     const fetchMentors = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-            const res = await axios.get(`${apiUrl}/api/mentors`, { withCredentials: true });
+            const res = await api.get('/api/mentors');
             if (res.data.success) {
                 setMentors(res.data.data);
             }
@@ -58,12 +57,11 @@ export default function AdminMentorsPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
             if (editingMentor) {
-                await axios.put(`${apiUrl}/api/users/mentors/${editingMentor._id}`, formData, { withCredentials: true });
+                await api.put(`/api/users/mentors/${editingMentor._id}`, formData);
                 showToast("Mentor updated successfully!", "success");
             } else {
-                await axios.post(`${apiUrl}/api/users/mentors`, formData, { withCredentials: true });
+                await api.post('/api/users/mentors', formData);
                 showToast("Mentor created successfully!", "success");
             }
             setShowModal(false);
@@ -83,8 +81,7 @@ export default function AdminMentorsPage() {
     const confirmDelete = async () => {
         if (!mentorToDelete) return;
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-            await axios.delete(`${apiUrl}/api/users/${mentorToDelete}`, { withCredentials: true });
+            await api.delete(`/api/users/${mentorToDelete}`);
             showToast("Mentor deleted", "success");
             fetchMentors();
         } catch (error) {

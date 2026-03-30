@@ -209,9 +209,7 @@ export default function AdminCourseManagement() {
   // APPROVE
   const approveCourse = async (id: string) => {
     try {
-      await axios.put(`${API}/api/courses/admin/approve/${id}`, {}, {
-        withCredentials: true,
-      });
+      await api.put(`/api/courses/admin/approve/${id}`);
       fetchCourses();
       showToast("Course Approved!", "success");
     } catch {
@@ -225,9 +223,7 @@ export default function AdminCourseManagement() {
     if (!isConfirmed) return;
 
     try {
-      await axios.delete(`${API}/api/courses/${id}`, {
-        withCredentials: true,
-      });
+      await api.delete(`/api/courses/${id}`);
       showToast("Course Deleted", "success");
       fetchCourses();
     } catch {

@@ -4,11 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Trash2, Edit2, Plus, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CategoryManagement() {
     const [categories, setCategories] = useState<any[]>([]);
@@ -24,7 +22,7 @@ export default function CategoryManagement() {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get(`${API}/api/categories`);
+            const res = await api.get('/api/categories');
             if (res.data.success) {
                 setCategories(res.data.data);
             }
@@ -48,10 +46,10 @@ export default function CategoryManagement() {
         e.preventDefault();
         try {
             if (editingCategory) {
-                await axios.put(`${API}/api/categories/${editingCategory._id}`, formData, { withCredentials: true });
+                await api.put(`/api/categories/${editingCategory._id}`, formData);
                 showToast('Category updated successfully', 'success');
             } else {
-                await axios.post(`${API}/api/categories`, formData, { withCredentials: true });
+                await api.post('/api/categories', formData);
                 showToast('Category created successfully', 'success');
             }
             setIsModalOpen(false);
@@ -67,7 +65,7 @@ export default function CategoryManagement() {
         if (!isConfirmed) return;
 
         try {
-            await axios.delete(`${API}/api/categories/${id}`, { withCredentials: true });
+            await api.delete(`/api/categories/${id}`);
             showToast('Category deleted', 'success');
             fetchCategories();
         } catch (err: any) {

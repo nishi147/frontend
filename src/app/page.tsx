@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
 import { useIntroOffer } from '@/context/IntroOfferContext';
 import { Footer } from '@/components/layout/Footer';
@@ -37,8 +37,7 @@ const WorkshopSection = () => {
   useEffect(() => {
     const fetchWorkshops = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const res = await axios.get(`${apiUrl}/api/workshops`);
+        const res = await api.get('/api/workshops');
         if (res.data.success) {
           setWorkshops(res.data.data);
         }
@@ -59,10 +58,7 @@ const WorkshopSection = () => {
 
     setIsProcessing(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const slotRes = await axios.get(`${apiUrl}/api/workshops/${workshop._id}/slots`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const slotRes = await api.get(`/api/workshops/${workshop._id}/slots`);
       const slots = slotRes.data.success ? slotRes.data.data : [];
       
       if (slots.length > 0) {
@@ -86,15 +82,11 @@ const WorkshopSection = () => {
   const proceedToPayment = async (workshop: any, slotId: string | null) => {
     setIsProcessing(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      
       // 1. Create order
       const payload: any = { workshopId: workshop._id };
       if (slotId) payload.slotId = slotId;
 
-      const orderRes = await axios.post(`${apiUrl}/api/payments/workshop-order`, payload, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const orderRes = await api.post('/api/payments/workshop-order', payload);
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -116,9 +108,7 @@ const WorkshopSection = () => {
             };
             if (slotId) verifyPayload.slotId = slotId;
 
-            const verifyRes = await axios.post(`${apiUrl}/api/payments/workshop-verify`, verifyPayload, {
-              headers: { Authorization: `Bearer ${token}` }
-            });
+            const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
             if (verifyRes.data.success) {
               router.push('/payment-success');
@@ -259,7 +249,7 @@ const ProjectSection = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`);
+        const res = await api.get('/api/projects');
         if (res.data.success) {
           setProjects(res.data.data);
         }

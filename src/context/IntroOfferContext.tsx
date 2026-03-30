@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 
@@ -27,8 +27,8 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
   const handleClaimOffer = async (introData: any) => {
     setIsProcessing(true);
     try {
-      // 1. Create Order on Backend (Using absolute API URL)
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/payments/intro-order`, introData);
+      // 1. Create Order on Backend
+      const res = await api.post('/api/payments/intro-order', introData);
       
       const { id: orderId, amount, currency } = res.data.data;
 
@@ -44,7 +44,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
         order_id: orderId,
         handler: async function (response: any) {
           try {
-            const verifyRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/payments/intro-verify`, {
+            const verifyRes = await api.post('/api/payments/intro-verify', {
               ...response,
               ...introData
             });

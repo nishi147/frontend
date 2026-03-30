@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { useCurrency } from '@/context/CurrencyContext';
 
@@ -16,7 +16,7 @@ export default function CoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`);
+       const res = await api.get('/api/courses');
         if (res.data.success) {
           setCourses(res.data.data);
         }

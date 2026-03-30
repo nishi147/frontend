@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import axios from 'axios';
+import api from '@/utils/api';
 import { MessageSquare, Trash2, Edit3, Plus, X, Star, User, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -24,7 +24,7 @@ export default function TestimonialsPage() {
 
   const fetchTestimonials = async () => {
     try {
-      const res = await axios.get('/api/testimonials?admin=true');
+      const res = await api.get('/api/testimonials?admin=true');
       setTestimonials(res.data.data);
     } catch (err) {
       console.error("Failed to fetch testimonials", err);
@@ -41,10 +41,10 @@ export default function TestimonialsPage() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`/api/testimonials/${editingId}`, formData);
+        await api.put(`/api/testimonials/${editingId}`, formData);
         showToast("Testimonial updated!", "success");
       } else {
-        await axios.post('/api/testimonials', formData);
+        await api.post('/api/testimonials', formData);
         showToast("Testimonial added!", "success");
       }
       setShowForm(false);
@@ -59,7 +59,7 @@ export default function TestimonialsPage() {
   const handleDelete = async (id: string) => {
     if (!window.confirm("Delete this testimonial?")) return;
     try {
-      await axios.delete(`/api/testimonials/${id}`);
+      await api.delete(`/api/testimonials/${id}`);
       showToast("Deleted successfully", "success");
       fetchTestimonials();
     } catch (err) {

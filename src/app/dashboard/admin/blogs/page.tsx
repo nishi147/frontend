@@ -5,11 +5,9 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Plus, Pencil, Trash2, Eye, Search, BookOpen, Clock, User as UserIcon, X, Check, Loader2 } from 'lucide-react';
-import axios from 'axios';
 import { useToast } from '@/context/ToastContext';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
+import api from '@/utils/api';
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -36,7 +34,7 @@ export default function AdminBlogsPage() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get(`${API}/api/blogs`);
+      const res = await api.get('/api/blogs');
       if (res.data.success) {
         setBlogs(res.data.data);
       }
@@ -88,10 +86,10 @@ export default function AdminBlogsPage() {
     setSaving(true);
     try {
       if (currentBlog) {
-        await axios.put(`${API}/api/blogs/${currentBlog._id}`, formData);
+        await api.put(`/api/blogs/${currentBlog._id}`, formData);
         showToast("Blog updated successfully!", "success");
       } else {
-        await axios.post(`${API}/api/blogs`, formData);
+        await api.post('/api/blogs', formData);
         showToast("Blog created successfully!", "success");
       }
       setIsModalOpen(false);
@@ -113,7 +111,7 @@ export default function AdminBlogsPage() {
   const confirmDelete = async () => {
     if (!blogToDelete) return;
     try {
-      await axios.delete(`${API}/api/blogs/${blogToDelete}`);
+      await api.delete(`/api/blogs/${blogToDelete}`);
       showToast("Blog deleted successfully", "success");
       fetchBlogs();
     } catch (error) {

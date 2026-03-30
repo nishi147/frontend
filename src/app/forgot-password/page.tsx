@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Logo } from '@/components/ui/Logo';
 import { Mail, ArrowLeft, CheckCircle2, Sparkles, Brain } from 'lucide-react';
 
@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
     setError('');
 
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/forgotpassword`, { email });
+      const res = await api.post('/api/auth/forgotpassword', { email });
       if (res.data.success) {
         setIsSubmitted(true);
       }

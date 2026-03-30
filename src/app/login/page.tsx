@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { Mail, Lock, Shield, Sparkles, Rocket, BookOpen, Brain, ArrowRight } from 'lucide-react';
@@ -27,8 +27,8 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+      const res = await api.post(
+        '/api/auth/login',
         { email, password }
       );
 

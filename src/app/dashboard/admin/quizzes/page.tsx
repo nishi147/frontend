@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { QuizForm } from '@/components/dashboard/QuizForm';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Plus, HelpCircle, Trash2, Edit3, Loader2, Award } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -16,11 +16,9 @@ export default function AdminQuizzesPage() {
     const [showForm, setShowForm] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-    const API = process.env.NEXT_PUBLIC_API_URL || '';
-
     const fetchQuizzes = async () => {
         try {
-            const res = await axios.get(`${API}/api/quizzes/teacher/my-quizzes`, { withCredentials: true });
+            const res = await api.get('/api/quizzes/teacher/my-quizzes');
             if (res.data.success) {
                 setQuizzes(res.data.data);
             }
@@ -33,12 +31,12 @@ export default function AdminQuizzesPage() {
 
     useEffect(() => {
         fetchQuizzes();
-    }, [API]);
+    }, []);
 
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this challenge?')) return;
         try {
-            const res = await axios.delete(`${API}/api/quizzes/${id}`, { withCredentials: true });
+            const res = await api.delete(`/api/quizzes/${id}`);
             if (res.data.success) {
                 showToast('Challenge deleted successfully!', 'success');
                 fetchQuizzes();

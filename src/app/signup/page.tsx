@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { User, Mail, Phone, Lock, Sparkles, Rocket, BookOpen, Brain } from 'lucide-react';
@@ -40,8 +40,8 @@ export default function SignupPage() {
       data.append('password', formData.password);
       data.append('role', formData.role);
 
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+      const res = await api.post(
+        '/api/auth/register',
         data,
         {
           headers: {
