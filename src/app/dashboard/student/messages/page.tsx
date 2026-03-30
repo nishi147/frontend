@@ -6,7 +6,7 @@ import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import axios from 'axios';
+import api from '@/utils/api';
 import { MessageSquare, Send, Search } from 'lucide-react';
 
 export default function MessagesPage() {
@@ -18,7 +18,7 @@ export default function MessagesPage() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get('/api/messages');
+        const res = await api.get('/api/messages');
         if (res.data.success) {
           setMessages(res.data.data);
         }
@@ -37,7 +37,7 @@ export default function MessagesPage() {
 
     try {
       // Send to Admin for Support Team
-      const res = await axios.post('/api/messages', {
+      const res = await api.post('/api/messages', {
         receiverId: '69b27a9a81687b34e3a5c845', 
         content: newMessage
       });

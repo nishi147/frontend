@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Gift, Trash2, Calendar, Tag, Percent, IndianRupee, Plus, X, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -23,7 +23,7 @@ export default function CouponsPage() {
 
   const fetchCoupons = async () => {
     try {
-      const res = await axios.get('/api/coupons');
+      const res = await api.get('/api/coupons');
       if (res.data.success) {
         setCoupons(res.data.data);
       }
@@ -43,7 +43,7 @@ export default function CouponsPage() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('/api/coupons', newCoupon);
+      await api.post('/api/coupons', newCoupon);
       showToast("Coupon created successfully!", "success");
       setShowAddForm(false);
       setNewCoupon({ code: '', discountType: 'percentage', discountAmount: 0, expiryDate: '', isActive: true });
@@ -56,7 +56,7 @@ export default function CouponsPage() {
   const deleteCoupon = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this coupon?")) return;
     try {
-      await axios.delete(`/api/coupons/${id}`);
+      await api.delete(`/api/coupons/${id}`);
       showToast("Coupon deleted!", "success");
       fetchCoupons();
     } catch (err) {

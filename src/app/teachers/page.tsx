@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useState, useEffect } from 'react';
 
 export default function TeachersPage() {
@@ -19,8 +19,7 @@ export default function TeachersPage() {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const res = await axios.get(`${apiUrl}/api/mentors`);
+        const res = await api.get('/api/mentors');
         if (res.data.success) {
           setMentors(res.data.data);
         }

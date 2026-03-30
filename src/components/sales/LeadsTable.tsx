@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle } from 'lucide-react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { LeadModal } from './LeadModal';
 import { useToast } from '@/context/ToastContext';
 import { useAuth } from '@/context/AuthContext';
@@ -23,7 +23,7 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
   const fetchLeads = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/leads', {
+      const res = await api.get('/api/leads', {
         params: { search, status, source, followUp, page, limit: 15 }
       });
       setLeads(res.data.data);
@@ -60,7 +60,7 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
     e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this lead?")) return;
     try {
-      const res = await axios.delete(`/api/leads/${id}`);
+      const res = await api.delete(`/api/leads/${id}`);
       if (res.data.success) {
         showToast("Lead successfully vaporized! 🚀", "success");
         fetchLeads();

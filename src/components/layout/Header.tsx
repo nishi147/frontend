@@ -7,12 +7,9 @@ import { useAuth } from '@/context/AuthContext';
 import { LogOut, LayoutDashboard, Menu, X, ChevronDown, Sparkles, Star } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 import { useIntroOffer } from '@/context/IntroOfferContext';
-import axios from 'axios';
-
+import api from '@/utils/api';
 import { useCurrency } from '@/context/CurrencyContext';
 import { MovingBanner } from './MovingBanner';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
 
 const CurrencySwitcher = ({ isMobile = false }) => {
   const { currency, setCurrency, availableCurrencies } = useCurrency();
@@ -50,7 +47,7 @@ export const Header = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${API}/api/courses`);
+        const res = await api.get('/api/courses');
         if (res.data.success) {
           setCourses(res.data.data.slice(0, 5));
         }

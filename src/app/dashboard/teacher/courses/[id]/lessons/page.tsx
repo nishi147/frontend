@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
+import api from '@/utils/api';
 import { Plus, Trash2, Video, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -17,14 +17,10 @@ export default function LessonsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const { showToast } = useToast();
 
-  const API = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(
-  `${API}/api/courses/${id}`,
-  { withCredentials: true }
-);
+        const res = await api.get(`/api/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -85,11 +81,7 @@ export default function LessonsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const res = await axios.put(
-  `${API}/api/courses/${id}`,
-  { modules: course.modules },
-  { withCredentials: true }
-);
+      const res = await api.put(`/api/courses/${id}`, { modules: course.modules });
       if (res.data.success) {
         showToast('Lessons saved successfully!', 'success');
       }

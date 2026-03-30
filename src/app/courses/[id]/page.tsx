@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, ArrowRight } from 'lucide-react';
@@ -35,7 +35,7 @@ export default function CourseDetailPage() {
     if (!couponCode) return;
     setCouponError('');
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/coupons/validate`, { code: couponCode });
+      const res = await api.post('/api/coupons/validate', { code: couponCode });
       if (res.data.success) {
         setAppliedCoupon(res.data.data);
         showToast("Coupon applied successfully! ✨", "success");
@@ -50,7 +50,7 @@ export default function CourseDetailPage() {
   useEffect(() => {
     const fetchDoc = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/courses/${id}`);
+        const res = await api.get(`/api/courses/${id}`);
         if (res.data.success) {
           setCourse(res.data.data);
         }
@@ -91,14 +91,11 @@ export default function CourseDetailPage() {
     setIsProcessing(true);
     try {
       // 1. Create order
-      const orderRes = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/payments/order`,
-        {
-          courseId: course._id,
-          sessions: selectedSessions,
-          couponCode: appliedCoupon?.code
-        }
-      );
+      const orderRes = await api.post('/api/payments/order', {
+        courseId: course._id,
+        sessions: selectedSessions,
+        couponCode: appliedCoupon?.code
+      });
       const order = orderRes.data.data;
 
       // 2. Open Razorpay Widget
@@ -112,17 +109,14 @@ export default function CourseDetailPage() {
         handler: async function (response: any) {
           try {
             // 3. Verify Payment
-            const verifyRes = await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/payments/verify`,
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                amount: finalPrice,
-                couponCode: appliedCoupon?.code
-              }
-            );
-
+            const verifyRes = await api.post('/api/payments/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              amount: finalPrice,
+              couponCode: appliedCoupon?.code
+            });
+            
             if (verifyRes.data.success) {
               showToast("Successfully enrolled! Welcome aboard. 🚀", "success");
               router.push('/payment-success');

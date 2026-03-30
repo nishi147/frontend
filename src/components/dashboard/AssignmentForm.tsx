@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import axios from 'axios';
+import api from '@/utils/api';
 import { X, Loader2, Calendar, FileText } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -25,12 +25,10 @@ export const AssignmentForm = ({ onClose, onSuccess, initialData }: AssignmentFo
     attachmentUrl: initialData?.attachmentUrl || ''
   });
 
-  const API = process.env.NEXT_PUBLIC_API_URL || '';
-
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${API}/api/courses/teacher/my-courses`, { withCredentials: true });
+        const res = await api.get('/api/courses/teacher/my-courses');
         if (res.data.success) {
           setCourses(res.data.data);
           if (!formData.course && res.data.data.length > 0) {
@@ -42,7 +40,7 @@ export const AssignmentForm = ({ onClose, onSuccess, initialData }: AssignmentFo
       }
     };
     fetchCourses();
-  }, [API, formData.course]);
+  }, [formData.course]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +52,11 @@ export const AssignmentForm = ({ onClose, onSuccess, initialData }: AssignmentFo
     setLoading(true);
     try {
       const url = initialData 
-        ? `${API}/api/assignments/${initialData._id}` 
-        : `${API}/api/assignments`;
+        ? `/api/assignments/${initialData._id}` 
+        : '/api/assignments';
       const method = initialData ? 'put' : 'post';
 
-      const res = await axios[method](url, formData, { withCredentials: true });
+      const res = await (api as any)[method](url, formData);
       
       if (res.data.success) {
         showToast(`Assignment ${initialData ? 'updated' : 'created'} successfully! 📝`, 'success');

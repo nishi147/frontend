@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 
 type Currency = string;
 
@@ -14,8 +14,6 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrency] = useState<Currency>('INR');
   const [rates, setRates] = useState<Record<string, number>>({ INR: 1 });
@@ -25,7 +23,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchLiveRates = async () => {
       try {
-        const res = await axios.get(`${API}/api/currencies`);
+        const res = await api.get('/api/currencies');
         if (res.data.success && res.data.data.length > 0) {
           const newRates: Record<string, number> = {};
           const newSymbols: Record<string, string> = {};

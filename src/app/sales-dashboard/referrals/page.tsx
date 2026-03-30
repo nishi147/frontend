@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Users, Gift, CheckCircle, Clock, Share2, Award, Copy, Check } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -14,7 +14,7 @@ export default function ReferralsPage() {
     try {
       setLoading(true);
       const endpoint = user?.role === 'admin' ? '/api/referrals' : '/api/referrals/me';
-      const res = await axios.get(endpoint);
+      const res = await api.get(endpoint);
       setStats(res.data.data);
     } catch (err) {
       console.error("Error fetching referrals:", err);

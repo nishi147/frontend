@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { CreditCard, Download, ExternalLink, Calendar, CheckCircle2 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -16,7 +16,7 @@ export default function BillingPage() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const res = await axios.get('/api/payments/my-payments');
+        const res = await api.get('/api/payments/my-payments');
         if (res.data.success) {
           setPayments(res.data.data);
         }

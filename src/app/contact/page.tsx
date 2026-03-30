@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 
 export default function ContactPage() {
@@ -22,7 +22,7 @@ export default function ContactPage() {
     setLoading(true);
     setError('');
     try {
-      await axios.post('/api/leads', {
+      await api.post('/api/leads', {
         name: form.name,
         email: form.email,
         phone: form.phone || 'Not provided',

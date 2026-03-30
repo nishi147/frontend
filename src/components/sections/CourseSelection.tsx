@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -55,10 +55,9 @@ const CourseSelection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
         const [coursesRes, categoriesRes] = await Promise.allSettled([
-          axios.get(`${apiUrl}/api/courses`),
-          axios.get(`${apiUrl}/api/categories`)
+          api.get('/api/courses'),
+          api.get('/api/categories')
         ]);
 
         if (coursesRes.status === 'fulfilled' && coursesRes.value.data.success) {

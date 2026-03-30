@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import axios from 'axios';
+import api from '@/utils/api';
 import { X, Loader2, Plus, Trash2, HelpCircle } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -26,12 +26,10 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
     ]
   });
 
-  const API = process.env.NEXT_PUBLIC_API_URL || '';
-
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${API}/api/courses/teacher/my-courses`, { withCredentials: true });
+        const res = await api.get('/api/courses/teacher/my-courses');
         if (res.data.success) {
           setCourses(res.data.data);
           if (!formData.course && res.data.data.length > 0) {
@@ -43,7 +41,7 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
       }
     };
     fetchCourses();
-  }, [API, formData.course]);
+  }, [formData.course]);
 
   const handleAddQuestion = () => {
     setFormData({
@@ -87,11 +85,11 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
     setLoading(true);
     try {
       const url = initialData 
-        ? `${API}/api/quizzes/${initialData._id}` 
-        : `${API}/api/quizzes`;
+        ? `/api/quizzes/${initialData._id}` 
+        : '/api/quizzes';
       const method = initialData ? 'put' : 'post';
 
-      const res = await axios[method](url, formData, { withCredentials: true });
+      const res = await (api as any)[method](url, formData);
       
       if (res.data.success) {
         showToast(`Quiz ${initialData ? 'updated' : 'created'} successfully! 🧠`, 'success');

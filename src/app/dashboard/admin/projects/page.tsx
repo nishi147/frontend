@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { CheckCircle, XCircle, Trash2, ExternalLink, Star } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -36,7 +36,7 @@ export default function AdminProjectsPage() {
 
     const fetchProjects = async () => {
         try {
-            const res = await axios.get('/api/projects/admin/all');
+            const res = await api.get('/api/projects/admin/all');
             if (res.data.success) {
                 setProjects(res.data.data);
             }
@@ -58,7 +58,7 @@ export default function AdminProjectsPage() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const res = await axios.post('/api/projects', formData);
+            const res = await api.post('/api/projects', formData);
             if (res.data.success) {
                 setProjects([res.data.data, ...projects]);
                 setShowForm(false);
@@ -76,7 +76,7 @@ export default function AdminProjectsPage() {
 
     const handleApprove = async (id: string) => {
         try {
-            const res = await axios.put(`/api/projects/admin/approve/${id}`);
+            const res = await api.put(`/api/projects/admin/approve/${id}`);
             if (res.data.success) {
                 setProjects(projects.map((p: any) => p._id === id ? res.data.data : p));
                 showToast(res.data.data.isApproved ? "Project approved!" : "Approval revoked", "success");
@@ -91,7 +91,7 @@ export default function AdminProjectsPage() {
         const confirmed = await confirm("Delete Project", "Are you sure you want to delete this project?", { variant: 'danger' });
         if (!confirmed) return;
         try {
-            const res = await axios.delete(`/api/projects/${id}`);
+            const res = await api.delete(`/api/projects/${id}`);
             if (res.data.success) {
                 setProjects(projects.filter((p: any) => p._id !== id));
                 showToast("Project deleted", "success");

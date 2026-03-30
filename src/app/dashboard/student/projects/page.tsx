@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Plus, ExternalLink, RefreshCw, Star } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -36,7 +36,7 @@ export default function StudentProjectsPage() {
 
     const fetchMyProjects = async () => {
         try {
-            const res = await axios.get('/api/projects/my-projects');
+            const res = await api.get('/api/projects/my-projects');
             if (res.data.success) {
                 setProjects(res.data.data);
             }
@@ -59,7 +59,7 @@ export default function StudentProjectsPage() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const res = await axios.post('/api/projects', formData);
+            const res = await api.post('/api/projects', formData);
             if (res.data.success) {
                 setProjects([res.data.data, ...projects]);
                 setShowForm(false);

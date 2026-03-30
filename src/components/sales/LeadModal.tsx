@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { X, Send, User, Phone, Mail, Calendar, MessageSquare, History } from 'lucide-react';
 
 interface LeadModalProps {
@@ -21,7 +21,7 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
   useEffect(() => {
     const fetchCounsellors = async () => {
       try {
-        const res = await axios.get('/api/users?role=sales');
+        const res = await api.get('/api/users?role=sales');
         setCounsellors(res.data.data);
       } catch (err) {
         console.error("Error fetching counsellors:", err);
@@ -36,9 +36,9 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
     try {
       const payload: any = { status, assignedTo, followUpDate };
       if (status === 'Converted') payload.revenue = revenue;
-      await axios.put(`/api/leads/${lead._id}`, payload);
+      await api.put(`/api/leads/${lead._id}`, payload);
       if (note.trim()) {
-        await axios.post(`/api/leads/${lead._id}/notes`, { text: note });
+        await api.post(`/api/leads/${lead._id}/notes`, { text: note });
       }
       onUpdate();
       onClose();

@@ -5,9 +5,7 @@ import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Play, ArrowRight, BookOpen, Clock, User, Star, Quote, X } from 'lucide-react';
 import Link from 'next/link';
-import axios from 'axios';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
+import api from '@/utils/api';
 
 const BLOG_POSTS = [
   {
@@ -73,7 +71,7 @@ export const BlogSection = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${API}/api/blogs`);
+        const res = await api.get('/api/blogs');
         if (res.data.success && res.data.data.length > 0) {
           setBlogs(res.data.data.map((b: any) => ({
             ...b,

@@ -4,12 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useParams, useRouter } from 'next/navigation';
 import { Clock, User as UserIcon, Calendar, ArrowLeft, Share2, PlayCircle } from 'lucide-react';
 import Link from 'next/link';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function BlogDetailPage() {
   const { id } = useParams();
@@ -20,7 +18,7 @@ export default function BlogDetailPage() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`${API}/api/blogs/${id}`);
+        const res = await api.get(`/api/blogs/${id}`);
         if (res.data.success) {
           setBlog(res.data.data);
         }

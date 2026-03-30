@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Star, Send } from 'lucide-react';
 
 import { useToast } from '@/context/ToastContext';
@@ -21,7 +21,7 @@ export default function FeedbackPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('/api/courses/student/my-courses');
+        const res = await api.get('/api/courses/student/my-courses');
         if (res.data.success) {
           setCourses(res.data.data);
           if (res.data.data.length > 0) setSelectedCourse(res.data.data[0]._id);
@@ -37,7 +37,7 @@ export default function FeedbackPage() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const res = await axios.post('/api/reviews', {
+      const res = await api.post('/api/reviews', {
         course: selectedCourse,
         rating,
         comment

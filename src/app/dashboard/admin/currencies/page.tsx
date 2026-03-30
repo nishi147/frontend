@@ -4,11 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Trash2, Edit2, Plus, Loader2, Star } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
-
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export default function CurrencyManagement() {
     const [currencies, setCurrencies] = useState<any[]>([]);
@@ -27,7 +25,7 @@ export default function CurrencyManagement() {
     const fetchCurrencies = async () => {
         try {
             // Include credentials so admin route gets ALL currencies including inactive ones
-            const res = await axios.get(`${API}/api/currencies`, { withCredentials: true });
+            const res = await api.get('/api/currencies');
             if (res.data.success) {
                 setCurrencies(res.data.data);
             }
@@ -51,10 +49,10 @@ export default function CurrencyManagement() {
         e.preventDefault();
         try {
             if (editingCurrency) {
-                await axios.put(`${API}/api/currencies/${editingCurrency._id}`, formData, { withCredentials: true });
+                await api.put(`/api/currencies/${editingCurrency._id}`, formData);
                 showToast('Currency updated successfully', 'success');
             } else {
-                await axios.post(`${API}/api/currencies`, formData, { withCredentials: true });
+                await api.post('/api/currencies', formData);
                 showToast('Currency created successfully', 'success');
             }
             setIsModalOpen(false);
@@ -70,7 +68,7 @@ export default function CurrencyManagement() {
         if (!isConfirmed) return;
 
         try {
-            await axios.delete(`${API}/api/currencies/${id}`, { withCredentials: true });
+            await api.delete(`/api/currencies/${id}`);
             showToast('Currency deleted', 'success');
             fetchCurrencies();
         } catch (err: any) {
@@ -80,7 +78,7 @@ export default function CurrencyManagement() {
     
     const setAsDefault = async (currency: any) => {
         try {
-            await axios.put(`${API}/api/currencies/${currency._id}`, { ...currency, isDefault: true }, { withCredentials: true });
+            await api.put(`/api/currencies/${currency._id}`, { ...currency, isDefault: true });
             showToast(`${currency.code} is now the default currency.`, 'success');
             fetchCurrencies();
         } catch (err: any) {

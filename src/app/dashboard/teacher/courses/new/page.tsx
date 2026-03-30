@@ -4,12 +4,10 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { Plus, Trash2, ChevronLeft, ChevronRight, PlayCircle, CheckCircle, BookOpen } from 'lucide-react';
-
-const API = process.env.NEXT_PUBLIC_API_URL;
 
 interface Session {
   title: string;
@@ -34,7 +32,7 @@ export default function CreateCoursePage() {
   React.useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get(`${API}/api/categories`);
+        const res = await api.get('/api/categories');
         if (res.data.success) {
           setCategories(res.data.data);
         }
@@ -88,10 +86,7 @@ export default function CreateCoursePage() {
         numberOfSessions: formData.totalLessons > 0 ? formData.totalLessons : 1,
       };
 
-      const res = await axios.post(`${API}/api/courses`, createData, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const res = await api.post('/api/courses', createData);
 
       if (res.data.success) {
         showToast("Course created successfully! Waiting for Admin approval.", "success");

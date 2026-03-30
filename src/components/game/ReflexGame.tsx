@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import axios from 'axios';
+import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
 import { Trophy, RefreshCw, Zap, Target } from 'lucide-react';
 
@@ -29,9 +29,7 @@ export const ReflexGame = () => {
     const fetchScore = async () => {
       if (user) {
         try {
-          const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/minigames`, {
-            withCredentials: true
-          });
+          const res = await api.get('/api/minigames');
           if (res.data.success && res.data.data.bestScore) {
             setBestScore(res.data.data.bestScore);
           }
@@ -46,10 +44,7 @@ export const ReflexGame = () => {
   const saveScore = async (finalBestScore: number) => {
     if (user) {
       try {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/minigames`, 
-          { score: finalBestScore },
-          { withCredentials: true }
-        );
+        const res = await api.post('/api/minigames', { score: finalBestScore });
         if (res.data.success && res.data.data.bestScore) {
           setBestScore(res.data.data.bestScore);
         }

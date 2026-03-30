@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { BarChart, Star, GraduationCap, Calendar, Download, Award } from 'lucide-react';
 
 export default function ProgressPage() {
@@ -17,7 +17,7 @@ export default function ProgressPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('/api/auth/me');
+        const res = await api.get('/api/auth/me');
         if (res.data.success) {
             // In a real app we'd fetch detailed progress
         }

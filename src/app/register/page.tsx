@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
-import axios from 'axios';
+import api from '@/utils/api';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 
@@ -36,10 +36,7 @@ export default function RegisterPage() {
       data.append('profilePicture', profilePicture);
     }
 
-    const res = await axios.post(
-  "https://backend-olive-five-70.vercel.app/api/auth/register",
-  data
-);
+    const res = await api.post('/api/auth/register', data);
     if (res.data.success) {
       setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
       setTimeout(() => {

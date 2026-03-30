@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { FileText, Clock, CheckCircle, Upload } from 'lucide-react';
 
 export default function AssignmentsPage() {
@@ -18,7 +18,7 @@ export default function AssignmentsPage() {
       try {
         // In a real app, we'd fetch assignments for all student's courses
         // For now, let's fetch all (or a mock list if API is empty)
-        const res = await axios.get('/api/assignments');
+        const res = await api.get('/api/assignments');
         if (res.data.success) {
           setAssignments(res.data.data);
         }

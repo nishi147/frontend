@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import { Send, CheckCircle2, AlertCircle, Phone, User, Mail, Sparkles } from 'lucide-react';
 
 export const LeadCaptureForm = ({ source = 'Website' }: { source?: string }) => {
@@ -17,7 +17,7 @@ export const LeadCaptureForm = ({ source = 'Website' }: { source?: string }) => 
     e.preventDefault();
     setStatus('submitting');
     try {
-      await axios.post('/api/leads', { ...formData, source });
+      await api.post('/api/leads', { ...formData, source });
       setStatus('success');
       setFormData({ name: '', phone: '', email: '', referralCode: '' });
     } catch (err: any) {

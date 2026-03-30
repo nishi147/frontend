@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { FileQuestion, Play, CheckCircle } from 'lucide-react';
 
 export default function QuizzesPage() {
@@ -16,7 +16,7 @@ export default function QuizzesPage() {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const res = await axios.get('/api/quizzes');
+        const res = await api.get('/api/quizzes');
         if (res.data.success) {
           setQuizzes(res.data.data);
         }

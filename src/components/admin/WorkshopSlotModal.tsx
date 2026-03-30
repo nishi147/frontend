@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import api from '@/utils/api';
 import { X, Trash2, Clock, Users, PlusCircle } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -36,7 +36,7 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
   const fetchSlots = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${workshop._id}/slots`);
+      const res = await api.get(`/api/workshops/${workshop._id}/slots`);
       if (res.data.success) {
         setSlots(res.data.data);
       }
@@ -67,9 +67,7 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
         capacity: Number(capacity)
       };
       
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${workshop._id}/slots`, payload, {
-        withCredentials: true
-      });
+      const res = await api.post(`/api/workshops/${workshop._id}/slots`, payload);
       
       if (res.data.success) {
         showToast('Slot added successfully', 'success');
@@ -95,9 +93,7 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
     
     if (window.confirm('Are you sure you want to delete this time slot?')) {
       try {
-        const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/workshops/${workshop._id}/slots/${slotId}`, {
-          withCredentials: true
-        });
+        const res = await api.delete(`/api/workshops/${workshop._id}/slots/${slotId}`);
         if (res.data.success) {
           showToast('Slot deleted', 'success');
           setSlots(slots.filter(s => s._id !== slotId));

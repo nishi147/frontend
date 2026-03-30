@@ -6,22 +6,19 @@ import { Header } from '@/components/layout/Header';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
-import axios from 'axios';
+import api from '@/utils/api';
 import { BookOpen, Plus, Settings, Trash2, Users } from 'lucide-react';
 
 export default function TeacherCourses() {
   const { user, loading } = useAuth();
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const API = process.env.NEXT_PUBLIC_API_URL || '';
 
-  const API = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
   const fetchCourses = async () => {
     try {
-      const res = await axios.get(
-        `${API}/api/courses/teacher/my-courses`,
-        { withCredentials: true }
-      );
+      const res = await api.get('/api/courses/teacher/my-courses');
 
       if (res.data.success) {
         setCourses(res.data.data);

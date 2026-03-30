@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
@@ -32,8 +32,6 @@ const AuthContext = createContext<AuthContextType>({
   login: () => {},
   logout: () => {},
 });
-
-import api from '@/utils/api';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -71,7 +69,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (newToken: string, newUser: User) => {
     Cookies.set('token', newToken, { expires: 30 });
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     setToken(newToken);
     setUser(newUser);
     const dashboardPath = newUser.role === 'sales' ? '/sales-dashboard' : `/dashboard/${newUser.role}`;
@@ -80,7 +77,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     Cookies.remove('token');
-    delete axios.defaults.headers.common['Authorization'];
     setToken(null);
     setUser(null);
     router.push('/login');
