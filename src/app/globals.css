@@ -31,6 +31,13 @@ body {
     border: 4px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
   }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 }
 
 /* Custom Scrollbar for playful vibe */

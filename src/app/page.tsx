@@ -15,7 +15,6 @@ import { useToast } from '@/context/ToastContext';
 import axios from 'axios';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
-import { BlogSection } from '@/components/sections/BlogSection';
 import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 
@@ -137,7 +136,12 @@ const WorkshopSection = () => {
 
     } catch (err: any) {
       console.error("Payment initiation error:", err);
-      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
+      // Fallback: If order creation fails with 401/403, redirect to login
+      if (err.response?.status === 401 || err.response?.status === 403) {
+          router.push('/login');
+      } else {
+          showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
+      }
     } finally {
       setIsProcessing(false);
       setActiveWorkshopForSlots(null);
@@ -159,7 +163,7 @@ const WorkshopSection = () => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
       {workshops.map((ws: any) => (
         <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
           <div className={`h-56 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2.5rem] ${
@@ -187,11 +191,11 @@ const WorkshopSection = () => {
                     </div>
                   </div>
           
-          <div className="absolute top-[12rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
-            <span className="text-slate-900 font-black text-4xl tracking-tight">₹{ws.price}</span>
+          <div className="absolute top-[10rem] md:top-[12rem] right-4 md:right-6 bg-white px-4 md:px-6 py-1.5 md:py-2 rounded-xl md:rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
+            <span className="text-slate-900 font-black text-2xl md:text-4xl tracking-tight">₹{ws.price}</span>
           </div>
 
-          <CardContent className="p-8 pt-10">
+          <CardContent className="p-5 md:p-8 pt-8 md:pt-10">
             <h3 className="text-2xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
             <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{ws.description}</p>
             
@@ -272,7 +276,7 @@ const ProjectSection = () => {
   if (projects.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
       {projects.map((project) => {
         // Extract Scratch ID if it's a scratch URL
         const scratchId = project.url.split('/').filter(Boolean).pop();
@@ -778,8 +782,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-10">Stories from our <span className="text-secondary-500">Superstars</span>! 🌟</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-white text-left p-8">
+          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            <Card className="min-w-[280px] md:min-w-0 bg-white text-left p-6 md:p-8 snap-center">
                <div className="flex gap-1 text-accent-500 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
                <p className="text-gray-600 font-bold text-lg mb-6">"RUZANN is amazing! I built my first game ever. The teachers are so funny and helpful!"</p>
                <div className="flex items-center gap-4">
@@ -803,7 +807,7 @@ export default function Home() {
                </div>
             </Card>
 
-            <Card className="bg-white text-left p-8">
+            <Card className="min-w-[280px] md:min-w-0 bg-white text-left p-6 md:p-8 snap-center">
                <div className="flex gap-1 text-accent-500 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
                <p className="text-gray-600 font-bold text-lg mb-6">"The session-pricing is completely transparent. The 1 INR trial convinced us to sign up!"</p>
                <div className="flex items-center gap-4">
@@ -871,10 +875,6 @@ export default function Home() {
       </section>
 
       <ContactSection />
-      
-      <div className="mt-12">
-        <BlogSection />
-      </div>
       
       <Footer />
       <ScrollToTop />

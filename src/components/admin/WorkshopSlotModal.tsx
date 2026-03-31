@@ -162,6 +162,26 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
                     />
                   </div>
                 </div>
+
+                <div className="bg-white/50 p-3 rounded-2xl border border-dashed border-gray-200">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 block">Quick Add Times</label>
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      type="button"
+                      onClick={() => { setStartTime('10:00'); setEndTime('11:00'); }}
+                      className="text-[10px] font-black bg-white hover:bg-primary-50 text-gray-600 hover:text-primary-600 border border-gray-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-all"
+                    >
+                      10:00 - 11:00 AM
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => { setStartTime('15:00'); setEndTime('16:00'); }}
+                      className="text-[10px] font-black bg-white hover:bg-primary-50 text-gray-600 hover:text-primary-600 border border-gray-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-all"
+                    >
+                      03:00 - 04:00 PM
+                    </button>
+                  </div>
+                </div>
                 <div>
                   <label className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1 block">Max Capacity</label>
                   <input 
