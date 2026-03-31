@@ -37,7 +37,7 @@ export default function TeachersPage() {
     if (user?.role === 'teacher') {
       router.push('/dashboard/teacher');
     } else {
-      router.push('/register?role=teacher');
+      router.push('/teacher/signup');
     }
   };
 

@@ -12,6 +12,7 @@ import { useIntroOffer } from '@/context/IntroOfferContext';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
+import axios from 'axios';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
 import { BlogSection } from '@/components/sections/BlogSection';
@@ -52,7 +53,7 @@ const WorkshopSection = () => {
 
   const handleBookWorkshop = async (workshop: any) => {
     if (!user) {
-      router.push('/register');
+      router.push('/signup');
       return;
     }
 
@@ -119,8 +120,8 @@ const WorkshopSection = () => {
           }
         },
         prefill: {
-          name: user.name,
-          email: user.email,
+          name: user?.name,
+          email: user?.email,
         },
         theme: {
           color: "#F2643D"
@@ -671,7 +672,7 @@ export default function Home() {
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Visual block-to-code switching</li>
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Instant browser preview</li>
             </ul>
-            <Link href={user ? "/editor" : "/register"}>
+            <Link href={user ? "/editor" : "/signup"}>
               <Button size="lg" className="bg-green-500 text-white hover:bg-green-600 border-none font-black text-xl px-10 py-6 rounded-2xl shadow-lg shadow-green-500/30">
                 Try it out now! 🪄
               </Button>
