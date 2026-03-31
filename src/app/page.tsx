@@ -886,19 +886,54 @@ export default function Home() {
 const CourseCatalog = () => {
     const [gradeFilter, setGradeFilter] = useState('All Ages');
     const [typeFilter, setTypeFilter] = useState('All');
+    const [courses, setCourses] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const courses = [
-        { id: 1, title: "Robotics Mastery", category: "Robotics", type: "Group", grade: "Ages 6–9", desc: "For Young Inventors ages 6–9. 18 sessions, beginner friendly, activity-based.", lessons: 18, rating: 4.8, students: "375+", total: 41175, perClass: 2287, icon: "🤖", color: "bg-[#6C5CE710]" },
-        { id: 2, title: "Beginner Robotics", category: "Robotics", type: "Group", grade: "Ages 10–12", desc: "For Curious Kids Ages 10–12. Learn by Doing, Play, Build and Explore!", lessons: 18, rating: 4.7, students: "400+", total: 41175, perClass: 2287, icon: "⚙️", color: "bg-[#00CECA10]" },
-        { id: 3, title: "Intermediate Robotics", category: "Robotics", type: "Group", grade: "Ages 10–12", desc: "Build. Try. Fix. Improve. For Smart Kids Ages 10–12. 24 sessions.", lessons: 24, rating: 4.9, students: "400+", total: 30744, perClass: 1281, icon: "🛠️", color: "bg-[#FD79A810]" },
-        { id: 4, title: "Generative AI for Kids", category: "AI", type: "1:1 Classes", grade: "Ages 13–16", desc: "Learn how to use AI tools responsibly and creatively. Deep dive into prompts.", lessons: 12, rating: 5.0, students: "120+", total: 15999, perClass: 1333, icon: "🧠", color: "bg-[#FDCB6E10]" },
-        { id: 5, title: "Scratch Coding", category: "Coding", type: "Group", grade: "Ages 6–9", desc: "Drag and drop coding for the youngest learners. Build 5 interactive games.", lessons: 10, rating: 4.6, students: "1k+", total: 5999, perClass: 599, icon: "🐱", color: "bg-[#FF767510]" },
-        { id: 6, title: "Fun Math & Logic", category: "Math", type: "1:1 Classes", grade: "All Ages", desc: "Critical thinking and logic puzzles that make math fun and exciting.", lessons: 8, rating: 4.9, students: "500+", total: 8499, perClass: 1062, icon: "🧩", color: "bg-[#00B89410]" },
-    ];
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const res = await api.get('/api/courses');
+                if (res.data.success) {
+                    setCourses(res.data.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch courses:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCourses();
+    }, []);
+
+    const getCourseIcon = (category: string) => {
+        const cat = category?.toLowerCase() || '';
+        if (cat.includes('robot')) return "🤖";
+        if (cat.includes('cod')) return "🐱";
+        if (cat.includes('ai')) return "🧠";
+        if (cat.includes('math')) return "🧩";
+        if (cat.includes('art')) return "🎨";
+        return "📚";
+    };
+
+    const getCourseColor = (category: string) => {
+        const cat = category?.toLowerCase() || '';
+        if (cat.includes('robot')) return "bg-[#6C5CE710]";
+        if (cat.includes('cod')) return "bg-[#FF767510]";
+        if (cat.includes('ai')) return "bg-[#FDCB6E10]";
+        if (cat.includes('math')) return "bg-[#00B89410]";
+        if (cat.includes('art')) return "bg-[#FD79A810]";
+        return "bg-blue-50";
+    };
 
     const filtered = courses.filter(c => 
-        (gradeFilter === 'All Ages' || c.grade === gradeFilter) &&
-        (typeFilter === 'All' || c.type === typeFilter)
+        (gradeFilter === 'All Ages' || c.ageGroup === gradeFilter || (gradeFilter === 'Ages 6–9' && c.ageGroup === '6-9') || (gradeFilter === 'Ages 10–12' && c.ageGroup === '10-12') || (gradeFilter === 'Ages 13–16' && c.ageGroup === '13-16')) &&
+        (typeFilter === 'All' || c.courseType === (typeFilter === '1:1 Classes' ? '1:1' : 'Group'))
+    );
+
+    if (loading) return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {[1, 2, 3].map(i => <div key={i} className="h-96 rounded-[2.5rem] bg-gray-100 animate-pulse" />)}
+        </div>
     );
 
     return (
@@ -911,7 +946,7 @@ const CourseCatalog = () => {
                         <button 
                             key={grade}
                             onClick={() => setGradeFilter(grade)}
-                            className={`px-6 py-2 rounded-full transition-all ${gradeFilter === grade ? 'bg-navy-900 text-white shadow-lg' : 'hover:bg-gray-100 text-gray-500'}`}
+                            className={`px-6 py-2 rounded-full transition-all text-sm md:text-base ${gradeFilter === grade ? 'bg-navy-900 text-white shadow-lg' : 'hover:bg-gray-100 text-gray-500'}`}
                         >
                             {grade}
                         </button>
@@ -924,7 +959,7 @@ const CourseCatalog = () => {
                         <button 
                             key={type}
                             onClick={() => setTypeFilter(type)}
-                            className={`px-6 py-2 rounded-full transition-all ${typeFilter === type ? 'bg-navy-900 text-white shadow-lg' : 'hover:bg-gray-100 text-gray-500'}`}
+                            className={`px-6 py-2 rounded-full transition-all text-sm md:text-base ${typeFilter === type ? 'bg-navy-900 text-white shadow-lg' : 'hover:bg-gray-100 text-gray-500'}`}
                         >
                             {type}
                         </button>
@@ -933,48 +968,55 @@ const CourseCatalog = () => {
             </div>
 
             {/* Courses Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                 {filtered.map(course => (
-                    <Card key={course.id} className="group bg-white rounded-[2.5rem] border-2 border-gray-50 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
-                        <div className={`h-64 ${course.color} relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
+                    <Card key={course._id} className="group bg-white rounded-[2.5rem] border-2 border-gray-50 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
+                        <div className={`h-48 md:h-64 ${getCourseColor(course.category?.name)} relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
                             {/* Tags */}
-                            <div className="absolute top-6 left-6 flex gap-2">
-                                <span className="bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-700 shadow-sm">{course.category}</span>
-                                <span className="bg-[#6C5CE7] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">{course.type}</span>
+                            <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-2">
+                                <span className="bg-white/90 backdrop-blur-sm px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-700 shadow-sm">{course.category?.name || 'General'}</span>
+                                <span className="bg-[#6C5CE7] px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">{course.courseType}</span>
                             </div>
-                            <div className="text-8xl mt-4 filter drop-shadow-lg">{course.icon}</div>
+                            <div className="text-6xl md:text-8xl mt-4 filter drop-shadow-lg">{getCourseIcon(course.category?.name)}</div>
                             {/* Student Count Overlay */}
-                            <div className="absolute bottom-6 right-6 bg-navy-900/80 backdrop-blur-sm text-white px-4 py-2 rounded-2xl flex items-center gap-2 text-xs font-black">
-                                <UsersIcon size={14} /> {course.students} Students
+                            <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 bg-navy-900/80 backdrop-blur-sm text-white px-3 md:px-4 py-2 rounded-2xl flex items-center gap-2 text-[10px] md:text-xs font-black">
+                                <UsersIcon size={14} /> {course.studentsEnrolled || 0}+ Students
                             </div>
                         </div>
-                        <CardContent className="p-8 flex flex-col flex-1">
-                            <h3 className="text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-[#6C5CE7] transition-colors">{course.title}</h3>
-                            <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 leading-relaxed">{course.desc}</p>
+                        <CardContent className="p-6 md:p-8 flex flex-col flex-1">
+                            <h3 className="text-lg md:text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-[#6C5CE7] transition-colors">{course.title}</h3>
+                            <p className="text-gray-500 font-bold text-xs md:text-sm mb-4 md:mb-6 line-clamp-2 leading-relaxed">{course.description || course.shortDescription}</p>
                             
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="flex items-center gap-2 text-[#FF7675] font-black">
-                                    <BookOpen size={16} /> {course.lessons} Lessons
+                            <div className="flex items-center gap-4 mb-6 md:mb-8">
+                                <div className="flex items-center gap-2 text-[#FF7675] font-black text-xs md:text-sm">
+                                    <BookOpen size={16} /> {course.totalLessons || course.numberOfSessions} Sessions
                                 </div>
                                 <div className="w-px h-4 bg-gray-200" />
-                                <div className="flex items-center gap-2 text-yellow-500 font-black">
-                                    <Star size={16} fill="currentColor" /> {course.rating}
+                                <div className="flex items-center gap-2 text-yellow-500 font-black text-xs md:text-sm">
+                                    <Star size={16} fill="currentColor" /> {course.rating || 5.0}
                                 </div>
                             </div>
 
-                            <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
+                            <div className="mt-auto pt-4 md:pt-6 border-t border-gray-50 flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-black text-gray-900">₹{course.total.toLocaleString()}</div>
-                                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.perClass}/class</div>
+                                    <div className="text-xl md:text-3xl font-black text-gray-900">₹{(course.offerPrice || course.totalCoursePrice).toLocaleString()}</div>
+                                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.pricePerSession}/class</div>
                                 </div>
-                                <Link href={`/courses/${course.id}`}>
-                                    <Button className="rounded-2xl px-8 py-6 font-black text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
+                                <Link href={`/courses/${course._id}`}>
+                                    <Button className="rounded-2xl px-6 md:px-8 py-4 md:py-6 font-black text-base md:text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
                                 </Link>
                             </div>
                         </CardContent>
                     </Card>
                 ))}
             </div>
+            {filtered.length === 0 && (
+                <div className="text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
+                    <span className="text-5xl block mb-4">🔍</span>
+                    <h3 className="text-2xl font-black text-gray-400">No courses match your criteria</h3>
+                    <p className="text-gray-400 font-bold">Try adjusting the filters to explore more learning adventures.</p>
+                </div>
+            )}
         </div>
     );
 };
