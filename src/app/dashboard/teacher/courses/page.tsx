@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Header } from '@/components/layout/Header';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -10,12 +10,10 @@ import api from '@/utils/api';
 import { BookOpen, Plus, Settings, Trash2, Users } from 'lucide-react';
 
 export default function TeacherCourses() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const API = process.env.NEXT_PUBLIC_API_URL || '';
 
-  useEffect(() => {
   const fetchCourses = async () => {
     try {
       const res = await api.get('/api/courses/teacher/my-courses');
@@ -30,20 +28,18 @@ export default function TeacherCourses() {
     }
   };
 
-  if (user?.role === "teacher" || user?.role === "admin") {
-    fetchCourses();
-  }
-}, [user]);
-
-  if (loading || isLoading) return <div className="p-20 text-center font-bold text-primary-500 text-2xl animate-pulse">Loading your academy... 📚</div>;
+  useEffect(() => {
+    if (user?.role === "teacher" || user?.role === "admin") {
+      fetchCourses();
+    }
+  }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
+    <DashboardLayout allowedRoles={['teacher', 'admin']}>
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div>
-            <h1 className="text-4xl md:text-5xl font-black text-gray-800 mb-2">My Courses 🎓</h1>
+            <h1 className="text-4xl font-black text-gray-800 mb-2">My Courses 🎓</h1>
             <p className="text-gray-500 font-bold">Manage your magical lessons and student adventures.</p>
           </div>
           <Link href="/dashboard/teacher/courses/new">
@@ -53,8 +49,10 @@ export default function TeacherCourses() {
           </Link>
         </div>
 
-        {courses.length === 0 ? (
-          <Card className="p-20 text-center border-dashed border-4 border-gray-200 bg-white/50">
+        {isLoading ? (
+          <div className="p-20 text-center font-bold text-primary-500 text-2xl animate-pulse">Loading your academy... 📚</div>
+        ) : courses.length === 0 ? (
+          <Card className="p-20 text-center border-dashed border-4 border-gray-200 bg-white/50 rounded-[3rem]">
             <div className="text-6xl mb-6">🏜️</div>
             <h2 className="text-2xl font-black text-gray-400 mb-4">No courses yet!</h2>
             <p className="text-gray-400 font-bold mb-8">Start your journey by creating your first course.</p>
@@ -65,14 +63,14 @@ export default function TeacherCourses() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course: any) => (
-              <Card key={course._id} className="group hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500 overflow-hidden bg-white">
+              <Card key={course._id} className="group hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500 overflow-hidden bg-white rounded-[2rem] shadow-sm">
                 <div className="h-48 bg-gray-100 relative overflow-hidden">
                   {course.thumbnail ? (
                     <img
-  src={course.thumbnail ? `${API}${course.thumbnail}` : "/placeholder-course.png"}
-  alt={course.title}
-  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-/>
+                      src={course.thumbnail}
+                      alt={course.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-6xl bg-primary-50">
                         📚
@@ -103,7 +101,7 @@ export default function TeacherCourses() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

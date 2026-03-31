@@ -17,13 +17,18 @@ api.interceptors.request.use((config) => {
   
   // Robust Path Handling:
   // 1. If absolute URL (starts with http) -> Remove baseURL to avoid double-prefixing
-  // 2. If relative URL (starts with /) -> Ensure baseURL is applied
+  // 2. If relative URL (starts with /) -> Handle prefixing thoughtfully
+  const isBrowser = typeof window !== 'undefined';
+  
   if (config.url && (config.url.startsWith('http://') || config.url.startsWith('https://'))) {
     config.baseURL = ''; 
   } else if (config.url && config.url.startsWith('/') && API_URL) {
-    // Ensure we don't double-slash
-    config.url = `${API_URL.replace(/\/$/, '')}${config.url}`;
-    config.baseURL = ''; 
+    // Only prefix if NOT in browser OR if it's NOT an /api route (for assets etc.)
+    // For /api routes in the browser, we want to stay on the same origin to use Next.js rewrites
+    if (!isBrowser || !config.url.startsWith('/api')) {
+      config.url = `${API_URL.replace(/\/$/, '')}${config.url}`;
+      config.baseURL = ''; 
+    }
   }
   
   return config;
