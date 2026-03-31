@@ -24,6 +24,55 @@ const HERO_IMAGES = [
   '/kindergarten_kids_learning_1_1773301524384.png'
 ];
 
+const WorkshopLeadModal = ({ isOpen, onClose, onProceed, isProcessing }: any) => {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', age: '' });
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+      <Card className="w-full max-w-md bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="p-8">
+           <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-black text-slate-800">Enroll in Workshop 🎟️</h3>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-800 transition-colors">✕</button>
+           </div>
+           <p className="text-slate-500 font-bold text-sm mb-8">Enter your details to proceed to the secure payment gateway.</p>
+           
+           <div className="space-y-4">
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Parent/Student Name</label>
+                <input required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
+                <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+                  <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Child's Age</label>
+                  <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                </div>
+              </div>
+           </div>
+
+           <Button 
+            onClick={() => onProceed(formData)} 
+            disabled={!formData.name || !formData.email || !formData.phone}
+            isLoading={isProcessing}
+            className="w-full py-6 rounded-2xl font-black text-lg bg-primary-500 hover:bg-primary-600 shadow-xl shadow-primary-200 mt-10"
+           >
+             Proceed to Payment →
+           </Button>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
 const WorkshopSection = () => {
   const { user, token } = useAuth();
   const router = useRouter();
@@ -33,6 +82,9 @@ const WorkshopSection = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeWorkshopForSlots, setActiveWorkshopForSlots] = useState<any>(null);
   const [workshopSlots, setWorkshopSlots] = useState<any[]>([]);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [pendingWorkshopFetch, setPendingWorkshopFetch] = useState<any>(null);
+  const [guestDetails, setGuestDetails] = useState<any>(null);
 
   useEffect(() => {
     const fetchWorkshops = async () => {
@@ -51,11 +103,6 @@ const WorkshopSection = () => {
   }, []);
 
   const handleBookWorkshop = async (workshop: any) => {
-    if (!user) {
-      router.push('/signup');
-      return;
-    }
-
     setIsProcessing(true);
     try {
       const slotRes = await api.get(`/api/workshops/${workshop._id}/slots`);
@@ -66,25 +113,54 @@ const WorkshopSection = () => {
         setActiveWorkshopForSlots(workshop);
         setIsProcessing(false);
       } else {
-        // Legacy flow: No slots set up
-        await proceedToPayment(workshop, null);
+        // No slots, check if guest or authenticated
+        if (!user) {
+          setPendingWorkshopFetch({ workshop, slotId: null });
+          setIsLeadModalOpen(true);
+          setIsProcessing(false);
+        } else {
+          await proceedToPayment(workshop, null, null);
+        }
       }
     } catch (err) {
       console.error("Error fetching slots", err);
-      try {
-        await proceedToPayment(workshop, null); // fallback
-      } catch (fallbackErr) {
+      if (!user) {
+        setPendingWorkshopFetch({ workshop, slotId: null });
+        setIsLeadModalOpen(true);
         setIsProcessing(false);
+      } else {
+        await proceedToPayment(workshop, null, null); // fallback
       }
     }
   };
 
-  const proceedToPayment = async (workshop: any, slotId: string | null) => {
+  const handleSlotSelection = async (slotId: string | null) => {
+     if (!user) {
+        setPendingWorkshopFetch({ workshop: activeWorkshopForSlots, slotId });
+        setIsLeadModalOpen(true);
+     } else {
+        await proceedToPayment(activeWorkshopForSlots, slotId, null);
+     }
+     setActiveWorkshopForSlots(null);
+  };
+
+  const handleGuestLeadSubmission = async (leadData: any) => {
+    setGuestDetails(leadData);
+    setIsLeadModalOpen(false);
+    await proceedToPayment(pendingWorkshopFetch.workshop, pendingWorkshopFetch.slotId, leadData);
+  };
+
+  const proceedToPayment = async (workshop: any, slotId: string | null, guestInfo: any) => {
     setIsProcessing(true);
     try {
-      // 1. Create order
       const payload: any = { workshopId: workshop._id };
       if (slotId) payload.slotId = slotId;
+      if (guestInfo) {
+        payload.guestName = guestInfo.name;
+        payload.guestEmail = guestInfo.email;
+        payload.guestPhone = guestInfo.phone;
+        payload.guestAge = guestInfo.age;
+      }
 
       const orderRes = await api.post('/api/payments/workshop-order', payload);
       const order = orderRes.data.data;
@@ -95,11 +171,10 @@ const WorkshopSection = () => {
         amount: order.amount,
         currency: order.currency,
         name: "RUZANN",
-        description: `Booking for ${workshop.title}`,
+        description: `Workshop: ${workshop.title}`,
         order_id: order.id,
         handler: async function (response: any) {
           try {
-            // 3. Verify Payment
             const verifyPayload: any = {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -107,6 +182,12 @@ const WorkshopSection = () => {
               workshopId: workshop._id
             };
             if (slotId) verifyPayload.slotId = slotId;
+            if (guestInfo) {
+               verifyPayload.guestName = guestInfo.name;
+               verifyPayload.guestEmail = guestInfo.email;
+               verifyPayload.guestPhone = guestInfo.phone;
+               verifyPayload.guestAge = guestInfo.age;
+            }
 
             const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
@@ -119,8 +200,9 @@ const WorkshopSection = () => {
           }
         },
         prefill: {
-          name: user?.name,
-          email: user?.email,
+          name: user?.name || guestInfo?.name,
+          email: user?.email || guestInfo?.email,
+          contact: guestInfo?.phone
         },
         theme: {
           color: "#F2643D"
@@ -136,15 +218,10 @@ const WorkshopSection = () => {
 
     } catch (err: any) {
       console.error("Payment initiation error:", err);
-      // Fallback: If order creation fails with 401/403, redirect to login
-      if (err.response?.status === 401 || err.response?.status === 403) {
-          router.push('/login');
-      } else {
-          showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
-      }
+      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
     } finally {
       setIsProcessing(false);
-      setActiveWorkshopForSlots(null);
+      setPendingWorkshopFetch(null);
     }
   };
 
@@ -230,10 +307,17 @@ const WorkshopSection = () => {
           workshop={activeWorkshopForSlots}
           slots={workshopSlots}
           onClose={() => setActiveWorkshopForSlots(null)}
-          onProceed={(slotId) => proceedToPayment(activeWorkshopForSlots, slotId)}
+          onProceed={(slotId) => handleSlotSelection(slotId)}
           isProcessing={isProcessing}
         />
       )}
+
+      <WorkshopLeadModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+        onProceed={handleGuestLeadSubmission}
+        isProcessing={isProcessing}
+      />
     </div>
   );
 };
@@ -988,12 +1072,12 @@ const CourseCatalog = () => {
                             <p className="text-gray-500 font-bold text-xs md:text-sm mb-4 md:mb-6 line-clamp-2 leading-relaxed">{course.description || course.shortDescription}</p>
                             
                             <div className="flex items-center gap-4 mb-6 md:mb-8">
-                                <div className="flex items-center gap-2 text-[#FF7675] font-black text-xs md:text-sm">
-                                    <BookOpen size={16} /> {course.totalLessons || course.numberOfSessions} Sessions
+                                <div className="flex items-center gap-2 text-[#FF7675] font-black text-xs md:text-sm whitespace-nowrap">
+                                    <BookOpen size={16} className="shrink-0" /> {course.totalLessons || course.numberOfSessions} Sessions
                                 </div>
-                                <div className="w-px h-4 bg-gray-200" />
-                                <div className="flex items-center gap-2 text-yellow-500 font-black text-xs md:text-sm">
-                                    <Star size={16} fill="currentColor" /> {course.rating || 5.0}
+                                <div className="w-px h-4 bg-gray-200 shrink-0" />
+                                <div className="flex items-center gap-2 text-yellow-500 font-black text-xs md:text-sm whitespace-nowrap">
+                                    <Star size={16} fill="currentColor" className="shrink-0" /> {course.rating || 5.0}
                                 </div>
                             </div>
 

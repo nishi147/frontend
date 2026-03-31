@@ -151,31 +151,26 @@ export default function AdminCourseManagement() {
     }
 
     try {
-        const createData: any = {
+        const payload: any = {
            ...formData,
            pricePerSession: formData.offerPrice,
            numberOfSessions: formData.totalLessons > 0 ? formData.totalLessons : 1,
         };
 
-        const config = { 
-          headers: { "Content-Type": "application/json" }, 
-          withCredentials: true 
-        };
+        const response = await (editingCourse 
+          ? api.put(`/api/courses/${editingCourse._id}`, payload)
+          : api.post('/api/courses', payload));
 
-        if (editingCourse) {
-          await api.put(`/api/courses/${editingCourse._id}`, createData);
-          showToast("Course Updated!", "success");
-        } else {
-          await api.post('/api/courses', createData);
-          showToast("Course Created!", "success");
+        if (response.data.success) {
+          showToast(editingCourse ? "Course Updated!" : "Course Created!", "success");
+          setIsModalOpen(false);
+          resetForm();
+          fetchCourses();
         }
-
-        setIsModalOpen(false);
-        resetForm();
-        fetchCourses();
     } catch (err: any) {
-        console.error("Error saving course:", err.response?.data || err.message);
-        showToast(`Error: ${err.response?.data?.message || err.response?.data?.error || "Check console"}`, "error");
+        console.error("Course Submission Error:", err.response?.data || err.message);
+        const errorMsg = err.response?.data?.message || err.response?.data?.error || "Check all required fields";
+        showToast(`Error: ${errorMsg}`, "error");
     }
   };
 
@@ -287,8 +282,8 @@ export default function AdminCourseManagement() {
            <h1 className="text-3xl font-black text-gray-800 tracking-tight">Manage Courses</h1>
            <p className="text-gray-500 font-bold uppercase text-[10px] tracking-widest mt-1">Curriculum & Catalogue</p>
         </div>
-        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="gap-2 px-6 shadow-xl w-full md:w-auto">
-          <Plus size={18} /> Create Course
+        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="gap-2 px-6 shadow-xl w-auto md:w-auto text-sm md:text-base">
+          <Plus size={18} /> <span className="hidden sm:inline">Create Course</span><span className="sm:hidden">Create</span>
         </Button>
       </div>
 
@@ -350,8 +345,9 @@ export default function AdminCourseManagement() {
 
       {/* WIZARD MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <Card className="w-full max-w-4xl bg-white shadow-2xl rounded-3xl overflow-hidden flex flex-col h-[90vh] md:h-auto md:max-h-[90vh]">
+        <div className="fixed inset-0 z-[2000] flex items-start md:items-center justify-center bg-black/70 backdrop-blur-sm p-0 md:p-4 overflow-y-auto">
+          <Card className="w-full max-w-4xl bg-white shadow-2xl rounded-none md:rounded-3xl overflow-hidden flex flex-col min-h-screen md:min-h-0 md:h-auto md:max-h-[95vh] my-0 md:my-4">
+
             
             {/* Header & Stepper */}
             <div className="bg-gray-50 border-b border-gray-100 p-6 flex flex-col items-center justify-center relative">
