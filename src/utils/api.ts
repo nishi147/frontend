@@ -1,36 +1,40 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const api = axios.create({
-  baseURL: API_URL,
   withCredentials: true,
+  timeout: 10000, // 10s timeout to prevent infinite hangs
 });
 
-// Request Interceptor: Automatically attach Bearer Token and handle URLs
+// Request Interceptor
 api.interceptors.request.use((config) => {
+  const isBrowser = typeof window !== 'undefined';
   const token = Cookies.get('token');
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  
-  // Robust Path Handling:
-  // 1. If absolute URL (starts with http) -> Remove baseURL to avoid double-prefixing
-  // 2. If relative URL (starts with /) -> Handle prefixing thoughtfully
-  const isBrowser = typeof window !== 'undefined';
-  
-  if (config.url && (config.url.startsWith('http://') || config.url.startsWith('https://'))) {
-    config.baseURL = ''; 
-  } else if (config.url && config.url.startsWith('/') && API_URL) {
-    // Only prefix if NOT in browser OR if it's NOT an /api route (for assets etc.)
-    // For /api routes in the browser, we want to stay on the same origin to use Next.js rewrites
-    if (!isBrowser || !config.url.startsWith('/api')) {
-      config.url = `${API_URL.replace(/\/$/, '')}${config.url}`;
-      config.baseURL = ''; 
+
+  // Robust URL Handling:
+  // We avoid using baseURL globally to prevent axios from concatenating incorrectly.
+  if (config.url) {
+    const isAbsolute = /^https?:\/\//i.test(config.url);
+
+    if (isAbsolute) {
+      // If absolute, do nothing (axios will use it as is)
+    } else if (isBrowser && config.url.startsWith('/api')) {
+      // In browser, use relative path for NextJs Rewrites (e.g. /api/auth/me)
+      // This avoids CORS and stale API_URL issues.
+    } else {
+      // For SSR or non-api assets, prepend the API_URL
+      const cleanBase = API_URL.replace(/\/$/, '');
+      const cleanUrl = config.url.startsWith('/') ? config.url : `/${config.url}`;
+      config.url = `${cleanBase}${cleanUrl}`;
     }
   }
-  
+
   return config;
 }, (error) => {
   return Promise.reject(error);

@@ -29,7 +29,7 @@ export const DashboardLayout = ({ children, allowedRoles }: { children: React.Re
 
   // Shifted blocking logic: Show spinner ONLY during initial loading.
   // If loading is finished but user is null, the useEffect will handle redirection.
-  const isAuthBlocked = loading;
+  const isAuthBlocked = loading || !user || (allowedRoles && !allowedRoles.includes(user.role));
 
   return (
     <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">

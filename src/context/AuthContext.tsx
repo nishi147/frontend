@@ -71,7 +71,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     Cookies.set('token', newToken, { expires: 30 });
     setToken(newToken);
     setUser(newUser);
-    const dashboardPath = newUser.role === 'sales' ? '/sales-dashboard' : `/dashboard/${newUser.role}`;
+    
+    // Unified Role-Based Redirection
+    let dashboardPath = `/dashboard/${newUser.role}`;
+    if (newUser.role === 'sales') {
+      dashboardPath = '/sales-dashboard';
+    }
+    
     router.push(dashboardPath);
   };
 
