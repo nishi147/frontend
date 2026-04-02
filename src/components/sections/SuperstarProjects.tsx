@@ -50,13 +50,13 @@ export const SuperstarProjects = () => {
         {/* Decorative Header Area (Matching Screenshot) */}
         <div className="text-center mb-10 md:mb-16 relative">
           {/* SVG Decorations */}
-          <div className="absolute left-[8%] top-0 hidden lg:block opacity-70 animate-bounce-slow">
+          <div className="absolute left-[-10px] md:left-[8%] top-[-20px] md:top-0 opacity-70 animate-bounce-slow scale-[0.4] md:scale-100 origin-top-left pointer-events-none">
             <div className="w-4 h-4 rounded-full bg-blue-500 mb-2" />
             <div className="w-8 h-8 rounded-full bg-orange-500 ml-8" />
             <div className="w-10 h-10 text-3xl">✨</div>
           </div>
           
-          <div className="absolute right-[5%] top-0 hidden lg:block">
+          <div className="absolute right-[-10px] md:right-[5%] top-[-20px] md:top-0 scale-[0.4] md:scale-100 origin-top-right pointer-events-none">
             <svg width="220" height="80" viewBox="0 0 220 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-float">
                <path d="M20 60 Q110 -20 200 60" stroke="#FFD700" strokeWidth="8" strokeLinecap="round" fill="none" />
                <circle cx="20" cy="62" r="12" fill="#3B82F6" />
