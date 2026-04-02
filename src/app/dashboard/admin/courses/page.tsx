@@ -606,8 +606,20 @@ export default function AdminCourseManagement() {
                                   <h4 className="font-black text-slate-800 text-lg">{module.title}</h4>
                                </div>
                                <div className="flex gap-2">
-                                  <Button variant="outline" onClick={() => openEditModule(mIdx)} className="border-slate-200 text-slate-500 hover:bg-slate-100 h-8 w-8 p-0 rounded-full"><Edit2 size={14}/></Button>
-                                  <Button variant="outline" onClick={() => removeModule(mIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-full"><Trash2 size={14}/></Button>
+                                  <button 
+                                    onClick={() => openEditModule(mIdx)} 
+                                    className="flex items-center justify-center w-8 h-8 rounded-full border border-slate-200 text-slate-400 hover:text-primary-500 hover:border-primary-200 hover:bg-primary-50 transition-all bg-white shadow-sm"
+                                    title="Edit Module"
+                                  >
+                                    <Edit2 size={14}/>
+                                  </button>
+                                  <button 
+                                    onClick={() => removeModule(mIdx)} 
+                                    className="flex items-center justify-center w-8 h-8 rounded-full border border-red-100 text-red-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-all bg-white shadow-sm"
+                                    title="Delete Module"
+                                  >
+                                    <Trash2 size={14}/>
+                                  </button>
                                </div>
                             </div>
 
@@ -631,8 +643,20 @@ export default function AdminCourseManagement() {
                                        </div>
                                     </div>
                                     <div className="flex gap-2">
-                                       <Button variant="outline" onClick={() => openEditSession(mIdx, sIdx)} className="border-slate-200 text-slate-500 hover:bg-slate-100 h-8 w-8 p-0 rounded-lg"><Edit2 size={14}/></Button>
-                                       <Button variant="outline" onClick={() => removeSession(mIdx, sIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"><Trash2 size={14}/></Button>
+                                       <button 
+                                         onClick={() => openEditSession(mIdx, sIdx)} 
+                                         className="flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-primary-500 hover:border-primary-200 hover:bg-primary-50 transition-all bg-white shadow-sm"
+                                         title="Edit Session"
+                                       >
+                                         <Edit2 size={14}/>
+                                       </button>
+                                       <button 
+                                         onClick={() => removeSession(mIdx, sIdx)} 
+                                         className="flex items-center justify-center w-8 h-8 rounded-lg border border-red-100 text-red-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-all bg-white shadow-sm"
+                                         title="Delete Session"
+                                       >
+                                         <Trash2 size={14}/>
+                                       </button>
                                     </div>
                                  </div>
                                ))}
