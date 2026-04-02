@@ -16,6 +16,7 @@ import axios from 'axios';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
 import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
+import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 
 const HERO_IMAGES = [
@@ -322,89 +323,6 @@ const WorkshopSection = () => {
   );
 };
 
-interface Project {
-  _id: string;
-  title: string;
-  description: string;
-  url: string;
-  studentName: string;
-  isApproved: boolean;
-}
-
-const ProjectSection = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await api.get('/api/projects');
-        if (res.data.success) {
-          setProjects(res.data.data);
-        }
-      } catch (err) {
-        console.error('Error fetching projects:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProjects();
-  }, []);
-
-  if (loading) return (
-    <div className="flex justify-center py-20">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-    </div>
-  );
-
-  if (projects.length === 0) return null;
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-      {projects.map((project) => {
-        // Extract Scratch ID if it's a scratch URL
-        const scratchId = project.url.split('/').filter(Boolean).pop();
-        const embedUrl = `https://scratch.mit.edu/projects/${scratchId}/embed`;
-
-        return (
-          <Card key={project._id} className="group border-2 border-gray-100 rounded-[2.5rem] overflow-hidden hover:border-primary-300 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-100 flex flex-col h-full bg-white">
-            <div className="relative aspect-video bg-gray-50 overflow-hidden">
-               <iframe
-                src={embedUrl}
-                className="w-full h-full border-0"
-                allowTransparency={true}
-                allowFullScreen={true}
-                scrolling="no"
-              />
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
-            
-            <CardContent className="p-8 flex flex-col flex-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-xl">👤</div>
-                <div>
-                   <h4 className="font-black text-gray-800 text-sm leading-none">{project.studentName}</h4>
-                   <span className="text-[10px] text-primary-500 font-bold uppercase tracking-wider">Superstar Student</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-baloo font-black text-gray-800 mb-3 group-hover:text-primary-600 transition-colors">{project.title}</h3>
-              <p className="text-gray-500 font-bold text-sm mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
-              
-              <div className="mt-auto pt-6 border-t border-gray-50">
-                <Link href={project.url} target="_blank">
-                  <Button variant="outline" className="w-full rounded-2xl py-6 font-black text-primary-600 border-primary-100 hover:bg-primary-50 transition-colors">
-                    View Project on Scratch 🚀
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
-    </div>
-  );
-};
 
 
 const ContactSection = () => {
@@ -790,25 +708,8 @@ export default function Home() {
 
       <CourseSelection />
 
-      {/* 2.5 STUDENT PROJECTS SECTION */}
-      <section className="py-20 px-4 container mx-auto" id="student-projects">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 text-center md:text-left">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full text-primary-600 font-bold mb-3">
-              <Star size={16} />
-              <span className="text-sm">Student Creations</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-black text-gray-800 leading-tight">
-              Built by our <span className="text-primary-500">Superstars</span> 🎨
-            </h2>
-          </div>
-          <p className="text-lg font-bold text-gray-400 md:max-w-xs">
-            See the magic students create after just a few sessions!
-          </p>
-        </div>
-
-        <ProjectSection />
-      </section>
+      {/* UPDATED SUPERSTAR PROJECTS SECTION */}
+      <SuperstarProjects />
 
       {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
       <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
