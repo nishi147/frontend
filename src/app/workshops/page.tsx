@@ -199,7 +199,7 @@ export default function WorkshopsPage() {
 
                   <CardContent className="p-8 pt-10">
                     <h3 className="text-xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
-                    <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{ws.description}</p>
+                    <p className="text-gray-600 font-medium text-sm leading-relaxed mb-8 line-clamp-3 h-15">{ws.description}</p>
                     
                     <div className="space-y-4 mb-10 pl-1">
                       <div className="flex items-center gap-4 text-slate-700">

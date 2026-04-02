@@ -14,11 +14,27 @@
   }
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-baloo), var(--font-nunito), Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
 }
 
 @layer utilities {

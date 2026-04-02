@@ -105,8 +105,8 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-[2rem] shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in transition-all">
+      <div className="w-full max-w-[95%] lg:max-w-4xl xl:max-w-6xl max-h-[90vh] flex flex-col bg-white rounded-[2rem] shadow-2xl overflow-hidden">
         
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50/50">
@@ -119,11 +119,11 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
           </button>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col lg:flex-row gap-8">
+        {/* Content - Responsive Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12">
           
-          {/* Add Slot Form */}
-          <div className="w-full lg:w-1/3">
+          {/* Add Slot Form - Sticky on larger screens for better UX */}
+          <div className="w-full lg:w-[400px] flex-shrink-0 lg:sticky lg:top-0">
             <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100">
               <h3 className="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
                 <PlusCircle size={20} className="text-primary-500" /> Add New Slot
@@ -206,8 +206,8 @@ export const WorkshopSlotModal: React.FC<WorkshopSlotModalProps> = ({ workshop, 
             </div>
           </div>
 
-          {/* Slots List */}
-          <div className="w-full lg:w-2/3">
+          {/* Slots List - Takes remaining space */}
+          <div className="flex-1 min-w-0">
             <h3 className="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
               <Clock size={20} className="text-secondary-500" /> Existing Time Slots
             </h3>

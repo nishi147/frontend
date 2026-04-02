@@ -105,138 +105,83 @@ const CourseSelection = () => {
   }
 
   return (
-    <section className="py-16 px-4 max-w-7xl mx-auto" id="course-selection">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-4">Explore <span className="text-secondary-500">All Subjects</span></h2>
-        <p className="text-lg font-bold text-gray-500 max-w-2xl mx-auto">
-          Personalized courses for every curious young mind
+    <section className="py-8 md:py-16 px-0 md:px-4 w-full max-w-7xl mx-auto overflow-hidden" id="course-selection">
+      <div className="text-center mb-6 md:mb-16 px-4">
+        <h2 className="text-2xl md:text-5xl font-black text-[#1a0a54] mb-2 md:mb-3">Choose Your Course</h2>
+        <p className="text-sm md:text-xl font-bold text-[#4a5568] max-w-xl mx-auto">
+          Exciting and effective programs, curated by experts!
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16 px-4">
-        {/* All Subjects Card */}
-        <button
+      {/* Grade Selector Card */}
+      <div className="mx-auto bg-[#f8f9fe] rounded-2xl md:rounded-3xl p-5 md:p-8 mb-8 md:mb-12 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 text-center md:text-left shadow-[0_2px_15px_rgb(0,0,0,0.03)] border border-blue-50/50 w-[92%] max-w-2xl">
+        <span className="text-sm md:text-xl font-black text-[#1a0a54]">Select Your Child's Age</span>
+        <div className="relative w-full md:w-auto min-w-[180px] md:min-w-[200px]">
+          <select 
+            value={ageFilter}
+            onChange={(e) => setAgeFilter(e.target.value)}
+            className="w-full appearance-none bg-white border-2 border-primary-100 rounded-full px-6 md:px-8 py-2 md:py-3.5 text-sm md:text-base font-black text-gray-700 focus:outline-none focus:border-primary-500 shadow-sm transition-all cursor-pointer pr-10 md:pr-12"
+          >
+            {ageGroups.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
+          </select>
+          <div className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 pointer-events-none text-primary-500">
+            <svg className="w-3 md:w-4 h-auto" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L7 7L13 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Subject Tabs */}
+      <div className="flex items-center md:justify-center gap-4 md:gap-12 mb-8 md:mb-10 border-b-2 border-gray-100 px-4 max-w-4xl mx-auto overflow-x-auto scrollbar-hide no-scrollbar relative">
+        <button 
           onClick={() => setCategoryFilter('All')}
-          className={`flex flex-col items-center justify-center p-6 rounded-3xl transition-all duration-300 transform hover:-translate-y-1 border-2 ${
-            categoryFilter === 'All'
-              ? 'bg-white border-primary-500 shadow-xl shadow-primary-500/20 ring-4 ring-primary-50'
-              : 'bg-white border-transparent hover:border-gray-50 shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgb(0,0,0,0.08)]'
-          }`}
+          className={`pb-3 md:pb-4 text-sm md:text-lg font-black transition-all relative whitespace-nowrap px-2 md:px-4 ${categoryFilter === 'All' ? 'text-primary-600' : 'text-[#1a0a54]/50 hover:text-[#1a0a54]'}`}
         >
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-3 bg-gray-900 text-white shadow-md">
-            🌟
-          </div>
-          <h3 className="text-lg font-black text-gray-900 mb-1">All Subjects</h3>
-          <p className="text-gray-500 text-[11px] font-bold text-center mb-3">Explore our full catalog</p>
-          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors">
-            {courses.length} Course{courses.length !== 1 ? 's' : ''}
-          </span>
+          All Subjects
+          {categoryFilter === 'All' && <div className="absolute bottom-[-2px] left-0 right-0 h-1 bg-primary-500 rounded-full" />}
         </button>
+        
+        {categories.map((cat) => (
+          <button 
+            key={cat._id}
+            onClick={() => setCategoryFilter(cat._id)}
+            className={`pb-3 md:pb-4 text-sm md:text-lg font-black transition-all relative whitespace-nowrap px-2 md:px-4 ${categoryFilter === cat._id ? 'text-primary-600' : 'text-[#1a0a54]/50 hover:text-[#1a0a54]'}`}
+          >
+            {cat.name}
+            {categoryFilter === cat._id && <div className="absolute bottom-[-2px] left-0 right-0 h-1 bg-primary-500 rounded-full" />}
+          </button>
+        ))}
 
-        {/* Dynamic Category Cards */}
-        {categories.map((cat, idx) => {
-          const nameLower = cat.name.toLowerCase();
-          let style = { bg: 'bg-[#eef5fe]', iconBg: 'bg-[#3b82f6]', text: 'text-[#2563eb]', desc: 'Discover new skills' };
-          
-          if (nameLower.includes('coding') || nameLower.includes('programming') || nameLower.includes('web')) {
-            style = { bg: 'bg-[#eef5fe]', iconBg: 'bg-[#3b82f6]', text: 'text-[#2563eb]', desc: 'Python, Scratch, Web Dev' };
-          } else if (nameLower.includes('robot')) {
-            style = { bg: 'bg-[#f5eeff]', iconBg: 'bg-[#8b5cf6]', text: 'text-[#7c3aed]', desc: 'Build & Program Real Bots' };
-          } else if (nameLower.includes('ai') || nameLower.includes('artificial') || nameLower.includes('intelligence')) {
-            style = { bg: 'bg-[#e6fbf5]', iconBg: 'bg-[#10b981]', text: 'text-[#059669]', desc: 'Future-Ready Thinking' };
-          } else if (nameLower.includes('math')) {
-            style = { bg: 'bg-[#fff8e1]', iconBg: 'bg-[#f59e0b]', text: 'text-[#d97706]', desc: 'Master Number Skills' };
-          } else if (nameLower.includes('science') || nameLower.includes('space')) {
-            style = { bg: 'bg-[#fff1f0]', iconBg: 'bg-[#f97316]', text: 'text-[#ea580c]', desc: 'Explore with Curiosity' };
-          } else if (nameLower.includes('english') || nameLower.includes('language')) {
-            style = { bg: 'bg-[#ecfdf5]', iconBg: 'bg-[#22c55e]', text: 'text-[#16a34a]', desc: 'Express with Impact' };
-          } else if (nameLower.includes('python')) {
-            style = { bg: 'bg-[#fffbeb]', iconBg: 'bg-[#eab308]', text: 'text-[#ca8a04]', desc: 'From Basics to Advanced' };
-          } else if (nameLower.includes('data')) {
-            style = { bg: 'bg-[#faf5ff]', iconBg: 'bg-[#a855f7]', text: 'text-[#9333ea]', desc: 'Analyse & Visualise' };
-          } else if (nameLower.includes('game')) {
-            style = { bg: 'bg-[#ffedb8]', iconBg: 'bg-[#f43f5e]', text: 'text-[#e11d48]', desc: 'Create Interactive Magic' };
-          } else {
-            const palettes = [
-              { bg: 'bg-[#eef5fe]', iconBg: 'bg-[#3b82f6]', text: 'text-[#2563eb]' },
-              { bg: 'bg-[#f5eeff]', iconBg: 'bg-[#8b5cf6]', text: 'text-[#7c3aed]' },
-              { bg: 'bg-[#e6fbf5]', iconBg: 'bg-[#10b981]', text: 'text-[#059669]' },
-              { bg: 'bg-[#fff8e1]', iconBg: 'bg-[#f59e0b]', text: 'text-[#d97706]' },
-              { bg: 'bg-[#fff1f0]', iconBg: 'bg-[#f97316]', text: 'text-[#ea580c]' },
-            ];
-            style = { ...palettes[idx % palettes.length], desc: 'Discover new skills' };
-          }
-
-          const courseCount = courses.filter(c => c.category?._id === cat._id).length;
-          const isSelected = categoryFilter === cat._id;
-          
-          return (
-            <button
-              key={cat._id}
-              onClick={() => setCategoryFilter(cat._id)}
-              className={`flex flex-col items-center justify-center p-6 rounded-3xl transition-all duration-300 transform hover:-translate-y-1 border-2 ${
-                isSelected
-                  ? `${style.bg} border-current ring-4 ring-opacity-20 ${style.text} shadow-lg`
-                  : `${style.bg} border-transparent hover:shadow-md hover:shadow-gray-200/50`
-              }`}
-            >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-3 text-white shadow-md ${style.iconBg} ${!cat.icon && "font-serif font-bold italic"}`}>
-                {cat.icon || cat.name.charAt(0)}
-              </div>
-              <h3 className={`text-lg font-black mb-1 ${style.text}`}>{cat.name}</h3>
-              <p className="text-gray-500 text-[11px] font-bold text-center mb-3 line-clamp-1 opacity-80">{style.desc}</p>
-              <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors ${isSelected ? 'bg-white/90 text-current' : 'bg-white/60 text-gray-500 hover:bg-white'} `}>
-                {courseCount} Course{courseCount !== 1 ? 's' : ''}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-      <div className="flex flex-col gap-6 mb-12 bg-white p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 max-w-5xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <span className="text-xs font-black text-gray-400 uppercase tracking-widest w-16 shrink-0 md:text-right">Grade:</span>
-          <div className="flex flex-wrap items-center gap-3 flex-1">
-            {ageGroups.map((group) => (
-              <button
-                key={group.value}
-                onClick={() => setAgeFilter(group.value)}
-                className={`px-5 py-2.5 rounded-full text-sm font-black transition-all duration-300 ${
-                  ageFilter === group.value
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30 ring-2 ring-primary-100'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
-                }`}
-              >
-                {group.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="w-full h-px bg-gray-100" />
-
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          <span className="text-xs font-black text-gray-400 uppercase tracking-widest w-16 shrink-0 md:text-right">Type:</span>
-          <div className="flex flex-wrap items-center gap-3 flex-1">
-            {classTypes.map((type) => (
-              <button
-                key={type.value}
-                onClick={() => setTypeFilter(type.value)}
-                className={`px-5 py-2.5 rounded-full text-sm font-black transition-all duration-300 ${
-                  typeFilter === type.value
-                    ? 'bg-secondary-500 text-white shadow-lg shadow-secondary-500/30 ring-2 ring-secondary-100'
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
-                }`}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <button 
+          className="pb-3 md:pb-4 text-sm md:text-lg font-black text-primary-600 flex items-center gap-2 px-2 md:px-4 opacity-70 hover:opacity-100"
+          onClick={() => setCategoryFilter('All')}
+        >
+          <span className="whitespace-nowrap">View All</span>
+          <ArrowRight size={14} className="md:w-4 md:h-4" />
+        </button>
       </div>
 
-      {/* Course Cards Grid */}
+      {/* Type Filter Buttons */}
+      <div className="flex items-center justify-center gap-2 mb-6 md:mb-12 flex-wrap px-4">
+        {classTypes.map((type) => (
+          <button
+            key={type.value}
+            onClick={() => setTypeFilter(type.value)}
+            className={`px-3 md:px-6 py-1.5 md:py-2.5 rounded-full text-[10px] md:text-xs font-black transition-all duration-300 border-2 ${
+              typeFilter === type.value
+                ? 'bg-primary-50 border-primary-500 text-primary-600 shadow-sm'
+                : 'bg-white border-transparent text-gray-400 hover:bg-gray-50'
+            }`}
+          >
+            {type.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Course Cards Grid (Horizontal on Mobile) */}
       {filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8 snap-x scrollbar-hide no-scrollbar pb-10 px-4 md:px-0">
           {filteredCourses.map((course) => {
             let multiplier = 1;
             if (typeFilter === '3:1') multiplier = 0.8;
@@ -248,86 +193,83 @@ const CourseSelection = () => {
             const displayType = typeFilter === 'All' ? course.courseType : typeFilter;
 
             return (
-            <Card key={course._id} className="group bg-white rounded-3xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-primary-100 transition-all duration-500 hover:-translate-y-1 flex flex-col relative">
-              {/* Category & Type Tags */}
-              <div className="absolute top-4 left-4 z-10 flex gap-1.5">
-                <span className="bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-primary-600 shadow-sm border border-primary-50">
-                  {course.category?.icon} {course.category?.name}
-                </span>
-                <span className="bg-secondary-500 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-sm">
-                  {displayType}
-                </span>
-              </div>
-
-              {/* Thumbnail Area - Dynamic Icon-Based Design */}
-              <div className={`h-48 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] ${
-                course.category?.name?.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-600 via-purple-700 to-slate-900' :
-                course.category?.name?.toLowerCase().includes('programming') ? 'bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600' :
-                course.category?.name?.toLowerCase().includes('magic') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-amber-500' :
-                course.category?.name?.toLowerCase().includes('art') ? 'bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600' :
-                'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
-              }`}>
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-                  <div className="absolute top-[-20%] left-[-10%] w-48 h-48 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
-                  <div className="absolute bottom-[-10%] right-[-10%] w-32 h-32 bg-black rounded-full blur-2xl opacity-20" />
+              <Card key={course._id} className="min-w-[280px] w-[80vw] md:w-auto snap-center group bg-white rounded-3xl border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-primary-100/50 transition-all duration-500 flex flex-col relative shrink-0">
+                {/* Category & Type Tags */}
+                <div className="absolute top-4 left-4 z-10 flex gap-2">
+                  <span className="bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#1a0a54] shadow-sm border border-gray-100">
+                    {course.category?.name}
+                  </span>
+                  <span className="bg-primary-500/90 backdrop-blur-sm px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white shadow-sm">
+                    {displayType}
+                  </span>
                 </div>
 
-                {/* Main Visual */}
-                <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-5px] transition-transform duration-500">
-                  <div className="text-5xl mb-3 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
-                    {course.category?.name?.toLowerCase().includes('robotics') ? '🤖' : 
-                     course.category?.name?.toLowerCase().includes('space') ? '🚀' :
-                     course.category?.icon || '📚'}
-                  </div>
-                  <div className="px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
-                    <span className="text-xs font-black text-white uppercase tracking-[0.2em] drop-shadow-sm">
-                      {course.title.split(':')[0]}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-4 right-4 bg-black/30 backdrop-blur-md text-white px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-[10px] font-black border border-white/10">
-                  <BookOpen size={12} className="text-primary-300" /> {course.numberOfSessions} Lessons
-                </div>
-              </div>
-
-              {/* Content Area */}
-              <CardContent className="p-6 flex flex-col flex-1">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-1.5 text-yellow-500 font-black text-xs">
-                    <Star size={14} fill="currentColor" /> {course.rating.toFixed(1)}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-gray-400 font-black text-[10px] uppercase tracking-tighter">
-                    <Users size={12} /> {course.studentsEnrolled} Enrolled
-                  </div>
-                </div>
-
-                <h3 className="text-xl font-black text-gray-900 mb-2 group-hover:text-primary-500 transition-colors line-clamp-1">{course.title}</h3>
-                <p className="text-gray-500 font-bold text-[12px] mb-6 line-clamp-2 leading-relaxed h-9">{course.description}</p>
-                
-                <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-black text-gray-900">₹{displayTotal}</span>
-                      {displayTotal < 5000 && (
-                        <span className="text-xs font-bold text-gray-400 line-through">₹{displayTotal + 1000}</span>
-                      )}
+                {/* Thumbnail Area */}
+                <div className={`h-44 md:h-52 relative overflow-hidden flex flex-col items-center justify-center p-6 ${
+                  course.category?.name?.toLowerCase().includes('space') ? 'bg-[#1a0a54]' :
+                  course.category?.name?.toLowerCase().includes('programming') ? 'bg-[#3b82f6]' :
+                  'bg-[#f2643d]'
+                }`}>
+                  {/* Enrolled Stack */}
+                  <div className="absolute top-4 right-4 z-10 bg-white/20 backdrop-blur-md rounded-full pl-1 pr-3 py-1 flex items-center gap-2 border border-white/30">
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="w-5 h-5 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[8px]">
+                          {i === 3 ? '👨' : i === 2 ? '👧' : '🧒'}
+                        </div>
+                      ))}
                     </div>
-                    <div className="text-[9px] font-black text-gray-400 uppercase tracking-tighter mt-0.5">
-                      ₹{displaySession} <span className="text-gray-300">/</span> Session
+                    <span className="text-[10px] font-black text-white">{course.studentsEnrolled}+ Enrolled</span>
+                  </div>
+
+                  <div className="relative z-10 text-6xl filter drop-shadow-xl group-hover:scale-110 transition-transform duration-500">
+                    {course.category?.icon || '📚'}
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <CardContent className="p-6 md:p-8 flex flex-col flex-1 gap-y-4 md:gap-y-6">
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="flex items-center gap-1 text-yellow-500 font-black text-xs">
+                      <Star size={14} fill="currentColor" /> {course.rating.toFixed(1)}
+                      <span className="text-gray-400 font-bold ml-1">({Math.floor(course.rating * 123)} ratings)</span>
                     </div>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full" />
+                    <div className="flex items-center gap-1 text-gray-500 font-black text-xs">
+                      <Users size={14} /> {course.studentsEnrolled} students
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 min-h-[5.5rem] md:min-h-[6.5rem]">
+                    <h3 className="text-xl md:text-2xl font-black text-[#1a0a54] group-hover:text-primary-500 transition-colors line-clamp-2 leading-tight">
+                      {course.title}
+                    </h3>
+                    <p className="text-gray-500 font-bold text-sm line-clamp-2 leading-relaxed">
+                      {course.description}
+                    </p>
                   </div>
                   
-                  <Link href={`/courses/${course._id}?type=${typeFilter}`}>
-                    <Button className="rounded-[1.5rem] px-6 py-4 font-black text-base bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-lg shadow-[#F2643D]/20 group/btn transition-all">
-                      Enroll <ArrowRight size={16} className="ml-1 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          )})}
+                  <div className="mt-auto pt-5 border-t border-gray-100 flex flex-col gap-4">
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-2xl md:text-3xl font-black text-[#1a0a54]">₹{displayTotal}</span>
+                        <span className="text-sm font-bold text-gray-400 line-through opacity-70">₹{displayTotal + 20000}</span>
+                      </div>
+                      <span className="text-sm font-black text-gray-600">
+                        (₹{displaySession} per class)
+                      </span>
+                    </div>
+                    
+                    <Link href={`/courses/${course._id}?type=${typeFilter}`} className="w-full">
+                      <Button variant="primary" className="w-full rounded-full py-4 md:py-6 font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all focus:ring-0 active:scale-95 shrink-0">
+                        Enroll Now
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       ) : (
         <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center animate-in fade-in zoom-in duration-500">

@@ -11,6 +11,7 @@ import { useToast } from "@/context/ToastContext";
 
 interface Session {
   title: string;
+  description?: string;
   videoUrl: string;
   duration: string;
 }
@@ -49,6 +50,8 @@ export default function AdminCourseManagement() {
     thumbnail: "",
     pricePerSession: 0,
     numberOfSessions: 0,
+    ageGroup: "All",
+    courseType: "Group",
     isPublished: true,
     isApproved: true,
     modules: [] as Module[],
@@ -57,7 +60,7 @@ export default function AdminCourseManagement() {
   // UI state for module/session addition
   const [newModuleTitle, setNewModuleTitle] = useState("");
   const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null);
-  const [newSessionData, setNewSessionData] = useState({ title: "", videoUrl: "", duration: "" });
+  const [newSessionData, setNewSessionData] = useState({ title: "", description: "", videoUrl: "", duration: "" });
   const [isAddingModule, setIsAddingModule] = useState(false);
 
   // FETCH COURSES
@@ -120,6 +123,8 @@ export default function AdminCourseManagement() {
       thumbnail: "",
       pricePerSession: 0,
       numberOfSessions: 0,
+      ageGroup: "All",
+      courseType: "Group",
       isPublished: true,
       isApproved: true,
       modules: [],
@@ -154,7 +159,7 @@ export default function AdminCourseManagement() {
         const payload: any = {
            ...formData,
            pricePerSession: formData.offerPrice,
-           numberOfSessions: formData.totalLessons > 0 ? formData.totalLessons : 1,
+           numberOfSessions: formData.numberOfSessions > 0 ? formData.numberOfSessions : 1,
         };
 
         const response = await (editingCourse 
@@ -192,6 +197,8 @@ export default function AdminCourseManagement() {
       thumbnail: course.thumbnail || "",
       pricePerSession: course.pricePerSession || 0,
       numberOfSessions: course.numberOfSessions || 0,
+      ageGroup: course.ageGroup || "All",
+      courseType: course.courseType || "Group",
       isPublished: course.isPublished,
       isApproved: course.isApproved,
       modules: course.modules || [],
@@ -243,6 +250,7 @@ export default function AdminCourseManagement() {
     const updatedModules = [...formData.modules];
     updatedModules[moduleIndex].lessons.push({
       title: newSessionData.title,
+      description: newSessionData.description,
       videoUrl: newSessionData.videoUrl,
       duration: newSessionData.duration,
     });
@@ -250,9 +258,8 @@ export default function AdminCourseManagement() {
     setFormData({
       ...formData,
       modules: updatedModules,
-      totalLessons: formData.totalLessons + 1, // Optional auto-increment
     });
-    setNewSessionData({ title: "", videoUrl: "", duration: "" });
+    setNewSessionData({ title: "", description: "", videoUrl: "", duration: "" });
     setActiveModuleIndex(null);
   };
 
@@ -389,11 +396,23 @@ export default function AdminCourseManagement() {
 
                     <div className="col-span-2 md:col-span-1">
                       <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Regular Price (₹)</label>
-                      <input type="number" value={formData.regularPrice} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, regularPrice: Number(e.target.value) })} />
+                      <input 
+                        type="number" 
+                        value={formData.regularPrice || ""} 
+                        className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" 
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => setFormData({ ...formData, regularPrice: e.target.value === "" ? 0 : Number(e.target.value) })} 
+                      />
                     </div>
                     <div className="col-span-2 md:col-span-1">
                       <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Offer Price (₹)</label>
-                      <input type="number" value={formData.offerPrice} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold text-green-600 focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, offerPrice: Number(e.target.value) })} />
+                      <input 
+                        type="number" 
+                        value={formData.offerPrice || ""} 
+                        className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold text-green-600 focus:border-primary-500 focus:bg-white outline-none" 
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => setFormData({ ...formData, offerPrice: e.target.value === "" ? 0 : Number(e.target.value) })} 
+                      />
                     </div>
 
                     <div className="col-span-2 md:col-span-1">
@@ -428,8 +447,36 @@ export default function AdminCourseManagement() {
                       </select>
                     </div>
                     <div className="col-span-2 md:col-span-1">
-                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Total Lessons/Sessions</label>
-                      <input type="number" value={formData.totalLessons} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" onChange={(e) => setFormData({ ...formData, totalLessons: Number(e.target.value) })} />
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Number of Sessions</label>
+                      <input 
+                        type="number" 
+                        value={formData.numberOfSessions || ""} 
+                        placeholder="e.g. 32"
+                        className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" 
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => {
+                          const val = e.target.value === "" ? 0 : Number(e.target.value);
+                          setFormData({ ...formData, numberOfSessions: val, totalLessons: val });
+                        }} 
+                      />
+                    </div>
+                    
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Age Group</label>
+                      <select value={formData.ageGroup} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none appearance-none" onChange={(e) => setFormData({ ...formData, ageGroup: e.target.value })}>
+                         <option value="All">All Ages</option>
+                         <option value="6-9">Ages 6-9</option>
+                         <option value="10-12">Ages 10-12</option>
+                         <option value="13-16">Ages 13-16</option>
+                      </select>
+                    </div>
+
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Class Type</label>
+                      <select value={formData.courseType} className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none appearance-none" onChange={(e) => setFormData({ ...formData, courseType: e.target.value })}>
+                         <option value="Group">Group Class</option>
+                         <option value="1:1">1:1 Session</option>
+                      </select>
                     </div>
                     
                     <div className="col-span-2">
@@ -500,7 +547,7 @@ export default function AdminCourseManagement() {
                            placeholder="Enter Module Title (e.g. Introduction to React)" 
                            value={newModuleTitle} 
                            onChange={(e) => setNewModuleTitle(e.target.value)}
-                           className="flex-1 p-3 rounded-xl border border-gray-200 font-bold focus:border-primary-500 outline-none"
+                           className="flex-1 p-3 rounded-xl border border-gray-200 font-bold focus:border-primary-500 outline-none text-sm"
                          />
                          <Button onClick={handleAddModule} className="font-bold shrink-0">Save Module</Button>
                          <Button variant="outline" onClick={() => setIsAddingModule(false)} className="shrink-0 font-bold">Cancel</Button>
@@ -540,6 +587,9 @@ export default function AdminCourseManagement() {
                                             {session.duration && <span>⏱️ {session.duration}</span>}
                                             {session.videoUrl && <span>🔗 Video Linked</span>}
                                           </div>
+                                          {session.description && (
+                                            <p className="text-[10px] font-bold text-slate-500 mt-1 line-clamp-2 italic">{session.description}</p>
+                                          )}
                                        </div>
                                     </div>
                                     <Button variant="outline" onClick={() => removeSession(mIdx, sIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"><Trash2 size={14}/></Button>
@@ -552,6 +602,10 @@ export default function AdminCourseManagement() {
                                       <div className="md:col-span-2">
                                         <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Session Title</label>
                                         <input autoFocus placeholder="e.g. Getting Started" value={newSessionData.title} onChange={(e) => setNewSessionData({...newSessionData, title: e.target.value})} className="w-full p-3 rounded-lg border border-slate-200 font-bold focus:border-primary-500 outline-none text-sm" />
+                                      </div>
+                                      <div className="md:col-span-2">
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Session Description (Short)</label>
+                                        <textarea placeholder="Briefly describe what this session covers" value={newSessionData.description} onChange={(e) => setNewSessionData({...newSessionData, description: e.target.value})} className="w-full p-3 rounded-lg border border-slate-200 font-bold focus:border-primary-500 outline-none text-sm resize-none" rows={2} />
                                       </div>
                                       <div>
                                         <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Video URL (Optional)</label>
@@ -611,8 +665,31 @@ export default function AdminCourseManagement() {
                         </div>
                        <div>
                           <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Curriculum Details</span>
-                          <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.totalLessons} Sessions Total</span>
-                       </div>
+                          <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.numberOfSessions} Sessions Total</span>
+                        </div>
+
+                        <div className="col-span-1 sm:col-span-2 mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div className="flex items-center justify-between p-4 bg-slate-100/50 rounded-2xl">
+                              <span className="text-xs font-black uppercase text-slate-500">Public Visibility</span>
+                              <button 
+                                type="button"
+                                onClick={() => setFormData({...formData, isPublished: !formData.isPublished})}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${formData.isPublished ? 'bg-primary-500 text-white' : 'bg-slate-300 text-slate-600'}`}
+                              >
+                                {formData.isPublished ? 'Published' : 'Hidden'}
+                              </button>
+                           </div>
+                           <div className="flex items-center justify-between p-4 bg-slate-100/50 rounded-2xl">
+                              <span className="text-xs font-black uppercase text-slate-500">Approval Status</span>
+                              <button 
+                                type="button"
+                                onClick={() => setFormData({...formData, isApproved: !formData.isApproved})}
+                                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${formData.isApproved ? 'bg-green-500 text-white' : 'bg-slate-300 text-slate-600'}`}
+                              >
+                                {formData.isApproved ? 'Approved' : 'Pending'}
+                              </button>
+                           </div>
+                        </div>
                     </div>
                  </div>
                )}
