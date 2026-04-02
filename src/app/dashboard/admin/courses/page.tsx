@@ -62,6 +62,8 @@ export default function AdminCourseManagement() {
   const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null);
   const [newSessionData, setNewSessionData] = useState({ title: "", description: "", videoUrl: "", duration: "" });
   const [isAddingModule, setIsAddingModule] = useState(false);
+  const [editingModuleIndex, setEditingModuleIndex] = useState<number | null>(null);
+  const [editingSessionInfo, setEditingSessionInfo] = useState<{ mIdx: number; sIdx: number } | null>(null);
 
   // FETCH COURSES
   const fetchCourses = async () => {
@@ -236,11 +238,18 @@ export default function AdminCourseManagement() {
   // CURRICULUM HANDLERS
   const handleAddModule = () => {
     if (!newModuleTitle.trim()) return;
-    setFormData({
-      ...formData,
-      modules: [...formData.modules, { title: newModuleTitle, lessons: [] }],
-      totalLessons: formData.totalLessons, // Optional: Update total lessons if auto-counting
-    });
+
+    if (editingModuleIndex !== null) {
+      const updatedModules = [...formData.modules];
+      updatedModules[editingModuleIndex].title = newModuleTitle;
+      setFormData({ ...formData, modules: updatedModules });
+      setEditingModuleIndex(null);
+    } else {
+      setFormData({
+        ...formData,
+        modules: [...formData.modules, { title: newModuleTitle, lessons: [] }],
+      });
+    }
     setNewModuleTitle("");
     setIsAddingModule(false);
   };
@@ -248,12 +257,20 @@ export default function AdminCourseManagement() {
   const handleAddSession = (moduleIndex: number) => {
     if (!newSessionData.title.trim()) return;
     const updatedModules = [...formData.modules];
-    updatedModules[moduleIndex].lessons.push({
-      title: newSessionData.title,
-      description: newSessionData.description,
-      videoUrl: newSessionData.videoUrl,
-      duration: newSessionData.duration,
-    });
+
+    if (editingSessionInfo) {
+      updatedModules[editingSessionInfo.mIdx].lessons[editingSessionInfo.sIdx] = {
+        ...newSessionData
+      };
+      setEditingSessionInfo(null);
+    } else {
+      updatedModules[moduleIndex].lessons.push({
+        title: newSessionData.title,
+        description: newSessionData.description,
+        videoUrl: newSessionData.videoUrl,
+        duration: newSessionData.duration,
+      });
+    }
 
     setFormData({
       ...formData,
@@ -261,6 +278,24 @@ export default function AdminCourseManagement() {
     });
     setNewSessionData({ title: "", description: "", videoUrl: "", duration: "" });
     setActiveModuleIndex(null);
+  };
+
+  const openEditModule = (mIdx: number) => {
+    setNewModuleTitle(formData.modules[mIdx].title);
+    setEditingModuleIndex(mIdx);
+    setIsAddingModule(true);
+  };
+
+  const openEditSession = (mIdx: number, sIdx: number) => {
+    const session = formData.modules[mIdx].lessons[sIdx];
+    setNewSessionData({
+      title: session.title,
+      description: session.description || "",
+      videoUrl: session.videoUrl,
+      duration: session.duration,
+    });
+    setEditingSessionInfo({ mIdx, sIdx });
+    setActiveModuleIndex(mIdx);
   };
 
   const removeModule = (mIdx: number) => {
@@ -499,7 +534,7 @@ export default function AdminCourseManagement() {
                {/* STEP 2: IMAGE & VIDEO */}
                {currentStep === 2 && (
                  <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-200 py-10">
-                    <div className="w-full max-w-lg bg-gray-50 p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center hover:border-primary-300 transition-colors">
+                    <div className="w-full max-lg bg-gray-50 p-8 rounded-3xl border-2 border-dashed border-gray-200 text-center hover:border-primary-300 transition-colors">
                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mx-auto shadow-sm mb-6">📷</div>
                        <h3 className="text-xl font-black text-gray-800 mb-2">Course Thumbnail</h3>
                        
@@ -549,8 +584,8 @@ export default function AdminCourseManagement() {
                            onChange={(e) => setNewModuleTitle(e.target.value)}
                            className="flex-1 p-3 rounded-xl border border-gray-200 font-bold focus:border-primary-500 outline-none text-sm"
                          />
-                         <Button onClick={handleAddModule} className="font-bold shrink-0">Save Module</Button>
-                         <Button variant="outline" onClick={() => setIsAddingModule(false)} className="shrink-0 font-bold">Cancel</Button>
+                         <Button onClick={handleAddModule} className="font-bold shrink-0">{editingModuleIndex !== null ? 'Update Module' : 'Save Module'}</Button>
+                         <Button variant="outline" onClick={() => { setIsAddingModule(false); setEditingModuleIndex(null); setNewModuleTitle(""); }} className="shrink-0 font-bold">Cancel</Button>
                       </div>
                     )}
 
@@ -570,7 +605,10 @@ export default function AdminCourseManagement() {
                                   <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 font-black text-sm">{mIdx + 1}</div>
                                   <h4 className="font-black text-slate-800 text-lg">{module.title}</h4>
                                </div>
-                               <Button variant="outline" onClick={() => removeModule(mIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-full"><Trash2 size={14}/></Button>
+                               <div className="flex gap-2">
+                                  <Button variant="outline" onClick={() => openEditModule(mIdx)} className="border-slate-200 text-slate-500 hover:bg-slate-100 h-8 w-8 p-0 rounded-full"><Edit2 size={14}/></Button>
+                                  <Button variant="outline" onClick={() => removeModule(mIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-full"><Trash2 size={14}/></Button>
+                               </div>
                             </div>
 
                             {/* Module Content */}
@@ -592,7 +630,10 @@ export default function AdminCourseManagement() {
                                           )}
                                        </div>
                                     </div>
-                                    <Button variant="outline" onClick={() => removeSession(mIdx, sIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"><Trash2 size={14}/></Button>
+                                    <div className="flex gap-2">
+                                       <Button variant="outline" onClick={() => openEditSession(mIdx, sIdx)} className="border-slate-200 text-slate-500 hover:bg-slate-100 h-8 w-8 p-0 rounded-lg"><Edit2 size={14}/></Button>
+                                       <Button variant="outline" onClick={() => removeSession(mIdx, sIdx)} className="border-red-100 text-red-500 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"><Trash2 size={14}/></Button>
+                                    </div>
                                  </div>
                                ))}
 
@@ -617,8 +658,8 @@ export default function AdminCourseManagement() {
                                       </div>
                                     </div>
                                     <div className="flex gap-2 justify-end pt-2 border-t border-slate-200">
-                                      <Button variant="outline" onClick={() => setActiveModuleIndex(null)} className="h-9 px-4 text-xs font-bold">Cancel</Button>
-                                      <Button onClick={() => handleAddSession(mIdx)} className="h-9 px-6 text-xs font-bold hover:bg-primary-600">Save Session</Button>
+                                      <Button variant="outline" onClick={() => { setActiveModuleIndex(null); setEditingSessionInfo(null); setNewSessionData({ title: "", description: "", videoUrl: "", duration: "" }); }} className="h-9 px-4 text-xs font-bold">Cancel</Button>
+                                      <Button onClick={() => handleAddSession(mIdx)} className="h-9 px-6 text-xs font-bold hover:bg-primary-600">{editingSessionInfo ? 'Update Session' : 'Save Session'}</Button>
                                     </div>
                                  </div>
                                ) : (
