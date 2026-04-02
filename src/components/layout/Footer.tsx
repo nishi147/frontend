@@ -13,7 +13,13 @@ export const Footer = () => {
           {/* Column 1: Brand */}
           <div className="flex flex-col gap-6">
             <Link href="/">
-              <Logo />
+              <div className="relative w-48 h-24 overflow-hidden flex items-center justify-start rounded-2xl">
+                <img
+                  src="/ruzann_bee_logo_black.png"
+                  alt="Ruzann Bee Logo"
+                  className="w-full h-full object-contain mix-blend-screen"
+                />
+              </div>
             </Link>
             <p className="text-gray-300 font-bold leading-relaxed max-w-xs">
               "We nurture a natural interest in coding and other learning areas, empowering your child to learn, explore, and reach their highest potential."
