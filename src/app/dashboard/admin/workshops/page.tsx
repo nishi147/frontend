@@ -23,7 +23,10 @@ export default function AdminWorkshops() {
     price: 0,
     venue: '',
     meetingLink: '',
+    image: '',
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const fetchWorkshops = async () => {
     try {
@@ -41,20 +44,36 @@ export default function AdminWorkshops() {
   useEffect(() => {
     fetchWorkshops();
   }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const formDataToSubmit = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (key !== 'image' || (key === 'image' && !imageFile)) {
+          formDataToSubmit.append(key, (formData as any)[key]);
+        }
+      });
+
+      if (imageFile) {
+        formDataToSubmit.append('image', imageFile);
+      }
+
       let res;
       if (editingId) {
-        res = await api.put(`/api/workshops/${editingId}`, formData);
+        res = await api.put(`/api/workshops/${editingId}`, formDataToSubmit, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       } else {
-        res = await api.post('/api/workshops', formData);
+        res = await api.post('/api/workshops', formDataToSubmit, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       }
       if (res.data.success) {
         setIsModalOpen(false);
         setEditingId(null);
-        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '' });
+        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '' });
+        setImageFile(null);
+        setImagePreview("");
         fetchWorkshops();
         showToast(`Workshop ${editingId ? 'updated' : 'created'} successfully`, "success");
       }
@@ -72,7 +91,10 @@ export default function AdminWorkshops() {
       price: ws.price,
       venue: ws.venue,
       meetingLink: ws.meetingLink || '',
+      image: ws.image || '',
     });
+    setImagePreview(ws.image || "");
+    setImageFile(null);
     setIsModalOpen(true);
   };
 
@@ -97,7 +119,7 @@ export default function AdminWorkshops() {
         </div>
         <Button onClick={() => {
           setEditingId(null);
-          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '' });
+          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '' });
           setIsModalOpen(true);
         }} className="font-black w-full md:w-auto">
           <Plus className="mr-2" /> Add Workshop
@@ -221,10 +243,32 @@ export default function AdminWorkshops() {
                 value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})}
               />
               <input 
-                type="url" placeholder="Meeting Link (Optional, e.g. https://zoom.us/j/...)"
-                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                type="url" placeholder="Meeting Link (Optional)"
+                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold text-sm"
                 value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
               />
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Workshop Image</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setImageFile(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => setImagePreview(reader.result as string);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full p-3 border-2 border-dashed rounded-xl font-bold text-xs cursor-pointer hover:border-accent-500 transition-colors"
+                />
+                {imagePreview && (
+                  <div className="mt-2 h-24 w-full rounded-xl overflow-hidden border">
+                    <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                  </div>
+                )}
+              </div>
               <Button type="submit" className="w-full py-6 font-black text-lg bg-accent-500 hover:bg-accent-600 mt-2">
                 {editingId ? 'Save Changes ✨' : 'Create Workshop ✨'}
               </Button>

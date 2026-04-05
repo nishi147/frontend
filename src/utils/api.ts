@@ -24,11 +24,9 @@ api.interceptors.request.use((config) => {
 
     if (isAbsolute) {
       // If absolute, do nothing (axios will use it as is)
-    } else if (isBrowser && config.url.startsWith('/api')) {
-      // In browser, use relative path for NextJs Rewrites (e.g. /api/auth/me)
-      // This avoids CORS and stale API_URL issues.
     } else {
-      // For SSR or non-api assets, prepend the API_URL
+      // Prepend API_URL for ALL relative calls (local or production)
+      // This bypasses Next.js rewrite issues and is more robust.
       const cleanBase = API_URL.replace(/\/$/, '');
       const cleanUrl = config.url.startsWith('/') ? config.url : `/${config.url}`;
       config.url = `${cleanBase}${cleanUrl}`;

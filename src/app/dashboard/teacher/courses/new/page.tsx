@@ -27,6 +27,7 @@ export default function CreateCoursePage() {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
 
   React.useEffect(() => {
@@ -80,13 +81,30 @@ export default function CreateCoursePage() {
     }
 
     try {
-      const createData: any = {
-        ...formData,
-        pricePerSession: formData.offerPrice,
-        numberOfSessions: formData.totalLessons > 0 ? formData.totalLessons : 1,
-      };
+      const formDataToSubmit = new FormData();
+      
+      Object.keys(formData).forEach(key => {
+        if (key === 'modules') {
+          formDataToSubmit.append('modules', JSON.stringify(formData.modules));
+        } else if (key === 'thumbnail') {
+          if (typeof formData.thumbnail === 'string' && !imageFile) {
+            formDataToSubmit.append('thumbnail', formData.thumbnail);
+          }
+        } else {
+          formDataToSubmit.append(key, (formData as any)[key]);
+        }
+      });
 
-      const res = await api.post('/api/courses', createData);
+      if (imageFile) {
+        formDataToSubmit.append('thumbnail', imageFile);
+      }
+
+      formDataToSubmit.set('pricePerSession', formData.offerPrice.toString());
+      formDataToSubmit.set('numberOfSessions', (formData.totalLessons > 0 ? formData.totalLessons : 1).toString());
+
+      const res = await api.post('/api/courses', formDataToSubmit, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
 
       if (res.data.success) {
         showToast("Course created successfully! Waiting for Admin approval.", "success");
@@ -232,15 +250,35 @@ export default function CreateCoursePage() {
                        <p className="text-slate-500 font-bold text-sm mb-10">Add a stunning cover for your course</p>
                        
                        <div className="space-y-6 text-left">
-                          <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 text-center">External Image URL</p>
+                          <div className="space-y-4">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">Upload or Link Image</p>
                             <input 
-                              placeholder="https://images.unsplash.com/..." 
-                              value={formData.thumbnail} 
-                              className="w-full p-5 bg-white border-2 border-slate-100 rounded-2xl font-bold focus:border-secondary-500 outline-none text-center shadow-sm" 
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  setImageFile(file);
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => setImagePreview(reader.result as string);
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                              className="w-full p-5 bg-white border-2 border-dashed border-slate-200 rounded-2xl font-bold cursor-pointer hover:border-secondary-500 transition-all text-xs"
+                            />
+                            <div className="flex items-center gap-3">
+                               <div className="h-px bg-slate-200 flex-1"></div>
+                               <span className="text-[10px] font-black text-slate-300">OR</span>
+                               <div className="h-px bg-slate-200 flex-1"></div>
+                            </div>
+                            <input 
+                              placeholder="Magical Image URL (https://...)" 
+                              value={typeof formData.thumbnail === 'string' ? formData.thumbnail : ''} 
+                              className="w-full p-5 bg-white border-2 border-slate-100 rounded-2xl font-bold focus:border-secondary-500 outline-none text-center shadow-sm text-sm" 
                               onChange={(e) => { 
                                 setFormData({ ...formData, thumbnail: e.target.value });
                                 setImagePreview(e.target.value);
+                                setImageFile(null);
                               }} 
                             />
                           </div>

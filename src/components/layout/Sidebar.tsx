@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion, Star, Ticket } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion, Star, Ticket, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {
@@ -18,6 +18,7 @@ export const Sidebar = () => {
       { name: 'Dashboard', href: base, icon: Home },
       { name: 'My Courses', href: `${base}/courses`, icon: BookOpen },
       { name: 'My Workshops', href: `${base}/workshops`, icon: Ticket },
+      { name: 'My Bootcamps', href: `${base}/bootcamps`, icon: Sparkles },
       { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },
       { name: 'Quizzes', href: `${base}/quizzes`, icon: FileQuestion },
       { name: 'Live Classes', href: `${base}/live-classes`, icon: Video },
@@ -30,6 +31,7 @@ export const Sidebar = () => {
     const teacherLinks = [
       { name: 'Dashboard', href: base, icon: Home },
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
+      { name: 'Manage Bootcamps', href: `${base}/bootcamps`, icon: Sparkles },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },
       { name: 'Quizzes', href: `${base}/quizzes`, icon: FileQuestion },
@@ -43,7 +45,8 @@ export const Sidebar = () => {
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },
       { name: 'Course Categories', href: `${base}/categories`, icon: BookOpen },
       { name: 'Global Currencies', href: `${base}/currencies`, icon: BookOpen },
-      { name: 'Workshops', href: `${base}/workshops`, icon: BookOpen },
+      { name: 'Workshops', href: `${base}/workshops`, icon: Ticket },
+      { name: 'Bootcamps', href: `${base}/bootcamps`, icon: Sparkles },
       { name: 'Project Approvals', href: `${base}/projects`, icon: CheckSquare },
       { name: 'Live Sessions', href: `${base}/live-classes`, icon: Video },
       { name: 'Assignments', href: `${base}/assignments`, icon: CheckSquare },

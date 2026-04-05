@@ -74,6 +74,87 @@ const WorkshopLeadModal = ({ isOpen, onClose, onProceed, isProcessing }: any) =>
   );
 };
 
+const BootcampSection = () => {
+  const [bootcamps, setBootcamps] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchBootcamps = async () => {
+      try {
+        const res = await api.get('/api/bootcamps');
+        if (res.data.success) {
+          setBootcamps(res.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching bootcamps:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBootcamps();
+  }, []);
+
+  if (loading) return (
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {[1, 2, 3, 4].map(i => <div key={i} className="h-64 rounded-3xl bg-gray-100 animate-pulse" />)}
+    </div>
+  );
+
+  if (bootcamps.length === 0) return null;
+
+  return (
+    <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+      {bootcamps.map((bc: any) => (
+        <Card key={bc._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white">
+          <div className="h-40 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2rem] bg-gradient-to-br from-purple-600 via-violet-700 to-indigo-900">
+              <div className="absolute inset-0 opacity-20 pointer-events-none">
+                <div className="absolute -top-10 -left-10 w-32 h-32 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
+              </div>
+              <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-2px] transition-transform duration-500">
+                <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">🚀</div>
+                <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">BOOTCAMP</span>
+                </div>
+              </div>
+          </div>
+          
+          <div className="absolute top-[8.5rem] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-1 transition-transform duration-500">
+            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tight">₹{bc.price}</span>
+          </div>
+
+          <CardContent className="p-5 pt-8">
+            <h3 className="text-lg font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{bc.title}</h3>
+            <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-6 line-clamp-1 opacity-70">{bc.description}</p>
+            
+            <div className="space-y-3 mb-8 pl-1">
+              <div className="flex items-center gap-3 text-slate-700">
+                 <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
+                   <Calendar size={14} className="text-indigo-600" />
+                 </div>
+                 <span className="font-bold text-xs">{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+              </div>
+              <div className="flex items-center gap-3 text-slate-700">
+                 <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
+                   <UserIcon size={14} className="text-indigo-600" />
+                 </div>
+                 <span className="font-bold text-xs uppercase line-clamp-1">{bc.instructor?.name || 'Top Mentor'}</span>
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => router.push(`/bootcamps/${bc._id}`)}
+              className="w-full py-4 rounded-full font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white border-none shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2"
+            >
+              Enroll Now <ArrowRight size={16} />
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
 const WorkshopSection = () => {
   const { user, token } = useAuth();
   const router = useRouter();
@@ -241,10 +322,10 @@ const WorkshopSection = () => {
   );
 
   return (
-    <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+    <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
       {workshops.map((ws: any) => (
-        <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-          <div className={`h-56 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2.5rem] ${
+        <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white">
+          <div className={`h-40 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2rem] ${
                     ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
                     ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
                     ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
@@ -252,56 +333,57 @@ const WorkshopSection = () => {
                   }`}>
                     {/* Decorative Elements */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none">
-                      <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
+                      <div className="absolute -top-10 -left-10 w-32 h-32 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
                     </div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-3px] transition-transform duration-500">
-                      <div className="text-7xl mb-3 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
+                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-2px] transition-transform duration-500">
+                      <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
                         {ws.title.toLowerCase().includes('space') ? '🚀' : 
                          ws.title.toLowerCase().includes('robot') ? '🤖' : 
                          ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
                       </div>
-                      <div className="px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
-                        <span className="text-xs font-black text-white uppercase tracking-[0.2em]">
-                          Special Bootcamp
+                      <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+                          Workshop
                         </span>
                       </div>
                     </div>
                   </div>
           
-          <div className="absolute top-[10rem] md:top-[12rem] right-4 md:right-6 bg-white px-4 md:px-6 py-1.5 md:py-2 rounded-xl md:rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
-            <span className="text-slate-900 font-black text-2xl md:text-4xl tracking-tight">₹{ws.price}</span>
+          <div className="absolute top-[8.5rem] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-1 transition-transform duration-500">
+            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tight">₹{ws.price}</span>
           </div>
 
-          <CardContent className="p-5 md:p-8 pt-8 md:pt-10">
-            <h3 className="text-2xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
-            <p className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{ws.description}</p>
+          <CardContent className="p-5 pt-8">
+            <h3 className="text-lg font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
+            <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-6 line-clamp-1 opacity-70">{ws.description}</p>
             
-            <div className="space-y-4 mb-10 pl-1">
-              <div className="flex items-center gap-4 text-slate-700">
-                 <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                   <Calendar size={18} className="text-teal-600" />
+            <div className="space-y-3 mb-8 pl-1">
+              <div className="flex items-center gap-3 text-slate-700">
+                 <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
+                   <Calendar size={14} className="text-teal-600" />
                  </div>
-                 <span className="font-bold text-[15px]">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                 <span className="font-bold text-xs">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
               </div>
-              <div className="flex items-center gap-4 text-slate-700">
-                 <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                   <MapPin size={18} className="text-teal-600" />
+              <div className="flex items-center gap-3 text-slate-700">
+                 <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
+                   <MapPin size={14} className="text-teal-600" />
                  </div>
-                 <span className="font-bold text-[15px] uppercase">{ws.venue}</span>
+                 <span className="font-bold text-xs uppercase line-clamp-1">{ws.venue}</span>
               </div>
             </div>
 
             <Button 
               onClick={() => handleBookWorkshop(ws)}
               isLoading={isProcessing}
-              className="w-full py-6 rounded-full font-black text-lg bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-lg shadow-[#F2643D]/30 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-full font-black text-sm bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-md shadow-[#F2643D]/30 transition-all flex items-center justify-center gap-2"
             >
-              Book Seat <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              Book Seat <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Button>
           </CardContent>
         </Card>
       ))}
+
 
       {activeWorkshopForSlots && (
         <WorkshopSlotSelectorModal
@@ -730,6 +812,28 @@ export default function Home() {
           </div>
 
           <WorkshopSection />
+        </div>
+      </section>
+
+      {/* 2.7 BOOTCAMPS SECTION */}
+      <section className="py-14 bg-white overflow-hidden" id="bootcamps">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-3">
+                <Sparkles size={16} />
+                <span className="text-sm">Extended Learning</span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black text-gray-800 leading-tight">
+                Specialized <span className="text-indigo-600">Bootcamps</span> 🎓
+              </h2>
+            </div>
+            <p className="text-base font-bold text-gray-400 md:max-w-xs">
+              Long-term intensive programs to master advanced technologies.
+            </p>
+          </div>
+
+          <BootcampSection />
         </div>
       </section>
 

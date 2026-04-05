@@ -64,6 +64,7 @@ export default function AdminCourseManagement() {
   const [isAddingModule, setIsAddingModule] = useState(false);
   const [editingModuleIndex, setEditingModuleIndex] = useState<number | null>(null);
   const [editingSessionInfo, setEditingSessionInfo] = useState<{ mIdx: number; sIdx: number } | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   // FETCH COURSES
   const fetchCourses = async () => {
@@ -134,6 +135,7 @@ export default function AdminCourseManagement() {
     setCurrentStep(1);
     setEditingCourse(null);
     setImagePreview("");
+    setImageFile(null);
   };
 
   // CREATE / UPDATE COURSE
@@ -158,15 +160,38 @@ export default function AdminCourseManagement() {
     }
 
     try {
-        const payload: any = {
-           ...formData,
-           pricePerSession: formData.offerPrice,
-           numberOfSessions: formData.numberOfSessions > 0 ? formData.numberOfSessions : 1,
-        };
+        const formDataToSubmit = new FormData();
+        
+        // Append all regular fields
+        Object.keys(formData).forEach(key => {
+          if (key === 'modules') {
+            formDataToSubmit.append('modules', JSON.stringify(formData.modules));
+          } else if (key === 'thumbnail') {
+            // Only append if it's a string (URL) and no file is selected
+            if (typeof formData.thumbnail === 'string' && !imageFile) {
+              formDataToSubmit.append('thumbnail', formData.thumbnail);
+            }
+          } else {
+            formDataToSubmit.append(key, (formData as any)[key]);
+          }
+        });
+
+        // Append file if selected
+        if (imageFile) {
+          formDataToSubmit.append('thumbnail', imageFile);
+        }
+
+        // Price calculations
+        formDataToSubmit.set('pricePerSession', formData.offerPrice.toString());
+        formDataToSubmit.set('numberOfSessions', (formData.numberOfSessions > 0 ? formData.numberOfSessions : 1).toString());
 
         const response = await (editingCourse 
-          ? api.put(`/api/courses/${editingCourse._id}`, payload)
-          : api.post('/api/courses', payload));
+          ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            })
+          : api.post('/api/courses', formDataToSubmit, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            }));
 
         if (response.data.success) {
           showToast(editingCourse ? "Course Updated!" : "Course Created!", "success");
@@ -540,16 +565,38 @@ export default function AdminCourseManagement() {
                        
                        <div className="space-y-4 relative w-full text-left">
                           <div>
-                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 text-center">Paste image link</p>
-                            <input 
-                              placeholder="https://example.com/image.jpg" 
-                              value={formData.thumbnail} 
-                              className="w-full p-4 border bg-white border-gray-100 rounded-xl font-bold focus:border-primary-500 outline-none text-center" 
-                              onChange={(e) => { 
-                                setFormData({ ...formData, thumbnail: e.target.value });
-                                setImagePreview(e.target.value);
-                              }} 
-                            />
+                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 text-center">Upload or Paste URL</p>
+                            <div className="flex flex-col gap-3">
+                               <input 
+                                 type="file"
+                                 accept="image/*"
+                                 onChange={(e) => {
+                                   const file = e.target.files?.[0];
+                                   if (file) {
+                                      setImageFile(file);
+                                      const reader = new FileReader();
+                                      reader.onloadend = () => setImagePreview(reader.result as string);
+                                      reader.readAsDataURL(file);
+                                   }
+                                 }}
+                                 className="w-full p-4 border-2 border-dashed border-gray-200 rounded-xl font-bold text-sm bg-white cursor-pointer hover:border-primary-400 transition-all"
+                               />
+                               <div className="flex items-center gap-2">
+                                  <div className="h-px bg-gray-200 flex-1"></div>
+                                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">OR</span>
+                                  <div className="h-px bg-gray-200 flex-1"></div>
+                               </div>
+                               <input 
+                                placeholder="Paste Image Link (https://...)" 
+                                value={typeof formData.thumbnail === 'string' ? formData.thumbnail : ''} 
+                                className="w-full p-4 border bg-white border-gray-100 rounded-xl font-bold focus:border-primary-500 outline-none text-center text-sm" 
+                                onChange={(e) => { 
+                                  setFormData({ ...formData, thumbnail: e.target.value });
+                                  setImagePreview(e.target.value);
+                                  setImageFile(null);
+                                }} 
+                              />
+                            </div>
                           </div>
                        </div>
                        
