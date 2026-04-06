@@ -25,7 +25,7 @@ const HERO_IMAGES = [
   '/kindergarten_kids_learning_1_1773301524384.png'
 ];
 
-const WorkshopLeadModal = ({ isOpen, onClose, onProceed, isProcessing }: any) => {
+const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "Enroll in Workshop 🎟️" }: any) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', age: '' });
   if (!isOpen) return null;
 
@@ -34,7 +34,7 @@ const WorkshopLeadModal = ({ isOpen, onClose, onProceed, isProcessing }: any) =>
       <Card className="w-full max-w-md bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
         <div className="p-8">
            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-black text-slate-800">Enroll in Workshop 🎟️</h3>
+              <h3 className="text-2xl font-black text-slate-800">{title}</h3>
               <button onClick={onClose} className="text-slate-400 hover:text-slate-800 transition-colors">✕</button>
            </div>
            <p className="text-slate-500 font-bold text-sm mb-8">Enter your details to proceed to the secure payment gateway.</p>
@@ -75,9 +75,14 @@ const WorkshopLeadModal = ({ isOpen, onClose, onProceed, isProcessing }: any) =>
 };
 
 const BootcampSection = () => {
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  const router = useRouter();
   const [bootcamps, setBootcamps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [pendingBootcamp, setPendingBootcamp] = useState<any>(null);
 
   useEffect(() => {
     const fetchBootcamps = async () => {
@@ -94,6 +99,92 @@ const BootcampSection = () => {
     };
     fetchBootcamps();
   }, []);
+
+  const handleEnrollBootcamp = async (bootcamp: any) => {
+    if (!user) {
+      setPendingBootcamp(bootcamp);
+      setIsLeadModalOpen(true);
+    } else {
+      await proceedToPayment(bootcamp, null);
+    }
+  };
+
+  const handleGuestLeadSubmission = async (leadData: any) => {
+    setIsLeadModalOpen(false);
+    await proceedToPayment(pendingBootcamp, leadData);
+  };
+
+  const proceedToPayment = async (bootcamp: any, guestInfo: any) => {
+    setIsProcessing(true);
+    try {
+      const payload: any = { bootcampId: bootcamp._id };
+      if (guestInfo) {
+        payload.guestName = guestInfo.name;
+        payload.guestEmail = guestInfo.email;
+        payload.guestPhone = guestInfo.phone;
+        payload.guestAge = guestInfo.age;
+      }
+
+      const orderRes = await api.post('/api/payments/bootcamp-order', payload);
+      const order = orderRes.data.data;
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD',
+        amount: order.amount,
+        currency: order.currency,
+        name: "RUZANN",
+        description: `Bootcamp: ${bootcamp.title}`,
+        order_id: order.id,
+        handler: async function (response: any) {
+          try {
+            const verifyPayload: any = {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              bootcampId: bootcamp._id
+            };
+            if (guestInfo) {
+               verifyPayload.guestName = guestInfo.name;
+               verifyPayload.guestEmail = guestInfo.email;
+               verifyPayload.guestPhone = guestInfo.phone;
+               verifyPayload.guestAge = guestInfo.age;
+            }
+
+            const verifyRes = await api.post('/api/payments/bootcamp-verify', verifyPayload);
+
+            if (verifyRes.data.success) {
+              router.push('/payment-success');
+            }
+          } catch (err: any) {
+            console.error("Verification error:", err);
+            showToast("Payment verification failed: " + (err.response?.data?.message || err.message), "error");
+          }
+        },
+        prefill: {
+          name: user?.name || guestInfo?.name,
+          email: user?.email || guestInfo?.email,
+          contact: guestInfo?.phone
+        },
+        theme: {
+          color: "#4F46E5"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+      
+      rzp.on('payment.failed', function (response: any){
+        showToast("Payment failed: " + response.error.description, "error");
+      });
+
+    } catch (err: any) {
+      console.error("Payment initiation error:", err);
+      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
+    } finally {
+      setIsProcessing(false);
+      setPendingBootcamp(null);
+    }
+  };
 
   if (loading) return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -143,7 +234,8 @@ const BootcampSection = () => {
             </div>
 
             <Button 
-              onClick={() => router.push(`/bootcamps/${bc._id}`)}
+              onClick={() => handleEnrollBootcamp(bc)}
+              isLoading={isProcessing && pendingBootcamp?._id === bc._id}
               className="w-full py-4 rounded-full font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white border-none shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2"
             >
               Enroll Now <ArrowRight size={16} />
@@ -151,6 +243,14 @@ const BootcampSection = () => {
           </CardContent>
         </Card>
       ))}
+
+      <EnrollLeadModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+        onProceed={handleGuestLeadSubmission}
+        isProcessing={isProcessing}
+        title="Enroll in Bootcamp 🎓"
+      />
     </div>
   );
 };
@@ -395,11 +495,12 @@ const WorkshopSection = () => {
         />
       )}
 
-      <WorkshopLeadModal 
+      <EnrollLeadModal 
         isOpen={isLeadModalOpen} 
         onClose={() => setIsLeadModalOpen(false)} 
         onProceed={handleGuestLeadSubmission}
         isProcessing={isProcessing}
+        title="Enroll in Workshop 🎟️"
       />
     </div>
   );
