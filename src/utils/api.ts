@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const api = axios.create({
   withCredentials: true,
-  timeout: 10000, // 10s timeout to prevent infinite hangs
+  timeout: 60000, // 60s timeout for file uploads
 });
 
 // Request Interceptor
