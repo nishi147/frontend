@@ -30,14 +30,14 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <Card className="w-full max-w-md bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
-        <div className="p-8">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6">
+      <Card className="w-full max-w-md bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="p-6 sm:p-10">
            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-black text-slate-800">{title}</h3>
-              <button onClick={onClose} className="text-slate-400 hover:text-slate-800 transition-colors">✕</button>
+              <h3 className="text-xl sm:text-2xl font-black text-slate-800 leading-tight">{title}</h3>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-800 transition-colors p-2 -mr-2">✕</button>
            </div>
-           <p className="text-slate-500 font-bold text-sm mb-8">Enter your details to proceed to the secure payment gateway.</p>
+           <p className="text-slate-500 font-bold text-xs sm:text-sm mb-8 leading-relaxed">Enter your details to proceed to the secure payment gateway.</p>
            
            <div className="space-y-4">
               <div>
@@ -48,13 +48,13 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
                 <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
                   <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
                 </div>
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Child's Age</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Child's Age (Optional)</label>
                   <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
                 </div>
               </div>
@@ -64,7 +64,7 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
             onClick={() => onProceed(formData)} 
             disabled={!formData.name || !formData.email || !formData.phone}
             isLoading={isProcessing}
-            className="w-full py-6 rounded-2xl font-black text-lg bg-primary-500 hover:bg-primary-600 shadow-xl shadow-primary-200 mt-10"
+            className="w-full py-5 sm:py-6 rounded-2xl font-black text-base sm:text-lg bg-primary-500 hover:bg-primary-600 shadow-xl shadow-primary-200 mt-8 sm:mt-10 transition-all active:scale-95"
            >
              Proceed to Payment →
            </Button>
