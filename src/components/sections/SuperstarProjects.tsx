@@ -73,15 +73,15 @@ export const SuperstarProjects = () => {
           </p>
         </div>
 
-        {/* Project Carousel (Mobile: horizontal, Desktop: smaller cards) */}
-        <div className="flex overflow-x-auto md:grid md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-6 pb-10 scrollbar-hide no-scrollbar snap-x px-2 -mx-2 md:mx-0 md:px-0">
+        {/* Project Carousel (Now Horizontal Slider for both Mobile and Desktop) */}
+        <div className="flex overflow-x-auto gap-6 md:gap-8 pb-12 scrollbar-hide no-scrollbar snap-x px-4 md:px-4 -mx-4 md:-mx-4 group/slider">
           {projects.map((project) => {
              // Extract Scratch ID for better preview if scratch
              const scratchId = project.url.split('/').filter(Boolean).pop();
              const previewUrl = `https://cdn2.scratch.mit.edu/get_image/project/${scratchId}_282x210.png`;
 
              return (
-               <div key={project._id} className="min-w-[280px] md:min-w-0 snap-center group">
+               <div key={project._id} className="min-w-[260px] md:min-w-[320px] snap-center group transition-all duration-300">
                  <Card className="h-full border-2 border-gray-50 rounded-[2rem] overflow-hidden hover:border-blue-100 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-100/50 flex flex-col bg-white">
                     {/* Compact Image Frame */}
                     <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
