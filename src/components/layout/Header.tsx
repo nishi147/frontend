@@ -73,15 +73,17 @@ export const Header = () => {
     <>
       <MovingBanner />
       <header className="bg-white sticky top-0 z-[100] border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-28 lg:h-32 flex items-center justify-between gap-2 md:gap-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-28 lg:h-32 flex items-center justify-between">
 
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0 flex items-center">
-          <Logo />
-        </Link>
+        {/* Left: Logo Section (Balanced for Centering) */}
+        <div className="flex-1 flex justify-start items-center h-full">
+          <Link href="/" className="flex-shrink-0 flex items-center h-full">
+            <Logo />
+          </Link>
+        </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+        {/* Middle: Desktop Nav (Perfectly Centered) */}
+        <nav className="hidden lg:flex items-center gap-2 xl:gap-6">
           {navLinks.map((link) => (
             <div 
               key={link.label} 
@@ -91,7 +93,7 @@ export const Header = () => {
             >
               <Link
                 href={link.href}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1 ${
+                className={`px-4 xl:px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap ${
                   isActive(link.href)
                     ? 'bg-[#EEE8FF] text-[#6C5CE7]'
                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -154,8 +156,8 @@ export const Header = () => {
           ))}
         </nav>
 
-        {/* Right Section (Desktop & Mobile Actions) */}
-        <div className="flex items-center gap-2 md:gap-4 shrink-0">
+        {/* Right Section (Balanced for Centering) */}
+        <div className="flex-1 flex justify-end items-center gap-2 md:gap-4 shrink-0">
           {/* Currency Switcher Temporarily Removed */}
 
           {/* Mobile Specific View: Currency Removed */}

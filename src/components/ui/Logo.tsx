@@ -3,13 +3,13 @@ import Image from "next/image";
 
 export const Logo = ({ className = "" }: { className?: string }) => {
   return (
-    <div className={`flex items-center ${className}`}>
-      <div className="relative w-40 sm:w-52 lg:w-64 h-20 sm:h-24 lg:h-28 overflow-hidden flex items-center justify-center rounded-2xl">
+    <div className={`flex items-center h-full ${className}`}>
+      <div className="relative w-48 sm:w-64 lg:w-72 h-full flex items-center justify-center transition-all duration-300">
         <Image
-          src="/ruzann_logo_new_v3.png"
+          src="/ruzann_logo-removebg-preview.png"
           alt="Ruzann logo"
-          width={500}
-          height={500}
+          width={1200}
+          height={400}
           className="w-full h-full object-contain transition-transform"
           priority
         />

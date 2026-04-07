@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
+import { useSearchParams } from 'next/navigation';
 import { Trash2, ExternalLink, Sparkles, Plus, Loader2, Upload } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 
@@ -21,6 +22,7 @@ interface Project {
 
 export default function StudentProjectsPage() {
     const { user, loading } = useAuth();
+    const searchParams = useSearchParams();
     const [projects, setProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { showToast, confirm } = useToast();
@@ -52,7 +54,12 @@ export default function StudentProjectsPage() {
         if (user) {
             fetchMyProjects();
         }
-    }, [user]);
+        
+        // Auto-open form if ?upload=true
+        if (searchParams.get('upload') === 'true') {
+            setShowForm(true);
+        }
+    }, [user, searchParams]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

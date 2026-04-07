@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardTitle, CardContent, CardHeader } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
-import Link from 'next/link';
+import { BookOpen, Video, Star, Sparkles, Rocket, ArrowRight } from 'lucide-react';
 
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [liveClasses, setLiveClasses] = useState([]);
 
@@ -30,37 +33,65 @@ export default function StudentDashboard() {
 
   return (
     <DashboardLayout allowedRoles={['student']}>
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col gap-8 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-primary-600 mb-2">Hello, {user?.name}! 👋</h1>
-            <p className="text-lg md:text-xl text-gray-500 font-bold">Ready to learn something new today?</p>
+            <h1 className="text-3xl md:text-5xl font-black text-gray-800 tracking-tighter mb-2">Hello, <span className="text-primary-500">{user?.name}</span>! 👋</h1>
+            <p className="text-lg md:text-xl text-gray-500 font-bold">Ready to launch another project today?</p>
           </div>
-          <Link href="/courses">
-            <Button size="lg" className="animate-bounce-slow">Explore Courses</Button>
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/courses">
+               <Button size="lg" variant="outline" className="rounded-2xl border-2 font-black">Explore Courses</Button>
+            </Link>
+            <Link href="/dashboard/student/projects?upload=true">
+               <Button size="lg" className="rounded-2xl font-black bg-primary-500 shadow-xl shadow-primary-200 animate-bounce-slow">Upload Project 🚀</Button>
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           <Card hoverEffect className="bg-gradient-to-br from-blue-100 to-primary-100 border-none shadow-md">
-             <CardTitle className="text-primary-700">Enrolled Courses 📚</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-primary-600">0</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+           <Card className="bg-white border-2 border-primary-50 rounded-[2rem] shadow-sm hover:shadow-xl transition-all group">
+             <CardContent className="p-8">
+               <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <BookOpen className="text-primary-500" />
+               </div>
+               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Enrolled Courses</p>
              </CardContent>
            </Card>
            
-           <Card hoverEffect className="bg-gradient-to-br from-yellow-100 to-accent-100 border-none shadow-md">
-             <CardTitle className="text-accent-700">Completed Lessons ⭐️</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-accent-600">0</div>
+           <Card className="bg-white border-2 border-accent-50 rounded-[2rem] shadow-sm hover:shadow-xl transition-all group">
+             <CardContent className="p-8">
+               <div className="w-12 h-12 bg-accent-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <Star className="text-accent-500" />
+               </div>
+               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Completed Lessons</p>
              </CardContent>
            </Card>
 
-           <Card hoverEffect className="bg-gradient-to-br from-purple-100 to-secondary-100 border-none shadow-md">
-             <CardTitle className="text-secondary-700">Certificates 🎓</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-secondary-600">0</div>
+           <Card className="bg-white border-2 border-secondary-50 rounded-[2rem] shadow-sm hover:shadow-xl transition-all group">
+             <CardContent className="p-8">
+               <div className="w-12 h-12 bg-secondary-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                 <Sparkles className="text-secondary-500" />
+               </div>
+               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Rewards Won</p>
              </CardContent>
+           </Card>
+
+           <Card className="bg-gradient-to-br from-primary-500 to-primary-600 border-none rounded-[2rem] shadow-xl shadow-primary-100 hover:shadow-2xl transition-all group cursor-pointer overflow-hidden relative" onClick={() => router.push('/dashboard/student/projects?upload=true')}>
+              <div className="absolute top-[-20%] right-[-10%] w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <CardContent className="p-8 text-white relative z-10">
+                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+                  <Rocket className="text-white" />
+                </div>
+                <div className="text-xl font-black mb-1">Project Showcase</div>
+                <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-4">Show your magic! 🎨</p>
+                <div className="flex items-center gap-2 text-xs font-black">
+                   Upload Now <ArrowRight size={14} />
+                </div>
+              </CardContent>
            </Card>
         </div>
 

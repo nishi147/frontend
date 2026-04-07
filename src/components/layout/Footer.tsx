@@ -12,14 +12,8 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Column 1: Brand */}
           <div className="flex flex-col gap-6">
-            <Link href="/">
-              <div className="relative w-48 h-24 overflow-hidden flex items-center justify-start rounded-2xl">
-                <img
-                  src="/ruzann_logo_new_v3.png"
-                  alt="Ruzann Bee Logo"
-                  className="w-full h-full object-contain"
-                />
-              </div>
+            <Link href="/" className="inline-block transform -translate-x-6 h-32 md:h-40">
+              <Logo className="h-full" />
             </Link>
             <p className="text-gray-300 font-bold leading-relaxed max-w-xs">
               "We nurture a natural interest in coding and other learning areas, empowering your child to learn, explore, and reach their highest potential."

@@ -38,7 +38,8 @@ interface CourseCardProps {
 const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', className = '' }) => {
   const { formatPrice } = useCurrency();
   const multiplier = typeFilter === '3:1' ? 0.8 : typeFilter === '5:1' ? 0.6 : typeFilter === 'Group' ? 0.5 : 1;
-  const displayTotal = Math.round(course.totalCoursePrice * multiplier);
+  const displayPerSession = Math.round(course.pricePerSession * multiplier);
+  const displayTotal = Math.round(displayPerSession * course.numberOfSessions);
   const displayType = typeFilter === 'All' ? course.courseType : typeFilter;
 
   // Smart Thumbnail Helper
@@ -56,8 +57,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
         {/* Image Area (Consistent Light Blue/Lavender) */}
         <div className="relative aspect-[4/3] rounded-[2.5rem] bg-[#f0f4ff] overflow-hidden flex items-center justify-center mb-6 group-hover:shadow-2xl group-hover:shadow-primary-100 transition-all duration-500">
           
-          {/* Enrollment Badge (Top Left) */}
-
           {/* Main Icon/Illustration or Thumbnail */}
           <div className="w-full h-full p-6 flex items-center justify-center">
             {course.thumbnail ? (
@@ -102,17 +101,20 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
               </div>
            </div>
 
-           <div className="flex items-center justify-between gap-4">
+           <div className="flex flex-col gap-4">
               <div className="flex flex-col">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Course Fee</span>
-                <div className="flex items-baseline gap-2">
-                   <span className="text-2xl font-black text-slate-900">{formatPrice(displayTotal)}</span>
+                <div className="flex items-center gap-2">
+                   <span className="text-3xl font-black text-slate-900">{formatPrice(displayPerSession)}</span>
+                   <span className="text-xs font-black uppercase tracking-widest text-slate-600 mt-1">/ session</span>
+                </div>
+                <div className="flex items-center gap-3 mt-2">
+                   <span className="text-sm font-black text-slate-700 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100">Total Course Fee: {formatPrice(displayTotal)}</span>
                    <span className="text-xs font-bold text-slate-400 line-through opacity-60">{formatPrice(displayTotal + 5000)}</span>
                 </div>
               </div>
               
               <Link href={`/courses/${course._id}?type=${typeFilter}`}>
-                <Button className="rounded-2xl px-6 py-6 bg-slate-900 hover:bg-black text-white font-black text-sm group-hover:scale-105 transition-all shadow-xl shadow-slate-200">
+                <Button className="w-full rounded-2xl py-6 bg-slate-900 hover:bg-black text-white font-black text-sm group-hover:scale-105 transition-all shadow-xl shadow-slate-200">
                   View Details
                 </Button>
               </Link>

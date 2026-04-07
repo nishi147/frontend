@@ -48,9 +48,13 @@ const CourseSelection = () => {
   const classTypes = [
     { label: 'All', value: 'All' },
     { label: '1:1 Classes', value: '1:1' },
-    { label: '3:1 Classes', value: '3:1' },
-    { label: '5:1 Classes', value: '5:1' },
     { label: 'Group Classes', value: 'Group' },
+  ];
+
+  const groupSubTypes = [
+    { label: '3:1 Ratio', value: '3:1' },
+    { label: '5:1 Ratio', value: '5:1' },
+    { label: 'Standard Group', value: 'Group' },
   ];
 
   useEffect(() => {
@@ -84,11 +88,6 @@ const CourseSelection = () => {
       result = result.filter(course => course.ageGroup === ageFilter);
     }
     
-    // We treat typeFilter as a dynamic pricing mode instead of a hard filter now
-    // if (typeFilter !== 'All') {
-    //   result = result.filter(course => course.courseType === typeFilter);
-    // }
-
     if (categoryFilter !== 'All') {
       result = result.filter(course => course.category?._id === categoryFilter);
     }
@@ -171,20 +170,47 @@ const CourseSelection = () => {
       </div>
 
       {/* Type Filters (Simplified Labels) */}
-      <div className="flex items-center justify-center gap-3 mb-16 flex-wrap px-4">
-        {classTypes.map((type) => (
-          <button
-            key={type.value}
-            onClick={() => setTypeFilter(type.value)}
-            className={`px-6 py-2.5 rounded-full text-xs font-black transition-all duration-300 border-2 ${
-              typeFilter === type.value
-                ? 'bg-primary-500 border-primary-500 text-white shadow-lg shadow-primary-200'
-                : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
-            }`}
-          >
-            {type.label}
-          </button>
-        ))}
+      <div className="flex flex-col items-center gap-6 mb-16 px-4">
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          {classTypes.map((type) => (
+            <button
+              key={type.value}
+              onClick={() => {
+                setTypeFilter(type.value);
+                // If switching to Group, default to generic group for pricing multiplier
+                if (type.value === 'Group' && !['3:1', '5:1', 'Group'].includes(typeFilter)) {
+                  setTypeFilter('Group');
+                }
+              }}
+              className={`px-6 py-2.5 rounded-full text-xs font-black transition-all duration-300 border-2 ${
+                (type.value === 'Group' ? ['Group', '3:1', '5:1'].includes(typeFilter) : typeFilter === type.value)
+                  ? 'bg-primary-500 border-primary-500 text-white shadow-lg shadow-primary-200'
+                  : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
+              }`}
+            >
+              {type.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sub-Filters for Group Mode */}
+        {['Group', '3:1', '5:1'].includes(typeFilter) && (
+          <div className="flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-2 duration-500">
+            {groupSubTypes.map((sub) => (
+              <button
+                key={sub.value}
+                onClick={() => setTypeFilter(sub.value)}
+                className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all duration-300 border ${
+                  typeFilter === sub.value
+                    ? 'bg-primary-100 border-primary-200 text-primary-600'
+                    : 'bg-gray-50 border-gray-100 text-gray-400 hover:bg-white hover:border-gray-200'
+                }`}
+              >
+                {sub.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Course Cards (BrightChamps Aesthetic) */}

@@ -23,7 +23,11 @@ export default function CourseDetailPage() {
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
   const [couponError, setCouponError] = useState('');
   
-  const originalPrice = selectedSessions * (course?.pricePerSession || 0);
+  const typeFilter = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('type') || 'All' : 'All';
+  const multiplier = typeFilter === '3:1' ? 0.8 : typeFilter === '5:1' ? 0.6 : typeFilter === 'Group' ? 0.5 : 1;
+  const effectivePricePerSession = Math.round((course?.pricePerSession || 0) * multiplier);
+  
+  const originalPrice = selectedSessions * effectivePricePerSession;
   const discountAmount = appliedCoupon ? (
     appliedCoupon.discountType === 'percent' 
       ? (originalPrice * appliedCoupon.discountValue) / 100 
@@ -104,7 +108,7 @@ export default function CourseDetailPage() {
         amount: order.amount,
         currency: order.currency,
         name: "RUZANN",
-        description: `Enrollment for ${course.title}`,
+        description: `Enrollment for ${course.title} (${typeFilter})`,
         order_id: order.id,
         handler: async function (response: any) {
           try {
@@ -219,15 +223,15 @@ export default function CourseDetailPage() {
               <div className="absolute -top-4 -right-4 bg-[#F2643D] text-white px-6 py-2 rounded-2xl font-black text-sm shadow-xl animate-bounce">BEST SELLER</div>
               
               <div className="text-center mb-8 border-b border-gray-50 pb-8">
-                <div className="text-gray-400 font-black uppercase tracking-widest text-xs mb-3 italic">Total Course Access</div>
+                <div className="text-gray-400 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Session</div>
                 <div className="flex flex-col items-center gap-1 mb-2">
-                   {appliedCoupon && (
-                       <span className="text-lg font-bold text-gray-400 line-through tracking-tighter">₹{originalPrice}</span>
-                   )}
-                   <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{finalPrice}</span>
+                   <div className="flex items-baseline gap-2">
+                      <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{effectivePricePerSession}</span>
+                      <span className="text-sm font-black text-navy-400 uppercase tracking-widest">/ session</span>
+                   </div>
                 </div>
-                <div className="text-secondary-500 font-black text-xs uppercase tracking-tight bg-secondary-50 inline-block px-4 py-1.5 rounded-full mt-2">
-                  ₹{course.pricePerSession} per amazing session!
+                <div className="text-navy-700 font-bold text-sm bg-navy-50 inline-block px-8 py-3 rounded-full mt-4 border border-navy-100 shadow-sm">
+                  Total Investment: ₹{finalPrice}
                 </div>
               </div>
 
