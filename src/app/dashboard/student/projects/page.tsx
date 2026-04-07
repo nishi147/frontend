@@ -9,6 +9,7 @@ import api from '@/utils/api';
 import { useSearchParams } from 'next/navigation';
 import { Trash2, ExternalLink, Sparkles, Plus, Loader2, Upload } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { Suspense } from 'react';
 
 interface Project {
     _id: string;
@@ -20,7 +21,7 @@ interface Project {
     createdAt: string;
 }
 
-export default function StudentProjectsPage() {
+function StudentProjectsContent() {
     const { user, loading } = useAuth();
     const searchParams = useSearchParams();
     const [projects, setProjects] = useState<Project[]>([]);
@@ -297,5 +298,17 @@ export default function StudentProjectsPage() {
                 )}
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function StudentProjectsPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center font-black text-2xl text-primary-500 animate-pulse">
+                Preparing your gallery... 🎨
+            </div>
+        }>
+            <StudentProjectsContent />
+        </Suspense>
     );
 }
