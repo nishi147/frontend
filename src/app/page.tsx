@@ -240,11 +240,11 @@ const BootcampSection = () => {
 
               <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
                 <div className="flex items-center gap-2 text-slate-700">
-                  <Calendar size={12} className="text-indigo-600" />
+                  <Calendar size={12} className="text-indigo-500" />
                   <span className="font-bold text-[10px] truncate">{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-700">
-                  <UserIcon size={12} className="text-indigo-600" />
+                  <UserIcon size={12} className="text-indigo-500" />
                   <span className="font-bold text-[10px] uppercase truncate">{bc.instructor?.name || 'Top Mentor'}</span>
                 </div>
               </div>
@@ -253,7 +253,7 @@ const BootcampSection = () => {
                 <Button 
                   onClick={() => handleEnrollBootcamp(bc)}
                   isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-                  className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-indigo-600 hover:bg-indigo-700 text-white border-none transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
                 >
                   Enroll <ArrowRight size={12} />
                 </Button>
@@ -434,7 +434,6 @@ const WorkshopSection = () => {
       {[1, 2, 3].map(i => <div key={i} className="h-96 rounded-3xl bg-gray-100 animate-pulse" />)}
     </div>
   );
-
   if (workshops.length === 0) return (
      <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
        <span className="text-6xl block mb-6">🗓️</span>
@@ -445,69 +444,76 @@ const WorkshopSection = () => {
 
   return (
     <div className="flex overflow-x-auto gap-6 md:gap-8 pb-12 scrollbar-hide no-scrollbar snap-x px-4 -mx-4 md:mx-0 md:px-0">
-      {workshops.map((ws: any) => (
-        <div key={ws._id} className="min-w-[260px] md:min-w-[320px] snap-center group/card transition-all duration-300">
-          <Card className="h-full relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white flex flex-col">
-            <div className={`aspect-[4/3] relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover/card:scale-[1.02] rounded-t-[2rem] ${
-                    ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
-                    ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
-                    ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
-                    'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
-                  }`}>
-                    {/* Decorative Elements */}
+      {workshops.map((ws: any) => {
+        const thumbUrl = getThumbnailUrl(ws.image);
+        return (
+          <div key={ws._id} className="min-w-[260px] md:min-w-[320px] snap-center group/card transition-all duration-300">
+            <Card className="h-full relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white flex flex-col">
+              <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
+                ws.image && ws.image !== 'no-image.jpg' ? 'bg-slate-100' :
+                ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
+                ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
+                ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
+                'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
+              }`}>
+                {ws.image && ws.image !== 'no-image.jpg' ? (
+                  <img src={thumbUrl} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={ws.title} />
+                ) : (
+                  <>
                     <div className="absolute inset-0 opacity-20 pointer-events-none">
-                      <div className="absolute -top-10 -left-10 w-32 h-32 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
+                      <div className="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full blur-2xl opacity-30 animate-pulse" />
                     </div>
+                    <div className="relative z-10">
+                      <div className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                        {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover/card:translate-y-[-2px] transition-transform duration-500">
-                      <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover/card:scale-110 transition-transform duration-500">
-                        {ws.title.toLowerCase().includes('space') ? '🚀' : 
-                         ws.title.toLowerCase().includes('robot') ? '🤖' : 
-                         ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
-                      </div>
-                      <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
-                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                          Workshop
-                        </span>
-                      </div>
-                    </div>
+              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
+                ₹{ws.price}
+              </div>
+
+              <CardContent className="p-3 flex-1 flex flex-col">
+                <div className="mb-2">
+                   <h3 className="text-sm font-black text-black leading-tight mb-0.5 line-clamp-1">{ws.title}</h3>
+                   <div className="flex items-center gap-1 text-yellow-500">
+                     <Star size={10} fill="currentColor" />
+                     <span className="text-[10px] font-black text-gray-800">5.0</span>
+                     <span className="text-[10px] font-medium text-gray-400">(4k+)</span>
+                   </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
+                  <div className="flex items-center gap-2 text-slate-700">
+                     <Calendar size={12} className="text-indigo-500" />
+                     <span className="font-bold text-[10px] truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                   </div>
-          
-          <div className="absolute top-[35%] md:top-[40%] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover/card:-translate-y-1 transition-transform duration-500">
-            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tight">₹{ws.price}</span>
+                  <div className="flex items-center gap-2 text-slate-700">
+                     <MapPin size={12} className="text-indigo-500" />
+                     <span className="font-bold text-[10px] uppercase truncate">{ws.venue}</span>
+                  </div>
+                </div>
+
+                <div className="mt-auto flex flex-col gap-1.5">
+                  <Button 
+                    onClick={() => handleBookWorkshop(ws)}
+                    isLoading={isProcessing && activeWorkshopForSlots?._id === ws._id}
+                    className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
+                  >
+                    Book Seat <ArrowRight size={12} />
+                  </Button>
+                  <Link href="/workshops" className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
+                    Program Info →
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-
-          <CardContent className="p-5 pt-8 flex flex-col flex-1">
-            <h3 className="text-[15px] font-black text-slate-800 tracking-wide mb-1 leading-tight">{ws.title}</h3>
-            <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-6 line-clamp-1 opacity-70">{ws.description}</p>
-            
-            <div className="space-y-3 mb-8 pl-1">
-              <div className="flex items-center gap-3 text-slate-700">
-                 <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
-                   <Calendar size={14} className="text-teal-600" />
-                 </div>
-                 <span className="font-bold text-xs">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-700">
-                 <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
-                   <MapPin size={14} className="text-teal-600" />
-                 </div>
-                 <span className="font-bold text-xs uppercase line-clamp-1">{ws.venue}</span>
-              </div>
-            </div>
-
-            <Button 
-              onClick={() => handleBookWorkshop(ws)}
-              isLoading={isProcessing}
-              className="w-full py-4 rounded-full font-black text-sm bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-md shadow-[#F2643D]/30 transition-all flex items-center justify-center gap-2"
-            >
-              Book Seat <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    ))}
-
+        )
+      })}
 
       {activeWorkshopForSlots && (
         <WorkshopSlotSelectorModal
@@ -880,7 +886,7 @@ export default function Home() {
             <p className="text-base text-gray-300 font-bold mb-6">
               A built-in sandbox where kids can write real code, run it instantly, and see their imaginations come to life on the screen.
             </p>
-            <ul className="space-y-3 font-semibold text-base text-gray-900 mb-8">
+            <ul className="space-y-3 font-semibold text-base text-gray-100 mb-8">
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Python & JavaScript support</li>
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Visual block-to-code switching</li>
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Instant browser preview</li>

@@ -218,22 +218,27 @@ export default function WorkshopsPage() {
 
                       <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
                         <div className="flex items-center gap-2 text-slate-700">
-                           <Calendar size={12} className="text-gray-400" />
+                           <Calendar size={12} className="text-indigo-500" />
                            <span className="font-bold text-[10px] truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                         </div>
                         <div className="flex items-center gap-2 text-slate-700">
-                           <MapPin size={12} className="text-gray-400" />
+                           <MapPin size={12} className="text-indigo-500" />
                            <span className="font-bold text-[10px] uppercase truncate">{ws.venue}</span>
                         </div>
                       </div>
 
-                      <Button 
-                        onClick={() => handleBookWorkshop(ws)}
-                        isLoading={processingId === ws._id}
-                        className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-slate-900 hover:bg-black text-white border-none transition-all flex items-center justify-center gap-2"
-                      >
-                        Book Seat <ArrowRight size={12} />
-                      </Button>
+                      <div className="flex flex-col gap-1.5">
+                        <Button 
+                          onClick={() => handleBookWorkshop(ws)}
+                          isLoading={processingId === ws._id}
+                          className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
+                        >
+                          Book Seat <ArrowRight size={12} />
+                        </Button>
+                        <Link href="/workshops" className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
+                          Program Info →
+                        </Link>
+                      </div>
                     </CardContent>
                   </Card>
                 );
