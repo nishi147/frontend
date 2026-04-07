@@ -12,7 +12,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Column 1: Brand */}
           <div className="flex flex-col gap-6">
-            <Link href="/" className="inline-block transform -translate-x-6 h-32 md:h-40">
+            <Link href="/" className="inline-block h-24 md:h-32 mb-2">
               <Logo className="h-full" />
             </Link>
             <p className="text-gray-300 font-bold leading-relaxed max-w-xs">
