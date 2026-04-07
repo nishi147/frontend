@@ -57,11 +57,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
         <div className="relative aspect-[4/3] rounded-[2.5rem] bg-[#f0f4ff] overflow-hidden flex items-center justify-center mb-6 group-hover:shadow-2xl group-hover:shadow-primary-100 transition-all duration-500">
           
           {/* Enrollment Badge (Top Left) */}
-          <div className="absolute top-5 left-5 z-20 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm border border-white/50 animate-in fade-in slide-in-from-left-4 duration-500">
-             <span className="text-[10px] font-black text-slate-600 flex items-center gap-2">
-               <span className="text-xs">👋</span> {course.studentsEnrolled}+ Enrolled
-             </span>
-          </div>
 
           {/* Main Icon/Illustration or Thumbnail */}
           <div className="w-full h-full p-6 flex items-center justify-center">

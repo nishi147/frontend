@@ -15,6 +15,7 @@ interface User {
   stars?: number;
   gems?: number;
   enrollments?: Array<{ course: string; status: string }>;
+  bootcamps?: Array<{ bootcamp: string; status: string }>;
 }
 
 interface AuthContextType {

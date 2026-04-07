@@ -233,13 +233,18 @@ const BootcampSection = () => {
               </div>
             </div>
 
-            <Button 
-              onClick={() => handleEnrollBootcamp(bc)}
-              isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-              className="w-full py-4 rounded-full font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white border-none shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2"
-            >
-              Enroll Now <ArrowRight size={16} />
-            </Button>
+            <div className="flex flex-col gap-3 mt-auto">
+              <Button 
+                onClick={() => handleEnrollBootcamp(bc)}
+                isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                className="w-full py-4 rounded-full font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white border-none shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2"
+              >
+                Enroll Now <ArrowRight size={16} />
+              </Button>
+              <Link href={`/bootcamps/${bc._id}`} className="w-full py-3 rounded-full font-black text-[10px] uppercase tracking-widest text-indigo-500 border-2 border-indigo-50 hover:bg-indigo-50 transition-all text-center">
+                View Curriculum & Details
+              </Link>
+            </div>
           </CardContent>
         </Card>
       ))}

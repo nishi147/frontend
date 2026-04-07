@@ -15,9 +15,9 @@ export const Footer = () => {
             <Link href="/">
               <div className="relative w-48 h-24 overflow-hidden flex items-center justify-start rounded-2xl">
                 <img
-                  src="/ruzann_bee_logo_black.png"
+                  src="/ruzann_logo_new_v3.png"
                   alt="Ruzann Bee Logo"
-                  className="w-full h-full object-contain mix-blend-screen"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </Link>

@@ -81,7 +81,7 @@ export default function AdminDashboard() {
           <h1 className="text-3xl md:text-5xl font-black text-gray-800 tracking-tighter leading-none">
             Admin Control <span className="text-accent-500">Center</span> 🔐
           </h1>
-          <p className="text-gray-500 font-bold mt-3 text-sm md:text-lg">Welcome back, Super Admin {user.name}!</p>
+          <p className="text-gray-500 font-bold mt-3 text-sm md:text-lg">Welcome back, {user.name}!</p>
         </div>
         <div className="bg-white px-6 py-4 rounded-3xl shadow-xl border-2 border-accent-100 flex items-center gap-4 w-full lg:w-auto transform hover:rotate-1 transition-all">
            <div className="w-4 h-4 rounded-full bg-green-500 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
