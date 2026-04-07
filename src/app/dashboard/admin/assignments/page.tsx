@@ -85,7 +85,7 @@ export default function AdminAssignmentsPage() {
                                     <div className="flex flex-col gap-2 pt-4 border-t border-gray-50">
                                         <div className="flex justify-between items-center">
                                             <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Course</p>
-                                            <p className="text-[10px] font-black bg-gray-100 px-2 py-0.5 rounded text-gray-500 tracking-tighter capitalize">{assignment.teacher?.name || 'Admin'}</p>
+                                            <p className="text-[10px] font-black bg-gray-100 px-2 py-0.5 rounded text-gray-500 tracking-tighter capitalize">{assignment.teacher?.systemCode || (assignment.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : assignment.teacher?.name || 'Admin')}</p>
                                         </div>
                                         <p className="font-bold text-primary-600">{assignment.course?.title}</p>
                                     </div>

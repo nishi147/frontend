@@ -59,10 +59,10 @@ export default function ResetPasswordPage() {
       </div>
 
       <Card className="relative z-10 w-full max-w-lg bg-white/70 backdrop-blur-xl border-0 shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-[40px] overflow-hidden">
-        <div className="p-8 pb-4 text-center">
-            <div className="flex justify-center mb-6">
-                <div className="p-3 bg-white rounded-2xl shadow-sm">
-                    <Logo />
+        <div className="p-6 pb-2 text-center">
+            <div className="flex justify-center mb-1">
+                <div className="p-2 bg-white rounded-2xl shadow-sm">
+                    <Logo size="small" />
                 </div>
             </div>
           <h1 className="text-3xl font-black text-gray-800 tracking-tight mb-2">Secure Reset</h1>

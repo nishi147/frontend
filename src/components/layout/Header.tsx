@@ -25,7 +25,7 @@ const CurrencySwitcher = ({ isMobile = false }) => {
           className={`px-2 py-1 rounded-lg text-[10px] font-black transition-all ${
             currency === curr 
               ? 'bg-slate-900 text-white shadow-sm' 
-              : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+              : 'text-gray-900 hover:text-black hover:bg-gray-100'
           }`}
         >
           {curr}
@@ -96,7 +96,7 @@ export const Header = () => {
                 className={`px-4 xl:px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap ${
                   isActive(link.href)
                     ? 'bg-[#EEE8FF] text-[#6C5CE7]'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    : 'text-black hover:bg-gray-100 hover:text-navy-900'
                 }`}
               >
                 {link.label}
@@ -108,8 +108,8 @@ export const Header = () => {
                 <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[350px] transition-all duration-300 transform ${isCoursesOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
                   <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-4 overflow-hidden">
                     <div className="mb-3 px-3">
-                      <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                        <Sparkles size={12} className="text-secondary-400" /> Featured Paths
+                      <h4 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2">
+                        <Sparkles size={12} className="text-secondary-600" /> Featured Paths
                       </h4>
                     </div>
                     
@@ -131,14 +131,14 @@ export const Header = () => {
                               </span>
                             </div>
                             <div className="flex-1 min-w-0">
-                               <p className="font-bold text-gray-800 text-sm truncate">{course.title}</p>
+                               <p className="font-bold text-black text-sm truncate">{course.title}</p>
                                <span className="text-[10px] font-black text-secondary-500 uppercase tracking-tighter">{typeof course.category === 'object' ? course.category?.name : course.category} • {course.numberOfSessions} Sessions</span>
                             </div>
                             <Star size={14} className="text-yellow-400 opacity-0 group-hover/item:opacity-100 transition-opacity" fill="currentColor" />
                           </Link>
                         ))
                       ) : (
-                        <div className="p-4 text-center text-gray-400 text-xs font-bold italic">
+                        <div className="p-4 text-center text-gray-900 text-xs font-bold italic">
                           Magic courses loading... ✨
                         </div>
                       )}
@@ -186,7 +186,7 @@ export const Header = () => {
               </Link>
               <button
                 onClick={logout}
-                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-gray-900 hover:text-red-600 hover:bg-red-50 transition-all"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -197,7 +197,7 @@ export const Header = () => {
           <div className="lg:hidden flex items-center gap-2 border-l pl-2 border-gray-100">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-all border border-gray-100"
+              className="p-2 rounded-xl text-black hover:bg-gray-100 transition-all border border-gray-100"
             >
               {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -227,7 +227,7 @@ export const Header = () => {
               {link.hasDropdown && (
                 <div className="pl-6 mt-2 flex flex-col gap-2 border-l-2 border-gray-50 ml-6">
                    {courses.slice(0, 3).map(course => (
-                     <Link key={course._id} href={`/courses/${course._id}`} onClick={() => setIsMenuOpen(false)} className="py-2 text-sm font-bold text-gray-500 hover:text-[#6C5CE7] transition-colors line-clamp-1">
+                     <Link key={course._id} href={`/courses/${course._id}`} onClick={() => setIsMenuOpen(false)} className="py-2 text-sm font-bold text-black hover:text-[#6C5CE7] transition-colors line-clamp-1">
                        🚀 {course.title}
                      </Link>
                    ))}

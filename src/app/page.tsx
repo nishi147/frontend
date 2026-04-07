@@ -35,27 +35,27 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
         <div className="p-6 sm:p-10">
            <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl sm:text-2xl font-black text-slate-800 leading-tight">{title}</h3>
-              <button onClick={onClose} className="text-slate-400 hover:text-slate-800 transition-colors p-2 -mr-2">✕</button>
+              <button onClick={onClose} className="text-slate-900 hover:text-slate-800 transition-colors p-2 -mr-2">✕</button>
            </div>
-           <p className="text-slate-500 font-bold text-xs sm:text-sm mb-8 leading-relaxed">Enter your details to proceed to the secure payment gateway.</p>
+           <p className="text-slate-700 font-bold text-xs sm:text-sm mb-8 leading-relaxed">Enter your details to proceed to the secure payment gateway.</p>
            
            <div className="space-y-4">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Parent/Student Name</label>
-                <input required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Parent/Student Name</label>
+                <input required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
               </div>
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
-                <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Email Address</label>
+                <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
-                  <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Phone Number</label>
+                  <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
                 </div>
-                <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Child's Age (Optional)</label>
-                  <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm" />
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Child's Age (Optional)</label>
+                  <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
                 </div>
               </div>
            </div>
@@ -421,16 +421,17 @@ const WorkshopSection = () => {
   if (workshops.length === 0) return (
      <div className="bg-white border-2 border-dashed border-gray-200 rounded-[3rem] p-20 text-center">
        <span className="text-6xl block mb-6">🗓️</span>
-       <h3 className="text-3xl font-black text-gray-400 mb-2">No Workshops Scheduled</h3>
-       <p className="text-gray-400 font-bold">New magical learning sessions are being planned. Check back soon!</p>
+       <h3 className="text-3xl font-black text-gray-900 mb-2">No Workshops Scheduled</h3>
+       <p className="text-gray-900 font-bold">New magical learning sessions are being planned. Check back soon!</p>
      </div>
   );
 
   return (
-    <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+    <div className="flex overflow-x-auto gap-6 md:gap-8 pb-12 scrollbar-hide no-scrollbar snap-x px-4 -mx-4 md:mx-0 md:px-0">
       {workshops.map((ws: any) => (
-        <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white">
-          <div className={`h-40 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2rem] ${
+        <div key={ws._id} className="min-w-[260px] md:min-w-[320px] snap-center group/card transition-all duration-300">
+          <Card className="h-full relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white flex flex-col">
+            <div className={`aspect-[4/3] relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover/card:scale-[1.02] rounded-t-[2rem] ${
                     ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
                     ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
                     ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
@@ -441,8 +442,8 @@ const WorkshopSection = () => {
                       <div className="absolute -top-10 -left-10 w-32 h-32 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
                     </div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-2px] transition-transform duration-500">
-                      <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
+                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover/card:translate-y-[-2px] transition-transform duration-500">
+                      <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover/card:scale-110 transition-transform duration-500">
                         {ws.title.toLowerCase().includes('space') ? '🚀' : 
                          ws.title.toLowerCase().includes('robot') ? '🤖' : 
                          ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
@@ -455,12 +456,12 @@ const WorkshopSection = () => {
                     </div>
                   </div>
           
-          <div className="absolute top-[8.5rem] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-1 transition-transform duration-500">
+          <div className="absolute top-[35%] md:top-[40%] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover/card:-translate-y-1 transition-transform duration-500">
             <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tight">₹{ws.price}</span>
           </div>
 
-          <CardContent className="p-5 pt-8">
-            <h3 className="text-lg font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
+          <CardContent className="p-5 pt-8 flex flex-col flex-1">
+            <h3 className="text-[15px] font-black text-slate-800 tracking-wide mb-1 leading-tight">{ws.title}</h3>
             <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-6 line-clamp-1 opacity-70">{ws.description}</p>
             
             <div className="space-y-3 mb-8 pl-1">
@@ -487,7 +488,8 @@ const WorkshopSection = () => {
             </Button>
           </CardContent>
         </Card>
-      ))}
+      </div>
+    ))}
 
 
       {activeWorkshopForSlots && (
@@ -571,7 +573,7 @@ const ContactSection = () => {
                  <Mail size={24} />
                </div>
                <div className="text-left">
-                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Email Us</p>
+                 <p className="text-xs font-black text-gray-900 uppercase tracking-widest mb-1">Email Us</p>
                  <p className="font-bold text-gray-800">support@ruzann.com</p>
                </div>
              </div>
@@ -580,7 +582,7 @@ const ContactSection = () => {
                  <Phone size={24} />
                </div>
                <div className="text-left">
-                 <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Call Us</p>
+                 <p className="text-xs font-black text-gray-900 uppercase tracking-widest mb-1">Call Us</p>
                  <p className="font-bold text-gray-800">+91 9960559894</p>
                </div>
              </div>
@@ -592,47 +594,47 @@ const ContactSection = () => {
            
            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Your Name</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Your Name</label>
                 <input 
                   required
                   type="text"
                   placeholder="Superstar's Name"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
                   value={form.name}
                   onChange={(e) => setForm({...form, name: e.target.value})}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Email Address</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Email Address</label>
                 <input 
                   required
                   type="email"
                   placeholder="parent@example.com"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
                   value={form.email}
                   onChange={(e) => setForm({...form, email: e.target.value})}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Phone Number</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Phone Number</label>
                 <input 
                   required
                   type="tel"
                   placeholder="+91 00000 00000"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
                   value={form.phone}
                   onChange={(e) => setForm({...form, phone: e.target.value})}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">What's on your mind?</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">What's on your mind?</label>
                 <div className="relative group">
                   <select 
                     required
-                    className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 appearance-none pr-12"
+                    className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black appearance-none pr-12"
                     value={form.subject}
                     onChange={(e) => setForm({...form, subject: e.target.value})}
                   >
@@ -641,30 +643,30 @@ const ContactSection = () => {
                     <option value="Demo">Free Demo Session 🎁</option>
                     <option value="Feedback">Just Saying Hi 👋</option>
                   </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900">
                     <ChevronDown size={20} />
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Referral Code (Optional)</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Referral Code (Optional)</label>
                 <input 
                   type="text"
                   placeholder="e.g. RUZ-X4K"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 uppercase"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black uppercase"
                   value={form.referralCode}
                   onChange={(e) => setForm({...form, referralCode: e.target.value})}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">Message</label>
+                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Message</label>
                 <textarea 
                   required
                   rows={4}
                   placeholder="Share your magic thoughts..."
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-gray-700 resize-none"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black resize-none"
                   value={form.message}
                   onChange={(e) => setForm({...form, message: e.target.value})}
                 />
@@ -837,7 +839,7 @@ export default function Home() {
              >
                Go Magic! ₹1 🚀
              </button>
-             <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-400 font-bold">
+             <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-900 font-bold">
                <span className="text-xs uppercase">Trusted by</span>
                <div className="flex -space-x-3">
                  {[1,2,3,4].map(i => <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px]"><UserIcon className="w-4 h-4" /></div>)}
@@ -861,7 +863,7 @@ export default function Home() {
             <p className="text-base text-gray-300 font-bold mb-6">
               A built-in sandbox where kids can write real code, run it instantly, and see their imaginations come to life on the screen.
             </p>
-            <ul className="space-y-3 font-semibold text-base text-gray-400 mb-8">
+            <ul className="space-y-3 font-semibold text-base text-gray-900 mb-8">
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Python & JavaScript support</li>
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Visual block-to-code switching</li>
                <li className="flex items-center gap-3"><span className="text-green-400 text-xl">✓</span> Instant browser preview</li>
@@ -912,7 +914,7 @@ export default function Home() {
                 Magical <span className="text-accent-500">Workshops</span>  🎟️
               </h2>
             </div>
-            <p className="text-base font-bold text-gray-400 md:max-w-xs">
+            <p className="text-base font-bold text-gray-900 md:max-w-xs">
               Intensive learning experiences designed to spark creative magic.
             </p>
           </div>
@@ -934,7 +936,7 @@ export default function Home() {
                 Specialized <span className="text-indigo-600">Bootcamps</span> 🎓
               </h2>
             </div>
-            <p className="text-base font-bold text-gray-400 md:max-w-xs">
+            <p className="text-base font-bold text-gray-900 md:max-w-xs">
               Long-term intensive programs to master advanced technologies.
             </p>
           </div>
@@ -1036,7 +1038,7 @@ export default function Home() {
              ))
            ) : mentors.length === 0 ? (
              <div className="col-span-full text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                <p className="text-gray-400 font-bold italic">Adding our expert mentors shortly! Stay tuned. ✨</p>
+                <p className="text-gray-900 font-bold italic">Adding our expert mentors shortly! Stay tuned. ✨</p>
              </div>
            ) : (
              mentors.map((mentor, i) => {
@@ -1136,7 +1138,7 @@ const CourseCatalog = () => {
             {/* Filters Bar */}
             <div className="bg-white p-4 rounded-[2rem] border-2 border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-center gap-8 font-bold">
                 <div className="flex items-center gap-4 flex-wrap justify-center">
-                    <span className="text-gray-400 uppercase tracking-widest text-xs">Grade:</span>
+                    <span className="text-gray-900 uppercase tracking-widest text-xs">Grade:</span>
                     {['All Ages', 'Ages 6–9', 'Ages 10–12', 'Ages 13–16'].map(grade => (
                         <button 
                             key={grade}
@@ -1149,7 +1151,7 @@ const CourseCatalog = () => {
                 </div>
                 <div className="hidden md:block w-px h-8 bg-gray-100" />
                 <div className="flex items-center gap-4 flex-wrap justify-center">
-                    <span className="text-gray-400 uppercase tracking-widest text-xs">Type:</span>
+                    <span className="text-gray-900 uppercase tracking-widest text-xs">Type:</span>
                     {['All', '1:1 Classes', 'Group Classes'].map(type => (
                         <button 
                             key={type}
@@ -1169,7 +1171,7 @@ const CourseCatalog = () => {
                         <div className={`h-48 md:h-64 ${getCourseColor(course.category?.name)} relative overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
                             {/* Tags */}
                             <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-2">
-                                <span className="bg-white/90 backdrop-blur-sm px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-700 shadow-sm">{course.category?.name || 'General'}</span>
+                                <span className="bg-white/90 backdrop-blur-sm px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-black shadow-sm">{course.category?.name || 'General'}</span>
                                 <span className="bg-[#6C5CE7] px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">{course.courseType}</span>
                             </div>
                             <div className="text-6xl md:text-8xl mt-4 filter drop-shadow-lg">{getCourseIcon(course.category?.name)}</div>
@@ -1195,7 +1197,7 @@ const CourseCatalog = () => {
                             <div className="mt-auto pt-4 md:pt-6 border-t border-gray-50 flex items-center justify-between">
                                 <div>
                                     <div className="text-xl md:text-3xl font-black text-gray-900">₹{(course.offerPrice || course.totalCoursePrice).toLocaleString()}</div>
-                                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">₹{course.pricePerSession}/class</div>
+                                    <div className="text-[10px] font-black text-gray-900 uppercase tracking-tighter">₹{course.pricePerSession}/class</div>
                                 </div>
                                 <Link href={`/courses/${course._id}`}>
                                     <Button className="rounded-2xl px-6 md:px-8 py-4 md:py-6 font-black text-base md:text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
@@ -1208,8 +1210,8 @@ const CourseCatalog = () => {
             {filtered.length === 0 && (
                 <div className="text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed border-gray-200">
                     <span className="text-5xl block mb-4">🔍</span>
-                    <h3 className="text-2xl font-black text-gray-400">No courses match your criteria</h3>
-                    <p className="text-gray-400 font-bold">Try adjusting the filters to explore more learning adventures.</p>
+                    <h3 className="text-2xl font-black text-gray-900">No courses match your criteria</h3>
+                    <p className="text-gray-900 font-bold">Try adjusting the filters to explore more learning adventures.</p>
                 </div>
             )}
         </div>

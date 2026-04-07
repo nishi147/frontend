@@ -81,7 +81,7 @@ export default function MyCoursesPage() {
                                 <CardContent className="p-6">
                                     <h3 className="text-xl font-black text-gray-800 mb-2 line-clamp-1">{course.title}</h3>
                                     <p className="text-gray-500 font-bold text-sm mb-4 flex items-center gap-2">
-                                        <User className="w-4 h-4" /> {course.teacher?.name}
+                                        <User className="w-4 h-4" /> {course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name)}
                                     </p>
                                     
                                     <div className="space-y-4">

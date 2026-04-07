@@ -130,18 +130,18 @@ export default function WorkshopsPage() {
           <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight">
             Workshops & <span className="text-yellow-300">Bootcamps</span>
           </h1>
-          <p className="text-lg md:text-xl font-bold text-white/80 mb-8">
+          <p className="text-lg md:text-xl font-bold text-white mb-8">
             Intensive, hands-on learning experiences for young innovators
           </p>
           {/* Search */}
           <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 max-w-md mx-auto shadow-lg">
-            <Search size={20} className="text-gray-400" />
+            <Search size={20} className="text-gray-900" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search workshops..."
-              className="flex-1 font-bold text-gray-700 bg-transparent outline-none"
+              className="flex-1 font-black text-black bg-transparent outline-none placeholder:text-gray-400"
             />
           </div>
         </div>
@@ -159,10 +159,10 @@ export default function WorkshopsPage() {
           ) : filtered.length === 0 ? (
             <div className="text-center py-24">
               <div className="text-6xl mb-4">🎪</div>
-              <h3 className="text-2xl font-black text-gray-400 mb-2">
+              <h3 className="text-2xl font-black text-gray-950 mb-2">
                 {search ? 'No workshops match your search' : 'No Workshops Scheduled Yet'}
               </h3>
-              <p className="text-gray-400 font-bold">Check back soon — new bootcamps are being planned!</p>
+              <p className="text-gray-900 font-bold">Check back soon — new bootcamps are being planned!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -198,8 +198,8 @@ export default function WorkshopsPage() {
                   </div>
 
                   <CardContent className="p-8 pt-10">
-                    <h3 className="text-xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
-                    <p className="text-gray-600 font-medium text-sm leading-relaxed mb-8 line-clamp-3 h-15">{ws.description}</p>
+                    <h3 className="text-xl font-black text-black uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
+                    <p className="text-black font-bold text-sm leading-relaxed mb-8 line-clamp-3 h-15">{ws.description}</p>
                     
                     <div className="space-y-4 mb-10 pl-1">
                       <div className="flex items-center gap-4 text-slate-700">

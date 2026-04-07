@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-export const Logo = ({ className = "" }: { className?: string }) => {
+export const Logo = ({ className = "", size = "normal" }: { className?: string, size?: "small" | "normal" }) => {
   const [processedSrc, setProcessedSrc] = useState<string>("/ruzann_logo_new_v3.png");
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const Logo = ({ className = "" }: { className?: string }) => {
 
   return (
     <div className={`flex items-center h-full ${className}`}>
-      <div className="relative w-48 sm:w-64 lg:w-72 h-full flex items-center justify-center transition-all duration-300">
+      <div className={`relative ${size === 'small' ? 'w-32 sm:w-40' : 'w-48 sm:w-64 lg:w-72'} h-full flex items-center justify-center transition-all duration-300`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={processedSrc}

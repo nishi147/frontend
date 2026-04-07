@@ -15,7 +15,7 @@ export const Footer = () => {
             <Link href="/" className="inline-block h-24 md:h-32 mb-2">
               <Logo className="h-full" />
             </Link>
-            <p className="text-gray-300 font-bold leading-relaxed max-w-xs">
+            <p className="text-white font-bold leading-relaxed max-w-xs">
               "We nurture a natural interest in coding and other learning areas, empowering your child to learn, explore, and reach their highest potential."
             </p>
             <div className="flex flex-wrap gap-4">
@@ -36,7 +36,7 @@ export const Footer = () => {
           {/* Column 2: Quick Links */}
           <div>
             <h4 className="text-xl font-black mb-8 border-b-4 border-primary-500 pb-2 inline-block">Quick Links</h4>
-            <ul className="flex flex-col gap-4 font-bold text-gray-400">
+            <ul className="flex flex-col gap-4 font-bold text-white/90">
               {['Home', 'About Us', 'Courses', 'Reviews', 'Blog'].map(link => (
                 <li key={link}>
                   <Link href="#" className="hover:text-white transition-colors flex items-center gap-2 group">
@@ -51,7 +51,7 @@ export const Footer = () => {
           {/* Column 3: Categories */}
           <div>
             <h4 className="text-xl font-black mb-8 border-b-4 border-secondary-500 pb-2 inline-block">Categories</h4>
-            <ul className="flex flex-col gap-4 font-bold text-gray-400">
+            <ul className="flex flex-col gap-4 font-bold text-white/90">
               {['Coding', 'Robotics', 'Python', 'AI & ML', 'Data Science', 'Math', 'Science'].map(cat => (
                 <li key={cat}>
                   <Link href="#" className="hover:text-white transition-colors flex items-center gap-2 group">
@@ -66,21 +66,21 @@ export const Footer = () => {
           {/* Column 4: Contact Us */}
           <div className="flex flex-col gap-6">
             <h4 className="text-xl font-black mb-8 border-b-4 border-yellow-400 pb-2 inline-block">Contact Us</h4>
-            <div className="flex flex-col gap-4 font-bold text-gray-400">
+            <div className="flex flex-col gap-4 font-bold text-white/90">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-yellow-400">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-yellow-400">
                   <Phone size={20} />
                 </div>
                 <span>+91 9960559894</span>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary-400">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-primary-400">
                   <Mail size={20} />
                 </div>
                 <span>support@ruzann.com</span>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-secondary-400">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-secondary-400">
                   <MapPin size={20} />
                 </div>
                 <span>Pune, Maharashtra, India</span>
@@ -98,7 +98,7 @@ export const Footer = () => {
               </span>
             ))}
           </div>
-          <p className="text-gray-500 font-bold">
+          <p className="text-white opacity-60 font-bold">
             © {new Date().getFullYear()} RUZANN EdTech. Crafted with ✨ for future innovators.
           </p>
         </div>

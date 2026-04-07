@@ -51,23 +51,23 @@ export const LeadCaptureForm = ({ source = 'Website' }: { source?: string }) => 
       
       <div className="relative z-10 space-y-8">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-primary-500 mb-2">
+          <div className="flex items-center gap-2 text-primary-700 mb-2">
              <Sparkles size={24} fill="currentColor" />
              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Start Your Journey</span>
           </div>
-          <h2 className="text-4xl font-black text-gray-800 tracking-tighter leading-none">Book a <span className="text-primary-500">Free Counselling</span></h2>
-          <p className="text-gray-400 font-bold text-sm tracking-tight italic">Enter your details and our team will guide you through our courses.</p>
+          <h2 className="text-4xl font-black text-black tracking-tighter leading-none">Book a <span className="text-primary-600">Free Counselling</span></h2>
+          <p className="text-gray-900 font-bold text-sm tracking-tight italic">Enter your details and our team will guide you through our courses.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative group/field">
-            <User className="absolute left-4 top-11 -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within/field:text-primary-500 transition-colors" />
-            <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block tracking-widest">Full Name</label>
+            <User className="absolute left-4 top-11 -translate-y-1/2 text-gray-900 w-5 h-5 group-focus-within/field:text-primary-600 transition-colors" />
+            <label className="text-[10px] font-black uppercase text-gray-900 ml-4 mb-2 block tracking-widest">Full Name</label>
             <input
               required
               type="text"
               placeholder="John Doe"
-              className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-primary-500 outline-none transition-all font-bold text-gray-700 bg-gray-50/30"
+              className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-primary-500 outline-none transition-all font-bold text-black bg-gray-50/30"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
             />
@@ -75,25 +75,25 @@ export const LeadCaptureForm = ({ source = 'Website' }: { source?: string }) => 
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative group/field">
-              <Phone className="absolute left-4 top-11 -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within/field:text-secondary-500 transition-colors" />
-              <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block tracking-widest">Phone Number</label>
+              <Phone className="absolute left-4 top-11 -translate-y-1/2 text-gray-900 w-5 h-5 group-focus-within/field:text-secondary-600 transition-colors" />
+              <label className="text-[10px] font-black uppercase text-gray-900 ml-4 mb-2 block tracking-widest">Phone Number</label>
               <input
                 required
                 type="tel"
                 placeholder="+91 9876543210"
-                className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-secondary-500 outline-none transition-all font-bold text-gray-700 bg-gray-50/30"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-secondary-500 outline-none transition-all font-bold text-black bg-gray-50/30"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
               />
             </div>
             <div className="relative group/field">
-              <Mail className="absolute left-4 top-11 -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within/field:text-primary-500 transition-colors" />
-              <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block tracking-widest">Email Address</label>
+              <Mail className="absolute left-4 top-11 -translate-y-1/2 text-gray-900 w-5 h-5 group-focus-within/field:text-primary-600 transition-colors" />
+              <label className="text-[10px] font-black uppercase text-gray-900 ml-4 mb-2 block tracking-widest">Email Address</label>
               <input
                 required
                 type="email"
                 placeholder="john@example.com"
-                className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-primary-500 outline-none transition-all font-bold text-gray-700 bg-gray-50/30"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-primary-500 outline-none transition-all font-bold text-black bg-gray-50/30"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
@@ -101,11 +101,11 @@ export const LeadCaptureForm = ({ source = 'Website' }: { source?: string }) => 
           </div>
 
           <div className="relative group/field">
-            <label className="text-[10px] font-black uppercase text-gray-400 ml-4 mb-2 block tracking-widest">Referral Code (Optional)</label>
+            <label className="text-[10px] font-black uppercase text-gray-900 ml-4 mb-2 block tracking-widest">Referral Code (Optional)</label>
             <input
               type="text"
               placeholder="RUZANN2026"
-              className="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-gray-200 focus:border-purple-500 outline-none transition-all font-mono font-bold text-gray-700 bg-gray-50/10"
+              className="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-gray-200 focus:border-purple-500 outline-none transition-all font-mono font-bold text-black bg-gray-50/10"
               value={formData.referralCode}
               onChange={(e) => setFormData({...formData, referralCode: e.target.value})}
             />

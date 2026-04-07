@@ -207,30 +207,42 @@ export default function AdminCourseManagement() {
   };
 
   // EDIT
-  const openEdit = (course: any) => {
-    setEditingCourse(course);
+  const openEdit = async (course: any) => {
+    // Safety check: sometimes the list view might have limited fields
+    // We should fetch the full details to ensure modules are populated
+    let fullCourse = course;
+    try {
+        const res = await api.get(`/api/courses/${course._id}`);
+        if (res.data.success) {
+            fullCourse = res.data.data;
+        }
+    } catch (err) {
+        console.error("Failed to fetch full course details for editing", err);
+    }
+
+    setEditingCourse(fullCourse);
     setFormData({
-      title: course.title || "",
-      slug: course.slug || "",
-      regularPrice: course.regularPrice || 0,
-      offerPrice: course.offerPrice || course.pricePerSession || 0,
-      category: course.category?._id || course.category || "",
-      level: course.level || "Beginner",
-      language: course.language || "English",
-      totalLessons: course.totalLessons || course.numberOfSessions || 0,
-      totalDuration: course.totalDuration || "",
-      shortDescription: course.shortDescription || "",
-      description: course.description || "",
-      thumbnail: course.thumbnail || "",
-      pricePerSession: course.pricePerSession || 0,
-      numberOfSessions: course.numberOfSessions || 0,
-      ageGroup: course.ageGroup || "All",
-      courseType: course.courseType || "Group",
-      isPublished: course.isPublished,
-      isApproved: course.isApproved,
-      modules: course.modules || [],
+      title: fullCourse.title || "",
+      slug: fullCourse.slug || "",
+      regularPrice: fullCourse.regularPrice || 0,
+      offerPrice: fullCourse.offerPrice || fullCourse.pricePerSession || 0,
+      category: fullCourse.category?._id || fullCourse.category || "",
+      level: fullCourse.level || "Beginner",
+      language: fullCourse.language || "English",
+      totalLessons: fullCourse.totalLessons || fullCourse.numberOfSessions || 0,
+      totalDuration: fullCourse.totalDuration || "",
+      shortDescription: fullCourse.shortDescription || "",
+      description: fullCourse.description || "",
+      thumbnail: fullCourse.thumbnail || "",
+      pricePerSession: fullCourse.pricePerSession || 0,
+      numberOfSessions: fullCourse.numberOfSessions || 0,
+      ageGroup: fullCourse.ageGroup || "All",
+      courseType: fullCourse.courseType || "Group",
+      isPublished: fullCourse.isPublished,
+      isApproved: fullCourse.isApproved,
+      modules: fullCourse.modules || [],
     });
-    setImagePreview(course.thumbnail || "");
+    setImagePreview(fullCourse.thumbnail || "");
     setCurrentStep(1);
     setIsModalOpen(true);
   };
@@ -383,12 +395,12 @@ export default function AdminCourseManagement() {
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-800 mb-1 leading-tight line-clamp-1 truncate">{course.title}</h3>
-                <p className="text-sm text-gray-500 mb-4 line-clamp-2">By {course.teacher?.name || 'Administrator'}</p>
+                <p className="text-sm text-gray-500 mb-4 line-clamp-2">By {course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name || 'Administrator')}</p>
 
                 <div className="flex items-center gap-4 mb-6 border-t border-gray-100 pt-4">
                   <div>
                       <span className="block text-[10px] uppercase font-black text-gray-400 tracking-wider">Price</span>
-                      <span className="font-black text-secondary-600">₹{course.totalCoursePrice || course.offerPrice || course.pricePerSession}</span>
+                      <span className="font-black text-secondary-600">₹{course.totalCoursePrice || course.offerPrice}</span>
                   </div>
                   <div className="w-px h-8 bg-gray-200"></div>
                   <div>
@@ -507,7 +519,7 @@ export default function AdminCourseManagement() {
                       </select>
                     </div>
                     <div className="col-span-2 md:col-span-1">
-                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Number of Sessions</label>
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Number of Modules</label>
                       <input 
                         type="number" 
                         value={formData.numberOfSessions || ""} 
@@ -615,7 +627,7 @@ export default function AdminCourseManagement() {
                     <div className="flex justify-between items-center bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
                       <div>
                          <h3 className="font-black text-slate-800 text-lg">Curriculum Builder</h3>
-                         <p className="text-xs font-bold text-slate-500">Structure your course into modules and sessions.</p>
+                         <p className="text-xs font-bold text-slate-500">Structure your course into modules and lessons.</p>
                       </div>
                       <Button onClick={() => setIsAddingModule(true)} className="bg-slate-800 hover:bg-slate-900 text-white font-bold gap-2 rounded-xl">
                         <Plus size={16} /> Add Module
@@ -777,7 +789,7 @@ export default function AdminCourseManagement() {
                         </div>
                        <div>
                           <span className="block text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">Curriculum Details</span>
-                          <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.numberOfSessions} Sessions Total</span>
+                          <span className="font-bold text-slate-600">{formData.modules.length} Modules / {formData.numberOfSessions} Modules Total</span>
                         </div>
 
                         <div className="col-span-1 sm:col-span-2 mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">

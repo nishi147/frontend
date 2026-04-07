@@ -93,7 +93,7 @@ export default function AdminLiveClasses() {
                   <Clock className="w-4 h-4 text-secondary-400" /> {new Date(lc.scheduledDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
                 <p className="flex items-center gap-3 text-sm font-bold text-gray-400">
-                  <User className="w-4 h-4 text-secondary-400" /> {lc.teacher?.name || 'Academic Facilitator'}
+                  <User className="w-4 h-4 text-secondary-400" /> {lc.teacher?.systemCode || (lc.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : lc.teacher?.name || 'Academic Facilitator')}
                 </p>
               </div>
               <a href={lc.meetingLink} target="_blank" rel="noreferrer" className="block">

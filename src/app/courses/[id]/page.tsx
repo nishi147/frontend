@@ -22,6 +22,13 @@ export default function CourseDetailPage() {
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
   const [couponError, setCouponError] = useState('');
+  const [expandedModules, setExpandedModules] = useState<number[]>([0]);
+
+  const toggleModule = (index: number) => {
+    setExpandedModules(prev => 
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
   
   const typeFilter = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('type') || 'All' : 'All';
   const multiplier = typeFilter === '3:1' ? 0.8 : typeFilter === '5:1' ? 0.6 : typeFilter === 'Group' ? 0.5 : 1;
@@ -108,7 +115,7 @@ export default function CourseDetailPage() {
         amount: order.amount,
         currency: order.currency,
         name: "RUZANN",
-        description: `Enrollment for ${course.title} (${typeFilter})`,
+        description: `Enrollment for ${course.title} (${typeFilter}) - Modules`,
         order_id: order.id,
         handler: async function (response: any) {
           try {
@@ -157,7 +164,7 @@ export default function CourseDetailPage() {
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-16 h-16 border-4 border-primary-100 border-t-primary-500 rounded-full animate-spin" />
-        <p className="font-black text-gray-400 animate-pulse">Summoning course magic...</p>
+        <p className="font-black text-gray-900 animate-pulse">Summoning course magic...</p>
       </div>
     </div>
   );
@@ -166,7 +173,7 @@ export default function CourseDetailPage() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 text-center">
        <span className="text-8xl mb-6 last:">🎒</span>
        <h1 className="text-4xl font-black text-gray-800 mb-2">Oops! Course Not Found</h1>
-       <p className="text-gray-500 font-bold mb-8">The magic scroll for this course seems to be missing.</p>
+       <p className="text-gray-900 font-bold mb-8">The magic scroll for this course seems to be missing.</p>
        <Button onClick={() => router.push('/courses')}>Explore Other Courses</Button>
     </div>
   );
@@ -189,16 +196,16 @@ export default function CourseDetailPage() {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-md">{course.title}</h1>
-            <p className="text-lg md:text-xl text-gray-400 font-bold mb-10 max-w-3xl leading-relaxed">{course.description}</p>
+            <p className="text-lg md:text-xl text-gray-100 font-bold mb-10 max-w-3xl leading-relaxed whitespace-pre-wrap">{course.description}</p>
             
             <div className="flex flex-wrap items-center gap-8">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center font-black text-white text-2xl shadow-lg">
-                   {course.teacher?.name?.[0]}
+                   {(course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name))?.[0]}
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-black uppercase tracking-widest mb-1">Mentor</p>
-                  <p className="font-bold text-xl">{course.teacher?.name}</p>
+                  <p className="text-xs text-white/60 font-black uppercase tracking-widest mb-1">Mentor</p>
+                  <p className="font-bold text-xl">{course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name)}</p>
                 </div>
               </div>
               
@@ -206,7 +213,7 @@ export default function CourseDetailPage() {
               
               <div className="flex items-center gap-6">
                  <div>
-                   <p className="text-xs text-secondary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><BookOpen size={12} /> Sessions</p>
+                   <p className="text-xs text-secondary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><BookOpen size={12} /> Modules</p>
                    <p className="font-bold text-xl">{course.numberOfSessions}</p>
                  </div>
                  <div>
@@ -223,11 +230,11 @@ export default function CourseDetailPage() {
               <div className="absolute -top-4 -right-4 bg-[#F2643D] text-white px-6 py-2 rounded-2xl font-black text-sm shadow-xl animate-bounce">BEST SELLER</div>
               
               <div className="text-center mb-8 border-b border-gray-50 pb-8">
-                <div className="text-gray-400 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Session</div>
+                <div className="text-gray-900 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Module</div>
                 <div className="flex flex-col items-center gap-1 mb-2">
                    <div className="flex items-baseline gap-2">
                       <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{effectivePricePerSession}</span>
-                      <span className="text-sm font-black text-navy-400 uppercase tracking-widest">/ session</span>
+                      <span className="text-sm font-black text-gray-900 uppercase tracking-widest">/ module</span>
                    </div>
                 </div>
                 <div className="text-navy-700 font-bold text-sm bg-navy-50 inline-block px-8 py-3 rounded-full mt-4 border border-navy-100 shadow-sm">
@@ -236,7 +243,7 @@ export default function CourseDetailPage() {
               </div>
 
               <div className="mb-8">
-                <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                <label className="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-3">
                   Promo Code:
                 </label>
                 <div className="flex gap-2">
@@ -264,7 +271,7 @@ export default function CourseDetailPage() {
               </div>
 
               <div className="mb-8">
-                <label htmlFor="session-select" className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                <label htmlFor="session-select" className="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-3">
                   Pick your learning path:
                 </label>
                 <div className="relative group">
@@ -276,11 +283,11 @@ export default function CourseDetailPage() {
                   >
                     {Array.from({ length: course.numberOfSessions }, (_, i) => i + 1).map((num) => (
                       <option key={num} value={num}>
-                        {num === course.numberOfSessions ? `Full Course (${num} Sessions)` : `${num} ${num === 1 ? 'Magical Session' : 'Sessions'}`}
+                        {num === course.numberOfSessions ? `Full Course (${num} Modules)` : `${num} ${num === 1 ? 'Magical Module' : 'Modules'}`}
                       </option>
                     ))}
                   </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-primary-500 transition-colors">
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900 group-hover:text-primary-500 transition-colors">
                     <ChevronDown size={20} />
                   </div>
                 </div>
@@ -306,7 +313,7 @@ export default function CourseDetailPage() {
                   { icon: <CheckCircle className="text-green-500 w-5 h-5" />, text: "Certificate of Completion" },
                   { icon: <CheckCircle className="text-green-500 w-5 h-5" />, text: "Live Doubt Sessions" }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 text-gray-600 font-bold hover:translate-x-1 transition-transform cursor-default">
+                  <div key={idx} className="flex items-center gap-4 text-black font-bold hover:translate-x-1 transition-transform cursor-default">
                     <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-green-50">
                       {item.icon}
                     </div>
@@ -315,7 +322,7 @@ export default function CourseDetailPage() {
                 ))}
               </div>
               
-              <p className="mt-8 text-center text-[10px] font-black text-gray-300 uppercase tracking-widest leading-relaxed px-4">
+              <p className="mt-8 text-center text-[10px] font-black text-gray-900 uppercase tracking-widest leading-relaxed px-4">
                 Secure 256-bit SSL encrypted payment processing. Verified by RUZANN.
               </p>
             </Card>
@@ -334,41 +341,56 @@ export default function CourseDetailPage() {
           
           {course.modules && course.modules.length > 0 ? (
             <div className="flex flex-col gap-6">
-              {course.modules.map((m: any, i: number) => (
-                <div key={m._id} className="group bg-white rounded-[2.5rem] border-2 border-gray-50 p-8 hover:border-secondary-200 transition-all duration-500 hover:shadow-xl hover:shadow-secondary-100">
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="w-14 h-14 bg-secondary-50 text-secondary-500 rounded-2xl flex items-center justify-center font-black text-xl shadow-inner group-hover:scale-110 group-hover:bg-secondary-500 group-hover:text-white transition-all duration-500">
-                      {i + 1}
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-black text-navy-900 group-hover:text-secondary-600 transition-colors uppercase tracking-tight">{m.title}</h3>
-                      <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{m.lessons?.length || 0} Lessons</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col gap-3 pl-4 border-l-2 border-gray-50 ml-7 space-y-1">
-                    {m.lessons.map((l: any, idx: number) => (
-                      <div key={l._id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-all group/lesson cursor-pointer">
-                        <div className="flex items-center gap-4 font-bold text-gray-600 group-hover/lesson:text-navy-900">
-                          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs shadow-sm border border-gray-100 group-hover/lesson:border-secondary-200">
-                            {l.videoUrl ? <PlayCircle size={14} className="text-secondary-400" /> : <FileText size={14} className="text-accent-400" />}
-                          </div>
-                          <span>{l.title}</span>
+              {course.modules.map((m: any, i: number) => {
+                const isExpanded = expandedModules.includes(i);
+                return (
+                  <div key={m._id || i} className={`bg-white rounded-[2.5rem] border-2 transition-all duration-300 ${isExpanded ? 'border-primary-100 shadow-xl shadow-primary-50' : 'border-gray-50 hover:border-gray-200'}`}>
+                    <button 
+                      onClick={() => toggleModule(i)}
+                      className="w-full text-left p-8 flex items-center justify-between group"
+                    >
+                      <div className="flex items-center gap-6">
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl shadow-inner transition-all duration-500 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-gray-50 text-gray-900 group-hover:bg-primary-50 group-hover:text-primary-500'}`}>
+                          {i + 1}
                         </div>
-                        <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest group-hover/lesson:text-secondary-500 transition-colors">
-                          {l.videoUrl ? 'Video' : 'Lecture'}
-                        </span>
+                        <div>
+                          <h3 className={`text-2xl font-black transition-colors uppercase tracking-tight ${isExpanded ? 'text-primary-600' : 'text-navy-900 group-hover:text-primary-500'}`}>{m.title}</h3>
+                          <p className="text-xs font-black text-gray-900 uppercase tracking-widest">{m.lessons?.length || 0} Lessons</p>
+                        </div>
                       </div>
-                    ))}
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-gray-100 text-gray-900 group-hover:border-primary-200 group-hover:text-primary-500'}`}>
+                        <ChevronDown size={20} />
+                      </div>
+                    </button>
+                    
+                    {isExpanded && (
+                      <div className="px-8 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex flex-col gap-3 pl-4 border-l-2 border-primary-50 ml-7 space-y-1">
+                          {m.lessons.map((l: any, idx: number) => (
+                            <div key={l._id || idx} className="flex items-center justify-between p-4 rounded-2xl hover:bg-primary-50/50 transition-all group/lesson cursor-pointer">
+                              <div className="flex items-center gap-4 font-bold text-black group-hover/lesson:text-navy-900">
+                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs shadow-sm border border-gray-100 group-hover/lesson:border-primary-200">
+                                  {l.videoUrl ? <PlayCircle size={14} className="text-primary-700" /> : <FileText size={14} className="text-accent-400" />}
+                                </div>
+                                <span>{l.title}</span>
+                              </div>
+                              <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest group-hover/lesson:text-primary-500 transition-colors">
+                                {l.videoUrl ? 'Video' : 'Lecture'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
              <div className="bg-white p-12 rounded-[3.5rem] border-4 border-dashed border-gray-100 text-center flex flex-col items-center">
                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center text-4xl mb-6 grayscale opacity-50">📑</div>
-               <h4 className="text-2xl font-black text-gray-300 mb-2">Curriculum Under Construction</h4>
-               <p className="text-gray-400 font-bold max-w-sm">Our mentors are busy polishing the magic scrolls for this course. Check back soon!</p>
+               <h4 className="text-2xl font-black text-gray-900 mb-2">Curriculum Under Construction</h4>
+               <p className="text-gray-900 font-bold max-w-sm">Our mentors are busy polishing the magic scrolls for this course. Check back soon!</p>
              </div>
           )}
         </div>
@@ -384,20 +406,20 @@ export default function CourseDetailPage() {
            </div>
            
            <div className="p-2">
-             <h5 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-100 pb-4">Our Commitment</h5>
+             <h5 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6 border-b border-gray-100 pb-4">Our Commitment</h5>
              <div className="space-y-6">
                 <div className="flex gap-5">
                    <div className="w-12 h-12 flex-shrink-0 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">🏆</div>
                    <div>
                      <p className="font-black text-gray-800 text-sm mb-1 uppercase tracking-tight">Verified Content</p>
-                     <p className="text-gray-500 font-bold text-xs leading-relaxed">Expert-approved courses designed for maximum impact.</p>
+                     <p className="text-gray-900 font-bold text-xs leading-relaxed">Expert-approved courses designed for maximum impact.</p>
                    </div>
                 </div>
                 <div className="flex gap-5">
                    <div className="w-12 h-12 flex-shrink-0 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">🔒</div>
                    <div>
                      <p className="font-black text-gray-800 text-sm mb-1 uppercase tracking-tight">Secure Learning</p>
-                     <p className="text-gray-500 font-bold text-xs leading-relaxed">Safe and moderated environment for all superstars.</p>
+                     <p className="text-gray-900 font-bold text-xs leading-relaxed">Safe and moderated environment for all superstars.</p>
                    </div>
                 </div>
              </div>
