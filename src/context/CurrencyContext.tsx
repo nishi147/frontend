@@ -47,8 +47,10 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
           if (saved && available.includes(saved)) {
             setCurrency(saved);
           } else {
-            setCurrency(defaultCurr as Currency);
-            localStorage.setItem('ruzann_currency', defaultCurr);
+            // Favor INR as the ultimate default if it exists, otherwise use backend default
+            const ultimateDefault = (available.includes('INR') ? 'INR' : defaultCurr) as Currency;
+            setCurrency(ultimateDefault);
+            localStorage.setItem('ruzann_currency', ultimateDefault);
           }
         }
       } catch (err) {

@@ -38,6 +38,7 @@ const CurrencySwitcher = ({ isMobile = false }) => {
 export const Header = () => {
   const { user, logout } = useAuth();
   const { openIntroModal } = useIntroOffer();
+  const { formatPrice } = useCurrency();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = React.useState(false);
@@ -173,7 +174,7 @@ export const Header = () => {
                 onClick={openIntroModal}
                 className="px-4 py-2 sm:px-5 sm:py-2 rounded-full bg-[#FF7F50] hover:bg-[#e86e40] text-white text-[10px] sm:text-xs md:text-sm font-black transition-all shadow-md uppercase tracking-wide border-b-4 border-[#e86e40] active:border-b-0 active:translate-y-1"
               >
-                Trial ₹1
+                Trial {formatPrice(1)}
               </button>
             </div>
           ) : (
@@ -248,7 +249,7 @@ export const Header = () => {
                   onClick={() => { openIntroModal(); setIsMenuOpen(false); }}
                   className="w-full py-3 rounded-xl bg-[#FF7F50] text-white font-bold hover:bg-[#e86e40] transition-all shadow"
                 >
-                  Book Trial ₹1
+                  Book Trial {formatPrice(1)}
                 </button>
               </>
             ) : (

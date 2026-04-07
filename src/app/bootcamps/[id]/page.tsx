@@ -203,7 +203,7 @@ export default function BootcampDetailPage() {
               <div className="text-center mb-10 pb-10 border-b-4 border-slate-50">
                 <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner group-hover:scale-110 transition-transform">🎓</div>
                 <h3 className="text-3xl font-black text-slate-800 tracking-tighter mb-2">JOIN THE MISSION</h3>
-                <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Secure your seat at HQ</p>
+                <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Secure your seat at HQ</p>
               </div>
 
               <div className="space-y-6 mb-12">
@@ -216,7 +216,7 @@ export default function BootcampDetailPage() {
                      <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-slate-100/50">{item.icon}</div>
                      <div>
                        <p className="font-black text-slate-800 text-sm mb-1">{item.title}</p>
-                       <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">{item.sub}</p>
+                       <p className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">{item.sub}</p>
                      </div>
                    </div>
                  ))}
@@ -236,7 +236,7 @@ export default function BootcampDetailPage() {
               </Button>
 
               <div className="mt-8 text-center">
-                 <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] px-4">
+                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-4">
                    Encrypted Payment Gateway • Instant Access
                  </p>
               </div>

@@ -74,6 +74,8 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
   );
 };
 
+import { getThumbnailUrl } from '@/utils/image';
+
 const BootcampSection = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -196,58 +198,73 @@ const BootcampSection = () => {
 
   return (
     <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-      {bootcamps.map((bc: any) => (
-        <Card key={bc._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] transition-all duration-500 bg-white">
-          <div className="h-40 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2rem] bg-gradient-to-br from-purple-600 via-violet-700 to-indigo-900">
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <div className="absolute -top-10 -left-10 w-32 h-32 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
-              </div>
-              <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-2px] transition-transform duration-500">
-                <div className="text-5xl mb-2 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">🚀</div>
-                <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">BOOTCAMP</span>
+      {bootcamps.map((bc: any) => {
+        const thumbUrl = getThumbnailUrl(bc.image);
+        return (
+          <Card key={bc._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white">
+            <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
+              bc.image && bc.image !== 'no-image.jpg' ? 'bg-slate-100' : 'bg-gradient-to-br from-purple-600 via-violet-700 to-indigo-900'
+            }`}>
+              {/* Background Hero Image */}
+              {bc.image && bc.image !== 'no-image.jpg' ? (
+                <img 
+                  src={thumbUrl} 
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  alt={bc.title} 
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 opacity-20 pointer-events-none">
+                    <div className="absolute -top-5 -left-5 w-24 h-24 bg-white rounded-full blur-2xl opacity-30 animate-pulse" />
+                  </div>
+                  <div className="relative z-10">
+                    <div className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
+                  </div>
+                </>
+              )}
+            </div>
+            
+            <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
+              ₹{bc.price}
+            </div>
+
+            <CardContent className="p-3">
+              <div className="mb-2">
+                <h3 className="text-sm font-black text-slate-800 leading-tight mb-0.5 line-clamp-1">{bc.title}</h3>
+                <div className="flex items-center gap-1 text-yellow-500">
+                  <Star size={10} fill="currentColor" />
+                  <span className="text-[10px] font-black text-gray-800">5.0</span>
+                  <span className="text-[10px] font-medium text-gray-400">(2k+)</span>
                 </div>
               </div>
-          </div>
-          
-          <div className="absolute top-[8.5rem] right-4 bg-white px-4 py-1.5 rounded-xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-1 transition-transform duration-500">
-            <span className="text-slate-900 font-black text-xl md:text-2xl tracking-tight">₹{bc.price}</span>
-          </div>
 
-          <CardContent className="p-5 pt-8">
-            <h3 className="text-lg font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{bc.title}</h3>
-            <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-6 line-clamp-1 opacity-70">{bc.description}</p>
-            
-            <div className="space-y-3 mb-8 pl-1">
-              <div className="flex items-center gap-3 text-slate-700">
-                 <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
-                   <Calendar size={14} className="text-indigo-600" />
-                 </div>
-                 <span className="font-bold text-xs">{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+              <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <Calendar size={12} className="text-indigo-600" />
+                  <span className="font-bold text-[10px] truncate">{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-700">
+                  <UserIcon size={12} className="text-indigo-600" />
+                  <span className="font-bold text-[10px] uppercase truncate">{bc.instructor?.name || 'Top Mentor'}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-slate-700">
-                 <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
-                   <UserIcon size={14} className="text-indigo-600" />
-                 </div>
-                 <span className="font-bold text-xs uppercase line-clamp-1">{bc.instructor?.name || 'Top Mentor'}</span>
-              </div>
-            </div>
 
-            <div className="flex flex-col gap-3 mt-auto">
-              <Button 
-                onClick={() => handleEnrollBootcamp(bc)}
-                isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-                className="w-full py-4 rounded-full font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white border-none shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2"
-              >
-                Enroll Now <ArrowRight size={16} />
-              </Button>
-              <Link href={`/bootcamps/${bc._id}`} className="w-full py-3 rounded-full font-black text-[10px] uppercase tracking-widest text-indigo-500 border-2 border-indigo-50 hover:bg-indigo-50 transition-all text-center">
-                View Curriculum & Details
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+              <div className="flex flex-col gap-1.5">
+                <Button 
+                  onClick={() => handleEnrollBootcamp(bc)}
+                  isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                  className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-indigo-600 hover:bg-indigo-700 text-white border-none transition-all flex items-center justify-center gap-2"
+                >
+                  Enroll <ArrowRight size={12} />
+                </Button>
+                <Link href={`/bootcamps/${bc._id}`} className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
+                  Syllabus →
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
 
       <EnrollLeadModal 
         isOpen={isLeadModalOpen} 

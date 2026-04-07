@@ -5,14 +5,14 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Calendar, MapPin, ArrowRight, Rocket, Search, Link as LinkIcon } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Rocket, Search, Link as LinkIcon, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 
 import api from '@/utils/api';
-import Cookies from 'js-cookie';
+import { getThumbnailUrl } from '@/utils/image';
 
 export default function WorkshopsPage() {
   const { user } = useAuth();
@@ -166,76 +166,78 @@ export default function WorkshopsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((ws: any) => (
-                <Card key={ws._id} className="relative group overflow-visible border-none shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2.5rem] transition-all duration-500 bg-white">
-                  <div className={`h-48 relative overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-700 group-hover:scale-[1.02] rounded-t-[2.5rem] ${
-                    ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
-                    ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
-                    ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
-                    'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
-                  }`}>
-                    {/* Decorative Elements */}
-                    <div className="absolute inset-0 opacity-20 pointer-events-none">
-                      <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl opacity-30 animate-pulse" />
-                    </div>
+              {filtered.map((ws: any) => {
+                const thumbUrl = getThumbnailUrl(ws.image);
+                return (
+                  <Card key={ws._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white">
+                    <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
+                      ws.image && ws.image !== 'no-image.jpg' ? 'bg-slate-100' :
+                      ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
+                      ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
+                      ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
+                      'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
+                    }`}>
+                      {/* Background Hero Image */}
+                      {ws.image && ws.image !== 'no-image.jpg' ? (
+                        <img 
+                          src={thumbUrl} 
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                          alt={ws.title} 
+                        />
+                      ) : (
+                        <>
+                          {/* Decorative Elements */}
+                          <div className="absolute inset-0 opacity-20 pointer-events-none">
+                            <div className="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full blur-2xl opacity-30 animate-pulse" />
+                          </div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center transform group-hover:translate-y-[-3px] transition-transform duration-500">
-                      <div className="text-6xl mb-3 filter drop-shadow-[0_8px_8px_rgba(0,0,0,0.3)] group-hover:scale-110 transition-transform duration-500">
-                        {ws.title.toLowerCase().includes('space') ? '🚀' : 
-                         ws.title.toLowerCase().includes('robot') ? '🤖' : 
-                         ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
-                      </div>
-                      <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
-                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                          Workshop Event
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute top-[10rem] right-6 bg-white px-6 py-2 rounded-2xl shadow-xl z-10 flex items-center justify-center border border-gray-100 transform group-hover:-translate-y-2 transition-transform duration-500">
-                    <span className="text-slate-900 font-black text-3xl tracking-tight">₹{ws.price}</span>
-                  </div>
-
-                  <CardContent className="p-8 pt-10">
-                    <h3 className="text-xl font-black text-black uppercase tracking-wide mb-1 line-clamp-1">{ws.title}</h3>
-                    <p className="text-black font-bold text-sm leading-relaxed mb-8 line-clamp-3 h-15">{ws.description}</p>
-                    
-                    <div className="space-y-4 mb-10 pl-1">
-                      <div className="flex items-center gap-4 text-slate-700">
-                        <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                          <Calendar size={18} className="text-teal-600" />
-                        </div>
-                        <span className="font-bold text-[15px]">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                      </div>
-                      <div className="flex items-center gap-4 text-slate-700">
-                        <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                          <MapPin size={18} className="text-teal-600" />
-                        </div>
-                        <span className="font-bold text-[15px] uppercase line-clamp-1">{ws.venue}</span>
-                      </div>
-                      {ws.meetingLink && (
-                        <div className="flex items-center gap-4 text-slate-700">
-                           <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center">
-                             <LinkIcon size={18} className="text-teal-600" />
-                           </div>
-                           <a href={ws.meetingLink} target="_blank" rel="noopener noreferrer" className="font-bold text-[15px] text-primary-500 hover:text-primary-600 hover:underline line-clamp-1 truncate block" title={ws.meetingLink}>
-                              Join Meeting
-                           </a>
-                        </div>
+                          <div className="relative z-10">
+                            <div className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                              {ws.title.toLowerCase().includes('space') ? '🚀' : 
+                               ws.title.toLowerCase().includes('robot') ? '🤖' : 
+                               ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
+                            </div>
+                          </div>
+                        </>
                       )}
                     </div>
+                    
+                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
+                      ₹{ws.price}
+                    </div>
 
-                    <Button 
-                      onClick={() => handleBookWorkshop(ws)}
-                      isLoading={processingId === ws._id}
-                      className="w-full py-6 rounded-full font-black text-lg bg-[#F2643D] hover:bg-[#E0532C] text-white border-none shadow-lg shadow-[#F2643D]/30 transition-all flex items-center justify-center gap-2"
-                    >
-                      Book Seat <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                    <CardContent className="p-3">
+                      <div className="mb-2">
+                         <h3 className="text-sm font-black text-black leading-tight mb-0.5 line-clamp-1">{ws.title}</h3>
+                         <div className="flex items-center gap-1 text-yellow-500">
+                           <Star size={10} fill="currentColor" />
+                           <span className="text-[10px] font-black text-gray-800">5.0</span>
+                           <span className="text-[10px] font-medium text-gray-400">(4k+)</span>
+                         </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
+                        <div className="flex items-center gap-2 text-slate-700">
+                           <Calendar size={12} className="text-gray-400" />
+                           <span className="font-bold text-[10px] truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-700">
+                           <MapPin size={12} className="text-gray-400" />
+                           <span className="font-bold text-[10px] uppercase truncate">{ws.venue}</span>
+                        </div>
+                      </div>
+
+                      <Button 
+                        onClick={() => handleBookWorkshop(ws)}
+                        isLoading={processingId === ws._id}
+                        className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-slate-900 hover:bg-black text-white border-none transition-all flex items-center justify-center gap-2"
+                      >
+                        Book Seat <ArrowRight size={12} />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>
