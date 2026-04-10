@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import api from '@/utils/api';
 import { getThumbnailUrl } from '@/utils/image';
-import { Star, BookOpen, Users, Mail, Award, ArrowLeft, Calendar, MapPin, Rocket, Sparkles } from 'lucide-react';
+import { Star, BookOpen, Mail, Award, ArrowLeft, Calendar, MapPin, Rocket, Sparkles } from 'lucide-react';
 import CourseCard from '@/components/ui/CourseCard';
 import Link from 'next/link';
 
@@ -128,29 +128,27 @@ export default function TeacherDetailPage() {
                        {profile.specialization || "Magic Learning Guide"}
                     </p>
                     
-                    <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                       <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
-                          <Users className="text-primary-500" />
-                          <div className="text-left">
-                             <p className="text-xs font-black text-slate-400 uppercase tracking-tighter">Students</p>
-                             <p className="text-lg font-black text-slate-900">1,200+</p>
-                          </div>
-                       </div>
-                       <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
-                          <BookOpen className="text-secondary-500" />
-                          <div className="text-left">
-                             <p className="text-xs font-black text-slate-400 uppercase tracking-tighter">Experience</p>
-                             <p className="text-lg font-black text-slate-900">5+ Years</p>
-                          </div>
-                       </div>
-                       <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
-                          <Star className="text-yellow-400" fill="currentColor" />
-                          <div className="text-left">
-                             <p className="text-xs font-black text-slate-400 uppercase tracking-tighter">Rating</p>
-                             <p className="text-lg font-black text-slate-900">5.0/5.0</p>
-                          </div>
-                       </div>
-                    </div>
+                     {/* Stats will be shown when real data is available via admin/student reviews */}
+                     <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                        {courses.length > 0 && (
+                           <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
+                              <BookOpen className="text-secondary-500" />
+                              <div className="text-left">
+                                 <p className="text-xs font-black text-slate-400 uppercase tracking-tighter">Courses</p>
+                                 <p className="text-lg font-black text-slate-900">{courses.length}</p>
+                              </div>
+                           </div>
+                        )}
+                        {profile.specialization && (
+                           <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
+                              <Star className="text-yellow-400" fill="currentColor" />
+                              <div className="text-left">
+                                 <p className="text-xs font-black text-slate-400 uppercase tracking-tighter">Expertise</p>
+                                 <p className="text-lg font-black text-slate-900">{profile.specialization}</p>
+                              </div>
+                           </div>
+                        )}
+                     </div>
                  </div>
               </div>
            </div>
