@@ -190,12 +190,8 @@ export default function AdminCourseManagement() {
       formDataToSubmit.set('numberOfSessions', (formData.numberOfSessions > 0 ? formData.numberOfSessions : 1).toString());
 
       const response = await (editingCourse 
-        ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          })
-        : api.post('/api/courses', formDataToSubmit, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          }));
+        ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit)
+        : api.post('/api/courses', formDataToSubmit));
 
       if (response.data.success) {
         showToast(editingCourse ? "Course Updated!" : "Course Created!", "success");

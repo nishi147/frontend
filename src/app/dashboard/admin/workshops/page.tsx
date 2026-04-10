@@ -62,13 +62,9 @@ export default function AdminWorkshops() {
 
       let res;
       if (editingId) {
-        res = await api.put(`/api/workshops/${editingId}`, formDataToSubmit, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        res = await api.put(`/api/workshops/${editingId}`, formDataToSubmit);
       } else {
-        res = await api.post('/api/workshops', formDataToSubmit, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        res = await api.post('/api/workshops', formDataToSubmit);
       }
       if (res.data.success) {
         setIsModalOpen(false);

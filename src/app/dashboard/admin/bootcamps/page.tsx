@@ -103,13 +103,9 @@ export default function AdminBootcamps() {
 
       let res;
       if (editingId) {
-        res = await api.put(`/api/bootcamps/${editingId}`, formDataToSubmit, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        res = await api.put(`/api/bootcamps/${editingId}`, formDataToSubmit);
       } else {
-        res = await api.post('/api/bootcamps', formDataToSubmit, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        res = await api.post('/api/bootcamps', formDataToSubmit);
       }
 
       if (res.data.success) {
