@@ -212,11 +212,11 @@ const BootcampSection = () => {
   if (bootcamps.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 md:px-0">
+    <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
       {bootcamps.map((bc: any) => {
         const thumbUrl = getThumbnailUrl(bc.image);
         return (
-          <div key={bc._id} className="w-full flex-none group">
+          <div key={bc._id} className="w-[85vw] md:w-full flex-none group">
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
                 {bc.studentsEnrolled > 0 && (
@@ -486,11 +486,11 @@ const WorkshopSection = () => {
   );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 md:px-0">
+    <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
       {workshops.map((ws: any) => {
         const thumbUrl = getThumbnailUrl(ws.image);
         return (
-          <div key={ws._id} className="w-full flex-none group">
+          <div key={ws._id} className="w-[85vw] md:w-full flex-none group">
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
                 {ws.studentsEnrolled > 0 && (
