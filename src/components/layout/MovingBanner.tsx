@@ -8,9 +8,9 @@ import { useCurrency } from '@/context/CurrencyContext';
 export const MovingBanner = () => {
   const { formatPrice } = useCurrency();
   const messages = [
-    { text: "Winter Coding Bootcamp is LIVE! 🚀", icon: Rocket, color: "text-white" },
+    { text: "Unleash Your Child's Coding Potential! 🚀", icon: Rocket, color: "text-white" },
     { text: "Join 10,000+ Happy Explorers! ✨", icon: Sparkles, color: "text-yellow-300" },
-    { text: `Get your First Trial Session for just ${formatPrice(1)} 🎁`, icon: Trophy, color: "text-white" },
+    { text: `Get your First Trial Session for just ${formatPrice(99)} 🎁`, icon: Trophy, color: "text-white" },
     { text: "New Courses in AI & Robotics! 🤖", icon: Star, color: "text-secondary-300" },
     { text: "Learning is Fun with RUZANN! 🎨", icon: Sparkles, color: "text-white" },
   ];
