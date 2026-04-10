@@ -206,71 +206,71 @@ export default function TeacherDetailPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                  {workshops.map((ws: any) => (
-                    <Card key={ws._id} className="group h-full border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col bg-white overflow-hidden relative border-t-8 border-t-accent-500 hover:-translate-y-2">
-                       <CardContent className="p-8 flex flex-col h-full">
-                          <div className="flex justify-between items-start mb-6">
-                             <div className="w-16 h-16 bg-accent-50 rounded-2xl flex items-center justify-center text-4xl">
-                                🎟️
-                             </div>
-                             <div className="bg-accent-100 text-accent-700 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                Workshop
-                             </div>
-                          </div>
-                          
-                          <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-2">{ws.title}</h3>
-                          <div className="space-y-3 mb-8 text-slate-500 font-bold">
-                             <div className="flex items-center gap-3">
-                                <Calendar size={18} className="text-accent-400" />
-                                <span>{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
-                             </div>
-                             <div className="flex items-center gap-3">
-                                <MapPin size={18} className="text-accent-400" />
-                                <span>{ws.venue}</span>
-                             </div>
-                          </div>
+                    <Link key={ws._id} href="/#workshops" className="block group">
+                     <Card className="h-full border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col bg-white overflow-hidden relative border-t-8 border-t-accent-500 hover:-translate-y-2 cursor-pointer">
+                        <CardContent className="p-8 flex flex-col h-full">
+                           <div className="flex justify-between items-start mb-6">
+                              <div className="w-16 h-16 bg-accent-50 rounded-2xl flex items-center justify-center text-4xl">
+                                 🎟️
+                              </div>
+                              <div className="bg-accent-100 text-accent-700 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                 Workshop
+                              </div>
+                           </div>
+                           
+                           <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-2">{ws.title}</h3>
+                           <div className="space-y-3 mb-8 text-slate-500 font-bold">
+                              <div className="flex items-center gap-3">
+                                 <Calendar size={18} className="text-accent-400" />
+                                 <span>{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                 <MapPin size={18} className="text-accent-400" />
+                                 <span>{ws.venue}</span>
+                              </div>
+                           </div>
 
-                          <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                             <div className="text-2xl font-black text-slate-900">₹{ws.price}</div>
-                             <Link href="/#workshops">
-                                <Button className="bg-primary-500 rounded-2xl font-black">Book Seat →</Button>
-                             </Link>
-                          </div>
-                       </CardContent>
-                    </Card>
+                           <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                              <div className="text-2xl font-black text-slate-900">₹{ws.price}</div>
+                              <div className="bg-primary-500 text-white px-4 py-2 rounded-2xl font-black text-sm group-hover:bg-primary-600 transition-colors">Book Seat →</div>
+                           </div>
+                        </CardContent>
+                     </Card>
+                    </Link>
                  ))}
 
                  {bootcamps.map((bc: any) => (
-                    <Card key={bc._id} className="group h-full border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col bg-white overflow-hidden relative border-t-8 border-t-indigo-500 hover:-translate-y-2">
-                       <CardContent className="p-8 flex flex-col h-full">
-                          <div className="flex justify-between items-start mb-6">
-                             <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-4xl">
-                                🚀
-                             </div>
-                             <div className="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                Bootcamp
-                             </div>
-                          </div>
-                          
-                          <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-2">{bc.title}</h3>
-                          <div className="space-y-3 mb-8 text-slate-500 font-bold">
-                             <div className="flex items-center gap-3">
-                                <Calendar size={18} className="text-indigo-400" />
-                                <span>{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
-                             </div>
-                             <div className="flex items-center gap-3 text-sm">
-                                <Rocket size={18} className="text-indigo-400" />
-                                <span>Intensive Masterclass</span>
-                             </div>
-                          </div>
+                    <Link key={bc._id} href="/#bootcamps" className="block group">
+                     <Card className="h-full border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col bg-white overflow-hidden relative border-t-8 border-t-indigo-500 hover:-translate-y-2 cursor-pointer">
+                        <CardContent className="p-8 flex flex-col h-full">
+                           <div className="flex justify-between items-start mb-6">
+                              <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-4xl">
+                                 🚀
+                              </div>
+                              <div className="bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                 Bootcamp
+                              </div>
+                           </div>
+                           
+                           <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-2">{bc.title}</h3>
+                           <div className="space-y-3 mb-8 text-slate-500 font-bold">
+                              <div className="flex items-center gap-3">
+                                 <Calendar size={18} className="text-indigo-400" />
+                                 <span>{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}</span>
+                              </div>
+                              <div className="flex items-center gap-3 text-sm">
+                                 <Rocket size={18} className="text-indigo-400" />
+                                 <span>Intensive Masterclass</span>
+                              </div>
+                           </div>
 
-                          <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                             <div className="text-2xl font-black text-slate-900">₹{bc.price}</div>
-                             <Link href="/#bootcamps">
-                                <Button className="bg-primary-500 rounded-2xl font-black">Go Live →</Button>
-                             </Link>
-                          </div>
-                       </CardContent>
-                    </Card>
+                           <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                              <div className="text-2xl font-black text-slate-900">₹{bc.price}</div>
+                              <div className="bg-primary-500 text-white px-4 py-2 rounded-2xl font-black text-sm group-hover:bg-primary-600 transition-colors">Go Live →</div>
+                           </div>
+                        </CardContent>
+                     </Card>
+                    </Link>
                  ))}
               </div>
            </section>
