@@ -1,5 +1,4 @@
 "use client";
-
 import React from 'react';
 import Link from 'next/link';
 import { getThumbnailUrl } from '@/utils/image';
@@ -46,8 +45,17 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
   const displayType = typeFilter === 'All' ? course.courseType : typeFilter;
 
   return (
-    <div className={`w-full flex-none group ${className}`}>
-      <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
+    <Link
+      href={`/courses/${course._id}?type=${typeFilter}`}
+      className={`w-full flex-none group block`}
+      onClick={() => trackEvent('course_details_click', {
+        course_id: course._id,
+        course_title: course.title,
+        category: course.category?.name,
+        age_group: course.ageGroup
+      })}
+    >
+      <Card className={`h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden cursor-pointer ${className}`}>
         
         {/* BrightChamps Style Header: light blue, centered icon */}
         <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
@@ -123,23 +131,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
                  </div>
               </div>
               
-              <Link 
-                href={`/courses/${course._id}?type=${typeFilter}`}
-                onClick={() => trackEvent('course_details_click', { 
-                  course_id: course._id, 
-                  course_title: course.title,
-                  category: course.category?.name,
-                  age_group: course.ageGroup
-                })}
-              >
-                <Button variant="outline" className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none">
-                  Enroll Now
-                </Button>
-              </Link>
+              <div className="w-full rounded-full py-3 border-2 border-primary-500 text-primary-500 group-hover:bg-primary-500 group-hover:text-white font-bold text-base transition-colors mt-2 text-center">
+                Enroll Now
+              </div>
            </div>
         </CardContent>
       </Card>
-    </div>
+    </Link>
   );
 };
 

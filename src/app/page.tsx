@@ -217,7 +217,7 @@ const BootcampSection = () => {
       {bootcamps.map((bc: any) => {
         const thumbUrl = getThumbnailUrl(bc.image);
         return (
-          <div key={bc._id} className="w-[85vw] md:w-full flex-none group">
+          <div key={bc._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleEnrollBootcamp(bc)}>
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
                 {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
@@ -286,7 +286,6 @@ const BootcampSection = () => {
                   
                   <Button 
                     variant="outline"
-                    onClick={() => handleEnrollBootcamp(bc)}
                     isLoading={isProcessing && pendingBootcamp?._id === bc._id}
                     className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
                   >
@@ -494,7 +493,7 @@ const WorkshopSection = () => {
       {workshops.map((ws: any) => {
         const thumbUrl = getThumbnailUrl(ws.image);
         return (
-          <div key={ws._id} className="w-[85vw] md:w-full flex-none group">
+          <div key={ws._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleBookWorkshop(ws)}>
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
                 {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
@@ -563,7 +562,6 @@ const WorkshopSection = () => {
                   
                   <Button 
                     variant="outline"
-                    onClick={() => handleBookWorkshop(ws)}
                     isLoading={isProcessing && activeWorkshopForSlots?._id === ws._id}
                     className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
                   >
