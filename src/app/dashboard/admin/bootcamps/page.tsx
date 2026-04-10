@@ -39,6 +39,8 @@ export default function AdminBootcamps() {
     venue: '',
     meetingLink: '',
     image: '',
+    rating: 0,
+    showStudentsEnrolled: false,
     modules: [] as Module[],
   });
 
@@ -72,7 +74,7 @@ export default function AdminBootcamps() {
   }, []);
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '', modules: [] });
+    setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false, modules: [] });
     setEditingId(null);
     setCurrentStep(1);
     setImageFile(null);
@@ -135,6 +137,8 @@ export default function AdminBootcamps() {
       venue: bc.venue,
       meetingLink: bc.meetingLink || '',
       image: bc.image || '',
+      rating: bc.rating || 0,
+      showStudentsEnrolled: bc.showStudentsEnrolled || false,
       modules: bc.modules || [],
     });
     setImagePreview(bc.image || "");
@@ -316,6 +320,14 @@ export default function AdminBootcamps() {
                     <div className="col-span-2 space-y-2">
                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">HQ Access Link (Meeting Link)</label>
                        <input placeholder="https://zoom.us/j/..." value={formData.meetingLink} className="w-full p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-bold text-slate-500 outline-none focus:border-indigo-400 focus:bg-white transition-all" onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })} />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Launch Rating (0-5)</label>
+                       <input type="number" step="0.1" min="0" max="5" value={formData.rating} className="w-full p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all" onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })} />
+                    </div>
+                    <div className="space-y-2 flex items-center gap-3 pt-6">
+                       <input type="checkbox" id="bcShowEnrolled" checked={formData.showStudentsEnrolled} className="w-6 h-6 rounded-lg accent-indigo-600 cursor-pointer" onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })} />
+                       <label htmlFor="bcShowEnrolled" className="text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer mt-1">Show Enrolled Count on Frontend</label>
                     </div>
                  </div>
                )}

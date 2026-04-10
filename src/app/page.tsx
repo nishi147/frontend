@@ -20,6 +20,7 @@ import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 import { trackEvent } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
+import { BlogSection } from '@/components/sections/BlogSection';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -219,7 +220,7 @@ const BootcampSection = () => {
           <div key={bc._id} className="w-[85vw] md:w-full flex-none group">
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
-                {bc.studentsEnrolled > 0 && (
+                {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
                 <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
                   <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     <span className="text-[8px]">👦</span>
@@ -246,14 +247,17 @@ const BootcampSection = () => {
                 <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{bc.title}</h3>
                 
                 <div className="flex items-center justify-between mb-3 text-sm">
+                  {bc.rating > 0 && (
                   <div className="flex items-center gap-1 text-gray-600">
                     <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                    <span className="font-bold text-black">4.95</span>
-                    <span className="text-xs text-gray-500">(1.2k ratings)</span>
+                    <span className="font-bold text-black">{bc.rating.toFixed(1)}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-black font-bold text-xs">
+                  )}
+                  {bc.showStudentsEnrolled && (
+                  <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
                     <span className="text-gray-600">👤</span> {bc.studentsEnrolled || 0} students
                   </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
@@ -493,7 +497,7 @@ const WorkshopSection = () => {
           <div key={ws._id} className="w-[85vw] md:w-full flex-none group">
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
               <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
-                {ws.studentsEnrolled > 0 && (
+                {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
                 <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
                   <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     <span className="text-[8px]">👦</span>
@@ -522,14 +526,17 @@ const WorkshopSection = () => {
                 <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{ws.title}</h3>
                 
                 <div className="flex items-center justify-between mb-3 text-sm">
+                  {ws.rating > 0 && (
                   <div className="flex items-center gap-1 text-gray-600">
                     <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                    <span className="font-bold text-black">4.88</span>
-                    <span className="text-xs text-gray-500">(800+ ratings)</span>
+                    <span className="font-bold text-black">{ws.rating.toFixed(1)}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-black font-bold text-xs">
+                  )}
+                  {ws.showStudentsEnrolled && (
+                  <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
                     <span className="text-gray-600">👤</span> {ws.studentsEnrolled || 0} students
                   </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
@@ -1127,10 +1134,10 @@ export default function Home() {
            </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
            {loadingMentors ? (
              [1,2,3,4].map(i => (
-               <div key={i} className="h-48 rounded-2xl bg-gray-50 animate-pulse border-2 border-gray-100" />
+               <div key={i} className="min-w-[280px] md:min-w-0 h-48 rounded-2xl bg-gray-50 animate-pulse border-2 border-gray-100 flex-none" />
              ))
            ) : mentors.length === 0 ? (
              <div className="col-span-full text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
@@ -1141,7 +1148,7 @@ export default function Home() {
                const bgColors = ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'];
                const bgColor = bgColors[i % bgColors.length];
                return (
-                 <div key={mentor._id} className="bg-white border-2 border-gray-100 rounded-2xl p-5 text-center hover:border-primary-300 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-xl shadow-primary-100">
+                 <Link href={`/teachers/${mentor._id}`} key={mentor._id} className="min-w-[280px] md:min-w-0 flex-none bg-white border-2 border-gray-100 rounded-2xl p-5 text-center hover:border-primary-300 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-xl shadow-primary-100">
                    <div className={`w-24 h-24 ${bgColor} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform overflow-hidden relative border-4 border-white shadow-sm`}>
                      {mentor.profilePicture ? (
                        <img 
@@ -1157,7 +1164,7 @@ export default function Home() {
                    <p className="text-gray-500 font-bold mb-2 uppercase tracking-tight text-sm">
                      {mentor.specialization || "Expert Mentor"}
                    </p>
-                 </div>
+                 </Link>
                );
              })
            )}
@@ -1167,6 +1174,7 @@ export default function Home() {
         </Link>
       </section>
 
+      <BlogSection />
       <ContactSection />
       
       {/* Bottom AdSense Unit 

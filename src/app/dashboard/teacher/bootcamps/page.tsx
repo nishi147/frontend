@@ -25,6 +25,8 @@ export default function TeacherBootcamps() {
     venue: '',
     meetingLink: '',
     image: '',
+    rating: 0,
+    showStudentsEnrolled: false,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -74,7 +76,7 @@ export default function TeacherBootcamps() {
       if (res.data.success) {
         setIsModalOpen(false);
         setEditingId(null);
-        setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '' });
+        setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
         setImageFile(null);
         setImagePreview("");
         fetchBootcamps();
@@ -96,6 +98,8 @@ export default function TeacherBootcamps() {
       venue: bc.venue,
       meetingLink: bc.meetingLink || '',
       image: bc.image || '',
+      rating: bc.rating || 0,
+      showStudentsEnrolled: bc.showStudentsEnrolled || false,
     });
     setImagePreview(bc.image || "");
     setImageFile(null);
@@ -123,7 +127,7 @@ export default function TeacherBootcamps() {
         </div>
         <Button onClick={() => {
           setEditingId(null);
-          setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '' });
+          setFormData({ title: '', description: '', date: '', endDate: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
           setImageFile(null);
           setImagePreview("");
           setIsModalOpen(true);
@@ -260,6 +264,16 @@ export default function TeacherBootcamps() {
                 className="w-full p-4 border-2 rounded-2xl focus:border-indigo-500 outline-none font-bold text-slate-700 bg-slate-50 transition-all mb-4"
                 value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
               />
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Bootcamp Rating (0-5)</label>
+                   <input type="number" step="0.1" min="0" max="5" value={formData.rating} className="w-full p-4 border-2 rounded-2xl focus:border-indigo-500 outline-none font-bold text-slate-700 bg-slate-50 transition-all" onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })} />
+                </div>
+                <div className="flex items-center gap-2 pt-6">
+                   <input type="checkbox" id="teacherBcShowEnrolled" checked={formData.showStudentsEnrolled} className="w-5 h-5 rounded accent-indigo-600" onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })} />
+                   <label htmlFor="teacherBcShowEnrolled" className="text-[10px] font-black uppercase tracking-widest text-slate-400 cursor-pointer">Show Enrolled</label>
+                </div>
+              </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Bootcamp Image</label>
                 <input 

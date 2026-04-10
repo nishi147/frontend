@@ -73,7 +73,7 @@ export default function TeachersPage() {
             <p className="text-gray-500 font-bold max-w-2xl mx-auto">Learn from verified professionals who are passionate about teaching kids.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {loadingMentors ? (
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="h-64 rounded-3xl bg-gray-50 animate-pulse border-2 border-gray-100" />
@@ -88,8 +88,9 @@ export default function TeachersPage() {
                 const bgColors = ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'];
                 const bgColor = bgColors[i % bgColors.length];
                 return (
-                  <Card key={mentor._id} className="group bg-white border-2 border-gray-100 rounded-[2.5rem] p-8 text-center hover:border-primary-300 transition-all cursor-pointer hover:-translate-y-2 hover:shadow-2xl shadow-primary-100 overflow-hidden relative">
-                    <div className={`w-32 h-32 ${bgColor} rounded-full flex items-center justify-center text-6xl mx-auto mb-6 group-hover:scale-110 transition-transform overflow-hidden relative border-8 border-white shadow-md`}>
+                  <Link href={`/teachers/${mentor._id}`} key={mentor._id}>
+                    <Card className="group bg-white border-2 border-gray-100 rounded-[1.5rem] md:rounded-[2.5rem] p-4 md:p-8 text-center hover:border-primary-300 transition-all cursor-pointer hover:-translate-y-2 hover:shadow-2xl shadow-primary-100 overflow-hidden relative">
+                    <div className={`w-20 h-20 md:w-32 md:h-32 ${bgColor} rounded-full flex items-center justify-center text-4xl md:text-6xl mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform overflow-hidden relative border-4 md:border-8 border-white shadow-md`}>
                       {mentor.profilePicture ? (
                         <img 
                           src={getThumbnailUrl(mentor.profilePicture)} 
@@ -100,11 +101,12 @@ export default function TeachersPage() {
                         <span className="font-baloo text-primary-600 font-black">{mentor.name[0]}</span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-black text-gray-800 mb-2">{mentor.name}</h3>
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-[10px] font-black uppercase tracking-widest">
+                    <h3 className="text-lg md:text-2xl font-black text-gray-800 mb-1 md:mb-2">{mentor.name}</h3>
+                    <div className="inline-block px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-primary-50 text-primary-600 text-[8px] md:text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
                       {mentor.specialization || "Expert Mentor"}
                     </div>
                   </Card>
+                </Link>
                 );
               })
             )}

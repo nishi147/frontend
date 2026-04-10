@@ -233,10 +233,12 @@ export default function CourseDetailPage() {
                    <p className="text-xs text-secondary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><BookOpen size={12} /> Modules</p>
                    <p className="font-bold text-xl">{course.numberOfSessions}</p>
                  </div>
+                 {course.rating > 0 && (
                  <div>
                    <p className="text-xs text-primary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><Star size={12} fill="currentColor" /> Rating</p>
-                   <p className="font-bold text-xl">5.0</p>
+                   <p className="font-bold text-xl">{course.rating.toFixed(1)}</p>
                  </div>
+                 )}
               </div>
             </div>
           </div>

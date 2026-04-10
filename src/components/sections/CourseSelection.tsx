@@ -24,6 +24,7 @@ interface Course {
   courseType: string;
   rating: number;
   studentsEnrolled: number;
+  showStudentsEnrolled: boolean;
   numberOfSessions: number;
   pricePerSession: number;
   totalCoursePrice: number;

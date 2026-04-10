@@ -59,6 +59,8 @@ export default function CreateCoursePage() {
     thumbnail: "",
     pricePerSession: 0,
     numberOfSessions: 0,
+    rating: 0,
+    showStudentsEnrolled: false,
     isPublished: true,
     modules: [] as Module[],
   });
@@ -232,6 +234,16 @@ export default function CreateCoursePage() {
                     <div>
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block ml-1">Offer Price (₹)</label>
                       <input type="number" value={formData.offerPrice} className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-black text-secondary-600 transition-all" onChange={(e) => setFormData({ ...formData, offerPrice: Number(e.target.value) })} />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block ml-1">Course Rating (0-5)</label>
+                      <input type="number" step="0.1" min="0" max="5" value={formData.rating} className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-bold text-slate-800 transition-all font-baloo" onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })} />
+                    </div>
+                    
+                    <div className="flex items-center gap-3 pt-6">
+                      <input type="checkbox" id="showEnrolled" checked={formData.showStudentsEnrolled} className="w-6 h-6 rounded-lg accent-secondary-500 cursor-pointer" onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })} />
+                      <label htmlFor="showEnrolled" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] cursor-pointer">Show Enrolled Count</label>
                     </div>
                     
                     <div className="col-span-2">

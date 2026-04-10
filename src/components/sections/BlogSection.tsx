@@ -7,87 +7,40 @@ import { Play, ArrowRight, BookOpen, Clock, User, Star, Quote, X } from 'lucide-
 import Link from 'next/link';
 import api from '@/utils/api';
 
-const BLOG_POSTS = [
-  {
-    id: 1,
-    title: "Why Coding is the New Magic for Kids 🪄",
-    excerpt: "Discover how learning to code empowers children to create, innovate, and solve real-world problems while having immense fun.",
-    image: "/blog_post_coding_kids_1774005427109.png",
-    author: "Sarah Chen",
-    date: "March 15, 2024",
-    readTime: "5 min read",
-    tag: "Coding"
-  },
-  {
-    id: 2,
-    title: "Building Robots: A Journey of Discovery 🤖",
-    excerpt: "From basic circuits to complex logic, see how our robotics workshops are shaping the engineers of tomorrow.",
-    image: "/blog_post_robotics_fun_1774005452675.png",
-    author: "David Miller",
-    date: "March 10, 2024",
-    readTime: "4 min read",
-    tag: "Robotics"
-  },
-  {
-    id: 3,
-    title: "AI for Kids: De-mystifying the Future 🧠",
-    excerpt: "Is AI too complex for children? Not with RUZANN! Explore our unique approach to teaching machine learning through play.",
-    image: "/blog_post_ai_future_1774005471755.png",
-    author: "Elena Rodriguez",
-    date: "March 05, 2024",
-    readTime: "6 min read",
-    tag: "AI & ML"
-  }
-];
-
-const STUDENT_VIDEOS = [
-  {
-    id: 1,
-    title: "Aarav's First Game!",
-    student: "Aarav, Age 10",
-    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=400",
-    description: "Watch how Aarav built a fully functional space invader game in just 4 weeks! 🚀"
-  },
-  {
-    id: 2,
-    title: "Zoe's Robot Workshop",
-    student: "Zoe, Age 8",
-    thumbnail: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=400",
-    description: "Zoe showcases her custom-built line follower robot. Mechanical magic! 🤖"
-  },
-  {
-    id: 3,
-    title: "AI Art by Kabir",
-    student: "Kabir, Age 12",
-    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=400",
-    description: "Kabir explains how he used Python and AI to generate amazing futuristic landscapes. 🎨"
-  }
-];
-
 export const BlogSection = () => {
   const [activeVideo, setActiveVideo] = useState<any>(null);
   const [blogs, setBlogs] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const res = await api.get('/api/blogs');
         if (res.data.success && res.data.data.length > 0) {
-          setBlogs(res.data.data.map((b: any) => ({
-            ...b,
-            id: b._id,
-            tag: b.category // Map category to tag for UI
-          })));
-        } else {
-          setBlogs(BLOG_POSTS);
+          // Only show published blogs by default
+          const publishedBlogs = res.data.data.filter((b: any) => b.isPublished !== false);
+          
+          if (publishedBlogs.length > 0) {
+            setBlogs(publishedBlogs.map((b: any) => ({
+              ...b,
+              id: b._id,
+              tag: b.category || 'General',
+              author: b.author || 'Ruzann Team',
+              readTime: b.readTime || '5 min read'
+            })));
+          }
         }
       } catch (error) {
         console.error("Error fetching blogs:", error);
-        setBlogs(BLOG_POSTS);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchBlogs();
   }, []);
+
+  if (isLoading) return null;
+  if (blogs.length === 0) return null;
 
   const VideoModal = ({ video, onClose }: { video: any, onClose: () => void }) => {
     if (!video) return null;

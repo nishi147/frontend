@@ -52,6 +52,8 @@ export default function AdminCourseManagement() {
     numberOfSessions: 0,
     ageGroup: "All",
     courseType: "Group",
+    rating: 0,
+    showStudentsEnrolled: false,
     isPublished: true,
     isApproved: true,
     modules: [] as Module[],
@@ -128,6 +130,8 @@ export default function AdminCourseManagement() {
       numberOfSessions: 0,
       ageGroup: "All",
       courseType: "Group",
+      rating: 0,
+      showStudentsEnrolled: false,
       isPublished: true,
       isApproved: true,
       modules: [],
@@ -160,49 +164,49 @@ export default function AdminCourseManagement() {
     }
 
     try {
-        const formDataToSubmit = new FormData();
-        
-        // Append all regular fields
-        Object.keys(formData).forEach(key => {
-          if (key === 'modules') {
-            formDataToSubmit.append('modules', JSON.stringify(formData.modules));
-          } else if (key === 'thumbnail') {
-            // Only append if it's a string (URL) and no file is selected
-            if (typeof formData.thumbnail === 'string' && !imageFile) {
-              formDataToSubmit.append('thumbnail', formData.thumbnail);
-            }
-          } else {
-            formDataToSubmit.append(key, (formData as any)[key]);
+      const formDataToSubmit = new FormData();
+      
+      // Append all regular fields
+      Object.keys(formData).forEach(key => {
+        if (key === 'modules') {
+          formDataToSubmit.append('modules', JSON.stringify(formData.modules));
+        } else if (key === 'thumbnail') {
+          // Only append if it's a string (URL) and no file is selected
+          if (typeof formData.thumbnail === 'string' && !imageFile) {
+            formDataToSubmit.append('thumbnail', formData.thumbnail);
           }
-        });
-
-        // Append file if selected
-        if (imageFile) {
-          formDataToSubmit.append('thumbnail', imageFile);
+        } else {
+          formDataToSubmit.append(key, (formData as any)[key]);
         }
+      });
 
-        // Price calculations
-        formDataToSubmit.set('pricePerSession', formData.offerPrice.toString());
-        formDataToSubmit.set('numberOfSessions', (formData.numberOfSessions > 0 ? formData.numberOfSessions : 1).toString());
+      // Append file if selected
+      if (imageFile) {
+        formDataToSubmit.append('thumbnail', imageFile);
+      }
 
-        const response = await (editingCourse 
-          ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit, {
-              headers: { 'Content-Type': 'multipart/form-data' }
-            })
-          : api.post('/api/courses', formDataToSubmit, {
-              headers: { 'Content-Type': 'multipart/form-data' }
-            }));
+      // Price calculations
+      formDataToSubmit.set('pricePerSession', formData.offerPrice.toString());
+      formDataToSubmit.set('numberOfSessions', (formData.numberOfSessions > 0 ? formData.numberOfSessions : 1).toString());
 
-        if (response.data.success) {
-          showToast(editingCourse ? "Course Updated!" : "Course Created!", "success");
-          setIsModalOpen(false);
-          resetForm();
-          fetchCourses();
-        }
+      const response = await (editingCourse 
+        ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
+        : api.post('/api/courses', formDataToSubmit, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          }));
+
+      if (response.data.success) {
+        showToast(editingCourse ? "Course Updated!" : "Course Created!", "success");
+        setIsModalOpen(false);
+        resetForm();
+        fetchCourses();
+      }
     } catch (err: any) {
-        console.error("Course Submission Error:", err.response?.data || err.message);
-        const errorMsg = err.response?.data?.message || err.response?.data?.error || "Check all required fields";
-        showToast(`Error: ${errorMsg}`, "error");
+      console.error("Course Submission Error:", err.response?.data || err.message);
+      const errorMsg = err.response?.data?.message || err.response?.data?.error || "Check all required fields";
+      showToast(`Error: ${errorMsg}`, "error");
     }
   };
 
@@ -238,6 +242,8 @@ export default function AdminCourseManagement() {
       numberOfSessions: fullCourse.numberOfSessions || 0,
       ageGroup: fullCourse.ageGroup || "All",
       courseType: fullCourse.courseType || "Group",
+      rating: fullCourse.rating || 0,
+      showStudentsEnrolled: fullCourse.showStudentsEnrolled || false,
       isPublished: fullCourse.isPublished,
       isApproved: fullCourse.isApproved,
       modules: fullCourse.modules || [],
@@ -549,6 +555,32 @@ export default function AdminCourseManagement() {
                          <option value="Group">Group Class</option>
                          <option value="1:1">1:1 Session</option>
                       </select>
+                    </div>
+
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1 block">Course Rating (0 to 5)</label>
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        min="0"
+                        max="5"
+                        placeholder="e.g. 4.8"
+                        value={formData.rating || ""} 
+                        className="w-full p-4 border bg-gray-50 border-gray-100 rounded-xl font-bold focus:border-primary-500 focus:bg-white outline-none" 
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => setFormData({ ...formData, rating: e.target.value === "" ? 0 : Number(e.target.value) })} 
+                      />
+                    </div>
+                    
+                    <div className="col-span-2 md:col-span-1 flex items-center gap-3">
+                      <input 
+                        type="checkbox" 
+                        id="showEnrolled"
+                        checked={formData.showStudentsEnrolled} 
+                        onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })}
+                        className="w-6 h-6 rounded-lg accent-primary-500"
+                      />
+                      <label htmlFor="showEnrolled" className="text-xs font-black text-gray-500 uppercase tracking-widest cursor-pointer">Show Enrolled Count on Frontend</label>
                     </div>
                     
                     <div className="col-span-2">

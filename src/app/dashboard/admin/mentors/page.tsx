@@ -14,6 +14,7 @@ interface Mentor {
     email: string;
     specialization: string;
     profilePicture: string;
+    bio: string;
     isApprovedTeacher: boolean;
 }
 
@@ -33,6 +34,7 @@ export default function AdminMentorsPage() {
         password: '',
         specialization: '',
         profilePicture: '',
+        bio: '',
         isApprovedTeacher: true
     });
 
@@ -99,6 +101,7 @@ export default function AdminMentorsPage() {
             password: '',
             specialization: '',
             profilePicture: '',
+            bio: '',
             isApprovedTeacher: true
         });
     };
@@ -111,6 +114,7 @@ export default function AdminMentorsPage() {
             password: '', // Don't show password
             specialization: mentor.specialization,
             profilePicture: mentor.profilePicture,
+            bio: mentor.bio || '',
             isApprovedTeacher: mentor.isApprovedTeacher
         });
         setShowModal(true);
@@ -310,6 +314,17 @@ export default function AdminMentorsPage() {
                                     className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-primary-500 focus:bg-white transition-all font-bold outline-none text-slate-800"
                                 />
                                 <p className="text-[10px] text-slate-400 font-bold ml-1 italic">Use high-quality images for a premium look.</p>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mentor Biography / About</label>
+                                <textarea 
+                                    placeholder="Write a magical bio for this mentor..."
+                                    value={formData.bio}
+                                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                                    className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-primary-500 focus:bg-white transition-all font-bold outline-none text-slate-800 min-h-[150px] resize-none"
+                                />
+                                <p className="text-[10px] text-slate-400 font-bold ml-1 italic">This will be displayed on their public profile page.</p>
                             </div>
 
                             <div className="pt-4 border-t border-slate-50">

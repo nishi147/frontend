@@ -31,6 +31,10 @@ export default function AdminBlogsPage() {
     author: 'Ruzann Team',
     isPublished: true
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [videoPreview, setVideoPreview] = useState<string>('');
 
   const fetchBlogs = async () => {
     try {
@@ -78,6 +82,10 @@ export default function AdminBlogsPage() {
         isPublished: true
       });
     }
+    setImageFile(null);
+    setVideoFile(null);
+    setImagePreview(blog?.image || '');
+    setVideoPreview(blog?.videoUrl || '');
     setIsModalOpen(true);
   };
 
@@ -85,11 +93,23 @@ export default function AdminBlogsPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        data.append(key, value.toString());
+      });
+
+      if (imageFile) data.append('image', imageFile);
+      if (videoFile) data.append('video', videoFile);
+
       if (currentBlog) {
-        await api.put(`/api/blogs/${currentBlog._id}`, formData);
+        await api.put(`/api/blogs/${currentBlog._id}`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         showToast("Blog updated successfully!", "success");
       } else {
-        await api.post('/api/blogs', formData);
+        await api.post('/api/blogs', data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         showToast("Blog created successfully!", "success");
       }
       setIsModalOpen(false);
@@ -251,26 +271,56 @@ export default function AdminBlogsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Thumbnail URL</label>
-                    <input
-                      type="text"
-                      value={formData.image}
-                      onChange={(e) => setFormData({...formData, image: e.target.value})}
-                      placeholder="Image URL"
-                      className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all"
-                    />
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1 text-primary-500">Blog Cover Image</label>
+                    <div className="relative group/upload h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center hover:border-primary-400 transition-all overflow-hidden">
+                       {imagePreview ? (
+                         <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                       ) : (
+                         <div className="text-gray-400 text-[10px] font-black uppercase text-center">
+                           <Plus className="mx-auto mb-1" size={20} />
+                           Click to Upload Cover
+                         </div>
+                       )}
+                       <input 
+                         type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer"
+                         onChange={(e) => {
+                           const file = e.target.files?.[0];
+                           if (file) {
+                             setImageFile(file);
+                             const reader = new FileReader();
+                             reader.onloadend = () => setImagePreview(reader.result as string);
+                             reader.readAsDataURL(file);
+                           }
+                         }}
+                       />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Video Link (Optional)</label>
-                    <input
-                      type="text"
-                      value={formData.videoUrl}
-                      onChange={(e) => setFormData({...formData, videoUrl: e.target.value})}
-                      placeholder="YouTube/Vimeo Link"
-                      className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all"
-                    />
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1 text-secondary-500">Blog Video (Optional)</label>
+                    <div className="relative group/upload h-24 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center hover:border-secondary-400 transition-all overflow-hidden">
+                       {videoPreview ? (
+                         <div className="w-full h-full flex items-center justify-center bg-secondary-50 text-secondary-600 font-black text-[10px] uppercase">
+                           <Check className="mr-2" size={14} /> Video Selected
+                         </div>
+                       ) : (
+                         <div className="text-gray-400 text-[10px] font-black uppercase text-center">
+                           <Plus className="mx-auto mb-1" size={20} />
+                           Upload Video File
+                         </div>
+                       )}
+                       <input 
+                         type="file" accept="video/*" className="absolute inset-0 opacity-0 cursor-pointer"
+                         onChange={(e) => {
+                           const file = e.target.files?.[0];
+                           if (file) {
+                             setVideoFile(file);
+                             setVideoPreview(file.name);
+                           }
+                         }}
+                       />
+                    </div>
                   </div>
                 </div>
 

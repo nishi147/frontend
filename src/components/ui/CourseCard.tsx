@@ -26,6 +26,7 @@ interface Course {
   courseType: string;
   rating: number;
   studentsEnrolled: number;
+  showStudentsEnrolled: boolean;
   numberOfSessions: number;
   pricePerSession: number;
   totalCoursePrice: number;
@@ -52,7 +53,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
         <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
           
           {/* Top Left Enrolled Badge */}
-          {course.studentsEnrolled > 0 && (
+          {course.showStudentsEnrolled && course.studentsEnrolled > 0 && (
           <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
              <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                 <span className="text-[8px]">👦</span>
@@ -92,14 +93,17 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
            </h3>
            
            <div className="flex items-center justify-between mb-3 text-sm">
+              {course.rating > 0 && (
               <div className="flex items-center gap-1 text-gray-600">
                 <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                <span className="font-bold text-black">{course.rating.toFixed(2)}</span>
-                <span className="text-xs text-gray-500">({course.numberOfSessions * 12} ratings)</span>
+                <span className="font-bold text-black">{course.rating.toFixed(1)}</span>
               </div>
-              <div className="flex items-center gap-1 text-black font-bold text-xs">
+              )}
+              {course.showStudentsEnrolled && (
+              <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
                 <span className="text-gray-600">👤</span> {course.studentsEnrolled || 0} students
               </div>
+              )}
            </div>
 
            {course.description && (
@@ -115,7 +119,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
                     <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(displayTotal + 15000)}</span>
                  </div>
                  <div className="text-sm font-bold text-black mt-1">
-                    ({formatPrice(displayPerSession)} per module)
+                    ({formatPrice(displayPerSession)} per hour)
                  </div>
               </div>
               

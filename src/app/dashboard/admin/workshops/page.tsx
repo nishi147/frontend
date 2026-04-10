@@ -24,6 +24,8 @@ export default function AdminWorkshops() {
     venue: '',
     meetingLink: '',
     image: '',
+    rating: 0,
+    showStudentsEnrolled: false,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -71,7 +73,7 @@ export default function AdminWorkshops() {
       if (res.data.success) {
         setIsModalOpen(false);
         setEditingId(null);
-        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '' });
+        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
         setImageFile(null);
         setImagePreview("");
         fetchWorkshops();
@@ -92,6 +94,8 @@ export default function AdminWorkshops() {
       venue: ws.venue,
       meetingLink: ws.meetingLink || '',
       image: ws.image || '',
+      rating: ws.rating || 0,
+      showStudentsEnrolled: ws.showStudentsEnrolled || false,
     });
     setImagePreview(ws.image || "");
     setImageFile(null);
@@ -119,7 +123,7 @@ export default function AdminWorkshops() {
         </div>
         <Button onClick={() => {
           setEditingId(null);
-          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '' });
+          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
           setIsModalOpen(true);
         }} className="font-black w-full md:w-auto">
           <Plus className="mr-2" /> Add Workshop
@@ -253,6 +257,24 @@ export default function AdminWorkshops() {
                 className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold text-sm"
                 value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
               />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Workshop Rating (0-5)</label>
+                  <input 
+                    type="number" step="0.1" min="0" max="5"
+                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                    value={formData.rating} onChange={e => setFormData({...formData, rating: Number(e.target.value)})}
+                  />
+                </div>
+                <div className="flex items-center gap-2 pt-5">
+                   <input 
+                    type="checkbox" id="wsShowEnrolled"
+                    className="w-5 h-5 accent-accent-500"
+                    checked={formData.showStudentsEnrolled} onChange={e => setFormData({...formData, showStudentsEnrolled: e.target.checked})}
+                   />
+                   <label htmlFor="wsShowEnrolled" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer">Show Enrolled Count</label>
+                </div>
+              </div>
               <div className="space-y-2">
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Workshop Image</label>
                 <input 
