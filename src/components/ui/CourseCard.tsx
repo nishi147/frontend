@@ -46,59 +46,76 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
 
   return (
     <div className={`w-full flex-none group ${className}`}>
-      <Card className="h-full border-2 border-slate-100 rounded-[2rem] overflow-hidden hover:border-primary-200 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-100/50 flex flex-col bg-white">
+      <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
         
-        {/* Compact Image Frame */}
-        <div className="relative aspect-[4/3] bg-slate-50 overflow-hidden flex items-center justify-center group-hover:bg-slate-100 transition-colors">
-          {course.thumbnail ? (
-            <img 
-              src={getThumbnailUrl(course.thumbnail)} 
-              alt={course.title} 
-              className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" 
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center p-4 text-8xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-700 select-none">
-              {course.category?.icon || '📚'}
-            </div>
+        {/* BrightChamps Style Header: light blue, centered icon */}
+        <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+          
+          {/* Top Left Enrolled Badge */}
+          {course.studentsEnrolled > 0 && (
+          <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
+             <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                <span className="text-[8px]">👦</span>
+             </div>
+             <span className="text-[10px] font-bold text-gray-700">{course.studentsEnrolled} Enrolled</span>
+          </div>
           )}
 
-          {/* Floating Tags (Bottom) */}
-          <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center z-20">
-             <span className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-800 shadow-sm whitespace-nowrap">
-               {course.category?.name || 'Class'}
+          <div className="w-24 h-24 relative z-10 flex items-center justify-center">
+            {course.thumbnail ? (
+              <img 
+                src={getThumbnailUrl(course.thumbnail)} 
+                alt={course.title} 
+                className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" 
+              />
+            ) : (
+              <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500 select-none">
+                {course.category?.icon || '📚'}
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Floating White Pill Tags */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
+             <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">
+               {course.category?.name || 'Coding Basics'}
              </span>
-             <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest text-white shadow-sm whitespace-nowrap ${displayType === '1:1' ? 'bg-indigo-500' : 'bg-primary-500'}`}>
+             <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">
                {displayType}
              </span>
           </div>
-          
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
         </div>
 
-        <CardContent className="p-5 flex flex-col flex-1">
-           <h3 className="text-xl font-black text-slate-800 mb-2 line-clamp-2 leading-tight group-hover:text-primary-600 transition-colors">
-             {course.title}
+        <CardContent className="p-5 flex flex-col flex-1 bg-white">
+           <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">
+             {course.title} {displayType !== 'All' ? `- ${displayType}` : ''}
            </h3>
            
-           <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-1 text-primary-500 font-black text-sm">
-                <Star size={14} fill="currentColor" /> {course.rating.toFixed(1)}
+           <div className="flex items-center justify-between mb-3 text-sm">
+              <div className="flex items-center gap-1 text-gray-600">
+                <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
+                <span className="font-bold text-black">{course.rating.toFixed(2)}</span>
+                <span className="text-xs text-gray-500">({course.numberOfSessions * 12} ratings)</span>
               </div>
-              <div className="w-1 h-1 bg-slate-300 rounded-full" />
-              <div className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">
-                {course.numberOfSessions} Sessions
+              <div className="flex items-center gap-1 text-black font-bold text-xs">
+                <span className="text-gray-600">👤</span> {course.studentsEnrolled || 0} students
               </div>
            </div>
 
+           {course.description && (
+             <p className="text-sm text-gray-600 line-clamp-2 mt-1 mb-4 leading-relaxed">
+               {course.description}
+             </p>
+           )}
+
            <div className="flex flex-col gap-4 mt-auto">
-              <div className="flex flex-col border-t border-slate-100 pt-4">
-                 <div className="flex items-center gap-2">
-                    <span className="text-2xl font-black text-slate-900">{formatPrice(displayPerSession)}</span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">/ session</span>
+              <div className="flex flex-col pt-1">
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-2xl lg:text-3xl font-black text-black">{formatPrice(displayTotal)}</span>
+                    <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(displayTotal + 15000)}</span>
                  </div>
-                 <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs font-black text-slate-600 bg-slate-50 px-2 py-0.5 rounded-lg">Total: {formatPrice(displayTotal)}</span>
-                    <span className="text-[10px] font-bold text-slate-400 line-through opacity-60 px-1">{formatPrice(displayTotal + 5000)}</span>
+                 <div className="text-sm font-bold text-black mt-1">
+                    ({formatPrice(displayPerSession)} per module)
                  </div>
               </div>
               
@@ -111,8 +128,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
                   age_group: course.ageGroup
                 })}
               >
-                <Button className="w-full rounded-xl py-4 bg-slate-900 hover:bg-black text-white font-black text-sm transition-all shadow-md mt-1">
-                  View Details
+                <Button variant="outline" className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none">
+                  Enroll Now
                 </Button>
               </Link>
            </div>

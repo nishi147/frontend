@@ -102,7 +102,7 @@ export default function BootcampDetailPage() {
           email: user.email,
         },
         theme: {
-          color: "#4F46E5"
+          color: "#EF4444"
         }
       };
 
@@ -168,7 +168,7 @@ export default function BootcampDetailPage() {
             
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
               <div className="flex items-center gap-5">
-                <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-600 flex items-center justify-center font-black text-white text-3xl shadow-2xl shadow-indigo-600/30">
+                <div className="w-16 h-16 rounded-[1.5rem] bg-primary-500 flex items-center justify-center font-black text-white text-3xl shadow-2xl shadow-primary-500/30">
                    {bootcamp.instructor?.name?.[0] || 'T'}
                 </div>
                 <div className="text-left">
@@ -224,7 +224,7 @@ export default function BootcampDetailPage() {
               
               <Button 
                 size="lg" 
-                className={`w-full py-10 rounded-[2.5rem] font-black text-2xl shadow-3xl transition-all active:scale-95 flex items-center justify-center gap-3 ${isEnrolled ? 'bg-green-500 hover:bg-green-600 shadow-green-100' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-100'}`} 
+                className={`w-full py-10 rounded-[2.5rem] font-black text-2xl shadow-3xl transition-all active:scale-95 flex items-center justify-center gap-3 ${isEnrolled ? 'bg-green-500 hover:bg-green-600 shadow-green-100' : 'bg-primary-500 hover:bg-primary-600 shadow-primary-500/30'}`} 
                 onClick={handleEnroll} 
                 isLoading={isProcessing}
               >
@@ -315,11 +315,11 @@ export default function BootcampDetailPage() {
           </div>
 
           <div className="lg:col-span-4 flex flex-col gap-10">
-             <div className="bg-indigo-600 p-12 rounded-[4rem] text-white relative overflow-hidden shadow-2xl shadow-indigo-100">
+             <div className="bg-primary-500 p-12 rounded-[4rem] text-white relative overflow-hidden shadow-2xl shadow-primary-100">
                 <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
                 <h4 className="text-3xl font-black mb-6 tracking-tighter leading-none">Need Direct <br/>Magical Support?</h4>
-                <p className="text-indigo-100 font-bold mb-10 leading-relaxed text-sm">Our mentors are ready to clarify your doubts and help you launch your coding career.</p>
-                <Link href="/contact" className="flex items-center justify-center bg-white text-indigo-600 w-full py-5 rounded-2xl font-black text-sm shadow-xl hover:-translate-y-1 transition-transform uppercase tracking-widest active:scale-95">
+                <p className="text-primary-100 font-bold mb-10 leading-relaxed text-sm">Our mentors are ready to clarify your doubts and help you launch your coding career.</p>
+                <Link href="/contact" className="flex items-center justify-center bg-white text-primary-500 w-full py-5 rounded-2xl font-black text-sm shadow-xl hover:-translate-y-1 transition-transform uppercase tracking-widest active:scale-95">
                   Contact HQ →
                 </Link>
              </div>

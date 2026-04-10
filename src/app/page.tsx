@@ -212,72 +212,86 @@ const BootcampSection = () => {
   if (bootcamps.length === 0) return null;
 
   return (
-    <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 md:px-0">
       {bootcamps.map((bc: any) => {
         const thumbUrl = getThumbnailUrl(bc.image);
         return (
-          <Card key={bc._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white">
-            <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
-              bc.image && bc.image !== 'no-image.jpg' ? 'bg-slate-100' : 'bg-gradient-to-br from-purple-600 via-violet-700 to-indigo-900'
-            }`}>
-              {/* Background Hero Image */}
-              {bc.image && bc.image !== 'no-image.jpg' ? (
-                <img 
-                  src={thumbUrl} 
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                  alt={bc.title} 
-                />
-              ) : (
-                <>
-                  <div className="absolute inset-0 opacity-20 pointer-events-none">
-                    <div className="absolute -top-5 -left-5 w-24 h-24 bg-white rounded-full blur-2xl opacity-30 animate-pulse" />
+          <div key={bc._id} className="w-full flex-none group">
+            <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
+              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+                {bc.studentsEnrolled > 0 && (
+                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
+                  <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                    <span className="text-[8px]">👦</span>
                   </div>
-                  <div className="relative z-10">
-                    <div className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
+                  <span className="text-[10px] font-bold text-gray-700">{bc.studentsEnrolled} Enrolled</span>
+                </div>
+                )}
+
+                <div className="w-24 h-24 relative z-10 flex items-center justify-center">
+                  {bc.image && bc.image !== 'no-image.jpg' ? (
+                    <img src={thumbUrl} className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" alt={bc.title} />
+                  ) : (
+                    <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
+                  )}
+                </div>
+
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
+                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Bootcamp</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Live</span>
+                </div>
+              </div>
+
+              <CardContent className="p-5 flex flex-col flex-1 bg-white">
+                <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{bc.title}</h3>
+                
+                <div className="flex items-center justify-between mb-3 text-sm">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
+                    <span className="font-bold text-black">4.95</span>
+                    <span className="text-xs text-gray-500">(1.2k ratings)</span>
                   </div>
-                </>
-              )}
-            </div>
-            
-            <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
-              ₹{bc.price}
-            </div>
-
-            <CardContent className="p-3">
-              <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-800 leading-tight mb-0.5 line-clamp-1">{bc.title}</h3>
-                <div className="flex items-center gap-1 text-yellow-500">
-                  <Star size={10} fill="currentColor" />
-                  <span className="text-[10px] font-black text-gray-800">5.0</span>
-                  <span className="text-[10px] font-medium text-gray-400">(2k+)</span>
+                  <div className="flex items-center gap-1 text-black font-bold text-xs">
+                    <span className="text-gray-600">👤</span> {bc.studentsEnrolled || 0} students
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <Calendar size={12} className="text-indigo-500" />
-                  <span className="font-bold text-[10px] truncate">{new Date(bc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                     <Calendar size={14} className="text-gray-400" />
+                     <span className="truncate">{new Date(bc.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                  </div>
+                  {bc.venue && (
+                  <div className="flex items-center gap-2">
+                     <MapPin size={14} className="text-gray-400" />
+                     <span className="truncate">{bc.venue}</span>
+                  </div>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <UserIcon size={12} className="text-indigo-500" />
-                  <span className="font-bold text-[10px] uppercase truncate">{bc.instructor?.name || 'Top Mentor'}</span>
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-1.5">
-                <Button 
-                  onClick={() => handleEnrollBootcamp(bc)}
-                  isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-                  className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
-                >
-                  Enroll <ArrowRight size={12} />
-                </Button>
-                <Link href={`/bootcamps/${bc._id}`} className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
-                  Syllabus →
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="flex flex-col gap-4 mt-auto">
+                  <div className="flex flex-col pt-1">
+                     <div className="flex items-baseline gap-2">
+                        <span className="text-2xl lg:text-3xl font-black text-black">₹{bc.price}</span>
+                        <span className="text-sm font-medium text-gray-400 line-through">₹{bc.price + 999}</span>
+                     </div>
+                     <div className="text-sm font-bold text-black mt-1">
+                        (Total Bootcamp pass)
+                     </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline"
+                    onClick={() => handleEnrollBootcamp(bc)}
+                    isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                    className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
+                  >
+                    Enroll Now
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         );
       })}
 
@@ -438,7 +452,7 @@ const WorkshopSection = () => {
           contact: guestInfo?.phone
         },
         theme: {
-          color: "#F2643D"
+          color: "#EF4444"
         }
       };
 
@@ -472,71 +486,82 @@ const WorkshopSection = () => {
   );
 
   return (
-    <div className="flex overflow-x-auto gap-6 md:gap-8 pb-12 scrollbar-hide no-scrollbar snap-x px-4 -mx-4 md:mx-0 md:px-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 md:px-0">
       {workshops.map((ws: any) => {
         const thumbUrl = getThumbnailUrl(ws.image);
         return (
-          <div key={ws._id} className="min-w-[260px] md:min-w-[320px] snap-center group/card transition-all duration-300">
-            <Card className="h-full relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white flex flex-col">
-              <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
-                ws.image && ws.image !== 'no-image.jpg' ? 'bg-slate-100' :
-                ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
-                ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
-                ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
-                'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
-              }`}>
-                {ws.image && ws.image !== 'no-image.jpg' ? (
-                  <img src={thumbUrl} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={ws.title} />
-                ) : (
-                  <>
-                    <div className="absolute inset-0 opacity-20 pointer-events-none">
-                      <div className="absolute -top-5 -left-5 w-20 h-20 bg-white rounded-full blur-2xl opacity-30 animate-pulse" />
-                    </div>
-                    <div className="relative z-10">
-                      <div className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
-                        {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
-                      </div>
-                    </div>
-                  </>
+          <div key={ws._id} className="w-full flex-none group">
+            <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
+              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+                {ws.studentsEnrolled > 0 && (
+                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
+                  <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                    <span className="text-[8px]">👦</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-gray-700">{ws.studentsEnrolled} Enrolled</span>
+                </div>
                 )}
-              </div>
 
-              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
-                ₹{ws.price}
-              </div>
-
-              <CardContent className="p-3 flex-1 flex flex-col">
-                <div className="mb-2">
-                   <h3 className="text-sm font-black text-black leading-tight mb-0.5 line-clamp-1">{ws.title}</h3>
-                   <div className="flex items-center gap-1 text-yellow-500">
-                     <Star size={10} fill="currentColor" />
-                     <span className="text-[10px] font-black text-gray-800">5.0</span>
-                     <span className="text-[10px] font-medium text-gray-400">(4k+)</span>
-                   </div>
+                <div className="w-24 h-24 relative z-10 flex items-center justify-center">
+                  {ws.image && ws.image !== 'no-image.jpg' ? (
+                    <img src={thumbUrl} className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" alt={ws.title} />
+                  ) : (
+                    <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                      {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex flex-col gap-1.5 mb-4 pt-2 border-t border-gray-50">
-                  <div className="flex items-center gap-2 text-slate-700">
-                     <Calendar size={12} className="text-indigo-500" />
-                     <span className="font-bold text-[10px] truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
+                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Workshop</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Event</span>
+                </div>
+              </div>
+
+              <CardContent className="p-5 flex flex-col flex-1 bg-white">
+                <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{ws.title}</h3>
+                
+                <div className="flex items-center justify-between mb-3 text-sm">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
+                    <span className="font-bold text-black">4.88</span>
+                    <span className="text-xs text-gray-500">(800+ ratings)</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-700">
-                     <MapPin size={12} className="text-indigo-500" />
-                     <span className="font-bold text-[10px] uppercase truncate">{ws.venue}</span>
+                  <div className="flex items-center gap-1 text-black font-bold text-xs">
+                    <span className="text-gray-600">👤</span> {ws.studentsEnrolled || 0} students
                   </div>
                 </div>
 
-                <div className="mt-auto flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                     <Calendar size={14} className="text-gray-400" />
+                     <span className="truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                     <MapPin size={14} className="text-gray-400" />
+                     <span className="truncate">{ws.venue}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4 mt-auto">
+                  <div className="flex flex-col pt-1">
+                     <div className="flex items-baseline gap-2">
+                        <span className="text-2xl lg:text-3xl font-black text-black">₹{ws.price}</span>
+                        <span className="text-sm font-medium text-gray-400 line-through">₹{ws.price + 999}</span>
+                     </div>
+                     <div className="text-sm font-bold text-black mt-1">
+                        (Event ticket)
+                     </div>
+                  </div>
+                  
                   <Button 
+                    variant="outline"
                     onClick={() => handleBookWorkshop(ws)}
                     isLoading={isProcessing && activeWorkshopForSlots?._id === ws._id}
-                    className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
+                    className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
                   >
-                    Book Seat <ArrowRight size={12} />
+                    Enroll Now
                   </Button>
-                  <Link href="/workshops" className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
-                    Program Info →
-                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -729,7 +754,7 @@ const ContactSection = () => {
                 type="submit" 
                 size="lg" 
                 fullWidth 
-                className="py-8 rounded-[2rem] font-black text-xl bg-[#F2643D] hover:bg-[#E0532C] border-none shadow-xl shadow-[#F2643D]/20 transition-all flex items-center justify-center gap-3 active:scale-95"
+                className="py-8 rounded-[2rem] font-black text-xl bg-[#EF4444] hover:bg-[#DC2626] border-none shadow-xl shadow-[#EF4444]/20 transition-all flex items-center justify-center gap-3 active:scale-95"
                 isLoading={isSubmitting}
               >
                 Send Some Magic! <Send size={20} />
@@ -1191,7 +1216,7 @@ const CourseCatalog = () => {
 
     const getCourseColor = (category: string) => {
         const cat = category?.toLowerCase() || '';
-        if (cat.includes('robot')) return "bg-[#6C5CE710]";
+        if (cat.includes('robot')) return "bg-[#EF444410]";
         if (cat.includes('cod')) return "bg-[#FF767510]";
         if (cat.includes('ai')) return "bg-[#FDCB6E10]";
         if (cat.includes('math')) return "bg-[#00B89410]";
@@ -1249,16 +1274,18 @@ const CourseCatalog = () => {
                             {/* Tags */}
                             <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-2">
                                 <span className="bg-white/90 backdrop-blur-sm px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-black shadow-sm">{course.category?.name || 'General'}</span>
-                                <span className="bg-[#6C5CE7] px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">{course.courseType}</span>
+                                <span className="bg-primary-500 px-3 md:px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-sm">{course.courseType}</span>
                             </div>
                             <div className="text-6xl md:text-8xl mt-4 filter drop-shadow-lg">{getCourseIcon(course.category?.name)}</div>
                             {/* Student Count Overlay */}
+                            {course.studentsEnrolled > 0 && (
                             <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 bg-navy-900/80 backdrop-blur-sm text-white px-3 md:px-4 py-2 rounded-2xl flex items-center gap-2 text-[10px] md:text-xs font-black">
-                                <UsersIcon size={14} /> {course.studentsEnrolled || 0}+ Students
+                                <UsersIcon size={14} /> {course.studentsEnrolled} Students
                             </div>
+                            )}
                         </div>
                         <CardContent className="p-6 md:p-8 flex flex-col flex-1">
-                            <h3 className="text-lg md:text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-[#6C5CE7] transition-colors">{course.title}</h3>
+                            <h3 className="text-lg md:text-2xl font-black text-gray-900 mb-2 truncate group-hover:text-primary-500 transition-colors">{course.title}</h3>
                             <p className="text-gray-500 font-bold text-xs md:text-sm mb-4 md:mb-6 line-clamp-2 leading-relaxed">{course.description || course.shortDescription}</p>
                             
                             <div className="flex items-center gap-4 mb-6 md:mb-8">
@@ -1277,7 +1304,7 @@ const CourseCatalog = () => {
                                     <div className="text-[10px] font-black text-gray-900 uppercase tracking-tighter">₹{course.pricePerSession}/class</div>
                                 </div>
                                 <Link href={`/courses/${course._id}`}>
-                                    <Button className="rounded-2xl px-6 md:px-8 py-4 md:py-6 font-black text-base md:text-lg bg-[#6C5CE7] hover:bg-[#5B4BCB] shadow-lg shadow-[#6C5CE720]">Enroll →</Button>
+                                    <Button className="rounded-2xl px-6 md:px-8 py-4 md:py-6 font-black text-base md:text-lg bg-primary-500 hover:bg-primary-600 shadow-lg shadow-primary-500/20">Enroll →</Button>
                                 </Link>
                             </div>
                         </CardContent>

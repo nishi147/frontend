@@ -12,13 +12,13 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          50: '#fdf4f2',
-          100: '#fbe9e4',
-          200: '#f8d2c9',
-          300: '#f4b8a8',
-          400: '#f09a80',
-          500: '#f4693a', // Ruzann Coral
-          600: '#dc5f34',
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444', // Ruzann Red (matches logo R)
+          600: '#dc2626',
         },
         secondary: {
           500: '#6b4fbb', // Ruzann Purple

@@ -93,7 +93,7 @@ export default function WorkshopsPage() {
           email: user.email,
         },
         theme: {
-          color: "#F2643D"
+          color: "#EF4444"
         }
       };
 
@@ -175,7 +175,7 @@ export default function WorkshopsPage() {
                       ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
                       ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
                       ws.title.toLowerCase().includes('art') ? 'bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500' :
-                      'bg-gradient-to-br from-[#F2643D] via-[#E0532C] to-[#C04220]'
+                      'bg-gradient-to-br from-[#EF4444] via-[#DC2626] to-[#B91C1C]'
                     }`}>
                       {/* Background Hero Image */}
                       {ws.image && ws.image !== 'no-image.jpg' ? (
@@ -231,7 +231,7 @@ export default function WorkshopsPage() {
                         <Button 
                           onClick={() => handleBookWorkshop(ws)}
                           isLoading={processingId === ws._id}
-                          className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#F2643D] hover:bg-[#E0532C] text-white border-none transition-all flex items-center justify-center gap-2"
+                          className="w-full py-2.5 rounded font-black text-[10px] uppercase tracking-wider bg-[#EF4444] hover:bg-[#DC2626] text-white border-none transition-all flex items-center justify-center gap-2"
                         >
                           Book Seat <ArrowRight size={12} />
                         </Button>
