@@ -29,7 +29,7 @@ export default function LoginPage() {
     try {
       const res = await api.post(
         '/api/auth/login',
-        { email, password }
+        { email: email.trim().toLowerCase(), password }
       );
 
       if (res.data.success) {
@@ -101,6 +101,9 @@ export default function LoginPage() {
               <input
                 type="email"
                 required
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck="false"
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

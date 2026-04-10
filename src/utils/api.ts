@@ -10,7 +10,20 @@ const api = axios.create({
 
 // Request Interceptor
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token') || Cookies.get('token');
+  let token = null;
+  
+  try {
+    if (typeof window !== 'undefined') {
+      token = localStorage.getItem('token');
+    }
+  } catch (err) {
+    console.warn('LocalStorage access blocked:', err);
+  }
+
+  // Fallback to cookie if localStorage fails or is empty
+  if (!token) {
+    token = Cookies.get('token');
+  }
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
