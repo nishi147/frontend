@@ -51,7 +51,7 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
   };
 
   const handleRemoveQuestion = (index: number) => {
-    const newQuestions = formData.questions.filter((_, i) => i !== index);
+    const newQuestions = formData.questions.filter((_: any, i: number) => i !== index);
     setFormData({ ...formData, questions: newQuestions });
   };
 
@@ -149,7 +149,7 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
                 </Button>
             </div>
 
-            {formData.questions.map((q, qIndex) => (
+            {formData.questions.map((q: any, qIndex: number) => (
                 <div key={qIndex} className="p-6 bg-gray-50 rounded-[2rem] border-2 border-gray-100 relative group animate-in slide-in-from-bottom duration-300">
                     <button 
                         type="button" 
@@ -171,7 +171,7 @@ export const QuizForm = ({ onClose, onSuccess, initialData }: QuizFormProps) => 
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {q.options.map((opt, oIndex) => (
+                            {q.options.map((opt: string, oIndex: number) => (
                                 <div key={oIndex} className="flex items-center gap-2">
                                     <input 
                                         type="radio"

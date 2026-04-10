@@ -10,7 +10,6 @@ const api = axios.create({
 
 // Request Interceptor
 api.interceptors.request.use((config) => {
-  const isBrowser = typeof window !== 'undefined';
   const token = Cookies.get('token');
 
   if (token) {

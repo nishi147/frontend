@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '@/utils/api';
+import { getThumbnailUrl } from '@/utils/image';
 import { useState, useEffect } from 'react';
 
 export default function TeachersPage() {
@@ -91,7 +92,7 @@ export default function TeachersPage() {
                     <div className={`w-32 h-32 ${bgColor} rounded-full flex items-center justify-center text-6xl mx-auto mb-6 group-hover:scale-110 transition-transform overflow-hidden relative border-8 border-white shadow-md`}>
                       {mentor.profilePicture ? (
                         <img 
-                          src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${mentor.profilePicture}`} 
+                          src={getThumbnailUrl(mentor.profilePicture)} 
                           alt={mentor.name} 
                           className="w-full h-full object-cover" 
                         />

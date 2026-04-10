@@ -370,7 +370,7 @@ export default function AdminBootcamps() {
                                        </div>
                                     </div>
                                     <div className="flex gap-2">
-                                       <button onClick={() => { setNewSessionData(les); setEditingSessionInfo({mIdx, sIdx}); setActiveModuleIndex(mIdx); }} className="p-2 text-slate-200 hover:text-indigo-500 transition-colors"><Edit size={14}/></button>
+                                       <button onClick={() => { setNewSessionData({ ...les, description: les.description || "" }); setEditingSessionInfo({mIdx, sIdx}); setActiveModuleIndex(mIdx); }} className="p-2 text-slate-200 hover:text-indigo-500 transition-colors"><Edit size={14}/></button>
                                        <button onClick={() => removeSession(mIdx, sIdx)} className="p-2 text-slate-200 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
                                     </div>
                                  </div>

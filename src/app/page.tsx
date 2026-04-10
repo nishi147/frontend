@@ -18,6 +18,8 @@ import CourseSelection from '@/components/sections/CourseSelection';
 import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
+import { trackEvent } from '@/utils/analytics';
+import { AdUnit } from '@/components/AdSense';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -107,11 +109,13 @@ const BootcampSection = () => {
       setPendingBootcamp(bootcamp);
       setIsLeadModalOpen(true);
     } else {
+      trackEvent('bootcamp_enroll_click', { bootcamp_id: bootcamp._id, bootcamp_title: bootcamp.title });
       await proceedToPayment(bootcamp, null);
     }
   };
 
   const handleGuestLeadSubmission = async (leadData: any) => {
+    trackEvent('bootcamp_lead_submit', { bootcamp_id: pendingBootcamp?._id, bootcamp_title: pendingBootcamp?.title });
     setIsLeadModalOpen(false);
     await proceedToPayment(pendingBootcamp, leadData);
   };
@@ -129,6 +133,12 @@ const BootcampSection = () => {
 
       const orderRes = await api.post('/api/payments/bootcamp-order', payload);
       const order = orderRes.data.data;
+
+      trackEvent('bootcamp_payment_init', { 
+        bootcamp_id: bootcamp._id, 
+        amount: order.amount / 100, 
+        currency: order.currency 
+      });
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD',
@@ -155,6 +165,11 @@ const BootcampSection = () => {
             const verifyRes = await api.post('/api/payments/bootcamp-verify', verifyPayload);
 
             if (verifyRes.data.success) {
+              trackEvent('bootcamp_payment_success', { 
+                bootcamp_id: bootcamp._id, 
+                amount: order.amount / 100, 
+                currency: order.currency 
+              });
               router.push('/payment-success');
             }
           } catch (err: any) {
@@ -323,6 +338,7 @@ const WorkshopSection = () => {
           setIsLeadModalOpen(true);
           setIsProcessing(false);
         } else {
+          trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
           await proceedToPayment(workshop, null, null);
         }
       }
@@ -343,12 +359,14 @@ const WorkshopSection = () => {
         setPendingWorkshopFetch({ workshop: activeWorkshopForSlots, slotId });
         setIsLeadModalOpen(true);
      } else {
+        trackEvent('workshop_slot_select', { workshop_id: activeWorkshopForSlots?._id, slot_id: slotId });
         await proceedToPayment(activeWorkshopForSlots, slotId, null);
      }
      setActiveWorkshopForSlots(null);
   };
 
   const handleGuestLeadSubmission = async (leadData: any) => {
+    trackEvent('workshop_lead_submit', { workshop_id: pendingWorkshopFetch?.workshop?._id });
     setGuestDetails(leadData);
     setIsLeadModalOpen(false);
     await proceedToPayment(pendingWorkshopFetch.workshop, pendingWorkshopFetch.slotId, leadData);
@@ -368,6 +386,12 @@ const WorkshopSection = () => {
 
       const orderRes = await api.post('/api/payments/workshop-order', payload);
       const order = orderRes.data.data;
+
+      trackEvent('workshop_payment_init', { 
+        workshop_id: workshop._id, 
+        amount: order.amount / 100, 
+        currency: order.currency 
+      });
 
       // 2. Open Razorpay Widget
       const options = {
@@ -396,6 +420,11 @@ const WorkshopSection = () => {
             const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
             if (verifyRes.data.success) {
+              trackEvent('workshop_payment_success', { 
+                workshop_id: workshop._id, 
+                amount: order.amount / 100, 
+                currency: order.currency 
+              });
               router.push('/payment-success');
             }
           } catch (err: any) {
@@ -555,6 +584,7 @@ const ContactSection = () => {
         referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
       });
+      trackEvent('contact_form_submit', { subject: form.subject });
       showToast("Thanks! Our team will contact you soon 🎉", "success");
       setForm({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
     } catch (err) {
@@ -758,6 +788,12 @@ export default function Home() {
     <div className="min-h-screen bg-white flex flex-col font-sans overflow-hidden">
       <Header />
       
+      {/* Top AdSense Unit 
+      <div className="max-w-7xl mx-auto px-4 pt-4">
+        <AdUnit slot="top-banner" className="mb-0" />
+      </div>
+      */}
+
       {/* 1. BALANCED HERO SECTION: COSMIC KINDERGARTEN */}
       <section className="relative flex min-h-[70vh] items-center justify-center p-4 overflow-hidden bg-navy-900">
         {/* Background Layer: Playful Illustration with Navy Overlay */}
@@ -812,7 +848,7 @@ export default function Home() {
               onClick={openIntroModal}
               className="text-lg px-10 py-4 rounded-full bg-white/10 backdrop-blur-lg border-2 border-white/20 hover:bg-white/20 font-black text-white"
             >
-              Claim ₹1 Offer ✨
+              Claim ₹99 Offer ✨
             </Button>
           </div>
 
@@ -828,7 +864,13 @@ export default function Home() {
       {/* NEW PLAY & LEARN SECTION */}
       <PlayAndLearnSection />
 
-      {/* 2. ₹1 ATTRACTIVE SECTION */}
+      {/* Mid-Page AdSense Unit 
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <AdUnit slot="mid-page-interstitial" className="my-0" />
+      </div>
+      */}
+
+      {/* 2. ₹99 ATTRACTIVE SECTION */}
       <section className="relative py-16 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-accent-500 -skew-y-3 origin-left z-0" />
         <div className="absolute inset-0 bg-yellow-400 -skew-y-3 origin-right opacity-50 translate-y-4 z-0" />
@@ -840,7 +882,7 @@ export default function Home() {
               </div>
               <h2 className="text-4xl md:text-6xl font-black mb-5 leading-[0.95]">
                 Get Your First <br/>
-              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">₹1</span>
+              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">₹99</span>
               </h2>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-5 font-bold text-base">
                 <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ No Commitments</span>
@@ -860,7 +902,7 @@ export default function Home() {
                onClick={openIntroModal}
                className="bg-accent-500 text-white w-full py-4 rounded-xl text-xl font-black shadow-xl hover:bg-accent-600 transition-all border-b-4 border-accent-700 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3"
              >
-               Go Magic! ₹1 🚀
+               Go Magic! ₹99 🚀
              </button>
              <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-900 font-bold">
                <span className="text-xs uppercase">Trusted by</span>
@@ -920,6 +962,12 @@ export default function Home() {
       </section>
 
       <CourseSelection />
+
+      {/* After Courses AdSense Unit 
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <AdUnit slot="post-courses-banner" className="my-0" />
+      </div>
+      */}
 
       {/* UPDATED SUPERSTAR PROJECTS SECTION */}
       <SuperstarProjects />
@@ -1072,7 +1120,7 @@ export default function Home() {
                    <div className={`w-24 h-24 ${bgColor} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform overflow-hidden relative border-4 border-white shadow-sm`}>
                      {mentor.profilePicture ? (
                        <img 
-                        src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${mentor.profilePicture}`} 
+                        src={getThumbnailUrl(mentor.profilePicture)} 
                         alt={mentor.name} 
                         className="w-full h-full object-cover" 
                        />
@@ -1096,6 +1144,12 @@ export default function Home() {
 
       <ContactSection />
       
+      {/* Bottom AdSense Unit 
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <AdUnit slot="footer-banner" className="mt-0" />
+      </div>
+      */}
+
       <Footer />
       <ScrollToTop />
     </div>

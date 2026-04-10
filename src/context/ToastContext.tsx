@@ -32,7 +32,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setToast(null);
   }, []);
 
-  const showConfirm = useCallback((title: string, message: string, options?: any) => {
+  const showConfirm = useCallback((title: string, message: string, options?: Partial<Pick<ConfirmationConfig, 'confirmText' | 'cancelText' | 'variant'>>) => {
     return new Promise<boolean>((resolve) => {
       setConfirmConfig({
         title,

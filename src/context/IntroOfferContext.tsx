@@ -40,7 +40,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
         amount: amount,
         currency: currency,
         name: "RUZANN EdTech",
-        description: "₹1 Introductory Offer",
+        description: "₹99 Introductory Offer",
         order_id: orderId,
         handler: async function (response: any) {
           try {

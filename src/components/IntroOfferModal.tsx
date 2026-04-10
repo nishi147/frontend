@@ -30,7 +30,7 @@ export const IntroOfferModal = () => {
             onClick={closeIntroModal}
             className="absolute top-4 right-4 text-white/80 hover:text-white font-black text-2xl"
           >✕</button>
-          <h2 className="text-3xl font-black mb-2">Start Learning at ₹1 Only! 🐝</h2>
+          <h2 className="text-3xl font-black mb-2">Start Learning at ₹99 Only! 🐝</h2>
           <p className="font-bold text-accent-100">Book Your Seat for a magical future.</p>
         </div>
         <CardContent className="p-8">
@@ -97,7 +97,7 @@ export const IntroOfferModal = () => {
               className="md:col-span-2 mt-4 bg-accent-500 hover:bg-accent-600 text-white border-none py-6 rounded-2xl text-xl font-black shadow-lg shadow-accent-200"
               isLoading={isProcessing}
             >
-              Pay ₹1 & Start Adventure 🚀
+              Pay ₹99 & Start Adventure 🚀
             </Button>
           </form>
         </CardContent>

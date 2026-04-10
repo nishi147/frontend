@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, ArrowRight } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
+import { trackEvent } from '@/utils/analytics';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -49,6 +50,11 @@ export default function CourseDetailPage() {
       const res = await api.post('/api/coupons/validate', { code: couponCode });
       if (res.data.success) {
         setAppliedCoupon(res.data.data);
+        trackEvent('coupon_applied', { 
+          code: couponCode, 
+          course_id: id, 
+          discount_type: res.data.data.discountType 
+        });
         showToast("Coupon applied successfully! ✨", "success");
       }
     } catch (err: any) {
@@ -109,6 +115,12 @@ export default function CourseDetailPage() {
       });
       const order = orderRes.data.data;
 
+      trackEvent('course_payment_init', { 
+        course_id: course._id, 
+        amount: finalPrice, 
+        sessions: selectedSessions 
+      });
+
       // 2. Open Razorpay Widget
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD',
@@ -129,6 +141,11 @@ export default function CourseDetailPage() {
             });
             
             if (verifyRes.data.success) {
+              trackEvent('course_payment_success', { 
+                course_id: course._id, 
+                amount: finalPrice, 
+                sessions: selectedSessions 
+              });
               showToast("Successfully enrolled! Welcome aboard. 🚀", "success");
               router.push('/payment-success');
             }
