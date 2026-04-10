@@ -208,13 +208,13 @@ export default function AdminWorkshops() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <Card className="w-full max-w-lg overflow-hidden bg-white">
-            <div className="bg-accent-500 p-6 text-white flex justify-between items-center">
-              <h2 className="text-2xl font-black">{editingId ? 'Edit Workshop ✏️' : 'New Workshop 🚀'}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-white hover:scale-110">✕</button>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <Card className="w-full max-w-lg overflow-hidden bg-white min-h-screen md:min-h-0 md:max-h-[90vh] flex flex-col md:rounded-[2rem]">
+            <div className="bg-accent-500 p-6 text-white flex justify-between items-center shrink-0">
+              <h2 className="text-xl md:text-2xl font-black">{editingId ? 'Edit Workshop ✏️' : 'New Workshop 🚀'}</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-white hover:scale-110 p-2">✕</button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 overflow-y-auto">
               <input 
                 type="text" required placeholder="Workshop Title"
                 className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
@@ -225,17 +225,23 @@ export default function AdminWorkshops() {
                 className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold resize-none"
                 value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
               ></textarea>
-              <div className="grid grid-cols-2 gap-4">
-                <input 
-                  type="date" required
-                  className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                  value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
-                />
-                <input 
-                  type="number" required placeholder="Price (₹)"
-                  className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                  value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})}
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Date</label>
+                  <input 
+                    type="date" required
+                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Price (₹)</label>
+                  <input 
+                    type="number" required placeholder="Price"
+                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                    value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})}
+                  />
+                </div>
               </div>
               <input 
                 type="text" required placeholder="Venue (e.g. Online - Zoom Live)"

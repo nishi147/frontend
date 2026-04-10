@@ -42,9 +42,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      const storedToken = Cookies.get('token');
+      const storedToken = localStorage.getItem('token') || Cookies.get('token');
       if (storedToken) {
         setToken(storedToken);
+        // Sync to cookie if missing (for legacy or cross-tab)
+        if (!Cookies.get('token')) {
+          Cookies.set('token', storedToken, { expires: 30 });
+        }
         try {
           const res = await api.get('/api/auth/me');
           if (res.data.success) {
@@ -69,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (newToken: string, newUser: User) => {
+    localStorage.setItem('token', newToken);
     Cookies.set('token', newToken, { expires: 30 });
     setToken(newToken);
     setUser(newUser);
@@ -83,6 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
     Cookies.remove('token');
     setToken(null);
     setUser(null);
