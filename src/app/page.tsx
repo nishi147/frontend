@@ -37,28 +37,28 @@ const EnrollLeadModal = ({ isOpen, onClose, onProceed, isProcessing, title = "En
       <Card className="w-full max-w-md bg-white rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
         <div className="p-6 sm:p-10">
            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-black text-slate-800 leading-tight">{title}</h3>
+              <h3 className="text-xl sm:text-2xl font-black text-black leading-tight">{title}</h3>
               <button onClick={onClose} className="text-slate-900 hover:text-slate-800 transition-colors p-2 -mr-2">✕</button>
            </div>
-           <p className="text-slate-700 font-bold text-xs sm:text-sm mb-8 leading-relaxed">Enter your details to proceed to the secure payment gateway.</p>
+           <p className="text-black font-bold text-xs sm:text-sm mb-8 leading-relaxed">Enter your details to proceed to the secure payment gateway.</p>
            
            <div className="space-y-4">
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Parent/Student Name</label>
-                <input required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
+                <input required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="e.g. John Doe" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-black placeholder:text-gray-500" />
               </div>
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Email Address</label>
-                <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
+                <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="e.g. name@example.com" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-black placeholder:text-gray-500" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Phone Number</label>
-                  <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
+                  <input required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="98765 43210" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-black placeholder:text-gray-500" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] font-black uppercase tracking-widest text-black ml-1">Child's Age (Optional)</label>
-                  <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-slate-900" />
+                  <input value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} placeholder="e.g. 8" className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:border-primary-500 transition-all text-sm text-black placeholder:text-gray-500" />
                 </div>
               </div>
            </div>
@@ -213,9 +213,9 @@ const BootcampSection = () => {
         return (
           <div key={bc._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleEnrollBootcamp(bc)}>
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
-              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
                 {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
-                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
+                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
                   <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     <span className="text-[8px]">👦</span>
                   </div>
@@ -223,9 +223,16 @@ const BootcampSection = () => {
                 </div>
                 )}
 
-                <div className="w-24 h-24 relative z-10 flex items-center justify-center">
+                {/* Branding Overlay */}
+                <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
+                   <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center text-black">
+                      <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
+                   </div>
+                </div>
+
+                <div className="w-full h-full relative z-10 flex items-center justify-center">
                   {bc.image && bc.image !== 'no-image.jpg' ? (
-                    <img src={thumbUrl} className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" alt={bc.title} />
+                    <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={bc.title} />
                   ) : (
                     <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
                   )}
@@ -460,9 +467,9 @@ const WorkshopSection = () => {
         return (
           <div key={ws._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleBookWorkshop(ws)}>
             <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
-              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
                 {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
-                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
+                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
                   <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     <span className="text-[8px]">👦</span>
                   </div>
@@ -470,9 +477,16 @@ const WorkshopSection = () => {
                 </div>
                 )}
 
-                <div className="w-24 h-24 relative z-10 flex items-center justify-center">
+                {/* Branding Overlay */}
+                <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
+                   <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center text-black">
+                      <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
+                   </div>
+                </div>
+
+                <div className="w-full h-full relative z-10 flex items-center justify-center">
                   {ws.image && ws.image !== 'no-image.jpg' ? (
-                    <img src={thumbUrl} className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" alt={ws.title} />
+                    <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={ws.title} />
                   ) : (
                     <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
                       {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
@@ -608,10 +622,10 @@ const ContactSection = () => {
             <MessageCircle size={16} />
             <span className="text-sm">Have a Question?</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-800 mb-6 leading-tight">
-            Let's Start a <br/><span className="text-primary-500">Magical</span> Conversation!
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
+            Let's Start a <br/><span className="text-primary-600">Magical</span> Conversation!
           </h2>
-          <p className="text-lg font-bold text-gray-500 mb-10 max-w-xl leading-relaxed">
+          <p className="text-lg font-bold text-black mb-10 max-w-xl leading-relaxed">
             Whether you're curious about our courses, need a demo, or just want to say hi, we're all ears!
           </p>
           
@@ -647,7 +661,7 @@ const ContactSection = () => {
                   required
                   type="text"
                   placeholder="Superstar's Name"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
                   value={form.name}
                   onChange={(e) => setForm({...form, name: e.target.value})}
                 />
@@ -659,7 +673,7 @@ const ContactSection = () => {
                   required
                   type="email"
                   placeholder="parent@example.com"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
                   value={form.email}
                   onChange={(e) => setForm({...form, email: e.target.value})}
                 />
@@ -671,7 +685,7 @@ const ContactSection = () => {
                   required
                   type="tel"
                   placeholder="+91 00000 00000"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
                   value={form.phone}
                   onChange={(e) => setForm({...form, phone: e.target.value})}
                 />
@@ -682,7 +696,7 @@ const ContactSection = () => {
                 <div className="relative group">
                   <select 
                     required
-                    className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black appearance-none pr-12"
+                    className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black appearance-none pr-12"
                     value={form.subject}
                     onChange={(e) => setForm({...form, subject: e.target.value})}
                   >
@@ -702,7 +716,7 @@ const ContactSection = () => {
                 <input 
                   type="text"
                   placeholder="e.g. RUZ-X4K"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black uppercase"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black uppercase placeholder:text-gray-500"
                   value={form.referralCode}
                   onChange={(e) => setForm({...form, referralCode: e.target.value})}
                 />
@@ -714,7 +728,7 @@ const ContactSection = () => {
                   required
                   rows={4}
                   placeholder="Share your magic thoughts..."
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-gray-50 bg-gray-50/50 focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black resize-none"
+                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black resize-none placeholder:text-gray-500"
                   value={form.message}
                   onChange={(e) => setForm({...form, message: e.target.value})}
                 />

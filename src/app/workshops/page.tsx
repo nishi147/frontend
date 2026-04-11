@@ -107,7 +107,7 @@ export default function WorkshopsPage() {
                 const thumbUrl = getThumbnailUrl(ws.image);
                 return (
                   <Card key={ws._id} className="min-w-[280px] sm:min-w-[320px] md:min-w-0 snap-center relative group overflow-hidden border border-gray-100 shadow-sm hover:shadow-md rounded-sm transition-all duration-300 bg-white">
-                    <div className={`h-20 relative overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-700 group-hover:scale-[1.02] ${
+                    <div className={`aspect-[16/10] relative overflow-hidden flex flex-col items-center justify-center transition-all duration-700 group-hover:scale-[1.02] ${
                       ws.image && ws.image !== 'no-image.jpg' ? 'bg-slate-100' :
                       ws.title.toLowerCase().includes('space') ? 'bg-gradient-to-br from-indigo-700 via-purple-800 to-slate-900' :
                       ws.title.toLowerCase().includes('robot') ? 'bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-700' :
@@ -118,7 +118,7 @@ export default function WorkshopsPage() {
                       {ws.image && ws.image !== 'no-image.jpg' ? (
                         <img 
                           src={thumbUrl} 
-                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                           alt={ws.title} 
                         />
                       ) : (
@@ -139,7 +139,7 @@ export default function WorkshopsPage() {
                       )}
                     </div>
                     
-                    <div className="absolute top-2 right-2 flex flex-col items-end gap-1 z-10">
+                    <div className="absolute top-2 left-2 flex flex-col items-start gap-1.5 z-30">
                       <div className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm border border-white/20">
                         ₹{ws.price}
                       </div>
@@ -149,6 +149,13 @@ export default function WorkshopsPage() {
                           <span className="text-[10px] font-bold text-gray-700">{ws.studentsEnrolled} Joined</span>
                         </div>
                       )}
+                    </div>
+
+                    {/* Branding Overlay */}
+                    <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
+                       <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center">
+                          <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
+                       </div>
                     </div>
 
                     <CardContent className="p-3">

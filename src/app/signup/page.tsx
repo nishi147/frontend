@@ -86,8 +86,8 @@ export default function SignupPage() {
                 <Logo size="small" />
             </div>
           </div>
-          <h1 className="text-3xl font-black text-gray-800 tracking-tight mb-2">Join RUZANN</h1>
-          <p className="text-gray-500 font-medium">Start your journey to greatness today!</p>
+          <h1 className="text-3xl font-black text-black tracking-tight mb-2">Join RUZANN</h1>
+          <p className="text-black font-black">Start your journey to greatness today!</p>
         </div>
 
         <CardContent className="p-8 pt-0">
@@ -114,7 +114,7 @@ export default function SignupPage() {
                 placeholder="What should we call you?"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 
@@ -129,7 +129,7 @@ export default function SignupPage() {
                 placeholder="Your superpower email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 
@@ -147,7 +147,7 @@ export default function SignupPage() {
                 placeholder="Mobile number"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full pl-20 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-20 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 
@@ -162,7 +162,7 @@ export default function SignupPage() {
                 placeholder="Create a strong password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 

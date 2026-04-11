@@ -65,8 +65,8 @@ export default function LoginPage() {
                 <Logo size="small" />
             </div>
           </div>
-          <h1 className="text-3xl font-black text-gray-800 tracking-tight mb-2">Welcome Back</h1>
-          <p className="text-gray-500 font-medium italic">Your learning magic awaits!</p>
+          <h1 className="text-3xl font-black text-black tracking-tight mb-2">Welcome Back</h1>
+          <p className="text-black font-black italic">Your learning magic awaits!</p>
         </div>
 
         <CardContent className="p-8 pt-0">
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 
@@ -121,12 +121,12 @@ export default function LoginPage() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
               />
             </div>
 
             <div className="flex justify-end px-2">
-                <Link href="/forgot-password" title="Forgot Password?" className="text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors">
+                <Link href="/forgot-password" title="Forgot Password?" className="text-sm font-black text-black hover:text-blue-600 transition-colors">
                     Forgot Password?
                 </Link>
             </div>
