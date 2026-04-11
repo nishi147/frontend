@@ -41,6 +41,7 @@ export default function AdminBootcamps() {
     image: '',
     rating: 0 as number | string,
     showStudentsEnrolled: false,
+    studentsEnrolled: '' as number | string,
     modules: [] as Module[],
   });
 
@@ -74,7 +75,7 @@ export default function AdminBootcamps() {
   }, []);
 
   const resetForm = () => {
-    setFormData({ title: '', description: '', date: '', endDate: '', price: '', venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false, modules: [] });
+    setFormData({ title: '', description: '', date: '', endDate: '', price: '', venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false, studentsEnrolled: '', modules: [] });
     setEditingId(null);
     setCurrentStep(1);
     setImageFile(null);
@@ -139,6 +140,7 @@ export default function AdminBootcamps() {
       image: bc.image || '',
       rating: bc.rating || 0,
       showStudentsEnrolled: bc.showStudentsEnrolled || false,
+      studentsEnrolled: bc.studentsEnrolled ?? '',
       modules: bc.modules || [],
     });
     setImagePreview(bc.image || "");
@@ -329,6 +331,12 @@ export default function AdminBootcamps() {
                        <input type="checkbox" id="bcShowEnrolled" checked={formData.showStudentsEnrolled} className="w-6 h-6 rounded-lg accent-indigo-600 cursor-pointer" onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })} />
                        <label htmlFor="bcShowEnrolled" className="text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer mt-1">Show Enrolled Count on Frontend</label>
                     </div>
+                    {formData.showStudentsEnrolled && (
+                      <div className="space-y-2 animate-in fade-in duration-300">
+                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Manual Enrolled Count (Genuinely)</label>
+                         <input type="number" placeholder="e.g. 1500" value={formData.studentsEnrolled} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value) })} />
+                      </div>
+                    )}
                  </div>
                )}
 

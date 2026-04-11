@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { getThumbnailUrl } from '@/utils/image';
 import { Card, CardContent } from './Card';
 import { Button } from './Button';
-import { Star } from 'lucide-react';
+import { Star } from 'lucide-react';1
 import { trackEvent } from '@/utils/analytics';
 
 import { useCurrency } from '@/context/CurrencyContext';

@@ -46,70 +46,7 @@ export default function WorkshopsPage() {
   }, []);
 
   const handleBookWorkshop = async (workshop: any) => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
-    setProcessingId(workshop._id);
-    try {
-      // 1. Create order
-      const orderRes = await api.post('/api/payments/workshop-order', { workshopId: workshop._id });
-      
-      if (!orderRes.data.success) {
-        throw new Error(orderRes.data.message || "Failed to create order");
-      }
-      
-      const order = orderRes.data.data;
-
-      // 2. Open Razorpay Widget
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD',
-        amount: order.amount,
-        currency: order.currency,
-        name: "RUZANN",
-        description: `Booking for ${workshop.title}`,
-        order_id: order.id,
-        handler: async function (response: any) {
-          try {
-            // 3. Verify Payment
-            const verifyRes = await api.post('/api/payments/workshop-verify', {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              workshopId: workshop._id
-            });
-
-            if (verifyRes.data.success) {
-              router.push('/payment-success');
-            }
-          } catch (err: any) {
-            console.error("Verification error:", err);
-            showToast("Payment verification failed: " + (err.response?.data?.message || err.message), "error");
-          }
-        },
-        prefill: {
-          name: user.name,
-          email: user.email,
-        },
-        theme: {
-          color: "#EF4444"
-        }
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-      
-      rzp.on('payment.failed', function (response: any){
-        showToast("Payment failed: " + response.error.description, "error");
-      });
-
-    } catch (err: any) {
-      console.error("Payment initiation error:", err.response?.data || err);
-      showToast("Failed to initiate payment: " + (err.response?.data?.message || err.message), "error");
-    } finally {
-      setProcessingId(null);
-    }
+    router.push(`/workshops/${workshop._id}`);
   };
 
   const filtered = workshops.filter((w: any) =>
@@ -202,8 +139,16 @@ export default function WorkshopsPage() {
                       )}
                     </div>
                     
-                    <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm z-10 border border-white/20">
-                      ₹{ws.price}
+                    <div className="absolute top-2 right-2 flex flex-col items-end gap-1 z-10">
+                      <div className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm border border-white/20">
+                        ₹{ws.price}
+                      </div>
+                      {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
+                        <div className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm flex items-center gap-1 border border-white/20 animate-in fade-in duration-500">
+                          <span className="text-[8px]">👦</span>
+                          <span className="text-[10px] font-bold text-gray-700">{ws.studentsEnrolled} Joined</span>
+                        </div>
+                      )}
                     </div>
 
                     <CardContent className="p-3">
@@ -235,7 +180,7 @@ export default function WorkshopsPage() {
                         >
                           Book Seat <ArrowRight size={12} />
                         </Button>
-                        <Link href="/workshops" className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
+                        <Link href={`/workshops/${ws._id}`} className="w-full py-1.5 rounded font-black text-[9px] uppercase tracking-widest text-indigo-500 border border-indigo-100 hover:bg-indigo-50 transition-all text-center">
                           Program Info →
                         </Link>
                       </div>

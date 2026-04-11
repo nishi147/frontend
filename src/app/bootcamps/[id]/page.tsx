@@ -188,6 +188,12 @@ export default function BootcampDetailPage() {
                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><MapPin size={12} /> Base</p>
                    <p className="font-black text-xl tracking-tight uppercase">{bootcamp.venue}</p>
                  </div>
+                 {bootcamp.showStudentsEnrolled && (
+                   <div className="text-left">
+                     <p className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><UsersIcon size={12} /> Joined By</p>
+                     <p className="font-black text-xl tracking-tight uppercase">{bootcamp.studentsEnrolled || 0} Students</p>
+                   </div>
+                 )}
               </div>
             </div>
           </div>

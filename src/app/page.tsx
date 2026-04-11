@@ -106,13 +106,7 @@ const BootcampSection = () => {
   }, []);
 
   const handleEnrollBootcamp = async (bootcamp: any) => {
-    if (!user) {
-      setPendingBootcamp(bootcamp);
-      setIsLeadModalOpen(true);
-    } else {
-      trackEvent('bootcamp_enroll_click', { bootcamp_id: bootcamp._id, bootcamp_title: bootcamp.title });
-      await proceedToPayment(bootcamp, null);
-    }
+    router.push(`/bootcamps/${bootcamp._id}`);
   };
 
   const handleGuestLeadSubmission = async (leadData: any) => {
@@ -339,36 +333,7 @@ const WorkshopSection = () => {
   }, []);
 
   const handleBookWorkshop = async (workshop: any) => {
-    setIsProcessing(true);
-    try {
-      const slotRes = await api.get(`/api/workshops/${workshop._id}/slots`);
-      const slots = slotRes.data.success ? slotRes.data.data : [];
-      
-      if (slots.length > 0) {
-        setWorkshopSlots(slots);
-        setActiveWorkshopForSlots(workshop);
-        setIsProcessing(false);
-      } else {
-        // No slots, check if guest or authenticated
-        if (!user) {
-          setPendingWorkshopFetch({ workshop, slotId: null });
-          setIsLeadModalOpen(true);
-          setIsProcessing(false);
-        } else {
-          trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
-          await proceedToPayment(workshop, null, null);
-        }
-      }
-    } catch (err) {
-      console.error("Error fetching slots", err);
-      if (!user) {
-        setPendingWorkshopFetch({ workshop, slotId: null });
-        setIsLeadModalOpen(true);
-        setIsProcessing(false);
-      } else {
-        await proceedToPayment(workshop, null, null); // fallback
-      }
-    }
+    router.push(`/workshops/${workshop._id}`);
   };
 
   const handleSlotSelection = async (slotId: string | null) => {

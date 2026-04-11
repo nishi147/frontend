@@ -26,6 +26,7 @@ export default function AdminWorkshops() {
     image: '',
     rating: 0,
     showStudentsEnrolled: false,
+    studentsEnrolled: '' as number | string,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -80,7 +81,7 @@ export default function AdminWorkshops() {
       if (res.data.success) {
         setIsModalOpen(false);
         setEditingId(null);
-        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
+        setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false, studentsEnrolled: '' });
         setImageFile(null);
         setImagePreview("");
         fetchWorkshops();
@@ -103,6 +104,7 @@ export default function AdminWorkshops() {
       image: ws.image || '',
       rating: ws.rating || 0,
       showStudentsEnrolled: ws.showStudentsEnrolled || false,
+      studentsEnrolled: ws.studentsEnrolled ?? '',
     });
     setImagePreview(ws.image || "");
     setImageFile(null);
@@ -130,7 +132,7 @@ export default function AdminWorkshops() {
         </div>
         <Button onClick={() => {
           setEditingId(null);
-          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false });
+          setFormData({ title: '', description: '', date: '', price: 0, venue: '', meetingLink: '', image: '', rating: 0, showStudentsEnrolled: false, studentsEnrolled: '' });
           setIsModalOpen(true);
         }} className="font-black w-full md:w-auto">
           <Plus className="mr-2" /> Add Workshop
@@ -273,13 +275,25 @@ export default function AdminWorkshops() {
                     value={formData.rating} onChange={e => setFormData({...formData, rating: Number(e.target.value)})}
                   />
                 </div>
-                <div className="flex items-center gap-2 pt-5">
-                   <input 
-                    type="checkbox" id="wsShowEnrolled"
-                    className="w-5 h-5 accent-accent-500"
-                    checked={formData.showStudentsEnrolled} onChange={e => setFormData({...formData, showStudentsEnrolled: e.target.checked})}
-                   />
-                   <label htmlFor="wsShowEnrolled" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer">Show Enrolled Count</label>
+                <div className="flex flex-col gap-2 pt-2">
+                   <div className="flex items-center gap-2">
+                     <input 
+                       type="checkbox" id="wsShowEnrolled"
+                       className="w-5 h-5 accent-accent-500"
+                       checked={formData.showStudentsEnrolled} onChange={e => setFormData({...formData, showStudentsEnrolled: e.target.checked})}
+                     />
+                     <label htmlFor="wsShowEnrolled" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer">Show Enrolled Count</label>
+                   </div>
+                   {formData.showStudentsEnrolled && (
+                     <div className="animate-in fade-in duration-300">
+                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Manual Enrolled Count (Genuinely)</label>
+                       <input 
+                         type="number" placeholder="e.g. 500"
+                         className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
+                         value={formData.studentsEnrolled} onChange={e => setFormData({...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value)})}
+                       />
+                     </div>
+                   )}
                 </div>
               </div>
               <div className="space-y-2">
