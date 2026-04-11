@@ -74,12 +74,12 @@ export const Header = () => {
     <>
       <MovingBanner />
       <header className="bg-white sticky top-0 z-[100] border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 h-28 lg:h-32 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 lg:h-20 flex items-center justify-between">
 
         {/* Left: Logo Section (Balanced for Centering) */}
         <div className="flex-1 flex justify-start items-center h-full">
           <Link href="/" className="flex-shrink-0 flex items-center h-full">
-            <Logo />
+            <Logo className="scale-125 origin-left transition-transform duration-300" />
           </Link>
         </div>
 
