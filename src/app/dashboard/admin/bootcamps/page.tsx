@@ -86,6 +86,10 @@ export default function AdminBootcamps() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (!formData.title || !formData.description || !formData.date || !formData.endDate || !formData.venue || formData.price === undefined) {
+      showToast("Please complete all required fields (Brief & Logistics)", "error");
+      return;
+    }
     setIsSubmitting(true);
     try {
       const formDataToSubmit = new FormData();
@@ -102,10 +106,21 @@ export default function AdminBootcamps() {
       }
 
       let res;
+      let token = '';
+      try {
+        token = localStorage.getItem('token') || '';
+      } catch (err) {}
+      
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
       if (editingId) {
-        res = await api.put(`/api/bootcamps/${editingId}`, formDataToSubmit);
+        res = await api.put(`/api/bootcamps/${editingId}`, formDataToSubmit, config);
       } else {
-        res = await api.post('/api/bootcamps', formDataToSubmit);
+        res = await api.post('/api/bootcamps', formDataToSubmit, config);
       }
 
       if (res.data.success) {

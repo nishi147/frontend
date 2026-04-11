@@ -60,11 +60,22 @@ export default function AdminWorkshops() {
         formDataToSubmit.append('image', imageFile);
       }
 
+      let token = '';
+      try {
+        token = localStorage.getItem('token') || '';
+      } catch (err) {}
+      
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
       let res;
       if (editingId) {
-        res = await api.put(`/api/workshops/${editingId}`, formDataToSubmit);
+        res = await api.put(`/api/workshops/${editingId}`, formDataToSubmit, config);
       } else {
-        res = await api.post('/api/workshops', formDataToSubmit);
+        res = await api.post('/api/workshops', formDataToSubmit, config);
       }
       if (res.data.success) {
         setIsModalOpen(false);
