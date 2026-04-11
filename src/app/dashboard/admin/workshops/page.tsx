@@ -221,106 +221,137 @@ export default function AdminWorkshops() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-          <Card className="w-full max-w-lg overflow-hidden bg-white min-h-screen md:min-h-0 md:max-h-[90vh] flex flex-col md:rounded-[2rem]">
-            <div className="bg-accent-500 p-6 text-white flex justify-between items-center shrink-0">
-              <h2 className="text-xl md:text-2xl font-black">{editingId ? 'Edit Workshop ✏️' : 'New Workshop 🚀'}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-white hover:scale-110 p-2">✕</button>
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-0 md:p-6 bg-slate-900/80 backdrop-blur-md overflow-hidden">
+          <Card className="w-full max-w-lg overflow-hidden bg-white shadow-3xl rounded-none md:rounded-[2.5rem] flex flex-col h-full md:h-auto md:max-h-[90vh]">
+            <div className="bg-indigo-600 p-4 pt-8 md:p-8 text-white flex justify-between items-center shrink-0 shadow-lg relative">
+               <div>
+                  <h2 className="text-xl md:text-2xl font-black">{editingId ? 'Edit Workshop ✏️' : 'New Workshop 🚀'}</h2>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-100 opacity-80 mt-1">Configure Event Details</p>
+               </div>
+               <button onClick={() => setIsModalOpen(false)} className="bg-white/10 hover:bg-white/20 p-2 rounded-xl transition-colors">✕</button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4 overflow-y-auto">
-              <input 
-                type="text" required placeholder="Workshop Title"
-                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}
-              />
-              <textarea 
-                required placeholder="Description" rows={3}
-                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold resize-none"
-                value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
-              ></textarea>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Date</label>
+            
+            <form onSubmit={handleSubmit} className="p-4 md:p-8 flex flex-col gap-6 overflow-y-auto flex-1 bg-white">
+               <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Workshop Identity</label>
                   <input 
-                    type="date" required
-                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                    value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                    type="text" required placeholder="e.g. Master the Dark Arts of JS"
+                    className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-black text-slate-800 transition-all placeholder:text-slate-400"
+                    value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}
                   />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Price (₹)</label>
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">The Mission Brief</label>
+                  <textarea 
+                    required placeholder="What will they learn? What will they build?" rows={4}
+                    className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-bold text-slate-700 resize-none transition-all placeholder:text-slate-400"
+                    value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
+                  ></textarea>
+               </div>
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Deployment Date</label>
+                   <input 
+                     type="date" required
+                     className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-black text-slate-800 transition-all"
+                     value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})}
+                   />
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Contribution (₹)</label>
+                   <input 
+                     type="number" required placeholder="999"
+                     className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-black text-indigo-600 transition-all placeholder:text-slate-400"
+                     value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})}
+                   />
+                 </div>
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Launch Base / Venue</label>
                   <input 
-                    type="number" required placeholder="Price"
-                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                    value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})}
+                    type="text" required placeholder="e.g. Pune Tech Park or Zoom"
+                    className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-bold text-slate-800 transition-all placeholder:text-slate-400"
+                    value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})}
                   />
-                </div>
-              </div>
-              <input 
-                type="text" required placeholder="Venue (e.g. Online - Zoom Live)"
-                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})}
-              />
-              <input 
-                type="url" placeholder="Meeting Link (Optional)"
-                className="p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold text-sm"
-                value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Workshop Rating (0-5)</label>
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Meeting Link (Optional)</label>
                   <input 
-                    type="number" step="0.1" min="0" max="5"
-                    className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                    value={formData.rating} onChange={e => setFormData({...formData, rating: Number(e.target.value)})}
+                    type="url" placeholder="https://zoom.us/..."
+                    className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-bold text-slate-500 text-sm transition-all placeholder:text-slate-400"
+                    value={formData.meetingLink} onChange={e => setFormData({...formData, meetingLink: e.target.value})}
                   />
-                </div>
-                <div className="flex flex-col gap-2 pt-2">
-                   <div className="flex items-center gap-2">
-                     <input 
-                       type="checkbox" id="wsShowEnrolled"
-                       className="w-5 h-5 accent-accent-500"
-                       checked={formData.showStudentsEnrolled} onChange={e => setFormData({...formData, showStudentsEnrolled: e.target.checked})}
-                     />
-                     <label htmlFor="wsShowEnrolled" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer">Show Enrolled Count</label>
+               </div>
+
+               <div className="grid grid-cols-1 sm:grid-cols-1 gap-6">
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Experience Rating (0-5)</label>
+                   <input 
+                     type="number" step="0.1" min="0" max="5"
+                     className="w-full p-4 border-2 border-slate-100 bg-slate-50 rounded-2xl focus:border-indigo-500 focus:bg-white outline-none font-black text-slate-800 transition-all"
+                     value={formData.rating} onChange={e => setFormData({...formData, rating: Number(e.target.value)})}
+                   />
+                 </div>
+                 <div className="flex flex-col gap-4 p-4 rounded-3xl bg-slate-50 border border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="checkbox" id="wsShowEnrolled"
+                        className="w-6 h-6 rounded-lg accent-indigo-600 cursor-pointer"
+                        checked={formData.showStudentsEnrolled} onChange={e => setFormData({...formData, showStudentsEnrolled: e.target.checked})}
+                      />
+                      <label htmlFor="wsShowEnrolled" className="text-[10px] font-black text-slate-900 uppercase tracking-widest cursor-pointer mt-1">Show Social Proof Badge</label>
+                    </div>
+                    {formData.showStudentsEnrolled && (
+                      <div className="animate-in fade-in duration-300 space-y-2">
+                        <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Manual Enrollment Count</label>
+                        <input 
+                          type="number" placeholder="e.g. 500"
+                          className="w-full p-4 border-2 border-white bg-white rounded-2xl focus:border-indigo-500 outline-none font-black text-indigo-600 shadow-sm transition-all"
+                          value={formData.studentsEnrolled} onChange={e => setFormData({...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value)})}
+                        />
+                      </div>
+                    )}
+                 </div>
+               </div>
+
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2">Workshop Visual (Thumbnail)</label>
+                 <div className="p-8 border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50 hover:border-indigo-300 transition-all text-center group relative overflow-hidden">
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setImageFile(file);
+                          const reader = new FileReader();
+                          reader.onloadend = () => setImagePreview(reader.result as string);
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    />
+                    <div className="flex flex-col items-center">
+                       <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">🖼️</span>
+                       <span className="text-[10px] font-black uppercase text-slate-400">Click or Drag to Upload</span>
+                    </div>
+                 </div>
+                 {imagePreview && (
+                   <div className="mt-4 h-32 w-full rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+                     <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
                    </div>
-                   {formData.showStudentsEnrolled && (
-                     <div className="animate-in fade-in duration-300">
-                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Manual Enrolled Count (Genuinely)</label>
-                       <input 
-                         type="number" placeholder="e.g. 500"
-                         className="w-full p-3 border-2 rounded-xl focus:border-accent-500 outline-none font-bold"
-                         value={formData.studentsEnrolled} onChange={e => setFormData({...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value)})}
-                       />
-                     </div>
-                   )}
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Workshop Image</label>
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setImageFile(file);
-                      const reader = new FileReader();
-                      reader.onloadend = () => setImagePreview(reader.result as string);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="w-full p-3 border-2 border-dashed rounded-xl font-bold text-xs cursor-pointer hover:border-accent-500 transition-colors"
-                />
-                {imagePreview && (
-                  <div className="mt-2 h-24 w-full rounded-xl overflow-hidden border">
-                    <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
-                  </div>
-                )}
-              </div>
-              <Button type="submit" className="w-full py-6 font-black text-lg bg-accent-500 hover:bg-accent-600 mt-2">
-                {editingId ? 'Save Changes ✨' : 'Create Workshop ✨'}
-              </Button>
+                 )}
+               </div>
+
+               <div className="sticky bottom-0 bg-white pt-4 pb-2 border-t border-slate-50 -mx-8 px-8 mt-4">
+                  <Button type="submit" className="w-full py-7 rounded-2xl font-black text-xl bg-indigo-600 hover:bg-indigo-700 shadow-2xl shadow-indigo-100 transition-all hover:scale-[1.02] active:scale-95">
+                    {editingId ? 'Save Mission ✨' : 'Launch Workshop 🚀'}
+                  </Button>
+               </div>
             </form>
           </Card>
         </div>

@@ -57,32 +57,32 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
     >
       <Card className={`h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden cursor-pointer ${className}`}>
         
-        {/* BrightChamps Style Header: light blue, centered icon */}
-        <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center p-8 group-hover:bg-[#e4efff] transition-colors">
+        {/* BrightChamps Style Header: Full area thumbnail or centered icon */}
+        <div className="relative aspect-[16/10] bg-[#eef5ff] group-hover:bg-[#e4efff] transition-all duration-500 overflow-hidden">
           
           {/* Top Left Enrolled Badge */}
           {course.showStudentsEnrolled && course.studentsEnrolled > 0 && (
-          <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white">
-             <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                <span className="text-[8px]">👦</span>
+          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md border border-white/50 z-30">
+             <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                <span className="text-[10px]">👦</span>
              </div>
-             <span className="text-[10px] font-bold text-gray-700">{course.studentsEnrolled} Enrolled</span>
+             <span className="text-[10px] font-black text-slate-800">{course.studentsEnrolled} Enrolled</span>
           </div>
           )}
 
-          <div className="w-24 h-24 relative z-10 flex items-center justify-center">
-            {course.thumbnail ? (
-              <img 
-                src={getThumbnailUrl(course.thumbnail)} 
-                alt={course.title} 
-                className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-500" 
-              />
-            ) : (
-              <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500 select-none">
+          {course.thumbnail ? (
+            <img 
+              src={getThumbnailUrl(course.thumbnail)} 
+              alt={course.title} 
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-7xl filter drop-shadow-xl group-hover:scale-110 transition-transform duration-500 select-none">
                 {course.category?.icon || '📚'}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Bottom Floating White Pill Tags */}
           <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">

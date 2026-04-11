@@ -258,25 +258,25 @@ export default function AdminBootcamps() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-0 md:p-6 overflow-y-auto">
-          <Card className="w-full max-w-4xl bg-white shadow-3xl rounded-none md:rounded-[3.5rem] overflow-hidden flex flex-col min-h-screen md:min-h-0 md:max-h-[95vh]">
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-0 md:p-6 overflow-hidden">
+          <Card className="w-full max-w-4xl bg-white shadow-3xl rounded-none md:rounded-[2.5rem] overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
             
             {/* Header / Stepper */}
-            <div className="bg-slate-50 border-b border-slate-100 p-6 pt-10 md:p-12 relative flex flex-col items-center">
-               <button onClick={() => setIsModalOpen(false)} className="absolute right-4 top-4 md:right-8 md:top-8 w-10 h-10 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-slate-100 hover:bg-slate-200 transition-colors font-bold z-50">✕</button>
-               <h2 className="text-2xl md:text-3xl font-black text-slate-800 mb-8 text-center">{editingId ? 'Updating Mission 🛰️' : 'Launching New Mission 🚀'}</h2>
+            <div className="bg-slate-50 border-b border-slate-100 p-4 pt-8 md:p-8 md:pt-10 relative flex flex-col items-center shrink-0">
+               <button onClick={() => setIsModalOpen(false)} className="absolute right-4 top-4 md:right-8 md:top-8 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-slate-100 hover:bg-slate-200 transition-colors font-bold z-50">✕</button>
+               <h2 className="text-xl md:text-2xl font-black text-slate-800 mb-4 md:mb-6 text-center">{editingId ? 'Updating Mission 🛰️' : 'Launching New Mission 🚀'}</h2>
                
-               <div className="flex items-center gap-2 w-full max-w-2xl">
+               <div className="flex items-center gap-1 md:gap-2 w-full max-w-2xl px-4 md:px-0">
                   {[1, 2, 3, 4].map((step) => (
                     <React.Fragment key={step}>
-                       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm z-10 transition-all duration-500 ${currentStep >= step ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'bg-white border-2 border-slate-100 text-slate-400'}`}>
-                         {step}
+                       <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl flex items-center justify-center font-black text-xs md:text-sm z-10 transition-all duration-500 ${currentStep >= step ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'bg-white border-2 border-slate-200 text-slate-800'}`}>
+                          {step}
                        </div>
-                       {step < 4 && <div className={`flex-1 h-1.5 rounded-full mx-1 transition-all duration-700 ${currentStep > step ? 'bg-indigo-600' : 'bg-slate-100'}`} />}
+                       {step < 4 && <div className={`flex-1 h-1 md:h-1.5 rounded-full mx-0.5 md:mx-1 transition-all duration-700 ${currentStep > step ? 'bg-indigo-600' : 'bg-slate-200'}`} />}
                     </React.Fragment>
                   ))}
                </div>
-               <div className="flex justify-between w-full max-w-2xl px-2 mt-3 text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
+               <div className="hidden md:flex justify-between w-full max-w-2xl px-2 mt-3 text-[10px] font-black uppercase text-slate-800 tracking-[0.2em]">
                   <span className={currentStep >= 1 ? 'text-indigo-600' : ''}>The Brief</span>
                   <span className={currentStep >= 2 ? 'text-indigo-600' : ''}>Logistics</span>
                   <span className={currentStep >= 3 ? 'text-indigo-600' : ''}>Curriculum</span>
@@ -290,12 +290,12 @@ export default function AdminBootcamps() {
                {currentStep === 1 && (
                  <div className="grid grid-cols-1 gap-6 md:gap-8 animate-in slide-in-from-bottom-4 duration-500">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Campaign Title</label>
-                       <input autoFocus required placeholder="e.g. Full Stack Masterclass" value={formData.title} className="w-full px-4 py-3 md:p-6 border-2 border-slate-50 bg-slate-50 rounded-2xl md:rounded-[1.5rem] font-black text-slate-700 focus:border-indigo-400 focus:bg-white outline-none transition-all placeholder:text-slate-300 min-h-[50px] md:min-h-[70px]" onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Campaign Title</label>
+                       <input autoFocus required placeholder="e.g. Full Stack Masterclass" value={formData.title} className="w-full px-4 py-3 md:p-6 border-2 border-slate-100 bg-slate-50 rounded-2xl md:rounded-[1.5rem] font-black text-slate-800 focus:border-indigo-400 focus:bg-white outline-none transition-all placeholder:text-slate-500 min-h-[50px] md:min-h-[70px]" onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">The Mission Goal (Description)</label>
-                       <textarea required rows={5} placeholder="Tell them why this bootcamp will change their lives..." value={formData.description} className="w-full px-4 py-3 md:p-6 border-2 border-slate-50 bg-slate-50 rounded-2xl md:rounded-[1.5rem] font-bold text-slate-600 resize-none focus:border-indigo-400 focus:bg-white outline-none transition-all" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">The Mission Goal (Description)</label>
+                       <textarea required rows={5} placeholder="Tell them why this bootcamp will change their lives..." value={formData.description} className="w-full px-4 py-3 md:p-6 border-2 border-slate-100 bg-slate-50 rounded-2xl md:rounded-[1.5rem] font-bold text-slate-800 resize-none focus:border-indigo-400 focus:bg-white outline-none transition-all placeholder:text-slate-500" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
                     </div>
                  </div>
                )}
@@ -304,37 +304,37 @@ export default function AdminBootcamps() {
                {currentStep === 2 && (
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 animate-in slide-in-from-bottom-4 duration-500">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Start Launch Date</label>
-                       <input type="date" value={formData.date} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-slate-700 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Start Launch Date</label>
+                       <input type="date" value={formData.date} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-black text-slate-800 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Estimated End Date</label>
-                       <input type="date" value={formData.endDate} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-slate-700 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Estimated End Date</label>
+                       <input type="date" value={formData.endDate} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-black text-slate-800 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Price / Contribution (₹)</label>
-                       <input type="number" value={formData.price} placeholder="9999" className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, price: e.target.value === '' ? '' : Number(e.target.value) })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Price / Contribution (₹)</label>
+                       <input type="number" value={formData.price} placeholder="9999" className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" onChange={(e) => setFormData({ ...formData, price: e.target.value === '' ? '' : Number(e.target.value) })} />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Base / Venue</label>
-                       <input placeholder="e.g. Pune City Center or Zoom" value={formData.venue} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-bold text-slate-700 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Base / Venue</label>
+                       <input placeholder="e.g. Pune City Center or Zoom" value={formData.venue} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
                     </div>
                     <div className="col-span-1 md:col-span-2 space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">HQ Access Link (Meeting Link)</label>
-                       <input placeholder="https://zoom.us/j/..." value={formData.meetingLink} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-bold text-slate-500 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">HQ Access Link (Meeting Link)</label>
+                       <input placeholder="https://zoom.us/j/..." value={formData.meetingLink} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-bold text-slate-800 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })} />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Launch Rating (0-5)</label>
-                       <input type="number" step="0.1" min="0" max="5" value={formData.rating} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, rating: e.target.value === '' ? '' : Number(e.target.value) })} />
+                       <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Launch Rating (0-5)</label>
+                       <input type="number" step="0.1" min="0" max="5" value={formData.rating} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, rating: e.target.value === '' ? '' : Number(e.target.value) })} />
                     </div>
                     <div className="space-y-2 flex items-center gap-3 pt-6 md:col-span-1">
                        <input type="checkbox" id="bcShowEnrolled" checked={formData.showStudentsEnrolled} className="w-6 h-6 rounded-lg accent-indigo-600 cursor-pointer" onChange={(e) => setFormData({ ...formData, showStudentsEnrolled: e.target.checked })} />
-                       <label htmlFor="bcShowEnrolled" className="text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer mt-1">Show Enrolled Count on Frontend</label>
+                       <label htmlFor="bcShowEnrolled" className="text-[10px] font-black text-slate-900 uppercase tracking-widest cursor-pointer mt-1">Show Enrolled Count on Frontend</label>
                     </div>
                     {formData.showStudentsEnrolled && (
                       <div className="space-y-2 animate-in fade-in duration-300">
-                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 md:ml-4">Manual Enrolled Count (Genuinely)</label>
-                         <input type="number" placeholder="e.g. 1500" value={formData.studentsEnrolled} className="w-full px-4 py-3 md:p-5 border-2 border-slate-50 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px]" onChange={(e) => setFormData({ ...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value) })} />
+                         <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest ml-2 md:ml-4">Manual Enrolled Count (Genuinely)</label>
+                         <input type="number" placeholder="e.g. 1500" value={formData.studentsEnrolled} className="w-full px-4 py-3 md:p-5 border-2 border-slate-100 bg-slate-50 rounded-2xl font-black text-indigo-600 outline-none focus:border-indigo-400 focus:bg-white transition-all min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" onChange={(e) => setFormData({ ...formData, studentsEnrolled: e.target.value === '' ? '' : Number(e.target.value) })} />
                       </div>
                     )}
                  </div>
@@ -344,21 +344,23 @@ export default function AdminBootcamps() {
                {currentStep === 3 && (
                  <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
                     <div className="flex justify-between items-center bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50 shadow-sm">
-                      <div>
-                         <h3 className="font-black text-slate-800 text-xl tracking-tight">Curriculum Architecture</h3>
-                         <p className="text-[10px] font-black uppercase text-indigo-400 tracking-widest mt-1">Design the learning pathway</p>
-                      </div>
-                      <Button onClick={() => setIsAddingModule(true)} className="bg-slate-900 border-b-4 border-slate-700 active:border-b-0 active:translate-y-1 hover:bg-black text-white font-black rounded-2xl px-6 py-4 flex gap-2">
-                        <Plus size={18} /> New Module
-                      </Button>
+                       <div>
+                          <h3 className="font-black text-slate-800 text-xl tracking-tight">Curriculum Architecture</h3>
+                          <p className="text-[10px] font-black uppercase text-indigo-600 tracking-widest mt-1">Design the learning pathway</p>
+                       </div>
+                       <Button onClick={() => setIsAddingModule(true)} className="bg-slate-900 border-b-4 border-slate-700 active:border-b-0 active:translate-y-1 hover:bg-black text-white font-black rounded-2xl px-6 py-4 flex gap-2">
+                         <Plus size={18} /> New Module
+                       </Button>
                     </div>
 
                     {isAddingModule && (
                       <div className="bg-slate-50 p-6 md:p-8 rounded-[2rem] border-4 border-indigo-100 flex flex-col md:flex-row gap-4 animate-in zoom-in-95">
-                         <input autoFocus placeholder="Module Title (e.g. Part 1: Foundations)" value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} className="flex-1 px-4 py-3 md:p-5 rounded-2xl border-2 border-white bg-white font-black text-slate-700 focus:border-indigo-400 outline-none shadow-sm min-h-[50px] md:min-h-[60px]" />
+                         <input autoFocus placeholder="Module Title (e.g. Part 1: Foundations)" value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} className="flex-1 px-4 py-3 md:p-5 rounded-2xl border-2 border-white bg-white font-black text-slate-800 focus:border-indigo-400 outline-none shadow-sm min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" />
                          <div className="flex gap-2 h-[50px] md:h-auto">
-                            <Button onClick={handleAddModule} className="bg-indigo-600 text-white font-black h-full px-6 md:px-8 rounded-2xl">{editingModuleIndex !== null ? 'Update' : 'Save'}</Button>
-                            <Button variant="outline" onClick={() => { setIsAddingModule(false); setEditingModuleIndex(null); setNewModuleTitle(""); }} className="bg-white border-2 border-slate-100 font-black h-full px-4 md:px-6 rounded-2xl text-slate-400">Cancel</Button>
+                            <Button onClick={handleAddModule} className="bg-indigo-600 text-white font-black h-full px-6 md:px-8 rounded-2xl">
+                               {editingModuleIndex !== null ? 'Update' : 'Save'}
+                            </Button>
+                            <Button variant="outline" onClick={() => { setIsAddingModule(false); setEditingModuleIndex(null); setNewModuleTitle(""); }} className="bg-white border-2 border-slate-200 font-black h-full px-4 md:px-6 rounded-2xl text-slate-800">Cancel</Button>
                          </div>
                       </div>
                     )}
@@ -372,8 +374,8 @@ export default function AdminBootcamps() {
                                   <h4 className="font-black text-slate-800 text-xl uppercase tracking-wide">{mod.title}</h4>
                                </div>
                                <div className="flex gap-2 opacity-0 group-hover/mod:opacity-100 transition-opacity">
-                                  <button onClick={() => { setNewModuleTitle(mod.title); setEditingModuleIndex(mIdx); setIsAddingModule(true); }} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-300 hover:text-indigo-500 border border-slate-100 transition-colors"><Edit2 size={16}/></button>
-                                  <button onClick={() => removeModule(mIdx)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-300 hover:text-red-500 border border-slate-100 transition-colors"><Trash2 size={16}/></button>
+                                  <button onClick={() => { setNewModuleTitle(mod.title); setEditingModuleIndex(mIdx); setIsAddingModule(true); }} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-400 hover:text-indigo-500 border border-slate-100 transition-colors"><Edit2 size={16}/></button>
+                                  <button onClick={() => removeModule(mIdx)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-400 hover:text-red-500 border border-slate-100 transition-colors"><Trash2 size={16}/></button>
                                </div>
                             </div>
                             <div className="p-6 space-y-4">
@@ -385,13 +387,13 @@ export default function AdminBootcamps() {
                                           <p className="font-black text-slate-800 text-sm leading-tight">{les.title}</p>
                                           <div className="flex gap-4 mt-1 text-[10px] font-black uppercase tracking-widest text-slate-400">
                                             {les.duration && <span>⏱️ {les.duration}</span>}
-                                            {les.videoUrl && <span className="text-indigo-400 flex items-center gap-1"><LinkIcon size={10}/> Linked</span>}
+                                            {les.videoUrl && <span className="text-indigo-600 flex items-center gap-1"><LinkIcon size={10}/> Linked</span>}
                                           </div>
                                        </div>
                                     </div>
                                     <div className="flex gap-2">
-                                       <button onClick={() => { setNewSessionData({ ...les, description: les.description || "" }); setEditingSessionInfo({mIdx, sIdx}); setActiveModuleIndex(mIdx); }} className="p-2 text-slate-200 hover:text-indigo-500 transition-colors"><Edit size={14}/></button>
-                                       <button onClick={() => removeSession(mIdx, sIdx)} className="p-2 text-slate-200 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
+                                       <button onClick={() => { setNewSessionData({ ...les, description: les.description || "" }); setEditingSessionInfo({mIdx, sIdx}); setActiveModuleIndex(mIdx); }} className="p-2 text-slate-400 hover:text-indigo-500 transition-colors"><Edit size={14}/></button>
+                                       <button onClick={() => removeSession(mIdx, sIdx)} className="p-2 text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
                                     </div>
                                  </div>
                                ))}
@@ -399,28 +401,28 @@ export default function AdminBootcamps() {
                                  <div className="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 space-y-5 animate-in slide-in-from-top-2">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                        <div className="col-span-2">
-                                         <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Session Topic</label>
-                                         <input autoFocus placeholder="e.g. Intro to Logic" value={newSessionData.title} onChange={e => setNewSessionData({...newSessionData, title: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-black text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0" />
+                                         <label className="text-[10px] font-black uppercase text-slate-900 ml-2">Session Topic</label>
+                                         <input autoFocus placeholder="e.g. Intro to Logic" value={newSessionData.title} onChange={e => setNewSessionData({...newSessionData, title: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-black text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0 placeholder:text-slate-500" />
                                        </div>
                                        <div className="col-span-2">
-                                         <textarea placeholder="Tell them what they will master in this session..." rows={2} value={newSessionData.description} onChange={e => setNewSessionData({...newSessionData, description: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm resize-none" />
+                                         <textarea placeholder="Tell them what they will master in this session..." rows={2} value={newSessionData.description} onChange={e => setNewSessionData({...newSessionData, description: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm resize-none placeholder:text-slate-500" />
                                        </div>
                                        <div>
-                                         <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Video Link (Optional)</label>
-                                         <input placeholder="https://youtube.com/..." value={newSessionData.videoUrl} onChange={e => setNewSessionData({...newSessionData, videoUrl: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0" />
+                                         <label className="text-[10px] font-black uppercase text-slate-900 ml-2">Video Link (Optional)</label>
+                                         <input placeholder="https://youtube.com/..." value={newSessionData.videoUrl} onChange={e => setNewSessionData({...newSessionData, videoUrl: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0 placeholder:text-slate-500" />
                                        </div>
                                        <div>
-                                         <label className="text-[10px] font-black uppercase text-slate-400 ml-2">Estimated Duration</label>
-                                         <input placeholder="e.g. 2 Hours" value={newSessionData.duration} onChange={e => setNewSessionData({...newSessionData, duration: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0" />
+                                         <label className="text-[10px] font-black uppercase text-slate-900 ml-2">Estimated Duration</label>
+                                         <input placeholder="e.g. 2 Hours" value={newSessionData.duration} onChange={e => setNewSessionData({...newSessionData, duration: e.target.value})} className="w-full px-4 py-3 md:p-4 rounded-xl border-2 border-white bg-white font-bold text-sm outline-none focus:border-indigo-400 shadow-sm min-h-[50px] md:min-h-0 placeholder:text-slate-500" />
                                        </div>
                                     </div>
                                     <div className="flex gap-2 justify-end pt-4 border-t border-slate-100">
-                                       <Button variant="ghost" onClick={() => { setActiveModuleIndex(null); setEditingSessionInfo(null); setNewSessionData({title:"", description:"", videoUrl:"", duration:""}); }} className="font-bold text-slate-400">Cancel</Button>
+                                       <Button variant="ghost" onClick={() => { setActiveModuleIndex(null); setEditingSessionInfo(null); setNewSessionData({title:"", description:"", videoUrl:"", duration:""}); }} className="font-bold text-slate-500">Cancel</Button>
                                        <Button onClick={() => handleAddSession(mIdx)} className="bg-indigo-600 text-white font-black px-8 rounded-xl shadow-lg shadow-indigo-100">{editingSessionInfo ? 'Update Session' : 'Add Session'}</Button>
                                     </div>
                                  </div>
                                ) : (
-                                 <button onClick={() => setActiveModuleIndex(mIdx)} className="w-full py-5 border-2 border-dashed border-slate-100 rounded-2xl font-black text-xs text-slate-300 hover:border-indigo-200 hover:text-indigo-400 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
+                                 <button onClick={() => setActiveModuleIndex(mIdx)} className="w-full py-5 border-2 border-dashed border-slate-200 rounded-2xl font-black text-xs text-slate-400 hover:border-indigo-200 hover:text-indigo-600 transition-all uppercase tracking-widest flex items-center justify-center gap-2">
                                    <Plus size={14}/> Add New Topic to {mod.title}
                                  </button>
                                )}
@@ -436,27 +438,27 @@ export default function AdminBootcamps() {
                  <div className="animate-in slide-in-from-bottom-4 duration-500 py-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                        <div className="space-y-8">
-                          <div className="bg-slate-50 p-8 rounded-[2.5rem] border-4 border-dashed border-slate-100 text-center hover:border-indigo-300 transition-colors group">
+                          <div className="bg-slate-50 p-8 rounded-[2.5rem] border-4 border-dashed border-slate-200 text-center hover:border-indigo-300 transition-colors group">
                              <div className="w-20 h-20 bg-white rounded-[1.5rem] shadow-xl flex items-center justify-center text-4xl mx-auto mb-6 group-hover:scale-110 transition-transform">🛰️</div>
                              <h4 className="text-xl font-black text-slate-800 mb-6 tracking-tight">Mission Visual (Thumbnail)</h4>
                              
                              <div className="space-y-4">
-                                <input type="file" accept="image/*" className="w-full p-4 border-2 border-slate-100 rounded-2xl bg-white font-black text-xs cursor-pointer hover:border-indigo-300 transition-all" onChange={(e) => {
+                                <input type="file" accept="image/*" className="w-full p-4 border-2 border-slate-200 rounded-2xl bg-white font-black text-xs cursor-pointer hover:border-indigo-300 transition-all" onChange={(e) => {
                                    const file = e.target.files?.[0];
                                    if (file) { setImageFile(file); const r = new FileReader(); r.onloadend = () => setImagePreview(r.result as string); r.readAsDataURL(file); }
                                 }} />
-                                <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest">or paste url</div>
-                                <input placeholder="https://..." value={typeof formData.image === 'string' ? formData.image : ''} className="w-full px-4 py-3 md:p-4 border-2 border-slate-100 rounded-2xl bg-white font-bold text-sm outline-none focus:border-indigo-400 transition-all min-h-[50px] md:min-h-[60px]" onChange={e => { setFormData({...formData, image: e.target.value}); setImagePreview(e.target.value); setImageFile(null); }} />
+                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">or paste url</div>
+                                <input placeholder="https://..." value={typeof formData.image === 'string' ? formData.image : ''} className="w-full px-4 py-3 md:p-4 border-2 border-slate-100 rounded-2xl bg-white font-bold text-sm outline-none focus:border-indigo-400 transition-all min-h-[50px] md:min-h-[60px] placeholder:text-slate-500" onChange={e => { setFormData({...formData, image: e.target.value}); setImagePreview(e.target.value); setImageFile(null); }} />
                              </div>
                              
                              {imagePreview && <div className="mt-8 h-48 w-full rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl"><img src={imagePreview} className="w-full h-full object-cover" alt="Preview" /></div>}
                           </div>
                        </div>
 
-                       <div className="flex flex-col justify-center text-center md:text-left space-y-8 p-6 md:p-10 bg-indigo-50/30 rounded-[3rem] border border-indigo-100/50">
+                       <div className="flex flex-col justify-center text-center md:text-left space-y-8 p-6 md:p-10 bg-indigo-50/30 rounded-[3rem] border border-indigo-100/50 shadow-sm">
                           <CheckCircle className="w-20 h-20 text-green-500 mx-auto md:mx-0 mb-2 animate-bounce" />
                           <h3 className="text-4xl font-black text-slate-800 tracking-tighter leading-none mb-4">Mission Ready <br/><span className="text-indigo-600">for Deployment!</span></h3>
-                          <div className="space-y-3 font-bold text-slate-500">
+                          <div className="space-y-3 font-bold text-slate-800">
                              <p className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-green-500" /> {formData.modules.length} Curriculum Modules Configured</p>
                              <p className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-indigo-500" /> Price set at ₹{formData.price}</p>
                              <p className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-orange-500" /> Venue: {formData.venue}</p>
@@ -468,27 +470,31 @@ export default function AdminBootcamps() {
 
             </CardContent>
 
-            <div className="p-4 md:p-12 border-t border-slate-50 flex items-center justify-between bg-white backdrop-blur-md">
-               <Button disabled={currentStep === 1 || isSubmitting} onClick={prevStep} variant="outline" className="px-4 py-3 md:px-8 md:py-5 rounded-2xl border-2 border-slate-100 text-slate-400 font-black flex gap-2 hover:bg-slate-50 transition-all">
-                 <ChevronLeft size={20} /> <span className="hidden md:inline">Back</span>
-               </Button>
+            <div className="p-4 md:p-12 border-t border-slate-100 flex items-center justify-between bg-white backdrop-blur-md shrink-0">
+               <div className="flex gap-4">
+                <Button disabled={currentStep === 1 || isSubmitting} onClick={prevStep} variant="outline" className="px-4 py-3 md:px-8 md:py-6 rounded-2xl border-2 border-slate-200 text-slate-800 font-black flex gap-2 hover:bg-slate-50 transition-all min-h-[50px] md:min-h-0">
+                  <ChevronLeft size={20} /> <span className="hidden md:inline">Back</span>
+                </Button>
+               </div>
                
                <div className="flex gap-4">
                   {currentStep < 4 ? (
-                    <Button onClick={nextStep} className="px-6 py-3 md:px-10 md:py-5 rounded-2xl bg-indigo-600 text-white font-black flex gap-2 shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95">
+                    <Button onClick={nextStep} className="px-6 py-3 md:px-10 md:py-6 rounded-2xl bg-indigo-600 text-white font-black flex gap-2 shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95 min-h-[50px] md:min-h-0">
                       <span className="hidden md:inline">Next Step</span> <span className="md:hidden">Next</span> <ChevronRight size={20} />
                     </Button>
                   ) : (
-                    <Button disabled={isSubmitting} onClick={() => handleSubmit()} className="px-6 py-3 md:px-12 md:py-5 rounded-[1rem] md:rounded-3xl bg-indigo-600 text-white font-black text-base md:text-xl flex gap-2 md:gap-3 shadow-2xl shadow-indigo-200 hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95">
+                    <Button disabled={isSubmitting} onClick={() => handleSubmit()} className="px-6 py-3 md:px-12 md:py-6 rounded-[1rem] md:rounded-3xl bg-indigo-600 text-white font-black text-base md:text-xl flex gap-2 md:gap-3 shadow-2xl shadow-indigo-200 hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95 min-h-[50px] md:min-h-0">
                       {isSubmitting ? <><Loader2 className="animate-spin" /> Launching...</> : editingId ? 'Update Mission ✨' : 'Launch Bootcamp 🚀'}
                     </Button>
                   ) }
                </div>
             </div>
 
+
           </Card>
         </div>
       )}
+
     </DashboardLayout>
   );
 }
