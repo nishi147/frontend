@@ -343,7 +343,9 @@ export default function AdminBootcamps() {
                       <Button onClick={() => setIsAddingModule(true)} className="bg-slate-900 border-b-4 border-slate-700 active:border-b-0 active:translate-y-1 hover:bg-black text-white font-black rounded-2xl px-6 py-4 flex gap-2">
                         <Plus size={18} /> New Module
                       </Button>
-                           {isAddingModule && (
+                    </div>
+
+                    {isAddingModule && (
                       <div className="bg-slate-50 p-6 md:p-8 rounded-[2rem] border-4 border-indigo-100 flex flex-col md:flex-row gap-4 animate-in zoom-in-95">
                          <input autoFocus placeholder="Module Title (e.g. Part 1: Foundations)" value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} className="flex-1 px-4 py-3 md:p-5 rounded-2xl border-2 border-white bg-white font-black text-slate-700 focus:border-indigo-400 outline-none shadow-sm min-h-[50px] md:min-h-[60px]" />
                          <div className="flex gap-2 h-[50px] md:h-auto">
@@ -351,7 +353,7 @@ export default function AdminBootcamps() {
                             <Button variant="outline" onClick={() => { setIsAddingModule(false); setEditingModuleIndex(null); setNewModuleTitle(""); }} className="bg-white border-2 border-slate-100 font-black h-full px-4 md:px-6 rounded-2xl text-slate-400">Cancel</Button>
                          </div>
                       </div>
-                    )}                    )}
+                    )}
 
                     <div className="space-y-8">
                        {formData.modules.map((mod, mIdx) => (
