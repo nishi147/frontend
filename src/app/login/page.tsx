@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
-import { Mail, Lock, Shield, Sparkles, Rocket, BookOpen, Brain, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Shield, Sparkles, Rocket, BookOpen, Brain, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,15 +15,26 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const isAdminHint = searchParams?.get('admin') === 'true';
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
+
+    if (!validateEmail(email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -94,6 +105,7 @@ export default function LoginPage() {
               </div>
             )}
 
+            {/* Email Field */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Mail className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
@@ -107,22 +119,30 @@ export default function LoginPage() {
                 placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
             </div>
 
+            {/* Password Field with Eye Toggle */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Lock className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
               </div>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                className="w-full pl-12 pr-12 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-blue-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
 
             <div className="flex justify-end px-2">

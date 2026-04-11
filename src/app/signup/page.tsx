@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import api from '@/utils/api';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
-import { User, Mail, Phone, Lock, Sparkles, Rocket, BookOpen, Brain } from 'lucide-react';
+import { User, Mail, Phone, Lock, Sparkles, Rocket, BookOpen, Brain, Eye, EyeOff } from 'lucide-react';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -20,16 +20,36 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validatePhone = (phone: string) => {
+    return /^\d{10}$/.test(phone.replace(/\s/g, ''));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
+
+    if (!validateEmail(formData.email.trim())) {
+      setError('Please enter a valid email address (e.g. name@example.com).');
+      return;
+    }
+
+    if (!validatePhone(formData.phone)) {
+      setError('Phone number must be exactly 10 digits.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -103,6 +123,7 @@ export default function SignupPage() {
               </div>
             )}
 
+            {/* Name */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <User className="w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
@@ -114,10 +135,11 @@ export default function SignupPage() {
                 placeholder="What should we call you?"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
             </div>
 
+            {/* Email */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Mail className="w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
@@ -129,10 +151,11 @@ export default function SignupPage() {
                 placeholder="Your superpower email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
             </div>
 
+            {/* Phone — 10 digits only */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 flex items-center pl-4 border-r border-gray-100">
                 <span className="text-gray-500 font-bold text-sm">+91</span>
@@ -144,26 +167,44 @@ export default function SignupPage() {
                 name="phone"
                 type="tel"
                 required
-                placeholder="Mobile number"
+                maxLength={10}
+                placeholder="10-digit mobile number"
                 value={formData.phone}
-                onChange={handleChange}
-                className="w-full pl-20 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                onChange={(e) => {
+                  // Only allow digits
+                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setFormData({ ...formData, phone: val });
+                }}
+                className="w-full pl-20 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
+              {formData.phone.length > 0 && (
+                <div className={`absolute inset-y-0 right-4 flex items-center text-xs font-black ${formData.phone.length === 10 ? 'text-green-500' : 'text-red-400'}`}>
+                  {formData.phone.length}/10
+                </div>
+              )}
             </div>
 
+            {/* Password with Eye Toggle */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Lock className="w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
               </div>
               <input
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 placeholder="Create a strong password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-900"
+                className="w-full pl-12 pr-12 py-4 rounded-2xl bg-gray-50/50 border-2 border-transparent focus:border-primary-400 focus:bg-white focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-primary-500 transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
 
             <Button
