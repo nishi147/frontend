@@ -8,6 +8,7 @@ import { Card, CardTitle, CardContent, CardHeader } from '@/components/ui/Card';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
+import ProfileCard from '@/components/ui/ProfileCard';
 import { BookOpen, Video, Star, Sparkles, Rocket, ArrowRight } from 'lucide-react';
 
 export default function StudentDashboard() {
@@ -34,18 +35,26 @@ export default function StudentDashboard() {
   return (
     <DashboardLayout allowedRoles={['student']}>
       <div className="flex flex-col gap-8 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div>
-            <h1 className="text-3xl md:text-5xl font-black text-gray-800 tracking-tighter mb-2">Hello, <span className="text-primary-500">{user?.name}</span>! 👋</h1>
-            <p className="text-lg md:text-xl text-gray-500 font-bold">Ready to launch another project today?</p>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Profile Card */}
+          <div className="lg:col-span-1">
+            <ProfileCard isTeacher={false} />
           </div>
-          <div className="flex gap-4">
-            <Link href="/courses">
-               <Button size="lg" variant="outline" className="rounded-2xl border-2 font-black">Explore Courses</Button>
-            </Link>
-            <Link href="/dashboard/student/projects?upload=true">
-               <Button size="lg" className="rounded-2xl font-black bg-primary-500 shadow-xl shadow-primary-200 animate-bounce-slow">Upload Project 🚀</Button>
-            </Link>
+
+          {/* Welcome + Actions */}
+          <div className="lg:col-span-3 flex flex-col justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black text-gray-800 tracking-tighter mb-2">Hello, <span className="text-primary-500">{user?.name?.split(' ')[0]}</span>! 👋</h1>
+              <p className="text-lg text-gray-500 font-bold">Ready to launch another project today?</p>
+            </div>
+            <div className="flex gap-4 flex-wrap">
+              <Link href="/courses">
+                 <Button size="lg" variant="outline" className="rounded-2xl border-2 font-black">Explore Courses</Button>
+              </Link>
+              <Link href="/dashboard/student/projects?upload=true">
+                 <Button size="lg" className="rounded-2xl font-black bg-primary-500 shadow-xl shadow-primary-200">Upload Project 🚀</Button>
+              </Link>
+            </div>
           </div>
         </div>
 

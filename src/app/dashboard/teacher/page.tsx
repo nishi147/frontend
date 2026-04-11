@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
 import Link from 'next/link';
 import { useToast } from '@/context/ToastContext';
+import ProfileCard from '@/components/ui/ProfileCard';
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
@@ -78,37 +79,45 @@ useEffect(() => {
   return (
     <DashboardLayout allowedRoles={['teacher', 'admin']}>
       <div className="flex flex-col gap-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-secondary-600 mb-2">Welcome Teacher {user?.name}! 🍎</h1>
-            <p className="text-lg md:text-xl text-gray-500 font-bold">Manage your courses and students from here.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Profile Card */}
+          <div className="lg:col-span-1">
+            <ProfileCard isTeacher={true} />
           </div>
-          <Link href="/dashboard/teacher/courses/new">
-            <Button size="lg" variant="secondary">Create New Course</Button>
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <Card hoverEffect className="bg-gradient-to-br from-green-100 to-emerald-100 border-none shadow-md">
-             <CardTitle className="text-emerald-700">Active Courses 📖</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-emerald-600">{myCourses.length}</div>
-             </CardContent>
-           </Card>
-           
-           <Card hoverEffect className="bg-gradient-to-br from-blue-100 to-primary-100 border-none shadow-md">
-             <CardTitle className="text-primary-700">Total Students 🎒</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-primary-600">0</div>
-             </CardContent>
-           </Card>
-
-           <Card hoverEffect className="bg-gradient-to-br from-purple-100 to-secondary-100 border-none shadow-md">
-             <CardTitle className="text-secondary-700">Earnings 💰</CardTitle>
-             <CardContent className="mt-4">
-               <div className="text-5xl font-black text-secondary-600">₹0</div>
-             </CardContent>
-           </Card>
+          {/* Welcome + Stats */}
+          <div className="lg:col-span-3 flex flex-col gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold text-secondary-600 mb-2">Welcome, {user?.name?.split(' ')[0]}! 🍎</h1>
+              <p className="text-lg text-gray-500 font-bold">Manage your courses and students from here.</p>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/dashboard/teacher/courses/new">
+                <Button size="lg" variant="secondary">Create New Course</Button>
+              </Link>
+              <Button size="lg" variant="outline" onClick={() => setIsScheduleModalOpen(true)}>Schedule Class 🎥</Button>
+            </div>
+            <div className="grid grid-cols-3 gap-4 mt-2">
+               <Card hoverEffect className="bg-gradient-to-br from-green-100 to-emerald-100 border-none shadow-md">
+                 <CardTitle className="text-emerald-700 text-sm">Active Courses 📖</CardTitle>
+                 <CardContent className="mt-2">
+                   <div className="text-4xl font-black text-emerald-600">{myCourses.length}</div>
+                 </CardContent>
+               </Card>
+               <Card hoverEffect className="bg-gradient-to-br from-blue-100 to-primary-100 border-none shadow-md">
+                 <CardTitle className="text-primary-700 text-sm">Total Students 🎒</CardTitle>
+                 <CardContent className="mt-2">
+                   <div className="text-4xl font-black text-primary-600">0</div>
+                 </CardContent>
+               </Card>
+               <Card hoverEffect className="bg-gradient-to-br from-purple-100 to-secondary-100 border-none shadow-md">
+                 <CardTitle className="text-secondary-700 text-sm">Earnings 💰</CardTitle>
+                 <CardContent className="mt-2">
+                   <div className="text-4xl font-black text-secondary-600">₹0</div>
+                 </CardContent>
+               </Card>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-8 gap-4">
