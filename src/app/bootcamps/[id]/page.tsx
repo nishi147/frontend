@@ -21,6 +21,13 @@ export default function BootcampDetailPage() {
   const [bootcamp, setBootcamp] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [expandedModules, setExpandedModules] = useState<number[]>([0]);
+
+  const toggleModule = (index: number) => {
+    setExpandedModules(prev => 
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
 
   useEffect(() => {
     const fetchBootcamp = async () => {
@@ -251,15 +258,15 @@ export default function BootcampDetailPage() {
       </div>
 
       {/* Curriculum & Details */}
-      <div className="container mx-auto px-6 -mt-20 md:-mt-24 relative z-20 pb-32">
+      <div className="container mx-auto px-4 md:px-6 py-20 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
           <div className="lg:col-span-8 flex flex-col gap-12">
             <div className="bg-white p-8 md:p-16 rounded-[4rem] shadow-2xl shadow-slate-100 border border-slate-50">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
                  <div>
-                    <h2 className="text-xs font-black text-indigo-500 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
-                      <div className="w-10 h-1 bg-indigo-500 rounded-full" /> MISSION SYLLABUS
+                    <h2 className="text-xs font-black text-primary-500 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
+                      <div className="w-10 h-1 bg-primary-500 rounded-full" /> MISSION SYLLABUS
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tighter break-words">Deep Dive <span className="text-slate-300">Phase.</span></h3>
                  </div>
@@ -273,46 +280,56 @@ export default function BootcampDetailPage() {
               </div>
 
               {bootcamp.modules && bootcamp.modules.length > 0 ? (
-                <div className="space-y-10">
-                  {bootcamp.modules.map((m: any, i: number) => (
+                <div className="space-y-6">
+                  {bootcamp.modules.map((m: any, i: number) => {
+                    const isExpanded = expandedModules.includes(i);
+                    return (
                     <div key={m._id} className="relative group">
-                       {/* Connection Line */}
-                       {i < bootcamp.modules.length - 1 && (
-                         <div className="absolute left-[34px] top-20 bottom-[-40px] w-1 bg-gradient-to-bottom from-indigo-100 to-transparent z-0" />
-                       )}
                        
-                       <div className="bg-white rounded-[3rem] border-4 border-slate-50 p-8 md:p-12 hover:border-indigo-100 hover:shadow-2xl hover:shadow-indigo-50 transition-all duration-500 relative z-10 group/card">
-                          <div className="flex items-center gap-8 mb-10">
-                            <div className="w-20 h-20 bg-slate-50 text-slate-300 rounded-[2rem] flex items-center justify-center font-black text-3xl shadow-inner group-hover/card:bg-indigo-600 group-hover/card:text-white transition-all duration-700">
-                               {(i + 1).toString().padStart(2, '0')}
+                       <div className={`bg-white rounded-[3rem] border-4 transition-all duration-500 relative z-10 ${isExpanded ? 'border-primary-100 shadow-2xl shadow-primary-50' : 'border-slate-50 hover:border-primary-50'}`}>
+                          <button
+                            onClick={() => toggleModule(i)}
+                            className="w-full flex items-center justify-between p-8 md:p-12 text-left"
+                          >
+                            <div className="flex items-center gap-6 md:gap-8">
+                              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[1.5rem] md:rounded-[2rem] flex shrink-0 items-center justify-center font-black text-2xl md:text-3xl shadow-inner transition-all duration-500 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-slate-50 text-slate-300'}`}>
+                                 {(i + 1).toString().padStart(2, '0')}
+                              </div>
+                              <div>
+                                 <p className="text-[10px] font-black text-primary-500 uppercase tracking-widest mb-1 italic">Module {i + 1}</p>
+                                 <h4 className={`text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight leading-none transition-colors ${isExpanded ? 'text-primary-600' : 'text-slate-800'}`}>{m.title}</h4>
+                              </div>
                             </div>
-                            <div>
-                               <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1 italic">Module {i + 1}</p>
-                               <h4 className="text-2xl md:text-3xl font-black text-slate-800 uppercase tracking-tight leading-none group-hover/card:text-indigo-600 transition-colors">{m.title}</h4>
+                            <div className={`w-12 h-12 rounded-full flex shrink-0 items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-slate-100 text-slate-400 group-hover:border-primary-100 group-hover:text-primary-400'}`}>
+                               <ChevronDown size={24} />
                             </div>
-                          </div>
+                          </button>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-2">
-                             {m.lessons.map((l: any, idx: number) => (
-                               <div key={l._id} className="flex items-center gap-5 p-5 rounded-3xl bg-slate-50/50 border-2 border-transparent hover:border-indigo-50 hover:bg-white transition-all group/topic cursor-default">
-                                  <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-slate-300 group-hover/topic:bg-indigo-500 group-hover/topic:text-white transition-all shadow-sm">
-                                     <PlayCircle size={18} />
-                                  </div>
-                                  <div className="flex-1">
-                                     <p className="font-black text-slate-700 text-sm leading-tight mb-1">{l.title}</p>
-                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{l.duration || 'Session'}</p>
-                                  </div>
-                               </div>
-                             ))}
-                          </div>
+                          {isExpanded && (
+                            <div className="px-6 pb-10 md:px-12 md:pb-12 animate-in fade-in slide-in-from-top-4 duration-300">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t-2 border-slate-50 pt-8">
+                                 {m.lessons.map((l: any, idx: number) => (
+                                   <div key={l._id} className="flex items-center gap-5 p-5 rounded-3xl bg-slate-50/50 border-2 border-transparent hover:border-primary-50 hover:bg-white transition-all group/topic cursor-default">
+                                      <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-slate-300 group-hover/topic:bg-primary-500 group-hover/topic:text-white transition-all shadow-sm">
+                                         <PlayCircle size={18} />
+                                      </div>
+                                      <div className="flex-1">
+                                         <p className="font-black text-slate-700 text-sm leading-tight mb-1">{l.title}</p>
+                                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{l.duration || 'Session'}</p>
+                                      </div>
+                                   </div>
+                                 ))}
+                              </div>
+                            </div>
+                          )}
                        </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               ) : (
-                  <div className="bg-indigo-50/30 p-16 rounded-[4rem] border-4 border-dashed border-indigo-100 text-center flex flex-col items-center">
+                  <div className="bg-primary-50/30 p-16 rounded-[4rem] border-4 border-dashed border-primary-100 text-center flex flex-col items-center">
                     <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center text-5xl mb-8 shadow-xl animate-pulse">🛰️</div>
-                    <h4 className="text-3xl font-black text-indigo-200 mb-4 uppercase tracking-widest">Syllabus Encrypting...</h4>
+                    <h4 className="text-3xl font-black text-primary-300 mb-4 uppercase tracking-widest">Syllabus Encrypting...</h4>
                     <p className="text-indigo-300 font-bold max-w-sm text-sm uppercase tracking-widest">The learning pathway for this mission is being finalized by our commanders.</p>
                   </div>
               )}
