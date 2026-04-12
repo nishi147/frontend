@@ -144,54 +144,53 @@ export default function BootcampDetailPage() {
       <Header />
       
       {/* Bootcamp Hero */}
-      <div className="bg-slate-900 text-white pt-24 pb-32 md:pt-32 md:pb-48 relative overflow-hidden">
-        {/* Cosmos background effect */}
+      <div className="bg-white text-slate-900 pt-24 pb-32 md:pt-32 md:pb-48 relative overflow-hidden">
+        {/* Colorful floating background effect */}
         <div className="absolute inset-0 z-0">
-           <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/20 rounded-full blur-[150px] animate-pulse" />
-           <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px]" />
-           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
+           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary-400/10 rounded-full blur-[150px] animate-[pulse_6s_ease-in-out_infinite]" />
+           <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-rose-400/10 rounded-full blur-[120px] animate-[pulse_8s_ease-in-out_infinite_reverse]" />
         </div>
 
         <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-16 items-center relative z-10">
           <div className="flex-1 text-center lg:text-left">
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-indigo-500/10 backdrop-blur-xl border border-indigo-500/30 rounded-2xl text-indigo-300 font-black text-[10px] uppercase tracking-[0.3em] mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
-               <Sparkles size={14} className="animate-wiggle" /> Intensive Bootcamp Mission
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary-50 border border-primary-100 rounded-2xl text-primary-600 font-black text-[10px] uppercase tracking-[0.3em] mb-8 animate-in fade-in slide-in-from-top-4 duration-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+               <Sparkles size={14} className="animate-pulse" /> Intensive Bootcamp Mission
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[0.9] tracking-tighter uppercase animate-in fade-in slide-in-from-left-8 duration-1000">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase animate-in fade-in slide-in-from-left-8 duration-1000 text-slate-900 break-words drop-shadow-sm">
                {bootcamp.title}
             </h1>
             
-            <p className="text-xl md:text-2xl text-slate-400 font-bold mb-12 max-w-3xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 font-bold mb-12 max-w-3xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                {bootcamp.description}
             </p>
             
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 group">
               <div className="flex items-center gap-5">
-                <div className="w-16 h-16 rounded-[1.5rem] bg-primary-500 flex items-center justify-center font-black text-white text-3xl shadow-2xl shadow-primary-500/30">
+                <div className="w-16 h-16 rounded-[1.5rem] bg-primary-500 flex items-center justify-center font-black text-white text-3xl shadow-2xl shadow-primary-500/30 group-hover:scale-105 group-hover:rotate-6 transition-all duration-300">
                    {bootcamp.instructor?.name?.[0] || 'T'}
                 </div>
                 <div className="text-left">
-                  <p className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1">Chief Instructor</p>
-                  <p className="font-black text-2xl tracking-tight">{bootcamp.instructor?.name || 'Top Mentor'}</p>
+                  <p className="text-[10px] text-primary-500 font-black uppercase tracking-widest mb-1">Chief Instructor</p>
+                  <p className="font-black text-2xl tracking-tight text-slate-800">{bootcamp.instructor?.name || 'Top Mentor'}</p>
                 </div>
               </div>
               
-              <div className="hidden md:block h-14 w-px bg-white/10" />
+              <div className="hidden md:block h-14 w-px bg-slate-200" />
               
               <div className="flex gap-10">
                  <div className="text-left">
-                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><Calendar size={12} /> Schedule</p>
-                   <p className="font-black text-xl tracking-tight">{new Date(bootcamp.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bootcamp.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
+                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><Calendar size={12} className="text-primary-500" /> Schedule</p>
+                   <p className="font-black text-xl tracking-tight text-slate-800">{new Date(bootcamp.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bootcamp.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</p>
                  </div>
                  <div className="text-left">
-                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><MapPin size={12} /> Base</p>
-                   <p className="font-black text-xl tracking-tight uppercase">{bootcamp.venue}</p>
+                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><MapPin size={12} className="text-primary-500" /> Base</p>
+                   <p className="font-black text-xl tracking-tight uppercase text-slate-800">{bootcamp.venue}</p>
                  </div>
                  {bootcamp.showStudentsEnrolled && (
                    <div className="text-left">
-                     <p className="text-[10px] text-indigo-400 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><UsersIcon size={12} /> Joined By</p>
-                     <p className="font-black text-xl tracking-tight uppercase">{bootcamp.studentsEnrolled || 0} Students</p>
+                     <p className="text-[10px] text-primary-500 font-black uppercase tracking-widest mb-1 flex items-center gap-1"><UsersIcon size={12} /> Joined By</p>
+                     <p className="font-black text-xl tracking-tight uppercase text-slate-800">{bootcamp.studentsEnrolled || 0} Students</p>
                    </div>
                  )}
               </div>
@@ -200,23 +199,23 @@ export default function BootcampDetailPage() {
 
           {/* Floating Payment Card */}
           <div className="w-full lg:w-[450px] group animate-in zoom-in-95 duration-1000 delay-300">
-            <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(79,70,229,0.15)] rounded-[4rem] border-none relative overflow-visible">
-              <div className="absolute -top-6 -right-6 bg-indigo-600 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(79,70,229,0.4)] rotate-12 group-hover:rotate-6 transition-transform">
+            <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
+              <div className="absolute -top-6 -right-6 bg-primary-500 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(244,63,94,0.3)] rotate-12 group-hover:rotate-6 transition-transform hover:scale-110">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
                  <p className="text-2xl font-black leading-none">₹{bootcamp.price}</p>
               </div>
               
               <div className="text-center mb-10 pb-10 border-b-4 border-slate-50">
-                <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner group-hover:scale-110 transition-transform">🎓</div>
+                <div className="w-20 h-20 bg-primary-50 text-primary-500 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner group-hover:scale-110 transition-transform hover:-rotate-12 duration-300">🎓</div>
                 <h3 className="text-3xl font-black text-slate-800 tracking-tighter mb-2">JOIN THE MISSION</h3>
                 <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Secure your seat at HQ</p>
               </div>
 
               <div className="space-y-6 mb-12">
                  {[
-                   { icon: <Clock className="text-indigo-500" size={20} />, title: "Full Intensive Schedule", sub: "Access to all modules & sessions" },
-                   { icon: <BookOpen className="text-indigo-500" size={20} />, title: "Resource Vault", sub: "PDFs, Code Snippets & Checklists" },
-                   { icon: <ShieldCheck className="text-indigo-500" size={20} />, title: "Mission Completion", sub: "Official Ruzann Certification" }
+                   { icon: <Clock className="text-primary-500" size={20} />, title: "Full Intensive Schedule", sub: "Access to all modules & sessions" },
+                   { icon: <BookOpen className="text-primary-500" size={20} />, title: "Resource Vault", sub: "PDFs, Code Snippets & Checklists" },
+                   { icon: <ShieldCheck className="text-primary-500" size={20} />, title: "Mission Completion", sub: "Official Ruzann Certification" }
                  ].map((item, idx) => (
                    <div key={idx} className="flex gap-5 items-start">
                      <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-slate-100/50">{item.icon}</div>
