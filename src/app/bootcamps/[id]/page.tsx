@@ -151,7 +151,7 @@ export default function BootcampDetailPage() {
       <Header />
       
       {/* Bootcamp Hero */}
-      <div className="bg-white text-slate-900 pt-24 pb-32 md:pt-32 md:pb-48 relative overflow-hidden">
+      <div className="bg-white text-slate-900 pt-10 pb-20 md:pt-16 md:pb-32 relative overflow-hidden">
         {/* Colorful floating background effect */}
         <div className="absolute inset-0 z-0">
            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary-400/10 rounded-full blur-[150px] animate-[pulse_6s_ease-in-out_infinite]" />
