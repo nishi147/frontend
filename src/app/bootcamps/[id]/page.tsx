@@ -152,16 +152,16 @@ export default function BootcampDetailPage() {
         </div>
 
         <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-16 items-center relative z-10">
-          <div className="flex-1 text-center lg:text-left">
+          <div className="flex-1 text-center lg:text-left min-w-0 w-full">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary-50 border border-primary-100 rounded-2xl text-primary-600 font-black text-[10px] uppercase tracking-[0.3em] mb-8 animate-in fade-in slide-in-from-top-4 duration-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
                <Sparkles size={14} className="animate-pulse" /> Intensive Bootcamp Mission
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase animate-in fade-in slide-in-from-left-8 duration-1000 text-slate-900 break-words drop-shadow-sm">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase animate-in fade-in slide-in-from-left-8 duration-1000 text-slate-900 break-words drop-shadow-sm">
                {bootcamp.title}
             </h1>
             
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 font-bold mb-12 max-w-3xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            <p className="text-base sm:text-lg md:text-xl lg:text-lg xl:text-2xl text-slate-600 font-bold mb-12 max-w-3xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                {bootcamp.description}
             </p>
             
@@ -198,7 +198,7 @@ export default function BootcampDetailPage() {
           </div>
 
           {/* Floating Payment Card */}
-          <div className="w-full lg:w-[450px] group animate-in zoom-in-95 duration-1000 delay-300">
+          <div className="w-full lg:w-[380px] xl:w-[450px] shrink-0 group animate-in zoom-in-95 duration-1000 delay-300">
             <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
               <div className="absolute -top-6 -right-6 bg-primary-500 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(244,63,94,0.3)] rotate-12 group-hover:rotate-6 transition-transform hover:scale-110">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
@@ -261,7 +261,7 @@ export default function BootcampDetailPage() {
                     <h2 className="text-xs font-black text-indigo-500 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
                       <div className="w-10 h-1 bg-indigo-500 rounded-full" /> MISSION SYLLABUS
                     </h2>
-                    <h3 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tighter">Deep Dive <span className="text-slate-300">Phase.</span></h3>
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tighter break-words">Deep Dive <span className="text-slate-300">Phase.</span></h3>
                  </div>
                  <div className="bg-slate-50 px-8 py-5 rounded-[2rem] border border-slate-100 flex items-center gap-4">
                     <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm">🚀</div>
