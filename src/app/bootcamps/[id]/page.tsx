@@ -151,17 +151,17 @@ export default function BootcampDetailPage() {
            <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-rose-400/10 rounded-full blur-[120px] animate-[pulse_8s_ease-in-out_infinite_reverse]" />
         </div>
 
-        <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-16 items-center relative z-10">
-          <div className="flex-1 text-center lg:text-left min-w-0 w-full">
+        <div className="container mx-auto px-4 md:px-6 flex flex-col lg:flex-row gap-12 items-center relative z-10">
+          <div className="flex-1 min-w-0 w-full text-center lg:text-left">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary-50 border border-primary-100 rounded-2xl text-primary-600 font-black text-[10px] uppercase tracking-[0.3em] mb-8 animate-in fade-in slide-in-from-top-4 duration-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
                <Sparkles size={14} className="animate-pulse" /> Intensive Bootcamp Mission
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-7xl font-black mb-8 leading-[0.9] tracking-tighter uppercase animate-in fade-in slide-in-from-left-8 duration-1000 text-slate-900 break-words drop-shadow-sm">
+            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight uppercase animate-in fade-in slide-in-from-left-8 duration-1000 text-slate-900 break-words drop-shadow-md">
                {bootcamp.title}
             </h1>
             
-            <p className="text-base sm:text-lg md:text-xl lg:text-lg xl:text-2xl text-slate-600 font-bold mb-12 max-w-3xl leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            <p className="text-lg md:text-xl text-slate-600 font-bold mb-10 max-w-3xl leading-relaxed whitespace-pre-wrap animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
                {bootcamp.description}
             </p>
             
@@ -198,7 +198,7 @@ export default function BootcampDetailPage() {
           </div>
 
           {/* Floating Payment Card */}
-          <div className="w-full lg:w-[380px] xl:w-[450px] shrink-0 group animate-in zoom-in-95 duration-1000 delay-300">
+          <div className="w-full lg:w-[420px] shrink-0 group animate-in zoom-in-95 duration-1000 delay-300">
             <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
               <div className="absolute -top-6 -right-6 bg-primary-500 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(244,63,94,0.3)] rotate-12 group-hover:rotate-6 transition-transform hover:scale-110">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
