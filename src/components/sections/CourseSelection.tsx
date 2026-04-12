@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '@/utils/api';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
-import { Star, Users, BookOpen, ArrowRight, Loader2 } from 'lucide-react';
+import { Star, Users, BookOpen, ArrowRight, Loader2, Code, Gamepad2, BrainCircuit, MonitorSmartphone, Palette, Shapes, Sparkles, Search } from 'lucide-react';
 import CourseCard from '@/components/ui/CourseCard';
 
 interface Category {
@@ -38,6 +38,17 @@ const CourseSelection = () => {
   const [ageFilter, setAgeFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
   const [categoryFilter, setCategoryFilter] = useState('All');
+
+  const getCategoryIcon = (catName: string) => {
+    const name = catName?.toLowerCase() || '';
+    if (name.includes('cod') || name.includes('program')) return <Code className="w-6 h-6 text-purple-600" />;
+    if (name.includes('game')) return <Gamepad2 className="w-6 h-6 text-orange-500" />;
+    if (name.includes('ai') || name.includes('artificial')) return <BrainCircuit className="w-6 h-6 text-teal-500" />;
+    if (name.includes('app') || name.includes('web')) return <MonitorSmartphone className="w-6 h-6 text-emerald-500" />;
+    if (name.includes('math')) return <Shapes className="w-6 h-6 text-blue-500" />;
+    if (name.includes('art') || name.includes('design')) return <Palette className="w-6 h-6 text-rose-500" />;
+    return <BookOpen className="w-6 h-6 text-indigo-500" />;
+  };
 
   const ageGroups = [
     { label: 'All Ages', value: 'All' },
@@ -96,6 +107,43 @@ const CourseSelection = () => {
     setFilteredCourses(result);
   }, [ageFilter, categoryFilter, courses]);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const startAutoScroll = () => {
+      intervalId = setInterval(() => {
+        const container = scrollRef.current;
+        if (container) {
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          if (container.scrollLeft >= maxScroll - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            container.scrollBy({ left: 320, behavior: 'smooth' }); // approximate card width
+          }
+        }
+      }, 3000); // Scroll every 3 seconds
+    };
+
+    if (filteredCourses.length > 0) {
+        // give it a short delay to ensure DOM is ready
+        setTimeout(() => {
+          startAutoScroll();
+          const container = scrollRef.current;
+          if (container) {
+             container.addEventListener('touchstart', () => clearInterval(intervalId));
+             container.addEventListener('touchend', startAutoScroll);
+          }
+        }, 500);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [filteredCourses]);
+
   if (loading) {
     return (
       <div className="py-20 flex flex-col items-center justify-center space-y-4">
@@ -123,9 +171,11 @@ const CourseSelection = () => {
           </svg>
         </div>
 
-        <h2 className="text-3xl md:text-6xl font-black text-[#0f172a] mb-3 tracking-tight">Choose Your Course</h2>
-        <p className="text-base md:text-xl font-bold text-slate-900 max-w-2xl mx-auto leading-relaxed opacity-80">
-          Exciting and effective programs, curated by experts!
+        <h2 className="text-3xl md:text-6xl font-black mb-3 tracking-tight drop-shadow-sm animate-float">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Choose Your Course</span>
+        </h2>
+        <p className="text-base md:text-xl font-bold max-w-2xl mx-auto leading-relaxed opacity-90 animate-pulse mt-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Exciting and effective programs, curated by experts!</span>
         </p>
       </div>
 
@@ -155,7 +205,9 @@ const CourseSelection = () => {
             onClick={() => setCategoryFilter('All')}
             className={`flex flex-col items-center gap-2 pb-4 text-sm md:text-base font-black transition-all relative whitespace-nowrap px-4 group ${categoryFilter === 'All' ? 'text-primary-600' : 'text-slate-900 hover:text-slate-600'}`}
           >
-            <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">🌈</span>
+            <div className={`mb-1 group-hover:-translate-y-1 transition-all duration-300 p-2.5 rounded-[1rem] shadow-sm border ${categoryFilter === 'All' ? 'bg-primary-50 border-primary-200' : 'bg-slate-50 border-slate-100 group-hover:bg-slate-100 group-hover:border-slate-200'} group-hover:shadow-md`}>
+              <Sparkles className={`w-6 h-6 ${categoryFilter === 'All' ? 'text-primary-600' : 'text-slate-500 group-hover:text-primary-500'}`} />
+            </div>
             <span>All Subjects</span>
             {categoryFilter === 'All' && <div className="absolute bottom-[-2px] left-0 right-0 h-1 bg-primary-500 rounded-full animate-in slide-in-from-left-full duration-300" />}
           </button>
@@ -166,7 +218,9 @@ const CourseSelection = () => {
               onClick={() => setCategoryFilter(cat._id)}
               className={`flex flex-col items-center gap-2 pb-4 text-sm md:text-base font-black transition-all relative whitespace-nowrap px-4 group ${categoryFilter === cat._id ? 'text-primary-600' : 'text-slate-900 hover:text-slate-600'}`}
             >
-              <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">{cat.icon || '📚'}</span>
+              <div className={`mb-1 group-hover:-translate-y-1 transition-all duration-300 p-2.5 rounded-[1rem] shadow-sm border ${categoryFilter === cat._id ? 'bg-primary-50 border-primary-200' : 'bg-slate-50 border-slate-100 group-hover:bg-slate-100 group-hover:border-slate-200'} group-hover:shadow-md`}>
+                 {getCategoryIcon(cat.name)}
+              </div>
               <span>{cat.name}</span>
               {categoryFilter === cat._id && <div className="absolute bottom-[-2px] left-0 right-0 h-1 bg-primary-500 rounded-full animate-in slide-in-from-left-full duration-300" />}
             </button>
@@ -176,8 +230,10 @@ const CourseSelection = () => {
             href="/courses"
             className="flex flex-col items-center gap-2 pb-4 text-xs md:text-sm font-black text-primary-500 ml-auto group"
           >
-            <span className="text-xl mb-1">🔍</span>
-            <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+            <div className="mb-1 group-hover:-translate-y-1 transition-all duration-300 bg-primary-50 p-2.5 rounded-[1rem] shadow-sm border border-primary-100 group-hover:bg-primary-200 group-hover:shadow-md">
+               <Search className="w-6 h-6 text-primary-600" />
+            </div>
+            <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity mt-1">
               <span>View All</span>
               <ArrowRight size={14} />
             </div>
@@ -233,7 +289,7 @@ const CourseSelection = () => {
       <div className="px-4">
         {filteredCourses.length > 0 ? (
           <div className="flex flex-col items-center">
-            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 overflow-x-auto scrollbar-hide pb-16 no-scrollbar w-full">
+            <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 overflow-x-auto scrollbar-hide pb-16 no-scrollbar w-full">
               {filteredCourses.slice(0, 6).map((course) => (
                 <CourseCard key={course._id} course={course} typeFilter={typeFilter} />
               ))}

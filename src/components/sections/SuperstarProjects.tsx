@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '@/utils/api';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Star, Sparkles, Loader2 } from 'lucide-react';
+import { Star, Sparkles, Loader2, Trophy } from 'lucide-react';
 
 interface Project {
   _id: string;
@@ -23,17 +23,53 @@ export const SuperstarProjects = () => {
       try {
         const res = await api.get('/api/projects');
         if (res.data.success) {
-          // Limit to 10 projects for performance and "preview" feel
+          // Limit to 10 projects for performance and preview feel
           setProjects(res.data.data.slice(0, 10));
         }
-      } catch (err) {
-        console.error('Error fetching projects:', err);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProjects();
   }, []);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const startAutoScroll = () => {
+      intervalId = setInterval(() => {
+        const container = scrollRef.current;
+        if (container) {
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          if (container.scrollLeft >= maxScroll - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            container.scrollBy({ left: 320, behavior: 'smooth' });
+          }
+        }
+      }, 3000);
+    };
+
+    if (projects.length > 0) {
+        setTimeout(() => {
+          startAutoScroll();
+          const container = scrollRef.current;
+          if (container) {
+             container.addEventListener('touchstart', () => clearInterval(intervalId));
+             container.addEventListener('touchend', startAutoScroll);
+          }
+        }, 500);
+    }
+    return () => clearInterval(intervalId);
+  }, [projects]);
 
   if (loading) return (
     <div className="py-20 flex flex-col items-center justify-center space-y-4">
@@ -49,16 +85,19 @@ export const SuperstarProjects = () => {
       <div className="max-w-7xl mx-auto relative">
         {/* Decorative Header Area */}
         <div className="text-center mb-12 md:mb-20 relative">
-          <h2 className="text-4xl md:text-6xl font-black text-[#0f172a] mb-4 tracking-tighter">
-            Projects by <span className="text-primary-500">Students</span>
-          </h2>
-          <p className="text-gray-900 font-bold text-base md:text-xl max-w-2xl mx-auto opacity-70">
-            Explore amazing creations built by our young innovators that are out of this world!
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Trophy className="w-8 h-8 md:w-10 md:h-10 text-yellow-500 animate-bounce-slow" />
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter drop-shadow-sm animate-float">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400">Projects by Students</span>
+            </h2>
+          </div>
+          <p className="text-base md:text-xl font-bold max-w-2xl mx-auto leading-relaxed opacity-90 animate-pulse mt-2">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Explore amazing creations built by our young innovators that are out of this world!</span>
           </p>
         </div>
 
         {/* Project Carousel (Horizontal Slider) */}
-        <div className="flex overflow-x-auto gap-8 md:gap-10 pb-16 scrollbar-hide no-scrollbar snap-x px-4 md:px-0 -mx-4 md:mx-0">
+        <div ref={scrollRef} className="flex overflow-x-auto gap-8 md:gap-10 pb-16 scrollbar-hide no-scrollbar snap-x px-4 md:px-0 -mx-4 md:mx-0">
           {projects.map((project) => {
              // Extract Scratch ID for better preview if scratch
              const scratchId = project.url.split('/').filter(Boolean).pop();

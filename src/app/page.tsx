@@ -13,7 +13,7 @@ import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
 import axios from 'axios';
-import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon } from 'lucide-react';
+import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon, Ticket, GraduationCap } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
 import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
@@ -104,6 +104,41 @@ const BootcampSection = () => {
     };
     fetchBootcamps();
   }, []);
+
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const startAutoScroll = () => {
+      intervalId = setInterval(() => {
+        const container = scrollRef.current;
+        if (container) {
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          if (container.scrollLeft >= maxScroll - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            container.scrollBy({ left: 320, behavior: 'smooth' });
+          }
+        }
+      }, 3000);
+    };
+
+    if (bootcamps.length > 0) {
+        setTimeout(() => {
+          startAutoScroll();
+          const container = scrollRef.current;
+          if (container) {
+             container.addEventListener('touchstart', () => clearInterval(intervalId));
+             container.addEventListener('touchend', startAutoScroll);
+          }
+        }, 500);
+    }
+    return () => clearInterval(intervalId);
+  }, [bootcamps]);
 
   const handleEnrollBootcamp = async (bootcamp: any) => {
     router.push(`/bootcamps/${bootcamp._id}`);
@@ -207,7 +242,7 @@ const BootcampSection = () => {
   if (bootcamps.length === 0) return null;
 
   return (
-    <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
+    <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
       {bootcamps.map((bc: any) => {
         const thumbUrl = getThumbnailUrl(bc.image);
         return (
@@ -339,6 +374,41 @@ const WorkshopSection = () => {
     fetchWorkshops();
   }, []);
 
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const startAutoScroll = () => {
+      intervalId = setInterval(() => {
+        const container = scrollRef.current;
+        if (container) {
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          if (container.scrollLeft >= maxScroll - 10) {
+            container.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            container.scrollBy({ left: 320, behavior: 'smooth' });
+          }
+        }
+      }, 3000);
+    };
+
+    if (workshops.length > 0) {
+        setTimeout(() => {
+          startAutoScroll();
+          const container = scrollRef.current;
+          if (container) {
+             container.addEventListener('touchstart', () => clearInterval(intervalId));
+             container.addEventListener('touchend', startAutoScroll);
+          }
+        }, 500);
+    }
+    return () => clearInterval(intervalId);
+  }, [workshops]);
+
   const handleBookWorkshop = async (workshop: any) => {
     router.push(`/workshops/${workshop._id}`);
   };
@@ -461,7 +531,7 @@ const WorkshopSection = () => {
   );
 
   return (
-    <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
+    <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
       {workshops.map((ws: any) => {
         const thumbUrl = getThumbnailUrl(ws.image);
         return (
@@ -990,12 +1060,15 @@ export default function Home() {
                 <Rocket size={16} />
                 <span className="text-sm">Space Bootcamps</span>
               </div>
-              <h2 className="text-3xl md:text-5xl font-black text-gray-800 leading-tight">
-                Magical <span className="text-accent-500">Workshops</span>  🎟️
-              </h2>
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
+                </h2>
+              </div>
             </div>
-            <p className="text-base font-bold text-gray-900 md:max-w-xs">
-              Intensive learning experiences designed to spark creative magic.
+            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
             </p>
           </div>
 
@@ -1012,12 +1085,15 @@ export default function Home() {
                 <Sparkles size={16} />
                 <span className="text-sm">Extended Learning</span>
               </div>
-              <h2 className="text-3xl md:text-5xl font-black text-gray-800 leading-tight">
-                Specialized <span className="text-indigo-600">Bootcamps</span> 🎓
-              </h2>
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Specialized Bootcamps</span>
+                </h2>
+              </div>
             </div>
-            <p className="text-base font-bold text-gray-900 md:max-w-xs">
-              Long-term intensive programs to master advanced technologies.
+            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Long-term intensive programs to master advanced technologies.</span>
             </p>
           </div>
 
