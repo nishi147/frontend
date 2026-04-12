@@ -6,13 +6,13 @@ import { useToast } from '@/context/ToastContext';
 import api from '@/utils/api';
 import { Camera, Pencil, User, Phone, Mail, BookOpen, X, Check, Loader2 } from 'lucide-react';
 
-// Fun cartoon avatars for students (no profile pic)
-const STUDENT_AVATARS = ['🧑‍🚀', '👩‍🎨', '🧑‍💻', '👩‍🔬', '🧙‍♂️', '🦸‍♀️', '🧚', '🐱‍👤'];
-
-function getStudentEmoji(name: string) {
-  const idx = name ? name.charCodeAt(0) % STUDENT_AVATARS.length : 0;
-  return STUDENT_AVATARS[idx];
-}
+// Premium cartoon avatars for students (using DiceBear)
+const getStudentAvatar = (name: string) => {
+  // Using 'avataaars' for a nice cartoon look. 
+  // 'adventurer' or 'notionists' are also good options.
+  const seed = encodeURIComponent(name || 'RuzannStudent');
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+};
 
 interface ProfileCardProps {
   isTeacher?: boolean;
@@ -30,7 +30,7 @@ export default function ProfileCard({ isTeacher = false }: ProfileCardProps) {
 
   const [form, setForm] = useState({
     name: user?.name || '',
-    phone: user?.phone || '',
+    phone: (user as any)?.phone || '',
     bio: (user as any)?.bio || '',
     specialization: (user as any)?.specialization || '',
   });
@@ -109,9 +109,11 @@ export default function ProfileCard({ isTeacher = false }: ProfileCardProps) {
                 <User className="w-10 h-10 text-emerald-500" />
               </div>
             ) : (
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-purple-100 border-4 border-white shadow-lg flex items-center justify-center text-4xl">
-                {getStudentEmoji(user?.name || '')}
-              </div>
+              <img 
+                src={getStudentAvatar(user?.name || '')}
+                alt="Avatar"
+                className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg bg-white"
+              />
             )}
 
             {/* Camera button */}

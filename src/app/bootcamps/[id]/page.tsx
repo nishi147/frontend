@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle, PlayCircle, FileText, ChevronDown, Calendar, MapPin, User, ArrowRight, Sparkles, BookOpen, Clock, ShieldCheck } from 'lucide-react';
+import { CheckCircle, PlayCircle, FileText, ChevronDown, Calendar, MapPin, User, ArrowRight, Sparkles, BookOpen, Clock, ShieldCheck, Users as UsersIcon } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
