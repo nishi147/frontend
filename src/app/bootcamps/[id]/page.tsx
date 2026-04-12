@@ -262,7 +262,7 @@ export default function BootcampDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
           <div className="lg:col-span-8 flex flex-col gap-12">
-            <div className="bg-white p-8 md:p-16 rounded-[4rem] shadow-2xl shadow-slate-100 border border-slate-50">
+            <div className="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-xl shadow-slate-100 border border-slate-50">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
                  <div>
                     <h2 className="text-xs font-black text-primary-500 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
@@ -286,30 +286,30 @@ export default function BootcampDetailPage() {
                     return (
                     <div key={m._id} className="relative group">
                        
-                       <div className={`bg-white rounded-[3rem] border-4 transition-all duration-500 relative z-10 ${isExpanded ? 'border-primary-100 shadow-2xl shadow-primary-50' : 'border-slate-50 hover:border-primary-50'}`}>
+                       <div className={`bg-white rounded-[2rem] border-2 transition-all duration-300 relative z-10 ${isExpanded ? 'border-primary-100 shadow-xl shadow-primary-50' : 'border-slate-50 hover:border-primary-50'}`}>
                           <button
                             onClick={() => toggleModule(i)}
-                            className="w-full flex items-center justify-between p-8 md:p-12 text-left"
+                            className="w-full flex items-center justify-between p-5 md:p-8 text-left"
                           >
-                            <div className="flex items-center gap-6 md:gap-8">
-                              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[1.5rem] md:rounded-[2rem] flex shrink-0 items-center justify-center font-black text-2xl md:text-3xl shadow-inner transition-all duration-500 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-slate-50 text-slate-300'}`}>
+                            <div className="flex items-center gap-4 md:gap-6">
+                              <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex shrink-0 items-center justify-center font-black text-xl md:text-2xl shadow-inner transition-all duration-300 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-slate-50 text-slate-400'}`}>
                                  {(i + 1).toString().padStart(2, '0')}
                               </div>
                               <div>
                                  <p className="text-[10px] font-black text-primary-500 uppercase tracking-widest mb-1 italic">Module {i + 1}</p>
-                                 <h4 className={`text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight leading-none transition-colors ${isExpanded ? 'text-primary-600' : 'text-slate-800'}`}>{m.title}</h4>
+                                 <h4 className={`text-lg md:text-xl font-bold uppercase tracking-tight leading-none transition-colors ${isExpanded ? 'text-primary-600' : 'text-slate-800'}`}>{m.title}</h4>
                               </div>
                             </div>
-                            <div className={`w-12 h-12 rounded-full flex shrink-0 items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-slate-100 text-slate-400 group-hover:border-primary-100 group-hover:text-primary-400'}`}>
-                               <ChevronDown size={24} />
+                            <div className={`w-10 h-10 rounded-full flex shrink-0 items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-slate-100 text-slate-400 group-hover:border-primary-100 group-hover:text-primary-400'}`}>
+                               <ChevronDown size={20} />
                             </div>
                           </button>
                           
                           {isExpanded && (
-                            <div className="px-6 pb-10 md:px-12 md:pb-12 animate-in fade-in slide-in-from-top-4 duration-300">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t-2 border-slate-50 pt-8">
+                            <div className="px-5 pb-6 md:px-8 md:pb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t-2 border-slate-50 pt-6">
                                  {m.lessons.map((l: any, idx: number) => (
-                                   <div key={l._id} className="flex items-center gap-5 p-5 rounded-3xl bg-slate-50/50 border-2 border-transparent hover:border-primary-50 hover:bg-white transition-all group/topic cursor-default">
+                                   <div key={l._id} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50/50 border-2 border-transparent hover:border-primary-50 hover:bg-white transition-all group/topic cursor-default">
                                       <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-slate-300 group-hover/topic:bg-primary-500 group-hover/topic:text-white transition-all shadow-sm">
                                          <PlayCircle size={18} />
                                       </div>
