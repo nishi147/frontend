@@ -2,9 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import { LeadsTable } from '@/components/sales/LeadsTable';
+import { PerformanceTable } from '@/components/sales/PerformanceTable';
+import { useAuth } from '@/context/AuthContext';
 import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare, Bell, IndianRupee } from 'lucide-react';
 
 export default function SalesDashboard() {
+  const { user } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -143,6 +146,13 @@ export default function SalesDashboard() {
             <p className="text-7xl font-black text-purple-600 tracking-tighter">{stats?.followUpToday || 0}</p>
          </div>
       </div>
+
+      {/* Performance Analytics Tracking (Admin Only) */}
+      {user?.role === 'admin' && (
+        <div className="animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
+           <PerformanceTable />
+        </div>
+      )}
 
       {/* Main Table Section */}
       <div className="space-y-6">

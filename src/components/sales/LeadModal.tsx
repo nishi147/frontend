@@ -12,6 +12,7 @@ interface LeadModalProps {
 export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
   const [note, setNote] = useState('');
   const [status, setStatus] = useState(lead.status);
+  const [priority, setPriority] = useState(lead.priority || 'Medium');
   const [assignedTo, setAssignedTo] = useState(lead.assignedTo?._id || '');
   const [followUpDate, setFollowUpDate] = useState(lead.followUpDate ? lead.followUpDate.split('T')[0] : '');
   const [revenue, setRevenue] = useState(lead.revenue || 0);
@@ -34,7 +35,7 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const payload: any = { status, assignedTo, followUpDate };
+      const payload: any = { status, priority, assignedTo, followUpDate };
       if (status === 'Converted') payload.revenue = revenue;
       await api.put(`/api/leads/${lead._id}`, payload);
       if (note.trim()) {
@@ -90,12 +91,26 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
                     >
-                       <option value="New">New</option>
-                       <option value="Contacted">Contacted</option>
-                       <option value="Converted">Converted</option>
-                       <option value="Lost">Lost</option>
-                    </select>
-                 </div>
+                        <option value="New">New</option>
+                        <option value="Contacted">Contacted</option>
+                        <option value="Interested">Interested</option>
+                        <option value="Converted">Converted</option>
+                        <option value="Not Interested">Not Interested</option>
+                        <option value="Lost">Lost</option>
+                     </select>
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-4">Priority</label>
+                     <select 
+                       className="w-full p-4 rounded-2xl border-2 border-gray-100 focus:border-red-400 font-bold text-gray-600 outline-none bg-gray-50/30"
+                       value={priority}
+                       onChange={(e) => setPriority(e.target.value)}
+                     >
+                        <option value="High">High 🔥</option>
+                        <option value="Medium">Medium ⚡</option>
+                        <option value="Low">Low ❄️</option>
+                     </select>
+                  </div>
                  {status === 'Converted' && (
                     <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                       <label className="text-[10px] font-black uppercase text-green-500 tracking-widest ml-4">Revenue (₹)</label>
@@ -152,21 +167,44 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
               </button>
            </form>
 
-           {lead.notes?.length > 0 && (
-             <div className="space-y-4 pt-4 border-t-2 border-gray-50">
-                <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                   <History size={14} /> Interaction History
-                </div>
-                <div className="space-y-4 max-h-[150px] overflow-y-auto pr-4 scrollbar-hide">
-                   {lead.notes.slice().reverse().map((n: any, i: number) => (
-                     <div key={i} className="bg-gray-50 p-4 rounded-2xl">
-                        <p className="text-sm font-bold text-gray-600">{n.text}</p>
-                        <span className="text-[10px] text-gray-400 mt-2 block italic">{new Date(n.date).toLocaleString()}</span>
-                     </div>
-                   ))}
-                </div>
-             </div>
-           )}
+            {(lead.activityLog?.length > 0 || lead.notes?.length > 0) && (
+              <div className="space-y-6 pt-8 border-t-2 border-gray-50">
+                 <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                       <History size={14} /> Activity & Timeline
+                    </div>
+                 </div>
+                 
+                 <div className="space-y-6 max-h-[300px] overflow-y-auto pr-4 scrollbar-hide">
+                    {/* Activity Log Timeline */}
+                    {lead.activityLog?.slice().reverse().map((log: any, i: number) => (
+                      <div key={`log-${i}`} className="relative pl-6 border-l-2 border-gray-100 pb-2">
+                         <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2 border-primary-500" />
+                         <div className="flex flex-col">
+                            <span className="text-xs font-black text-gray-800">{log.action}</span>
+                            <p className="text-[11px] text-gray-500 font-medium">{log.note}</p>
+                            <span className="text-[9px] text-gray-400 uppercase tracking-tighter mt-1">
+                               {new Date(log.timestamp).toLocaleString()}
+                            </span>
+                         </div>
+                      </div>
+                    ))}
+
+                    {/* Interaction Notes */}
+                    {lead.notes?.slice().reverse().map((n: any, i: number) => (
+                      <div key={`note-${i}`} className="bg-primary-50/50 p-5 rounded-3xl border border-primary-100 relative overflow-hidden group">
+                         <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <MessageSquare size={40} />
+                         </div>
+                         <p className="text-sm font-bold text-gray-700 leading-relaxed">{n.text}</p>
+                         <div className="flex items-center gap-2 mt-3 text-[10px] font-black text-primary-400 uppercase tracking-widest">
+                            <User size={10} /> {lead.assignedTo?.name || 'Mentor'} • {new Date(n.date).toLocaleString()}
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            )}
         </div>
       </div>
     </div>

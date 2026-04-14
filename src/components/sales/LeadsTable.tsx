@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle } from 'lucide-react';
+import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle, Send } from 'lucide-react';
 import api from '@/utils/api';
 import { LeadModal } from './LeadModal';
+import { CreateLeadModal } from './CreateLeadModal';
+import { ShareLeadsModal } from './ShareLeadsModal';
 import { useToast } from '@/context/ToastContext';
 import { useAuth } from '@/context/AuthContext';
 import { Trash2 } from 'lucide-react';
@@ -13,18 +15,21 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
+  const [priority, setPriority] = useState('');
   const [source, setSource] = useState('');
   const [followUp, setFollowUp] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedLead, setSelectedLead] = useState<any>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const { showToast } = useToast();
 
   const fetchLeads = async () => {
     try {
       setLoading(true);
       const res = await api.get('/api/leads', {
-        params: { search, status, source, followUp, page, limit: 15 }
+        params: { search, status, priority, source, followUp, page, limit: 15 }
       });
       setLeads(res.data.data);
       setTotalPages(res.data.pages || 1);
@@ -37,14 +42,14 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
 
   useEffect(() => {
     setPage(1); // Reset page on filter change
-  }, [search, status, source, followUp]);
+  }, [search, status, priority, source, followUp]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchLeads();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [search, status, source, followUp, page]);
+  }, [search, status, priority, source, followUp, page]);
 
   const handleExport = () => {
     window.open(`/api/leads/export`, '_blank');
@@ -93,6 +98,17 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
           }}
         />
       )}
+      {showCreateModal && (
+        <CreateLeadModal 
+          onClose={() => setShowCreateModal(false)}
+          onUpdate={fetchLeads}
+        />
+      )}
+      {showShareModal && (
+        <ShareLeadsModal 
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
         <div className="relative w-full md:w-96">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -121,8 +137,21 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
             <option value="">Status</option>
             <option value="New">New</option>
             <option value="Contacted">Contacted</option>
+            <option value="Interested">Interested</option>
             <option value="Converted">Converted</option>
+            <option value="Not Interested">Not Interested</option>
             <option value="Lost">Lost</option>
+          </select>
+
+          <select 
+            className="px-4 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-primary-500 bg-white font-bold text-xs text-gray-600 min-w-[130px]"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
+            <option value="">Priority</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
           </select>
 
           <select 
@@ -143,6 +172,22 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
           >
             <Download size={18} /> Export
           </button>
+
+          {user?.role === 'admin' && (
+            <button 
+              onClick={() => setShowShareModal(true)}
+              className="flex items-center gap-3 px-6 py-4 bg-secondary-100 text-secondary-600 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-secondary-50 hover:bg-secondary-200 transition-all"
+            >
+              <Send size={18} /> Share CSV
+            </button>
+          )}
+
+          <button 
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-3 px-6 py-4 bg-primary-500 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary-100 hover:bg-primary-600 transition-all"
+          >
+            <User size={18} /> Add Lead
+          </button>
         </div>
       </div>
 
@@ -153,6 +198,7 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
               <tr>
                 <th className="px-8 py-6">Lead Information</th>
                 <th className="px-8 py-6">Source</th>
+                <th className="px-8 py-6">Priority</th>
                 <th className="px-8 py-6">Status</th>
                 <th className="px-8 py-6">Assigned To</th>
                 <th className="px-8 py-6 text-right">Actions</th>
@@ -187,10 +233,18 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
                      }`}>{lead.source}</span>
                   </td>
                   <td className="px-8 py-6">
+                     <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                       lead.priority === 'High' ? 'bg-red-500 text-white shadow-sm shadow-red-200' :
+                       lead.priority === 'Medium' ? 'bg-yellow-500 text-white shadow-sm shadow-yellow-200' :
+                       'bg-gray-200 text-gray-600'
+                     }`}>{lead.priority || 'Medium'}</span>
+                  </td>
+                  <td className="px-8 py-6">
                      <span className={`px-4 py-2 rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-sm ${
                        lead.status === 'Converted' ? 'bg-green-500 text-white' :
+                       lead.status === 'Interested' ? 'bg-yellow-400 text-white' :
                        lead.status === 'Contacted' ? 'bg-secondary-500 text-white' :
-                       lead.status === 'Lost' ? 'bg-gray-400 text-white' :
+                       lead.status === 'Not Interested' || lead.status === 'Lost' ? 'bg-red-500 text-white' :
                        'bg-primary-500 text-white'
                      }`}>{lead.status}</span>
                   </td>
