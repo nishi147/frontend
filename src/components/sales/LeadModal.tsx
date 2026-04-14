@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
-import { X, Send, User, Phone, Mail, Calendar, MessageSquare, History } from 'lucide-react';
+import { X, Send, User, Phone, Mail, Calendar, MessageSquare, History, GripVertical } from 'lucide-react';
 
 interface LeadModalProps {
   lead: any;
@@ -19,6 +19,11 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
   const [counsellors, setCounsellors] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
+  // Draggable State
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
     const fetchCounsellors = async () => {
       try {
@@ -30,6 +35,42 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
     };
     fetchCounsellors();
   }, []);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.drag-handle')) {
+      setIsDragging(true);
+      setDragOffset({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y
+        });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, dragOffset]);
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,15 +94,26 @@ export const LeadModal = ({ lead, onClose, onUpdate }: LeadModalProps) => {
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        <div className="p-8 md:p-12 space-y-8">
+      <div 
+        className="relative bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+        style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+      >
+        <div className="p-8 md:p-12 pb-4 drag-handle cursor-move select-none" onMouseDown={handleMouseDown}>
            <div className="flex justify-between items-start">
-              <div>
-                 <span className="px-4 py-1.5 bg-primary-100 text-primary-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 inline-block">Lead Details</span>
-                 <h2 className="text-4xl font-black text-gray-800 tracking-tighter">{lead.name}</h2>
+              <div className="flex items-center gap-3">
+                 <div className="p-2 bg-gray-50 rounded-lg text-gray-400">
+                    <GripVertical size={20} />
+                 </div>
+                 <div>
+                    <span className="px-4 py-1.5 bg-primary-100 text-primary-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-1 inline-block">Lead Details</span>
+                    <h2 className="text-4xl font-black text-gray-800 tracking-tighter">{lead.name}</h2>
+                 </div>
               </div>
-              <button onClick={onClose} className="p-3 hover:bg-gray-100 rounded-2xl transition-all"><X size={24} /></button>
+              <button onClick={onClose} className="p-3 hover:bg-gray-100 rounded-2xl transition-all" onMouseDown={e => e.stopPropagation()}><X size={24} /></button>
            </div>
+        </div>
+
+        <div className="p-8 md:p-12 pt-0 space-y-8">
 
            <div className="grid grid-cols-2 gap-6 border-b-2 border-gray-50 pb-8">
               <div className="space-y-4">
