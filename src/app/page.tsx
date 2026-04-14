@@ -258,12 +258,7 @@ const BootcampSection = () => {
                 </div>
                 )}
 
-                {/* Branding Overlay */}
-                <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
-                   <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center text-black">
-                      <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
-                   </div>
-                </div>
+
 
                 <div className="w-full h-full relative z-10 flex items-center justify-center">
                   {bc.image && bc.image !== 'no-image.jpg' ? (
@@ -547,12 +542,7 @@ const WorkshopSection = () => {
                 </div>
                 )}
 
-                {/* Branding Overlay */}
-                <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
-                   <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center text-black">
-                      <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
-                   </div>
-                </div>
+
 
                 <div className="w-full h-full relative z-10 flex items-center justify-center">
                   {ws.image && ws.image !== 'no-image.jpg' ? (

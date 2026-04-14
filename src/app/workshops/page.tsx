@@ -151,12 +151,7 @@ export default function WorkshopsPage() {
                       )}
                     </div>
 
-                    {/* Branding Overlay */}
-                    <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
-                       <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center">
-                          <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-3.5 w-auto object-contain" />
-                       </div>
-                    </div>
+
 
                     <CardContent className="p-3">
                       <div className="mb-2">

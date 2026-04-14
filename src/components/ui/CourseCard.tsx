@@ -70,12 +70,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
           </div>
           )}
 
-          {/* Top Right Branding Overlay (Solves Visibility Issue) */}
-          <div className="absolute top-3 right-3 z-30 opacity-100 animate-in fade-in duration-700">
-             <div className="bg-white/95 backdrop-blur-md px-2.5 py-1.5 rounded-xl shadow-lg border border-white/50 flex items-center justify-center">
-                <img src="/ruzann_logo_new_v3.png" alt="Ruzann" className="h-4 w-auto object-contain" />
-             </div>
-          </div>
+
 
           {course.thumbnail ? (
             <img 
