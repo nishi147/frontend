@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {DashboardLayout} from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
-import { Plus, Edit2, Trash2, X, Check, Search, User, Briefcase, Mail, ShieldCheck } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Check, Search, User, Briefcase, Mail, ShieldCheck, Upload, Camera, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import api from '@/utils/api';
@@ -31,12 +31,16 @@ export default function AdminMentorsPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         password: '',
         specialization: '',
         profilePicture: '',
         bio: '',
         isApprovedTeacher: true
     });
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+
 
     useEffect(() => {
         fetchMentors();
@@ -59,11 +63,27 @@ export default function AdminMentorsPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const data = new FormData();
+            data.append('name', formData.name);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
+            if (!editingMentor) data.append('password', formData.password);
+            data.append('specialization', formData.specialization);
+            data.append('bio', formData.bio);
+            data.append('isApprovedTeacher', String(formData.isApprovedTeacher));
+            
+            if (imageFile) {
+                data.append('profilePicture', imageFile);
+            } else if (editingMentor) {
+                // If editing and no new file, keep the existing URL
+                data.append('profilePicture', formData.profilePicture);
+            }
+
             if (editingMentor) {
-                await api.put(`/api/users/mentors/${editingMentor._id}`, formData);
+                await api.put(`/api/users/mentors/${editingMentor._id}`, data);
                 showToast("Mentor updated successfully!", "success");
             } else {
-                await api.post('/api/users/mentors', formData);
+                await api.post('/api/users/mentors', data);
                 showToast("Mentor created successfully!", "success");
             }
             setShowModal(false);
@@ -98,12 +118,15 @@ export default function AdminMentorsPage() {
         setFormData({
             name: '',
             email: '',
+            phone: '',
             password: '',
             specialization: '',
             profilePicture: '',
             bio: '',
             isApprovedTeacher: true
         });
+        setImageFile(null);
+        setImagePreview(null);
     };
 
     const handleEdit = (mentor: Mentor) => {
@@ -111,12 +134,15 @@ export default function AdminMentorsPage() {
         setFormData({
             name: mentor.name,
             email: mentor.email,
-            password: '', // Don't show password
+            phone: (mentor as any).phone || '',
+            password: '', 
             specialization: mentor.specialization,
             profilePicture: mentor.profilePicture,
             bio: mentor.bio || '',
             isApprovedTeacher: mentor.isApprovedTeacher
         });
+        setImagePreview(mentor.profilePicture);
+        setImageFile(null);
         setShowModal(true);
     };
 
@@ -294,6 +320,18 @@ export default function AdminMentorsPage() {
                                     </div>
                                 )}
                                 <div className="space-y-3">
+                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
+                                    <input 
+                                        type="tel"
+                                        placeholder="10-digit number"
+                                        pattern="\d{10}"
+                                        maxLength={10}
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
+                                        className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-primary-500 focus:bg-white transition-all font-bold outline-none text-slate-800"
+                                    />
+                                </div>
+                                <div className="space-y-3">
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Specialization</label>
                                     <input 
                                         required
@@ -306,14 +344,50 @@ export default function AdminMentorsPage() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Profile Picture URL</label>
-                                <input 
-                                    placeholder="https://images.unsplash.com/..."
-                                    value={formData.profilePicture}
-                                    onChange={(e) => setFormData({...formData, profilePicture: e.target.value})}
-                                    className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-primary-500 focus:bg-white transition-all font-bold outline-none text-slate-800"
-                                />
-                                <p className="text-[10px] text-slate-400 font-bold ml-1 italic">Use high-quality images for a premium look.</p>
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Profile Photo</label>
+                                <div className="flex flex-col md:flex-row gap-6 items-center">
+                                    <div className="relative group w-32 h-32 rounded-[2rem] bg-slate-50 border-4 border-white shadow-xl overflow-hidden flex-shrink-0">
+                                        {imagePreview ? (
+                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                <Camera size={40} />
+                                            </div>
+                                        )}
+                                        {imagePreview && (
+                                            <button 
+                                                type="button"
+                                                onClick={() => { setImageFile(null); setImagePreview(null); }}
+                                                className="absolute inset-0 bg-red-500/80 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={24} />
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 w-full">
+                                        <label className="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-200 rounded-[2rem] hover:bg-slate-50 transition-all cursor-pointer group">
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-primary-500 mb-2 group-hover:scale-110 transition-transform">
+                                                    <Upload size={20} />
+                                                </div>
+                                                <p className="text-xs font-black text-slate-500 tracking-widest uppercase">Click or Drag Image</p>
+                                                <p className="text-[10px] text-slate-400 font-bold mt-1">PNG, JPG, WEBP (Max 4MB)</p>
+                                            </div>
+                                            <input 
+                                                type="file" 
+                                                className="hidden" 
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        setImageFile(file);
+                                                        setImagePreview(URL.createObjectURL(file));
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div className="space-y-3">

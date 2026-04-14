@@ -6,6 +6,29 @@ import { PerformanceTable } from '@/components/sales/PerformanceTable';
 import { useAuth } from '@/context/AuthContext';
 import { Users, Target, TrendingUp, DollarSign, ArrowUpRight, Clock, Star, MessageSquare, Bell, IndianRupee } from 'lucide-react';
 
+const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
+  <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-gray-100 border-2 border-gray-50 group hover:-translate-y-2 transition-all duration-500">
+    <div className="flex justify-between items-start mb-6">
+      <div className={`p-4 rounded-3xl ${color} bg-opacity-10 shadow-inner group-hover:scale-110 transition-transform`}>
+         <Icon className={`w-8 h-8 ${color.replace('bg-', 'text-')}`} strokeWidth={3} />
+      </div>
+      <div className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+         <ArrowUpRight size={12} strokeWidth={3} /> {trend || 'Stable'}
+      </div>
+    </div>
+    <div className="flex flex-col">
+      <span className="text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] mb-1">{title}</span>
+      <span className="text-4xl font-black text-gray-800 tracking-tighter tabular-nums mb-2">
+        {typeof value === 'number' && title.includes('Revenue') ? `₹${value.toLocaleString()}` : value || 0}
+        {title.includes('Rate') && '%'}
+      </span>
+      <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden mt-2">
+         <div className={`h-full ${color} rounded-full transition-all duration-1000`} style={{ width: '65%' }} />
+      </div>
+    </div>
+  </div>
+);
+
 export default function SalesDashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState<any>(null);
@@ -25,29 +48,6 @@ export default function SalesDashboard() {
   useEffect(() => {
     fetchStats();
   }, []);
-
-  const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
-    <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-gray-100 border-2 border-gray-50 group hover:-translate-y-2 transition-all duration-500">
-      <div className="flex justify-between items-start mb-6">
-        <div className={`p-4 rounded-3xl ${color} bg-opacity-10 shadow-inner group-hover:scale-110 transition-transform`}>
-           <Icon className={`w-8 h-8 ${color.replace('bg-', 'text-')}`} strokeWidth={3} />
-        </div>
-        <div className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest">
-           <ArrowUpRight size={12} strokeWidth={3} /> {trend || 'Stable'}
-        </div>
-      </div>
-      <div className="flex flex-col">
-        <span className="text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] mb-1">{title}</span>
-        <span className="text-4xl font-black text-gray-800 tracking-tighter tabular-nums mb-2">
-          {typeof value === 'number' && title.includes('Revenue') ? `₹${value.toLocaleString()}` : value || 0}
-          {title.includes('Rate') && '%'}
-        </span>
-        <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden mt-2">
-           <div className={`h-full ${color} rounded-full transition-all duration-1000`} style={{ width: '65%' }} />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="max-w-[1600px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-700">

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle, Send } from 'lucide-react';
+import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle, Send, Plus } from 'lucide-react';
 import api from '@/utils/api';
 import { LeadModal } from './LeadModal';
 import { CreateLeadModal } from './CreateLeadModal';
@@ -110,84 +110,87 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
         />
       )}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <div className="relative w-full md:w-96">
+        <div className="relative w-full lg:w-[450px]">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search leads..."
-            className="w-full pl-12 pr-4 py-4 rounded-[2rem] border-2 border-gray-100 focus:border-primary-500 shadow-sm transition-all outline-none font-medium"
+            placeholder="Search leads by name, email or phone..."
+            className="w-full pl-12 pr-4 py-3.5 rounded-2xl border-2 border-slate-100 focus:border-primary-500 shadow-sm transition-all outline-none font-medium text-sm"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-
-        <div className="flex flex-wrap gap-2 w-full md:w-auto">
-          <button 
-            onClick={() => setFollowUp(followUp === 'today' ? '' : 'today')}
-            className={`flex items-center gap-2 px-5 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all border-2 ${followUp === 'today' ? 'bg-purple-500 border-purple-500 text-white shadow-lg' : 'bg-white border-gray-100 text-gray-400'}`}
-          >
-             <Bell size={16} /> {followUp === 'today' ? 'Today Only' : 'Follow-up Today'}
-          </button>
-
-          <select 
-            className="px-4 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-primary-500 bg-white font-bold text-xs text-gray-600 min-w-[130px]"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="">Status</option>
-            <option value="New">New</option>
-            <option value="Contacted">Contacted</option>
-            <option value="Interested">Interested</option>
-            <option value="Converted">Converted</option>
-            <option value="Not Interested">Not Interested</option>
-            <option value="Lost">Lost</option>
-          </select>
-
-          <select 
-            className="px-4 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-primary-500 bg-white font-bold text-xs text-gray-600 min-w-[130px]"
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-          >
-            <option value="">Priority</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-
-          <select 
-            className="px-4 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-primary-500 bg-white font-bold text-xs text-gray-600 min-w-[130px]"
-            value={source}
-            onChange={(e) => setSource(e.target.value)}
-          >
-            <option value="">Source</option>
-            <option value="Website">Website</option>
-            <option value="Meta">Meta Ads</option>
-            <option value="Google">Google Ads</option>
-            <option value="Referral">Referral</option>
-          </select>
-
-          <button 
-            onClick={handleExport}
-            className="flex items-center gap-3 px-6 py-4 bg-secondary-500 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-secondary-100 hover:bg-secondary-600 transition-all"
-          >
-            <Download size={18} /> Export
-          </button>
-
-          {user?.role === 'admin' && (
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+          <div className="flex flex-wrap gap-2 flex-1 lg:flex-none">
             <button 
-              onClick={() => setShowShareModal(true)}
-              className="flex items-center gap-3 px-6 py-4 bg-secondary-100 text-secondary-600 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-secondary-50 hover:bg-secondary-200 transition-all"
+              onClick={() => setFollowUp(followUp === 'today' ? '' : 'today')}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl font-black uppercase text-[9px] tracking-widest transition-all border-2 ${followUp === 'today' ? 'bg-purple-500 border-purple-500 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-purple-200'}`}
             >
-              <Send size={18} /> Share CSV
+               <Bell size={14} /> {followUp === 'today' ? 'Today Only' : 'Follow-ups'}
             </button>
-          )}
+  
+            <select 
+              className="px-3 py-3 rounded-xl border-2 border-slate-100 outline-none focus:border-primary-500 bg-white font-bold text-[10px] uppercase tracking-wider text-slate-600 min-w-[110px] cursor-pointer"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="">Status</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Interested">Interested</option>
+              <option value="Converted">Converted</option>
+              <option value="Not Interested">Not Interested</option>
+              <option value="Lost">Lost</option>
+            </select>
+  
+            <select 
+              className="px-3 py-3 rounded-xl border-2 border-slate-100 outline-none focus:border-primary-500 bg-white font-bold text-[10px] uppercase tracking-wider text-slate-600 min-w-[110px] cursor-pointer"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            >
+              <option value="">Priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+  
+            <select 
+              className="px-3 py-3 rounded-xl border-2 border-slate-100 outline-none focus:border-primary-500 bg-white font-bold text-[10px] uppercase tracking-wider text-slate-600 min-w-[110px] cursor-pointer"
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+            >
+              <option value="">Source</option>
+              <option value="Website">Website</option>
+              <option value="Meta">Meta Ads</option>
+              <option value="Google">Google Ads</option>
+              <option value="Referral">Referral</option>
+            </select>
+          </div>
 
-          <button 
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-3 px-6 py-4 bg-primary-500 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary-100 hover:bg-primary-600 transition-all"
-          >
-            <User size={18} /> Add Lead
-          </button>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <button 
+              onClick={handleExport}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-slate-800 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg hover:bg-slate-900 transition-all"
+            >
+              <Download size={14} /> Export
+            </button>
+  
+            {user?.role === 'admin' && (
+              <button 
+                onClick={() => setShowShareModal(true)}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-secondary-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-secondary-200 hover:bg-secondary-600 transition-all"
+              >
+                <Send size={14} /> Share
+              </button>
+            )}
+  
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-primary-500 text-white rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary-200 hover:bg-primary-600 transition-all"
+            >
+              <Plus size={14} /> New Lead
+            </button>
+          </div>
         </div>
       </div>
 
