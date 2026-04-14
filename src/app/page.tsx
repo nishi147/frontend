@@ -949,48 +949,53 @@ export default function Home() {
       </div>
       */}
 
-      {/* 2. ₹99 ATTRACTIVE SECTION */}
-      <section className="relative py-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-accent-500 -skew-y-3 origin-left z-0" />
-        <div className="absolute inset-0 bg-yellow-400 -skew-y-3 origin-right opacity-50 translate-y-4 z-0" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-           <div className="text-white flex-1 text-center lg:text-left">
-              <div className="inline-block bg-white text-accent-600 text-sm font-black tracking-widest uppercase px-5 py-2 rounded-full mb-5 shadow-lg animate-pulse">
-                LIMITED TIME MAGIC
+      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
+      <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-100 rounded-full text-accent-600 font-bold mb-3">
+                <Rocket size={16} />
+                <span className="text-sm">Space Bootcamps</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-black mb-5 leading-[0.95]">
-                Get Your First <br/>
-              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">₹99</span>
-              </h2>
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-5 font-bold text-base">
-                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ No Commitments</span>
-                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ Full Access</span>
-                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ Certification</span>
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
+                </h2>
               </div>
-              <p className="text-lg font-bold text-accent-100 max-w-xl">Join 10,000+ happy parents who started their child's tech journey with RUZANN.</p>
-           </div>
-           
-           <Card className="w-full lg:w-[380px] bg-white p-7 rounded-[2rem] shadow-xl border-4 border-yellow-200 transform hover:scale-105 transition-all">
-             <div className="text-center mb-5">
-               <div className="text-4xl mb-3">🎁</div>
-               <h3 className="text-2xl font-black text-gray-800">Special Gift Box</h3>
-               <p className="text-gray-500 font-bold text-sm">Fill details to unlock the offer</p>
-             </div>
-             <button 
-               onClick={openIntroModal}
-               className="bg-accent-500 text-white w-full py-4 rounded-xl text-xl font-black shadow-xl hover:bg-accent-600 transition-all border-b-4 border-accent-700 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3"
-             >
-               Go Magic! ₹99 🚀
-             </button>
-             <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-900 font-bold">
-               <span className="text-xs uppercase">Trusted by</span>
-               <div className="flex -space-x-3">
-                 {[1,2,3,4].map(i => <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px]"><UserIcon className="w-4 h-4" /></div>)}
-                 <div className="w-9 h-9 rounded-full border-2 border-white bg-secondary-500 text-white flex items-center justify-center text-[10px] font-black">+10k</div>
-               </div>
-             </div>
-           </Card>
+            </div>
+            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
+            </p>
+          </div>
+
+          <WorkshopSection />
+        </div>
+      </section>
+
+      {/* 2.7 BOOTCAMPS SECTION */}
+      <section className="py-14 bg-white overflow-hidden" id="bootcamps">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-3">
+                <Sparkles size={16} />
+                <span className="text-sm">Extended Learning</span>
+              </div>
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Specialized Bootcamps</span>
+                </h2>
+              </div>
+            </div>
+            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Long-term intensive programs to master advanced technologies.</span>
+            </p>
+          </div>
+
+          <BootcampSection />
         </div>
       </section>
 
@@ -1051,53 +1056,48 @@ export default function Home() {
       {/* UPDATED SUPERSTAR PROJECTS SECTION */}
       <SuperstarProjects />
 
-      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
-      <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-100 rounded-full text-accent-600 font-bold mb-3">
-                <Rocket size={16} />
-                <span className="text-sm">Space Bootcamps</span>
+      {/* 2. ₹99 ATTRACTIVE SECTION */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-accent-500 -skew-y-3 origin-left z-0" />
+        <div className="absolute inset-0 bg-yellow-400 -skew-y-3 origin-right opacity-50 translate-y-4 z-0" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
+           <div className="text-white flex-1 text-center lg:text-left">
+              <div className="inline-block bg-white text-accent-600 text-sm font-black tracking-widest uppercase px-5 py-2 rounded-full mb-5 shadow-lg animate-pulse">
+                LIMITED TIME MAGIC
               </div>
-              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
-                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
-                </h2>
+              <h2 className="text-4xl md:text-6xl font-black mb-5 leading-[0.95]">
+                Get Your First <br/>
+              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">₹99</span>
+              </h2>
+              <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-5 font-bold text-base">
+                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ No Commitments</span>
+                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ Full Access</span>
+                <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ Certification</span>
               </div>
-            </div>
-            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
-            </p>
-          </div>
-
-          <WorkshopSection />
-        </div>
-      </section>
-
-      {/* 2.7 BOOTCAMPS SECTION */}
-      <section className="py-14 bg-white overflow-hidden" id="bootcamps">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-3">
-                <Sparkles size={16} />
-                <span className="text-sm">Extended Learning</span>
-              </div>
-              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
-                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Specialized Bootcamps</span>
-                </h2>
-              </div>
-            </div>
-            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Long-term intensive programs to master advanced technologies.</span>
-            </p>
-          </div>
-
-          <BootcampSection />
+              <p className="text-lg font-bold text-accent-100 max-w-xl">Join 10,000+ happy parents who started their child's tech journey with RUZANN.</p>
+           </div>
+           
+           <Card className="w-full lg:w-[380px] bg-white p-7 rounded-[2rem] shadow-xl border-4 border-yellow-200 transform hover:scale-105 transition-all">
+             <div className="text-center mb-5">
+               <div className="text-4xl mb-3">🎁</div>
+               <h3 className="text-2xl font-black text-gray-800">Special Gift Box</h3>
+               <p className="text-gray-500 font-bold text-sm">Fill details to unlock the offer</p>
+             </div>
+             <button 
+               onClick={openIntroModal}
+               className="bg-accent-500 text-white w-full py-4 rounded-xl text-xl font-black shadow-xl hover:bg-accent-600 transition-all border-b-4 border-accent-700 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3"
+             >
+               Go Magic! ₹99 🚀
+             </button>
+             <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-900 font-bold">
+               <span className="text-xs uppercase">Trusted by</span>
+               <div className="flex -space-x-3">
+                 {[1,2,3,4].map(i => <div key={i} className="w-9 h-9 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-[10px]"><UserIcon className="w-4 h-4" /></div>)}
+                 <div className="w-9 h-9 rounded-full border-2 border-white bg-secondary-500 text-white flex items-center justify-center text-[10px] font-black">+10k</div>
+               </div>
+             </div>
+           </Card>
         </div>
       </section>
 
