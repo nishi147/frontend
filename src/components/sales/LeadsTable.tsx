@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle, Send } from 'lucide-react';
+import { Search, Filter, Download, MessageSquare, ExternalLink, User, Calendar, Mail, Bell, Phone, MessageCircle, Send, Plus } from 'lucide-react';
 import api from '@/utils/api';
 import { LeadModal } from './LeadModal';
 import { CreateLeadModal } from './CreateLeadModal';
@@ -186,7 +186,7 @@ export const LeadsTable = ({ onLeadUpdate }: { onLeadUpdate?: () => void }) => {
             onClick={() => setShowCreateModal(true)}
             className="flex items-center gap-3 px-6 py-4 bg-primary-500 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary-100 hover:bg-primary-600 transition-all"
           >
-            <User size={18} /> Add Lead
+            <Plus size={18} /> Add Lead
           </button>
         </div>
       </div>
