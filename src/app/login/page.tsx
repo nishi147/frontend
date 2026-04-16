@@ -16,6 +16,8 @@ export default function LoginPage() {
   const [successMsg, setSuccessMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showResend, setShowResend] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const { login } = useAuth();
   
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -45,13 +47,36 @@ export default function LoginPage() {
 
       if (res.data.success) {
         setSuccessMsg('Welcome back! Journeying to your dashboard...');
+        setIsLoading(false);
         setTimeout(() => {
           login(res.data.token, res.data.user);
         }, 1500);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Check your credentials.');
+      if (err.response?.data?.isVerified === false) {
+        setError('Please verify your email before logging in.');
+        setShowResend(true);
+      } else {
+        setError(err.response?.data?.message || 'Login failed. Check your credentials.');
+      }
       setIsLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setResendLoading(true);
+    setError('');
+    setSuccessMsg('');
+    try {
+      const res = await api.post('/api/auth/resend-verification', { email: email.trim().toLowerCase() });
+      if (res.data.success) {
+        setSuccessMsg('Verification email resent successfully! Please check your inbox.');
+        setShowResend(false);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to resend verification email.');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -83,8 +108,20 @@ export default function LoginPage() {
         <CardContent className="p-8 pt-0">
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-sm font-bold animate-shake text-center">
-                {error}
+              <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-sm font-bold animate-shake text-center flex flex-col gap-2">
+                <span>{error}</span>
+                {showResend && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-red-200 hover:bg-red-100 text-red-700 mx-auto"
+                    isLoading={resendLoading}
+                    onClick={handleResend}
+                  >
+                    Resend Verification Email
+                  </Button>
+                )}
               </div>
             )}
             {successMsg && (

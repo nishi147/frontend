@@ -71,10 +71,9 @@ export default function SignupPage() {
       );
 
       if (res.data.success) {
-        setSuccessMsg('Account created successfully! Preparing your magical dashboard...');
-        setTimeout(() => {
-          login(res.data.token, res.data.user);
-        }, 1500);
+        setSuccessMsg(res.data.message || 'Account created! Please check your email to verify your account.');
+        setFormData({ name: '', email: '', phone: '', password: '', role: 'student' });
+        setIsLoading(false);
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed. Try again.');
