@@ -26,10 +26,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let dynamicRoutes: MetadataRoute.Sitemap = [];
 
   try {
-    const [coursesRes, workshopsRes, bootcampsRes] = await Promise.all([
+    const [coursesRes, workshopsRes, bootcampsRes, blogsRes] = await Promise.all([
       fetch(`${apiUrl}/api/courses`).then(res => res.json()),
       fetch(`${apiUrl}/api/workshops`).then(res => res.json()),
       fetch(`${apiUrl}/api/bootcamps`).then(res => res.json()),
+      fetch(`${apiUrl}/api/blogs`).then(res => res.json()),
     ]);
 
     if (coursesRes.success) {
@@ -56,6 +57,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(b.updatedAt || new Date()),
         changeFrequency: 'weekly' as const,
         priority: 0.7,
+      })));
+    }
+
+    if (blogsRes.success) {
+      dynamicRoutes.push(...blogsRes.data.map((blog: any) => ({
+        url: `${baseUrl}/blog/${blog.slug || blog._id}`,
+        lastModified: new Date(blog.updatedAt || new Date()),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
       })));
     }
   } catch (error) {

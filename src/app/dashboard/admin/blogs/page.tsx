@@ -4,10 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Plus, Pencil, Trash2, Eye, Search, BookOpen, Clock, User as UserIcon, X, Check, Loader2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, Search, BookOpen, Clock, User as UserIcon, X, Check, Loader2, Bold, Italic, Link as LinkIcon, List, Type, HelpCircle, ChevronDown, ChevronUp, AlertCircle, Sparkles } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import api from '@/utils/api';
+
+// Utility for slug generation
+const generateSlug = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w ]+/g, '')
+    .replace(/ +/g, '-');
+};
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -22,19 +30,25 @@ export default function AdminBlogsPage() {
 
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     excerpt: '',
     content: '',
     image: '',
+    imageAlt: '',
     videoUrl: '',
     category: 'Coding',
-    readTime: '5 min read',
     author: 'Ruzann Team',
-    isPublished: true
+    isPublished: true,
+    metaTitle: '',
+    metaDescription: '',
+    keywords: '',
+    faqs: [] as { question: string, answer: string }[]
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
+  const [seoScore, setSeoScore] = useState(0);
 
   const fetchBlogs = async () => {
     try {
@@ -50,6 +64,21 @@ export default function AdminBlogsPage() {
     }
   };
 
+  const calculateSeoScore = (data: typeof formData) => {
+    let score = 0;
+    if (data.title.length > 30) score += 20;
+    if (data.metaTitle && data.metaTitle.length > 30) score += 20;
+    if (data.metaDescription && data.metaDescription.length > 100 && data.metaDescription.length <= 160) score += 20;
+    if (data.content.split(' ').length >= 300) score += 20;
+    if (data.keywords && data.keywords.split(',').length >= 3) score += 10;
+    if (data.imageAlt) score += 10;
+    setSeoScore(score);
+  };
+
+  useEffect(() => {
+    calculateSeoScore(formData);
+  }, [formData]);
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -59,27 +88,37 @@ export default function AdminBlogsPage() {
       setCurrentBlog(blog);
       setFormData({
         title: blog.title,
+        slug: blog.slug || '',
         excerpt: blog.excerpt,
         content: blog.content,
         image: blog.image || '',
+        imageAlt: blog.imageAlt || '',
         videoUrl: blog.videoUrl || '',
         category: blog.category || 'Coding',
-        readTime: blog.readTime || '5 min read',
         author: blog.author || 'Ruzann Team',
-        isPublished: blog.isPublished ?? true
+        isPublished: blog.isPublished ?? true,
+        metaTitle: blog.metaTitle || '',
+        metaDescription: blog.metaDescription || '',
+        keywords: Array.isArray(blog.keywords) ? blog.keywords.join(', ') : '',
+        faqs: blog.faqs || []
       });
     } else {
       setCurrentBlog(null);
       setFormData({
         title: '',
+        slug: '',
         excerpt: '',
         content: '',
         image: '',
+        imageAlt: '',
         videoUrl: '',
         category: 'Coding',
-        readTime: '5 min read',
         author: 'Ruzann Team',
-        isPublished: true
+        isPublished: true,
+        metaTitle: '',
+        metaDescription: '',
+        keywords: '',
+        faqs: []
       });
     }
     setImageFile(null);
@@ -95,7 +134,11 @@ export default function AdminBlogsPage() {
     try {
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        data.append(key, value.toString());
+        if (key === 'faqs') {
+          data.append(key, JSON.stringify(value));
+        } else {
+          data.append(key, value.toString());
+        }
       });
 
       if (imageFile) data.append('image', imageFile);
@@ -335,15 +378,175 @@ export default function AdminBlogsPage() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Content (Markdown/Text)</label>
+                {/* Content Editor with Toolbar */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Magical Content (Markdown)</label>
+                    <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-xl">
+                      {[
+                        { icon: Bold, action: '**', label: 'Bold' },
+                        { icon: Italic, action: '_', label: 'Italic' },
+                        { icon: List, action: '\n- ', label: 'List' },
+                        { icon: Type, action: '\n## ', label: 'Heading' },
+                        { icon: LinkIcon, action: '[](url)', label: 'Link' }
+                      ].map((tool, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, content: formData.content + tool.action });
+                          }}
+                          className="p-1.5 hover:bg-white rounded-lg transition-all text-gray-500 hover:text-primary-500"
+                          title={tool.label}
+                        >
+                          <tool.icon size={16} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   <textarea
                     required
                     value={formData.content}
                     onChange={(e) => setFormData({...formData, content: e.target.value})}
-                    placeholder="Tell your story here..."
-                    className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all h-48 resize-none"
+                    placeholder="Once upon a time in a world of code..."
+                    className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-medium text-gray-700 transition-all h-64 resize-none leading-relaxed"
                   />
+                </div>
+
+                {/* SEO Optimization Section */}
+                <div className="pt-6 border-t border-gray-100">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-black text-gray-800 flex items-center gap-2">
+                       <Sparkles className="text-yellow-500" size={20} /> SEO Optimization
+                    </h3>
+                    <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">SEO Score</span>
+                      <div className="w-12 h-6 bg-gray-200 rounded-full overflow-hidden relative">
+                         <div 
+                           className={`h-full transition-all duration-1000 ${seoScore > 70 ? 'bg-green-500' : seoScore > 40 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                           style={{ width: `${seoScore}%` }}
+                         />
+                      </div>
+                      <span className={`text-xs font-black ${seoScore > 70 ? 'text-green-600' : seoScore > 40 ? 'text-yellow-600' : 'text-red-500'}`}>{seoScore}%</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">URL Slug</label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={formData.slug}
+                          onChange={(e) => setFormData({...formData, slug: e.target.value})}
+                          placeholder="auto-generated-slug"
+                          className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all pr-12"
+                        />
+                        <button 
+                          type="button" 
+                          onClick={() => setFormData({...formData, slug: generateSlug(formData.title)})}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-500 hover:text-primary-600 font-bold text-[10px]"
+                        >
+                          AUTO
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Meta Title</label>
+                      <input
+                        type="text"
+                        value={formData.metaTitle}
+                        onChange={(e) => setFormData({...formData, metaTitle: e.target.value})}
+                        placeholder="Premium Title for Search Results"
+                        className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all"
+                      />
+                    </div>
+                    <div className="col-span-full space-y-2">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Meta Description ({formData.metaDescription.length}/160)</label>
+                      <textarea
+                        value={formData.metaDescription}
+                        onChange={(e) => setFormData({...formData, metaDescription: e.target.value.slice(0, 160)})}
+                        placeholder="A magnetic summary for search engines..."
+                        className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all h-20 resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Keywords (Comma separated)</label>
+                      <input
+                        type="text"
+                        value={formData.keywords}
+                        onChange={(e) => setFormData({...formData, keywords: e.target.value})}
+                        placeholder="coding, kids, future..."
+                        className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Image Alt Text</label>
+                      <input
+                        type="text"
+                        value={formData.imageAlt}
+                        onChange={(e) => setFormData({...formData, imageAlt: e.target.value})}
+                        placeholder="Describe the image for SEO"
+                        className="w-full px-6 py-4 bg-gray-50/50 rounded-2xl border-2 border-gray-100 focus:border-primary-300 outline-none font-bold text-gray-700 transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* FAQ Section */}
+                <div className="pt-6 border-t border-gray-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-black text-gray-800 flex items-center gap-2">
+                      <HelpCircle className="text-primary-500" size={20} /> Blog FAQ Section
+                    </h3>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData({ ...formData, faqs: [...formData.faqs, { question: '', answer: '' }] })}
+                      className="text-xs font-black text-primary-500 hover:text-primary-600 flex items-center gap-1 uppercase tracking-widest"
+                    >
+                      <Plus size={14} /> Add Question
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {formData.faqs.map((faq, idx) => (
+                      <div key={idx} className="p-6 bg-gray-50 rounded-[1.5rem] border border-gray-100 relative group animate-in slide-in-from-bottom-2">
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const newFaqs = [...formData.faqs];
+                            newFaqs.splice(idx, 1);
+                            setFormData({ ...formData, faqs: newFaqs });
+                          }}
+                          className="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                        <div className="space-y-3">
+                          <input
+                            type="text"
+                            value={faq.question}
+                            onChange={(e) => {
+                              const newFaqs = [...formData.faqs];
+                              newFaqs[idx].question = e.target.value;
+                              setFormData({ ...formData, faqs: newFaqs });
+                            }}
+                            placeholder="Question..."
+                            className="w-full px-4 py-3 bg-white rounded-xl border border-gray-200 focus:border-primary-300 outline-none font-bold text-gray-700"
+                          />
+                          <textarea
+                            value={faq.answer}
+                            onChange={(e) => {
+                              const newFaqs = [...formData.faqs];
+                              newFaqs[idx].answer = e.target.value;
+                              setFormData({ ...formData, faqs: newFaqs });
+                            }}
+                            placeholder="Answer..."
+                            className="w-full px-4 py-3 bg-white rounded-xl border border-gray-200 focus:border-primary-300 outline-none font-medium text-gray-600 h-20 resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="pt-6 flex gap-3">
