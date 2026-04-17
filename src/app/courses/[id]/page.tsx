@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, ArrowRight } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
-import { trackEvent } from '@/utils/analytics';
+import { trackEvent, trackLead } from '@/utils/analytics';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -105,6 +105,16 @@ export default function CourseDetailPage() {
       return;
     }
     
+    // Tracking Lead Event
+    trackLead({
+      content_name: course.title,
+      content_category: course.category?.name,
+      content_ids: [course._id],
+      content_type: 'product',
+      value: finalPrice,
+      currency: 'INR'
+    });
+
     setIsProcessing(true);
     try {
       // 1. Create order

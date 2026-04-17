@@ -98,9 +98,16 @@ export const Footer = () => {
               </span>
             ))}
           </div>
-          <p className="text-white opacity-60 font-bold">
-            © {new Date().getFullYear()} RUZANN EdTech. Crafted with ✨ for future innovators.
-          </p>
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <p className="text-white opacity-60 font-bold">
+              © {new Date().getFullYear()} RUZANN EdTech. Crafted with ✨ for future innovators.
+            </p>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
+               <Link href="/privacy-policy" className="hover:text-primary-500 transition-colors">Privacy Policy</Link>
+               <span className="w-1 h-1 rounded-full bg-white/20" />
+               <Link href="/terms-conditions" className="hover:text-secondary-500 transition-colors">Terms & Conditions</Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

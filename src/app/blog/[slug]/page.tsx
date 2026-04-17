@@ -22,7 +22,13 @@ export default function BlogSlugPage() {
       try {
         const res = await api.get(`/api/blogs/${slug}`);
         if (res.data.success) {
-          setBlog(res.data.data);
+          const blogData = res.data.data;
+          // If a slug exists, redirect to the slug-based URL for SEO if a different ID was used
+          if (blogData.slug && slug !== blogData.slug) {
+            router.replace(`/blog/${blogData.slug}`);
+            return;
+          }
+          setBlog(blogData);
         }
       } catch (e) {
         console.error("Error fetching blog:", e);
@@ -32,7 +38,7 @@ export default function BlogSlugPage() {
     };
     fetchBlog();
     window.scrollTo(0, 0);
-  }, [slug]);
+  }, [slug, router]);
 
   // Generate Table of Contents
   const toc = useMemo(() => {

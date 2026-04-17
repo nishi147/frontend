@@ -9,6 +9,7 @@ import { ToastProvider } from "@/context/ToastContext";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { AnalyticsProviders } from "@/components/AnalyticsProviders";
 import MetaPixel from "@/components/MetaPixel";
+import GoogleAnalyticsHandler from "@/components/GoogleAnalyticsHandler";
 import AdSense from "@/components/AdSense";
 import { Suspense } from "react";
 import { CookieBanner } from "@/components/ui/CookieBanner";
@@ -41,7 +42,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${baloo.variable} ${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}>
-        {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
+        <GoogleAnalytics gaId="G-JK7E9ELJNE" />
+        <GoogleAnalyticsHandler />
         <AdSense />
         <Suspense fallback={null}>
           <MetaPixel />

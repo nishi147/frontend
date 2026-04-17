@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import api from '@/utils/api';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import { trackEvent, trackContact } from '@/utils/analytics';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
@@ -30,6 +31,11 @@ export default function ContactPage() {
         referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
       });
+      trackContact({
+        content_category: 'Contact Page',
+        subject: form.subject
+      });
+      trackEvent('contact_page_submit', { subject: form.subject });
       setSuccess(true);
       setForm({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
     } catch (err: any) {

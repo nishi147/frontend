@@ -1,17 +1,54 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Settings, Globe, Shield, Palette, Mail, MessageSquare, CreditCard, Save, RefreshCw } from 'lucide-react';
+import { Settings, Globe, Shield, Palette, Mail, MessageSquare, CreditCard, Save, RefreshCw, FileText, Upload, CheckCircle, ExternalLink, Trash2, FileCheck } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
+import api from '@/utils/api';
 
 export default function AdminSettings() {
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState('general');
   const [isSaving, setIsSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const handleSave = () => {
+  // Documents State (removed legal docs as they moved to dedicated page)
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await api.get('/api/settings');
+      if (res.data.success) {
+        // Only fetching what's needed for this page in the future
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      showToast("Failed to load settings", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
     setIsSaving(true);
-    setTimeout(() => setIsSaving(false), 1500);
+    try {
+      const res = await api.put('/api/settings', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (res.data.success) {
+        showToast("Settings updated successfully!", "success");
+      }
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      showToast("Failed to save settings", "error");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const tabs = [
@@ -169,7 +206,8 @@ export default function AdminSettings() {
                 </SettingsSection>
               </div>
             )}
-          </div>
+          )}
+        </div>
         </div>
       </div>
     </DashboardLayout>

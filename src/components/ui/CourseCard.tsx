@@ -5,7 +5,7 @@ import { getThumbnailUrl } from '@/utils/image';
 import { Card, CardContent } from './Card';
 import { Button } from './Button';
 import { Star } from 'lucide-react';1
-import { trackEvent } from '@/utils/analytics';
+import { trackEvent, trackLead } from '@/utils/analytics';
 
 import { useCurrency } from '@/context/CurrencyContext';
 
@@ -48,12 +48,22 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
     <Link
       href={`/courses/${course._id}?type=${typeFilter}`}
       className={`w-full flex-none group block`}
-      onClick={() => trackEvent('course_details_click', {
-        course_id: course._id,
-        course_title: course.title,
-        category: course.category?.name,
-        age_group: course.ageGroup
-      })}
+      onClick={() => {
+        trackLead({
+          content_name: course.title,
+          content_category: course.category?.name,
+          content_ids: [course._id],
+          content_type: 'product',
+          value: Math.round(course.pricePerSession * multiplier * course.numberOfSessions),
+          currency: 'INR'
+        });
+        trackEvent('course_details_click', {
+          course_id: course._id,
+          course_title: course.title,
+          category: course.category?.name,
+          age_group: course.ageGroup
+        });
+      }}
     >
       <Card className={`h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden cursor-pointer ${className}`}>
         

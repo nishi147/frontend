@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion, Star, Ticket, Sparkles, Rocket } from 'lucide-react';
+import { BookOpen, Video, Home, CheckSquare, BarChart, Users, Settings, UserCheck, Tag, MessageSquare, FileQuestion, Star, Ticket, Sparkles, Rocket, FileText } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Sidebar = () => {
@@ -55,6 +55,7 @@ export const Sidebar = () => {
       { name: 'Manage Blogs', href: `${base}/blogs`, icon: BookOpen },
       { name: 'Coupon Center', href: `${base}/coupons`, icon: Tag },
       { name: 'Testimonials', href: `${base}/testimonials`, icon: MessageSquare },
+      { name: 'Legal Documents', href: `${base}/legal`, icon: FileText },
       { name: 'Settings', href: `${base}/settings`, icon: Settings },
     ];
 

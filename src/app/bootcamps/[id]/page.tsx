@@ -11,6 +11,7 @@ import { CheckCircle, PlayCircle, FileText, ChevronDown, Calendar, MapPin, User,
 import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
+import { trackLead } from '@/utils/analytics';
 
 export default function BootcampDetailPage() {
   const { id } = useParams();
@@ -66,10 +67,19 @@ export default function BootcampDetailPage() {
     }
 
     if (isEnrolled) {
-      showToast("You are already enrolled in this bootcamp!", "success");
       return;
     }
     
+    // Tracking Lead Event
+    trackLead({
+      content_name: bootcamp.title,
+      content_category: 'Bootcamp',
+      content_ids: [bootcamp._id],
+      content_type: 'product',
+      value: bootcamp.price,
+      currency: 'INR'
+    });
+
     setIsProcessing(true);
     try {
       // 1. Create order

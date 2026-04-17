@@ -8,18 +8,14 @@ export default function MetaPixel() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
+  const pixelId = '1210254384412672';
+
   useEffect(() => {
     // Track PageView on route change
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'PageView')
+      (window as any).fbq('track', 'PageView');
     }
-  }, [pathname, searchParams])
-
-  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
-
-  if (!pixelId) {
-    return null
-  }
+  }, [pathname, searchParams]);
 
   return (
     <>
@@ -51,5 +47,5 @@ export default function MetaPixel() {
         />
       </noscript>
     </>
-  )
+  );
 }

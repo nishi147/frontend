@@ -18,7 +18,7 @@ import CourseSelection from '@/components/sections/CourseSelection';
 import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
-import { trackEvent } from '@/utils/analytics';
+import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
 import { BlogSection } from '@/components/sections/BlogSection';
 
@@ -141,6 +141,13 @@ const BootcampSection = () => {
   }, [bootcamps]);
 
   const handleEnrollBootcamp = async (bootcamp: any) => {
+    trackLead({
+      content_name: bootcamp.title,
+      content_category: 'Bootcamp_Listing',
+      content_ids: [bootcamp._id],
+      value: bootcamp.price,
+      currency: 'INR'
+    });
     router.push(`/bootcamps/${bootcamp._id}`);
   };
 
@@ -405,6 +412,13 @@ const WorkshopSection = () => {
   }, [workshops]);
 
   const handleBookWorkshop = async (workshop: any) => {
+    trackLead({
+      content_name: workshop.title,
+      content_category: 'Workshop_Listing',
+      content_ids: [workshop._id],
+      value: workshop.price,
+      currency: 'INR'
+    });
     router.push(`/workshops/${workshop._id}`);
   };
 
@@ -652,6 +666,10 @@ const ContactSection = () => {
         source: 'Website',
         referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
+      });
+      trackContact({
+        content_category: 'Contact Form',
+        subject: form.subject
       });
       trackEvent('contact_form_submit', { subject: form.subject });
       showToast("Thanks! Our team will contact you soon 🎉", "success");
