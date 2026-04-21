@@ -21,6 +21,7 @@ import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelecto
 import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
 import { BlogSection } from '@/components/sections/BlogSection';
+import { SliderWrapper } from '@/components/ui/SliderWrapper';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -104,41 +105,6 @@ const BootcampSection = () => {
     };
     fetchBootcamps();
   }, []);
-
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    if (!isMobile) return;
-
-    let intervalId: NodeJS.Timeout;
-
-    const startAutoScroll = () => {
-      intervalId = setInterval(() => {
-        const container = scrollRef.current;
-        if (container) {
-          const maxScroll = container.scrollWidth - container.clientWidth;
-          if (container.scrollLeft >= maxScroll - 10) {
-            container.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            container.scrollBy({ left: 320, behavior: 'smooth' });
-          }
-        }
-      }, 3000);
-    };
-
-    if (bootcamps.length > 0) {
-        setTimeout(() => {
-          startAutoScroll();
-          const container = scrollRef.current;
-          if (container) {
-             container.addEventListener('touchstart', () => clearInterval(intervalId));
-             container.addEventListener('touchend', startAutoScroll);
-          }
-        }, 500);
-    }
-    return () => clearInterval(intervalId);
-  }, [bootcamps]);
 
   const handleEnrollBootcamp = async (bootcamp: any) => {
     trackLead({
@@ -248,97 +214,89 @@ const BootcampSection = () => {
 
   if (bootcamps.length === 0) return null;
 
-  return (
-    <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
-      {bootcamps.map((bc: any) => {
-        const thumbUrl = getThumbnailUrl(bc.image);
-        return (
-          <div key={bc._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleEnrollBootcamp(bc)}>
-            <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
-              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
-                {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
-                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
-                  <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                    <span className="text-[8px]">👦</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-700">{bc.studentsEnrolled} Enrolled</span>
-                </div>
-                )}
-
-
-
-                <div className="w-full h-full relative z-10 flex items-center justify-center">
-                  {bc.image && bc.image !== 'no-image.jpg' ? (
-                    <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={bc.title} />
-                  ) : (
-                    <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
-                  )}
-                </div>
-
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
-                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Bootcamp</span>
-                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Live</span>
-                </div>
+  const bootcampCards = bootcamps.map((bc: any) => {
+    const thumbUrl = getThumbnailUrl(bc.image);
+    return (
+      <div key={bc._id} className="group cursor-pointer h-full" onClick={() => handleEnrollBootcamp(bc)}>
+        <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white overflow-hidden">
+          <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
+            {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
+            <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
+              <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                <span className="text-[8px]">👦</span>
               </div>
-
-              <CardContent className="p-5 flex flex-col flex-1 bg-white">
-                <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{bc.title}</h3>
-                
-                <div className="flex items-center justify-between mb-3 text-sm">
-                  {bc.rating > 0 && (
-                  <div className="flex items-center gap-1 text-gray-600">
-                    <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                    <span className="font-bold text-black">{bc.rating.toFixed(1)}</span>
-                  </div>
-                  )}
-                  {bc.showStudentsEnrolled && (
-                  <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
-                    <span className="text-gray-600">👤</span> {bc.studentsEnrolled || 0} students
-                  </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                     <Calendar size={14} className="text-gray-400" />
-                     <span className="truncate">{new Date(bc.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                  </div>
-                  {bc.venue && (
-                  <div className="flex items-center gap-2">
-                     <MapPin size={14} className="text-gray-400" />
-                     <span className="truncate">{bc.venue}</span>
-                  </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-4 mt-auto">
-                  <div className="flex flex-col pt-1">
-                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl lg:text-3xl font-black text-black">₹{bc.price}</span>
-                        <span className="text-sm font-medium text-gray-400 line-through">₹{bc.price + 999}</span>
-                     </div>
-                     <div className="text-sm font-bold text-black mt-1">
-                        (Total Bootcamp pass)
-                     </div>
-                  </div>
-                  
-                  <Button 
-                    variant="outline"
-                    isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-                    className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
-                  >
-                    Enroll Now
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              <span className="text-[10px] font-bold text-gray-700">{bc.studentsEnrolled} Enrolled</span>
+            </div>
+            )}
+            <div className="w-full h-full relative z-10 flex items-center justify-center">
+              {bc.image && bc.image !== 'no-image.jpg' ? (
+                <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={bc.title} />
+              ) : (
+                <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">🚀</div>
+              )}
+            </div>
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
+              <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Bootcamp</span>
+              <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Live</span>
+            </div>
           </div>
-        );
-      })}
+          <CardContent className="p-5 flex flex-col flex-1 bg-white">
+            <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{bc.title}</h3>
+            <div className="flex items-center justify-between mb-3 text-sm">
+              {bc.rating > 0 && (
+              <div className="flex items-center gap-1 text-gray-600">
+                <Star size={14} className="text-yellow-400 fill-yellow-400" />
+                <span className="font-bold text-black">{bc.rating.toFixed(1)}</span>
+              </div>
+              )}
+              {bc.showStudentsEnrolled && (
+              <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
+                <span className="text-gray-600">👤</span> {bc.studentsEnrolled || 0} students
+              </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <Calendar size={14} className="text-gray-400" />
+                <span className="truncate">{new Date(bc.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(bc.endDate || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+              </div>
+              {bc.venue && (
+              <div className="flex items-center gap-2">
+                <MapPin size={14} className="text-gray-400" />
+                <span className="truncate">{bc.venue}</span>
+              </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-4 mt-auto">
+              <div className="flex flex-col pt-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl lg:text-3xl font-black text-black">₹{bc.price}</span>
+                  <span className="text-sm font-medium text-gray-400 line-through">₹{bc.price + 999}</span>
+                </div>
+                <div className="text-sm font-bold text-black mt-1">(Total Bootcamp pass)</div>
+              </div>
+              <Button
+                variant="outline"
+                isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
+              >
+                Enroll Now
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  });
 
-      <EnrollLeadModal 
-        isOpen={isLeadModalOpen} 
-        onClose={() => setIsLeadModalOpen(false)} 
+  return (
+    <div className="px-6 md:px-8">
+      <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
+        {bootcampCards}
+      </SliderWrapper>
+      <EnrollLeadModal
+        isOpen={isLeadModalOpen}
+        onClose={() => setIsLeadModalOpen(false)}
         onProceed={handleGuestLeadSubmission}
         isProcessing={isProcessing}
         title="Enroll in Bootcamp 🎓"
@@ -375,41 +333,6 @@ const WorkshopSection = () => {
     };
     fetchWorkshops();
   }, []);
-
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    if (!isMobile) return;
-
-    let intervalId: NodeJS.Timeout;
-
-    const startAutoScroll = () => {
-      intervalId = setInterval(() => {
-        const container = scrollRef.current;
-        if (container) {
-          const maxScroll = container.scrollWidth - container.clientWidth;
-          if (container.scrollLeft >= maxScroll - 10) {
-            container.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            container.scrollBy({ left: 320, behavior: 'smooth' });
-          }
-        }
-      }, 3000);
-    };
-
-    if (workshops.length > 0) {
-        setTimeout(() => {
-          startAutoScroll();
-          const container = scrollRef.current;
-          if (container) {
-             container.addEventListener('touchstart', () => clearInterval(intervalId));
-             container.addEventListener('touchend', startAutoScroll);
-          }
-        }, 500);
-    }
-    return () => clearInterval(intervalId);
-  }, [workshops]);
 
   const handleBookWorkshop = async (workshop: any) => {
     trackLead({
@@ -539,93 +462,86 @@ const WorkshopSection = () => {
      </div>
   );
 
-  return (
-    <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
-      {workshops.map((ws: any) => {
-        const thumbUrl = getThumbnailUrl(ws.image);
-        return (
-          <div key={ws._id} className="w-[85vw] md:w-full flex-none group cursor-pointer" onClick={() => handleBookWorkshop(ws)}>
-            <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden">
-              <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
-                {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
-                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
-                  <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                    <span className="text-[8px]">👦</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-700">{ws.studentsEnrolled} Enrolled</span>
-                </div>
-                )}
-
-
-
-                <div className="w-full h-full relative z-10 flex items-center justify-center">
-                  {ws.image && ws.image !== 'no-image.jpg' ? (
-                    <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={ws.title} />
-                  ) : (
-                    <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
-                      {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
-                    </div>
-                  )}
-                </div>
-
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
-                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Workshop</span>
-                  <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Event</span>
-                </div>
+  const workshopCards = workshops.map((ws: any) => {
+    const thumbUrl = getThumbnailUrl(ws.image);
+    return (
+      <div key={ws._id} className="group cursor-pointer h-full" onClick={() => handleBookWorkshop(ws)}>
+        <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white overflow-hidden">
+          <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
+            {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
+            <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
+              <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+                <span className="text-[8px]">👦</span>
               </div>
-
-              <CardContent className="p-5 flex flex-col flex-1 bg-white">
-                <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{ws.title}</h3>
-                
-                <div className="flex items-center justify-between mb-3 text-sm">
-                  {ws.rating > 0 && (
-                  <div className="flex items-center gap-1 text-gray-600">
-                    <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                    <span className="font-bold text-black">{ws.rating.toFixed(1)}</span>
-                  </div>
-                  )}
-                  {ws.showStudentsEnrolled && (
-                  <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
-                    <span className="text-gray-600">👤</span> {ws.studentsEnrolled || 0} students
-                  </div>
-                  )}
+              <span className="text-[10px] font-bold text-gray-700">{ws.studentsEnrolled} Enrolled</span>
+            </div>
+            )}
+            <div className="w-full h-full relative z-10 flex items-center justify-center">
+              {ws.image && ws.image !== 'no-image.jpg' ? (
+                <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={ws.title} />
+              ) : (
+                <div className="text-6xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                  {ws.title.toLowerCase().includes('space') ? '🚀' : ws.title.toLowerCase().includes('robot') ? '🤖' : ws.title.toLowerCase().includes('art') ? '🎨' : '🎟️'}
                 </div>
-
-                <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                     <Calendar size={14} className="text-gray-400" />
-                     <span className="truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                     <MapPin size={14} className="text-gray-400" />
-                     <span className="truncate">{ws.venue}</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-4 mt-auto">
-                  <div className="flex flex-col pt-1">
-                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl lg:text-3xl font-black text-black">₹{ws.price}</span>
-                        <span className="text-sm font-medium text-gray-400 line-through">₹{ws.price + 999}</span>
-                     </div>
-                     <div className="text-sm font-bold text-black mt-1">
-                        (Event ticket)
-                     </div>
-                  </div>
-                  
-                  <Button 
-                    variant="outline"
-                    isLoading={isProcessing && activeWorkshopForSlots?._id === ws._id}
-                    className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
-                  >
-                    Enroll Now
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              )}
+            </div>
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
+              <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Workshop</span>
+              <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">Event</span>
+            </div>
           </div>
-        )
-      })}
+          <CardContent className="p-5 flex flex-col flex-1 bg-white">
+            <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">{ws.title}</h3>
+            <div className="flex items-center justify-between mb-3 text-sm">
+              {ws.rating > 0 && (
+              <div className="flex items-center gap-1 text-gray-600">
+                <Star size={14} className="text-yellow-400 fill-yellow-400" />
+                <span className="font-bold text-black">{ws.rating.toFixed(1)}</span>
+              </div>
+              )}
+              {ws.showStudentsEnrolled && (
+              <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
+                <span className="text-gray-600">👤</span> {ws.studentsEnrolled || 0} students
+              </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5 mb-4 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <Calendar size={14} className="text-gray-400" />
+                <span className="truncate">{new Date(ws.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin size={14} className="text-gray-400" />
+                <span className="truncate">{ws.venue}</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 mt-auto">
+              <div className="flex flex-col pt-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl lg:text-3xl font-black text-black">₹{ws.price}</span>
+                  <span className="text-sm font-medium text-gray-400 line-through">₹{ws.price + 999}</span>
+                </div>
+                <div className="text-sm font-bold text-black mt-1">(Event ticket)</div>
+              </div>
+              <Button
+                variant="outline"
+                isLoading={isProcessing && activeWorkshopForSlots?._id === ws._id}
+                className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
+              >
+                Enroll Now
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  });
+
+  return (
+    <div className="px-6 md:px-8">
+      <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4000} gap={24}>
+        {workshopCards}
+      </SliderWrapper>
 
       {activeWorkshopForSlots && (
         <WorkshopSlotSelectorModal
@@ -636,10 +552,9 @@ const WorkshopSection = () => {
           isProcessing={isProcessing}
         />
       )}
-
-      <EnrollLeadModal 
-        isOpen={isLeadModalOpen} 
-        onClose={() => setIsLeadModalOpen(false)} 
+      <EnrollLeadModal
+        isOpen={isLeadModalOpen}
+        onClose={() => setIsLeadModalOpen(false)}
         onProceed={handleGuestLeadSubmission}
         isProcessing={isProcessing}
         title="Enroll in Workshop 🎟️"
@@ -828,6 +743,73 @@ const ContactSection = () => {
   );
 };
 
+// ─── Floating BrightChamps-Style Decorations ───────────────────────────────
+const FloatingDecorations = () => (
+  <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+
+    {/* Outlined Stars */}
+    <svg className="absolute top-[8%] left-[3%] opacity-[0.12] animate-float-a" style={{animationDelay:'0s'}} width="70" height="70" viewBox="0 0 80 80" fill="none">
+      <path d="M40 5L47 30H73L52 46L59 71L40 55L21 71L28 46L7 30H33L40 5Z" stroke="#6366f1" strokeWidth="2.5" fill="none"/>
+    </svg>
+    <svg className="absolute top-[12%] right-[6%] opacity-[0.10] animate-float-b" style={{animationDelay:'1.5s'}} width="50" height="50" viewBox="0 0 60 60" fill="none">
+      <path d="M30 4L36 22H55L40 33L46 51L30 40L14 51L20 33L5 22H24L30 4Z" stroke="#a855f7" strokeWidth="2" fill="none"/>
+    </svg>
+    <svg className="absolute top-[38%] left-[1%] opacity-[0.10] animate-float-c" style={{animationDelay:'2s'}} width="38" height="38" viewBox="0 0 60 60" fill="none">
+      <path d="M30 4L36 22H55L40 33L46 51L30 40L14 51L20 33L5 22H24L30 4Z" stroke="#f59e0b" strokeWidth="2" fill="none"/>
+    </svg>
+    <svg className="absolute top-[55%] right-[2%] opacity-[0.09] animate-float-a" style={{animationDelay:'3s'}} width="64" height="64" viewBox="0 0 80 80" fill="none">
+      <path d="M40 5L47 30H73L52 46L59 71L40 55L21 71L28 46L7 30H33L40 5Z" stroke="#6366f1" strokeWidth="2.5" fill="none"/>
+    </svg>
+    <svg className="absolute bottom-[20%] left-[4%] opacity-[0.10] animate-float-b" style={{animationDelay:'0.8s'}} width="48" height="48" viewBox="0 0 60 60" fill="none">
+      <path d="M30 4L36 22H55L40 33L46 51L30 40L14 51L20 33L5 22H24L30 4Z" stroke="#ec4899" strokeWidth="2" fill="none"/>
+    </svg>
+    <svg className="absolute bottom-[10%] right-[5%] opacity-[0.09] animate-float-c" style={{animationDelay:'2.5s'}} width="36" height="36" viewBox="0 0 60 60" fill="none">
+      <path d="M30 4L36 22H55L40 33L46 51L30 40L14 51L20 33L5 22H24L30 4Z" stroke="#a855f7" strokeWidth="2" fill="none"/>
+    </svg>
+    <svg className="absolute top-[72%] left-[8%] opacity-[0.08] animate-float-a" style={{animationDelay:'4s'}} width="30" height="30" viewBox="0 0 60 60" fill="none">
+      <path d="M30 4L36 22H55L40 33L46 51L30 40L14 51L20 33L5 22H24L30 4Z" stroke="#6366f1" strokeWidth="2" fill="none"/>
+    </svg>
+
+    {/* Diamond sparkle glyphs */}
+    <div className="absolute top-[22%] left-[12%] text-indigo-300 text-3xl opacity-20 animate-wiggle-slow" style={{animationDelay:'0.5s'}}>✦</div>
+    <div className="absolute top-[45%] right-[10%] text-purple-300 text-2xl opacity-15 animate-wiggle-slow" style={{animationDelay:'2s'}}>✦</div>
+    <div className="absolute bottom-[35%] left-[15%] text-pink-300 text-xl opacity-15 animate-float-b" style={{animationDelay:'1s'}}>✦</div>
+    <div className="absolute bottom-[55%] right-[14%] text-amber-300 text-2xl opacity-20 animate-float-c" style={{animationDelay:'3.5s'}}>✦</div>
+    <div className="absolute top-[65%] right-[18%] text-indigo-200 text-3xl opacity-15 animate-wiggle-slow" style={{animationDelay:'1.2s'}}>✦</div>
+
+    {/* Plus signs */}
+    <div className="absolute top-[30%] right-[22%] text-indigo-200 font-black text-2xl opacity-20 animate-float-a" style={{animationDelay:'0.3s'}}>+</div>
+    <div className="absolute top-[60%] left-[22%] text-purple-200 font-black text-3xl opacity-15 animate-float-b" style={{animationDelay:'2.8s'}}>+</div>
+    <div className="absolute bottom-[28%] right-[28%] text-pink-200 font-black text-xl opacity-15 animate-float-c" style={{animationDelay:'1.8s'}}>+</div>
+    <div className="absolute top-[18%] left-[30%] text-amber-200 font-black text-2xl opacity-15 animate-float-a" style={{animationDelay:'3.2s'}}>+</div>
+
+    {/* Coloured dots */}
+    <div className="absolute top-[25%] left-[7%] w-3 h-3 rounded-full bg-indigo-300 opacity-25 animate-float-b" style={{animationDelay:'0.6s'}} />
+    <div className="absolute top-[42%] right-[7%] w-4 h-4 rounded-full bg-purple-300 opacity-20 animate-float-a" style={{animationDelay:'1.4s'}} />
+    <div className="absolute bottom-[42%] left-[10%] w-2.5 h-2.5 rounded-full bg-pink-300 opacity-25 animate-float-c" style={{animationDelay:'2.2s'}} />
+    <div className="absolute bottom-[22%] right-[12%] w-3.5 h-3.5 rounded-full bg-amber-300 opacity-20 animate-float-b" style={{animationDelay:'3.8s'}} />
+    <div className="absolute top-[78%] left-[18%] w-2 h-2 rounded-full bg-teal-300 opacity-25 animate-float-a" style={{animationDelay:'0.9s'}} />
+    <div className="absolute top-[15%] right-[30%] w-2.5 h-2.5 rounded-full bg-rose-300 opacity-20 animate-float-c" style={{animationDelay:'4.2s'}} />
+
+    {/* Spinning dashed rings */}
+    <svg className="absolute top-[35%] right-[5%] opacity-[0.08] animate-spin-slow" width="50" height="50" viewBox="0 0 50 50" fill="none">
+      <circle cx="25" cy="25" r="20" stroke="#8b5cf6" strokeWidth="2" strokeDasharray="8 6"/>
+    </svg>
+    <svg className="absolute bottom-[45%] left-[5%] opacity-[0.07] animate-spin-slow" style={{animationDelay:'3s', animationDirection:'reverse'}} width="40" height="40" viewBox="0 0 50 50" fill="none">
+      <circle cx="25" cy="25" r="20" stroke="#f59e0b" strokeWidth="2" strokeDasharray="10 5"/>
+    </svg>
+
+    {/* Squiggly arcs */}
+    <svg className="absolute top-[5%] left-[40%] opacity-[0.08] animate-float-c" style={{animationDelay:'1s'}} width="120" height="40" viewBox="0 0 140 50" fill="none">
+      <path d="M10 35 Q35 5 70 25 Q105 45 130 15" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+    </svg>
+    <svg className="absolute bottom-[15%] right-[20%] opacity-[0.07] animate-float-a" style={{animationDelay:'2.3s'}} width="100" height="35" viewBox="0 0 140 50" fill="none">
+      <path d="M10 35 Q35 5 70 25 Q105 45 130 15" stroke="#a855f7" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+    </svg>
+
+  </div>
+);
+
 export default function Home() {
   const router = useRouter();
   const { user } = useAuth();
@@ -874,6 +856,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans overflow-hidden">
       <Header />
+
+      {/* Floating BrightChamps-style background decorations */}
+      <FloatingDecorations />
       
       {/* Top AdSense Unit 
       <div className="max-w-7xl mx-auto px-4 pt-4">
@@ -960,13 +945,13 @@ export default function Home() {
       {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
       <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-left">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-100 rounded-full text-accent-600 font-bold mb-3">
                 <Rocket size={16} />
                 <span className="text-sm">Space Bootcamps</span>
               </div>
-              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+              <div className="flex items-center justify-start gap-3 mb-2">
                 <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
                 <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
@@ -985,13 +970,13 @@ export default function Home() {
       {/* 2.7 BOOTCAMPS SECTION */}
       <section className="py-14 bg-white overflow-hidden" id="bootcamps">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-left">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-3">
                 <Sparkles size={16} />
                 <span className="text-sm">Extended Learning</span>
               </div>
-              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+              <div className="flex items-center justify-start gap-3 mb-2">
                 <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
                 <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Specialized Bootcamps</span>
@@ -1183,56 +1168,133 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. TEACHERS SHOWCASE SECTION */}
-      <section className="py-12 px-4 container mx-auto" id="teachers">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-           <div className="max-w-2xl">
-             <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-2">Meet Our Cool <span className="text-primary-500">Mentors</span></h2>
-             <p className="text-base font-bold text-gray-500">Learn from the very best! Our verified experts know exactly how to guide young minds.</p>
-           </div>
-           <Link href="/teachers#experts">
-             <Button variant="outline" className="hidden md:flex font-bold">See all Mentors</Button>
-           </Link>
-        </div>
+      {/* 6. EDUCATORS SHOWCASE SECTION — BrightChamps Style */}
+      <section className="py-16 bg-white overflow-hidden" id="teachers">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
 
-        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto scrollbar-hide no-scrollbar w-full px-4 md:px-0 pb-8">
-           {loadingMentors ? (
-             [1,2,3,4].map(i => (
-               <div key={i} className="min-w-[280px] md:min-w-0 h-48 rounded-2xl bg-gray-50 animate-pulse border-2 border-gray-100 flex-none" />
-             ))
-           ) : mentors.length === 0 ? (
-             <div className="col-span-full text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                <p className="text-gray-900 font-bold italic">Adding our expert mentors shortly! Stay tuned. ✨</p>
-             </div>
-           ) : (
-             mentors.map((mentor, i) => {
-               const bgColors = ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'];
-               const bgColor = bgColors[i % bgColors.length];
-               return (
-                 <Link href={`/teachers/${mentor._id}`} key={mentor._id} className="min-w-[280px] md:min-w-0 flex-none bg-white border-2 border-gray-100 rounded-2xl p-5 text-center hover:border-primary-300 transition-all cursor-pointer group hover:-translate-y-1 hover:shadow-xl shadow-primary-100">
-                   <div className={`w-24 h-24 ${bgColor} rounded-full flex items-center justify-center text-5xl mx-auto mb-4 group-hover:scale-110 transition-transform overflow-hidden relative border-4 border-white shadow-sm`}>
-                     {mentor.profilePicture ? (
-                       <img 
-                        src={getThumbnailUrl(mentor.profilePicture)} 
-                        alt={mentor.name} 
-                        className="w-full h-full object-cover" 
-                       />
-                     ) : (
-                       <span className="font-baloo text-primary-600 font-black">{mentor.name[0]}</span>
-                     )}
-                   </div>
-                   <h3 className="text-2xl font-black text-gray-800 mb-1">{mentor.name}</h3>
-                   <p className="text-gray-500 font-bold mb-2 uppercase tracking-tight text-sm">
-                     {mentor.specialization || "Expert Mentor"}
-                   </p>
-                 </Link>
-               );
-             })
-           )}
+          {/* Section Header */}
+          <div className="text-left mb-12 relative">
+            <div className="mb-2">
+              <span className="text-4xl">⭐</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-3">
+              Our Team of <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-500">Educators</span>
+            </h2>
+            <p className="text-base md:text-lg font-bold text-gray-500 max-w-xl">
+              Guiding stars committed to student success
+            </p>
+          </div>
+
+          {/* Cards */}
+          {loadingMentors ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="rounded-2xl bg-gray-100 animate-pulse h-96" />
+              ))}
+            </div>
+          ) : mentors.length === 0 ? (
+            <div className="text-center py-16 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+              <p className="text-gray-500 font-bold italic text-lg">Adding our expert mentors shortly! Stay tuned. ✨</p>
+            </div>
+          ) : (
+            <SliderWrapper slidesPerViewLg={4} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4000} gap={20}>
+              {mentors.map((mentor, i) => {
+                const heroBgs = [
+                  'bg-yellow-400', 'bg-green-500', 'bg-orange-400',
+                  'bg-purple-400', 'bg-blue-400', 'bg-pink-400', 'bg-teal-400'
+                ];
+                const heroBg = heroBgs[i % heroBgs.length];
+                const rating = mentor.rating || 5.0;
+                const ratingCount = mentor.ratingCount || Math.floor(Math.random() * 800 + 200);
+                const experience = mentor.experience || `${Math.floor(Math.random() * 4) + 1} years`;
+                const subjects = mentor.specialization || 'Coding & Technology';
+                const location = mentor.location || 'India';
+                const bioText = mentor.bio || `Hi! I'm ${mentor.name.split(' ')[0]}, passionate about making learning fun and effective for every child.`;
+                const shortBio = bioText.length > 90 ? bioText.slice(0, 90) + '...' : bioText;
+
+                return (
+                  <div key={mentor._id} className="group">
+                    <div className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col">
+
+                      {/* Coloured Photo Banner */}
+                      <div className={`relative ${heroBg} h-56 overflow-hidden rounded-t-3xl`}>
+                        {mentor.profilePicture ? (
+                          <img
+                            src={getThumbnailUrl(mentor.profilePicture)}
+                            alt={mentor.name}
+                            className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center w-full h-full">
+                            <span className="text-8xl font-black text-white/70 select-none">{mentor.name[0]}</span>
+                          </div>
+                        )}
+
+                      </div>
+
+                      {/* Card Body */}
+                      <div className="p-5 flex flex-col flex-1">
+                        {/* Name */}
+                        <h3 className="text-base font-black text-gray-900 mb-0.5 leading-snug">{mentor.name}</h3>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-1 mb-3">
+                          <Star size={13} className="text-yellow-400 fill-yellow-400" />
+                          <span className="text-xs font-black text-gray-800">{rating.toFixed(1)}</span>
+                          <span className="text-xs text-gray-400 font-medium">({ratingCount.toLocaleString()} ratings)</span>
+                        </div>
+
+                        {/* Meta info */}
+                        <div className="space-y-1.5 mb-3">
+                          <div className="flex items-start gap-2 text-xs text-gray-700 font-bold">
+                            <span className="text-gray-400 mt-px">◈</span>
+                            <span>Experience: <strong>{experience}</strong></span>
+                          </div>
+                          <div className="flex items-start gap-2 text-xs text-gray-700 font-bold">
+                            <span className="text-gray-400 mt-px">◈</span>
+                            <span className="line-clamp-2 leading-relaxed">{subjects}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-2">
+                            <span className="text-base leading-none">🇮🇳</span>
+                            <div className="flex flex-col leading-none">
+                              <span className="text-[9px] text-gray-400 uppercase tracking-widest font-black">Location</span>
+                              <span className="text-xs font-black text-gray-700">{location}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Short Bio */}
+                        <p className="text-xs text-gray-500 font-medium leading-relaxed mb-4 flex-1">
+                          {shortBio}{' '}
+                          {bioText.length > 90 && (
+                            <Link href={`/teachers/${mentor._id}`} className="text-primary-500 font-bold hover:underline">Read More</Link>
+                          )}
+                        </p>
+
+                        {/* CTA */}
+                        <Link href={`/teachers/${mentor._id}`} className="block">
+                          <button className="w-full py-3 rounded-full border-2 border-primary-500 text-primary-600 text-sm font-black hover:bg-primary-500 hover:text-white transition-all duration-200 active:scale-95 tracking-wide">
+                            Join Class
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </SliderWrapper>
+          )}
+
+          {/* See All link */}
+          <div className="text-center mt-10">
+            <Link href="/teachers#experts">
+              <Button variant="outline" className="rounded-full px-10 py-5 border-2 border-slate-100 font-black text-slate-600 hover:bg-slate-50 hover:border-slate-200 transition-all gap-2 shadow-lg shadow-slate-100">
+                See All Educators <ArrowRight size={16} className="text-primary-500" />
+              </Button>
+            </Link>
+          </div>
+
         </div>
-        <Link href="/teachers#experts">
-          <Button variant="outline" className="md:hidden w-full font-bold mt-8">See all Mentors</Button>
-        </Link>
       </section>
 
       <BlogSection />

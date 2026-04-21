@@ -105,3 +105,35 @@ body {
 .animate-bounce-slow {
   animation: bounce-slow 4s ease-in-out infinite;
 }
+
+@keyframes float-a {
+  0%   { transform: translateY(0px) rotate(0deg) scale(1); }
+  33%  { transform: translateY(-18px) rotate(6deg) scale(1.05); }
+  66%  { transform: translateY(-8px) rotate(-4deg) scale(0.97); }
+  100% { transform: translateY(0px) rotate(0deg) scale(1); }
+}
+@keyframes float-b {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-22px) rotate(-8deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+@keyframes float-c {
+  0%   { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  40%  { transform: translateY(-12px) translateX(8px) rotate(12deg); }
+  80%  { transform: translateY(-6px) translateX(-4px) rotate(-6deg); }
+  100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wiggle-slow {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50%       { transform: rotate(8deg) scale(1.1); }
+}
+
+.animate-float-a { animation: float-a 6s ease-in-out infinite; }
+.animate-float-b { animation: float-b 7s ease-in-out infinite; }
+.animate-float-c { animation: float-c 8s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 12s linear infinite; }
+.animate-wiggle-slow { animation: wiggle-slow 5s ease-in-out infinite; }

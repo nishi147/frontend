@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { Star, Users, BookOpen, ArrowRight, Loader2, Code, Gamepad2, BrainCircuit, MonitorSmartphone, Palette, Shapes, Sparkles, Search } from 'lucide-react';
 import CourseCard from '@/components/ui/CourseCard';
+import { SliderWrapper } from '@/components/ui/SliderWrapper';
 
 interface Category {
   _id: string;
@@ -107,42 +108,7 @@ const CourseSelection = () => {
     setFilteredCourses(result);
   }, [ageFilter, categoryFilter, courses]);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    if (!isMobile) return;
-
-    let intervalId: NodeJS.Timeout;
-
-    const startAutoScroll = () => {
-      intervalId = setInterval(() => {
-        const container = scrollRef.current;
-        if (container) {
-          const maxScroll = container.scrollWidth - container.clientWidth;
-          if (container.scrollLeft >= maxScroll - 10) {
-            container.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            container.scrollBy({ left: 320, behavior: 'smooth' }); // approximate card width
-          }
-        }
-      }, 3000); // Scroll every 3 seconds
-    };
-
-    if (filteredCourses.length > 0) {
-        // give it a short delay to ensure DOM is ready
-        setTimeout(() => {
-          startAutoScroll();
-          const container = scrollRef.current;
-          if (container) {
-             container.addEventListener('touchstart', () => clearInterval(intervalId));
-             container.addEventListener('touchend', startAutoScroll);
-          }
-        }, 500);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [filteredCourses]);
 
   if (loading) {
     return (
@@ -155,26 +121,12 @@ const CourseSelection = () => {
 
   return (
     <section className="py-8 md:py-16 px-0 md:px-4 w-full max-w-7xl mx-auto overflow-hidden bg-white" id="course-selection">
-      <div className="text-center mb-6 md:mb-10 px-4 relative">
-        {/* Floating Magic Decorations (Matching Projects Style) */}
-        <div className="absolute left-[-20px] md:left-[5%] top-[-10px] md:top-0 opacity-60 animate-bounce-slow scale-75 md:scale-100 origin-top-left pointer-events-none hidden sm:block">
-          <div className="w-3 h-3 rounded-full bg-blue-400 mb-2 shadow-sm" />
-          <div className="w-6 h-6 rounded-full bg-orange-400 ml-6 opacity-80" />
-          <div className="w-10 h-10 text-2xl mt-1">✨</div>
-        </div>
-        
-        <div className="absolute right-[-20px] md:right-[5%] top-[-10px] md:top-4 scale-75 md:scale-100 origin-top-right pointer-events-none hidden sm:block">
-          <svg width="180" height="60" viewBox="0 0 220 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="animate-float opacity-40">
-             <path d="M20 60 Q110 -20 200 60" stroke="#3B82F6" strokeWidth="6" strokeLinecap="round" fill="none" />
-             <circle cx="20" cy="62" r="10" fill="#FFA500" />
-             <circle cx="200" cy="62" r="12" fill="#3B82F6" />
-          </svg>
-        </div>
+    <div className="text-left mb-6 md:mb-10 px-4 relative">
 
-        <h2 className="text-3xl md:text-6xl font-black mb-3 tracking-tight drop-shadow-sm animate-float">
+        <h2 className="text-3xl md:text-6xl font-black mb-3 tracking-tight drop-shadow-sm">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Choose Your Course</span>
         </h2>
-        <p className="text-base md:text-xl font-bold max-w-2xl mx-auto leading-relaxed opacity-90 animate-pulse mt-2">
+        <p className="text-base md:text-xl font-bold max-w-2xl leading-relaxed opacity-90 mt-2">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Exciting and effective programs, curated by experts!</span>
         </p>
       </div>
@@ -286,17 +238,21 @@ const CourseSelection = () => {
       </div>
 
       {/* Course Cards (BrightChamps Aesthetic) */}
-      <div className="px-4">
+      <div className="px-6 md:px-8">
         {filteredCourses.length > 0 ? (
           <div className="flex flex-col items-center">
-            <div ref={scrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 overflow-x-auto scrollbar-hide pb-16 no-scrollbar w-full">
-              {filteredCourses.slice(0, 6).map((course) => (
-                <CourseCard key={course._id} course={course} typeFilter={typeFilter} />
-              ))}
+            <div className="w-full">
+              <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={5000} gap={24}>
+                {filteredCourses.slice(0, 6).map((course) => (
+                  <div key={course._id} className="h-full">
+                    <CourseCard course={course} typeFilter={typeFilter} />
+                  </div>
+                ))}
+              </SliderWrapper>
             </div>
 
             {filteredCourses.length > 6 && (
-              <Link href="/courses" className="mt-4">
+              <Link href="/courses" className="mt-8">
                 <Button variant="outline" className="rounded-full px-12 py-7 border-2 border-slate-100 font-black text-slate-600 hover:bg-slate-50 hover:border-slate-200 transition-all gap-3 shadow-xl shadow-slate-100">
                   <span>View All Courses</span>
                   <ArrowRight size={20} className="text-primary-500" />
@@ -309,8 +265,8 @@ const CourseSelection = () => {
             <div className="text-6xl mb-6 grayscale opacity-40">🎒</div>
             <h3 className="text-2xl font-black text-slate-900 mb-2">No Classes Found</h3>
             <p className="text-slate-900 font-bold max-w-sm mx-auto">Try selecting a different age group or subject category to find the perfect class.</p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => { setAgeFilter('All'); setTypeFilter('All'); setCategoryFilter('All'); }}
               className="mt-8 rounded-2xl border-none font-black text-primary-600 bg-primary-50 px-8 py-6"
             >

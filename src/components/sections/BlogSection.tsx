@@ -77,7 +77,7 @@ export const BlogSection = () => {
       {activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />}
       <div className="max-w-7xl mx-auto">
         {/* ... */}
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 text-center md:text-left">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 text-left">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full text-primary-600 font-bold mb-3">
               <BookOpen size={16} />
