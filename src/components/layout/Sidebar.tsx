@@ -41,7 +41,6 @@ export const Sidebar = () => {
     const adminLinks = [
       { name: 'Overview', href: base, icon: BarChart },
       { name: 'Manage Users', href: `${base}/users`, icon: Users },
-      { name: 'Student Details', href: `${base}/student-details`, icon: FileText },
       { name: 'Sales CRM', href: '/sales-dashboard', icon: BarChart },
       { name: 'Cool Mentors', href: `${base}/mentors`, icon: UserCheck },
       { name: 'Manage Courses', href: `${base}/courses`, icon: BookOpen },

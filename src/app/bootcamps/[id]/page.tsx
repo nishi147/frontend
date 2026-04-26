@@ -12,7 +12,6 @@ import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackLead } from '@/utils/analytics';
-import { RegistrationFormModal } from '@/components/ui/RegistrationFormModal';
 
 export default function BootcampDetailPage() {
   const { id } = useParams();
@@ -24,8 +23,6 @@ export default function BootcampDetailPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [expandedModules, setExpandedModules] = useState<number[]>([0]);
-  const [showRegForm, setShowRegForm] = useState(false);
-  const [studentDetailId, setStudentDetailId] = useState<string | null>(null);
 
   const toggleModule = (index: number) => {
     setExpandedModules(prev => 
@@ -63,39 +60,16 @@ export default function BootcampDetailPage() {
   const handleEnroll = async () => {
     if (authLoading) return;
 
+    if (!user) {
+      showToast("Please login to enroll in this bootcamp", "info");
+      router.push('/login');
+      return;
+    }
+
     if (isEnrolled) {
       return;
     }
     
-    setShowRegForm(true);
-  };
-
-  const handleRegSubmit = async (data: any) => {
-    setIsProcessing(true);
-    try {
-      const res = await api.post('/api/student-details', {
-        ...data,
-        bootcampId: bootcamp._id,
-        type: 'bootcamp',
-        amount: bootcamp.price
-      });
-      
-      if (res.data.success) {
-        const regId = res.data.data._id;
-        setStudentDetailId(regId);
-        setShowRegForm(false);
-        await proceedToPayment(regId);
-      }
-    } catch (err: any) {
-      console.error("Save details error:", err);
-      const msg = err.response?.data?.error || err.response?.data?.message || "Failed to save details";
-      showToast(msg, "error");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const proceedToPayment = async (regId: string) => {
     // Tracking Lead Event
     trackLead({
       content_name: bootcamp.title,
@@ -129,8 +103,7 @@ export default function BootcampDetailPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              bootcampId: bootcamp._id,
-              studentDetailId: regId
+              bootcampId: bootcamp._id
             });
             
             if (verifyRes.data.success) {
@@ -159,8 +132,7 @@ export default function BootcampDetailPage() {
 
     } catch (err: any) {
       console.error(err);
-      const msg = err.response?.data?.message || "Failed to initiate payment";
-      showToast(msg, "error");
+      showToast(err.response?.data?.message || "Failed to initiate payment", "error");
     } finally {
       setIsProcessing(false);
     }
@@ -409,21 +381,6 @@ export default function BootcampDetailPage() {
       </div>
 
       <Footer />
-
-      {showRegForm && (
-        <RegistrationFormModal
-          title={bootcamp.title}
-          amount={bootcamp.price}
-          initialData={{
-            name: user?.name,
-            email: user?.email,
-            phone: user?.phone
-          }}
-          onClose={() => setShowRegForm(false)}
-          onSubmit={handleRegSubmit}
-          isProcessing={isProcessing}
-        />
-      )}
     </div>
   );
 }

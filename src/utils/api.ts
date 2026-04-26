@@ -34,12 +34,15 @@ api.interceptors.request.use((config) => {
   }
 
   // Robust URL Handling:
+  // We avoid using baseURL globally to prevent axios from concatenating incorrectly.
   if (config.url) {
     const isAbsolute = /^https?:\/\//i.test(config.url);
 
     if (isAbsolute) {
-      // If absolute, do nothing
+      // If absolute, do nothing (axios will use it as is)
     } else {
+      // Prepend API_URL for ALL relative calls (local or production)
+      // This bypasses Next.js rewrite issues and is more robust.
       const cleanBase = API_URL.replace(/\/$/, '');
       const cleanUrl = config.url.startsWith('/') ? config.url : `/${config.url}`;
       config.url = `${cleanBase}${cleanUrl}`;
