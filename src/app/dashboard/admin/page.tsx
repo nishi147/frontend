@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import api from '@/utils/api';
-import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift } from 'lucide-react';
+import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift, Shield, FileText } from 'lucide-react';
 
 interface Analytics {
   totalStudents: number;
@@ -175,10 +175,16 @@ export default function AdminDashboard() {
       {/* Management Links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8 mb-12 px-2 sm:px-0">
          <ManagementCard 
-           title="User Management"
-           description="Manage students and teacher accounts, approve new registrations."
+           title="Manage Staff"
+           description="Control permissions for Admins, Teachers, and Sales team members."
            href="/dashboard/admin/users"
-           icon={<Users className="w-10 h-10 md:w-12 md:h-12 text-primary-500" />}
+           icon={<Shield className="w-10 h-10 md:w-12 md:h-12 text-accent-500" />}
+         />
+         <ManagementCard 
+           title="Registered Students"
+           description="Manage student platform accounts and verify identity details."
+           href="/dashboard/admin/registered-students"
+           icon={<GraduationCap className="w-10 h-10 md:w-12 md:h-12 text-primary-500" />}
          />
          <ManagementCard 
            title="Course Oversight"
@@ -197,6 +203,12 @@ export default function AdminDashboard() {
            description="Create and manage live magical events and schedules."
            href="/dashboard/admin/workshops"
            icon={<Video className="w-10 h-10 md:w-12 md:h-12 text-green-500" />}
+         />
+         <ManagementCard 
+           title="Form Dossiers"
+           description="View comprehensive registration details from all enrollment forms."
+           href="/dashboard/admin/student-details"
+           icon={<FileText className="w-10 h-10 md:w-12 md:h-12 text-indigo-500" />}
          />
          <ManagementCard 
            title="Sales CRM"

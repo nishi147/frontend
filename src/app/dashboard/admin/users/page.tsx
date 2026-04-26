@@ -20,7 +20,9 @@ export default function UserManagement() {
     try {
       const res = await api.get('/api/users');
       if (res.data.success) {
-        setUsers(res.data.data);
+        // Filter out students as they have their own section now
+        const nonStudents = res.data.data.filter((u: any) => u.role !== 'student');
+        setUsers(nonStudents);
       }
     } catch (err) {
       console.error("Failed to fetch users", err);

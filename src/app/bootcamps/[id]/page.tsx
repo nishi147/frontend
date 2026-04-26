@@ -12,6 +12,7 @@ import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackLead } from '@/utils/analytics';
+import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
 
 export default function BootcampDetailPage() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function BootcampDetailPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [expandedModules, setExpandedModules] = useState<number[]>([0]);
+  const [showRegModal, setShowRegModal] = useState(false);
 
   const toggleModule = (index: number) => {
     setExpandedModules(prev => 
@@ -60,12 +62,6 @@ export default function BootcampDetailPage() {
   const handleEnroll = async () => {
     if (authLoading) return;
 
-    if (!user) {
-      showToast("Please login to enroll in this bootcamp", "info");
-      router.push('/login');
-      return;
-    }
-
     if (isEnrolled) {
       return;
     }
@@ -80,6 +76,10 @@ export default function BootcampDetailPage() {
       currency: 'INR'
     });
 
+    setShowRegModal(true);
+  };
+
+  const proceedToPayment = async (registrationId: string) => {
     setIsProcessing(true);
     try {
       // 1. Create order
@@ -103,7 +103,8 @@ export default function BootcampDetailPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              bootcampId: bootcamp._id
+              bootcampId: bootcamp._id,
+              registrationId
             });
             
             if (verifyRes.data.success) {
@@ -115,8 +116,8 @@ export default function BootcampDetailPage() {
           }
         },
         prefill: {
-          name: user.name,
-          email: user.email,
+          name: user?.name,
+          email: user?.email,
         },
         theme: {
           color: "#EF4444"
@@ -381,6 +382,21 @@ export default function BootcampDetailPage() {
       </div>
 
       <Footer />
+
+      {bootcamp && (
+        <StudentRegistrationModal
+          isOpen={showRegModal}
+          onClose={() => setShowRegModal(false)}
+          onSuccess={(regId) => {
+            setShowRegModal(false);
+            proceedToPayment(regId);
+          }}
+          type="bootcamp"
+          itemId={bootcamp._id}
+          itemName={bootcamp.title}
+          amount={bootcamp.price}
+        />
+      )}
     </div>
   );
 }

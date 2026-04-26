@@ -13,6 +13,7 @@ import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackEvent } from '@/utils/analytics';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
+import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
 
 export default function WorkshopDetailPage() {
   const { id } = useParams();
@@ -26,6 +27,8 @@ export default function WorkshopDetailPage() {
   
   const [activeWorkshopForSlots, setActiveWorkshopForSlots] = useState<any>(null);
   const [workshopSlots, setWorkshopSlots] = useState<any[]>([]);
+  const [showRegModal, setShowRegModal] = useState(false);
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWorkshop = async () => {
@@ -62,33 +65,25 @@ export default function WorkshopDetailPage() {
         setActiveWorkshopForSlots(workshop);
         setIsProcessing(false);
       } else {
-        // No slots, check if guest or authenticated
-        if (!user) {
-          showToast("Please login to book a seat", "info");
-          router.push('/login');
-          setIsProcessing(false);
-        } else {
-          trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
-          await proceedToPayment(null);
-        }
+        trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
+        setSelectedSlotId(null);
+        setShowRegModal(true);
+        setIsProcessing(false);
       }
     } catch (err) {
       console.error("Error fetching slots", err);
-      if (!user) {
-        showToast("Please login to book a seat", "info");
-        router.push('/login');
-        setIsProcessing(false);
-      } else {
-        await proceedToPayment(null); // fallback
-      }
+      trackEvent('workshop_enroll_click_fallback', { workshop_id: workshop._id, workshop_title: workshop.title });
+      setSelectedSlotId(null);
+      setShowRegModal(true);
+      setIsProcessing(false);
     }
   };
 
-  const proceedToPayment = async (slotId: string | null) => {
+  const proceedToPayment = async (registrationId: string) => {
     setIsProcessing(true);
     try {
-      const payload: any = { workshopId: workshop._id };
-      if (slotId) payload.slotId = slotId;
+      const payload: any = { workshopId: workshop._id, registrationId };
+      if (selectedSlotId) payload.slotId = selectedSlotId;
 
       const orderRes = await api.post('/api/payments/workshop-order', payload);
       const order = orderRes.data.data;
@@ -112,9 +107,10 @@ export default function WorkshopDetailPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              workshopId: workshop._id
+              workshopId: workshop._id,
+              registrationId
             };
-            if (slotId) verifyPayload.slotId = slotId;
+            if (selectedSlotId) verifyPayload.slotId = selectedSlotId;
 
             const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
@@ -299,8 +295,27 @@ export default function WorkshopDetailPage() {
           workshop={activeWorkshopForSlots}
           slots={workshopSlots}
           onClose={() => setActiveWorkshopForSlots(null)}
-          onProceed={(slotId) => proceedToPayment(slotId)}
+          onProceed={(slotId) => {
+            setSelectedSlotId(slotId);
+            setActiveWorkshopForSlots(null);
+            setShowRegModal(true);
+          }}
           isProcessing={isProcessing}
+        />
+      )}
+
+      {workshop && (
+        <StudentRegistrationModal
+          isOpen={showRegModal}
+          onClose={() => setShowRegModal(false)}
+          onSuccess={(regId) => {
+            setShowRegModal(false);
+            proceedToPayment(regId);
+          }}
+          type="workshop"
+          itemId={workshop._id}
+          itemName={workshop.title}
+          amount={workshop.price}
         />
       )}
     </div>
