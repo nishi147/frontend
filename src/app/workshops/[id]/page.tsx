@@ -12,6 +12,7 @@ import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackEvent } from '@/utils/analytics';
+import { RegistrationFormModal } from '@/components/ui/RegistrationFormModal';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 
 export default function WorkshopDetailPage() {
@@ -26,6 +27,9 @@ export default function WorkshopDetailPage() {
   
   const [activeWorkshopForSlots, setActiveWorkshopForSlots] = useState<any>(null);
   const [workshopSlots, setWorkshopSlots] = useState<any[]>([]);
+  
+  const [showRegForm, setShowRegForm] = useState(false);
+  const [pendingSlotId, setPendingSlotId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWorkshop = async () => {
@@ -62,29 +66,48 @@ export default function WorkshopDetailPage() {
         setActiveWorkshopForSlots(workshop);
         setIsProcessing(false);
       } else {
-        // No slots, check if guest or authenticated
-        if (!user) {
-          showToast("Please login to book a seat", "info");
-          router.push('/login');
-          setIsProcessing(false);
-        } else {
-          trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
-          await proceedToPayment(null);
-        }
+        // No slots, proceed to payment (which now shows the registration form)
+        trackEvent('workshop_enroll_click', { workshop_id: workshop._id, workshop_title: workshop.title });
+        await proceedToPayment(null);
       }
     } catch (err) {
       console.error("Error fetching slots", err);
-      if (!user) {
-        showToast("Please login to book a seat", "info");
-        router.push('/login');
-        setIsProcessing(false);
-      } else {
-        await proceedToPayment(null); // fallback
-      }
+      // Fallback: proceed to payment anyway
+      await proceedToPayment(null);
     }
   };
 
   const proceedToPayment = async (slotId: string | null) => {
+    setPendingSlotId(slotId);
+    setShowRegForm(true);
+    setActiveWorkshopForSlots(null); // Close slot selector if open
+  };
+
+  const handleRegSubmit = async (data: any) => {
+    setIsProcessing(true);
+    try {
+      const res = await api.post('/api/student-details', {
+        ...data,
+        workshopId: workshop._id,
+        type: 'workshop',
+        amount: workshop.price
+      });
+      
+      if (res.data.success) {
+        const regId = res.data.data._id;
+        setShowRegForm(false);
+        await initiateRazorpay(pendingSlotId, regId);
+      }
+    } catch (err: any) {
+      console.error("Save details error:", err);
+      const msg = err.response?.data?.error || err.response?.data?.message || "Failed to save details";
+      showToast(msg, "error");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const initiateRazorpay = async (slotId: string | null, regId: string) => {
     setIsProcessing(true);
     try {
       const payload: any = { workshopId: workshop._id };
@@ -112,7 +135,8 @@ export default function WorkshopDetailPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              workshopId: workshop._id
+              workshopId: workshop._id,
+              studentDetailId: regId
             };
             if (slotId) verifyPayload.slotId = slotId;
 
@@ -300,6 +324,21 @@ export default function WorkshopDetailPage() {
           slots={workshopSlots}
           onClose={() => setActiveWorkshopForSlots(null)}
           onProceed={(slotId) => proceedToPayment(slotId)}
+          isProcessing={isProcessing}
+        />
+      )}
+
+      {showRegForm && (
+        <RegistrationFormModal
+          title={workshop.title}
+          amount={workshop.price}
+          initialData={{
+            name: user?.name,
+            email: user?.email,
+            phone: user?.phone
+          }}
+          onClose={() => setShowRegForm(false)}
+          onSubmit={handleRegSubmit}
           isProcessing={isProcessing}
         />
       )}

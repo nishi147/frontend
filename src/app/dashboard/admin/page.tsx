@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import api from '@/utils/api';
-import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift } from 'lucide-react';
+import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift, FileText } from 'lucide-react';
 
 interface Analytics {
   totalStudents: number;
@@ -179,6 +179,12 @@ export default function AdminDashboard() {
            description="Manage students and teacher accounts, approve new registrations."
            href="/dashboard/admin/users"
            icon={<Users className="w-10 h-10 md:w-12 md:h-12 text-primary-500" />}
+         />
+         <ManagementCard 
+           title="Student Details"
+           description="View detailed registration forms for workshops and bootcamps."
+           href="/dashboard/admin/student-details"
+           icon={<FileText className="w-10 h-10 md:w-12 md:h-12 text-indigo-500" />}
          />
          <ManagementCard 
            title="Course Oversight"
