@@ -1,16 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:5000';
-    }
-  }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-};
-
-const API_URL = getBaseUrl();
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 const api = axios.create({
   withCredentials: true,
@@ -43,15 +34,12 @@ api.interceptors.request.use((config) => {
   }
 
   // Robust URL Handling:
-  // We avoid using baseURL globally to prevent axios from concatenating incorrectly.
   if (config.url) {
     const isAbsolute = /^https?:\/\//i.test(config.url);
 
     if (isAbsolute) {
-      // If absolute, do nothing (axios will use it as is)
+      // If absolute, do nothing
     } else {
-      // Prepend API_URL for ALL relative calls (local or production)
-      // This bypasses Next.js rewrite issues and is more robust.
       const cleanBase = API_URL.replace(/\/$/, '');
       const cleanUrl = config.url.startsWith('/') ? config.url : `/${config.url}`;
       config.url = `${cleanBase}${cleanUrl}`;
