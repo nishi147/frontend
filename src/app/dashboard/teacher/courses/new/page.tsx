@@ -248,7 +248,7 @@ export default function CreateCoursePage() {
                     
                     <div className="col-span-2">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block ml-1">Course Bio / Description</label>
-                      <textarea placeholder="Tell your students about the magic they will learn..." value={formData.description} rows={5} className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-bold text-slate-600 resize-none transition-all" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                      <textarea placeholder="Tell your students about the magic they will learn..." value={formData.description} rows={5} className="w-full p-5 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-secondary-500 focus:bg-white outline-none font-medium text-slate-600 resize-none transition-all" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
                     </div>
                  </div>
                )}

@@ -179,7 +179,7 @@ export default function BootcampDetailPage() {
                {bootcamp.title}
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 font-bold mb-10 max-w-3xl leading-relaxed whitespace-pre-wrap animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            <p className="text-base md:text-lg lg:text-xl text-slate-600 font-medium mb-10 max-w-3xl leading-relaxed whitespace-pre-wrap animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 text-left md:text-justify">
                {bootcamp.description}
             </p>
             
@@ -217,7 +217,7 @@ export default function BootcampDetailPage() {
 
           {/* Floating Payment Card */}
           <div className="w-full lg:w-[420px] shrink-0 group animate-in zoom-in-95 duration-1000 delay-300">
-            <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
+            <Card className="bg-white p-7 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[2.5rem] md:rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
               <div className="absolute -top-6 -right-6 bg-primary-500 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(244,63,94,0.3)] rotate-12 group-hover:rotate-6 transition-transform hover:scale-110">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
                  <p className="text-2xl font-black leading-none">₹{bootcamp.price}</p>
@@ -247,7 +247,7 @@ export default function BootcampDetailPage() {
               
               <Button 
                 size="lg" 
-                className={`w-full py-10 rounded-[2.5rem] font-black text-2xl shadow-3xl transition-all active:scale-95 flex items-center justify-center gap-3 ${isEnrolled ? 'bg-green-500 hover:bg-green-600 shadow-green-100' : 'bg-primary-500 hover:bg-primary-600 shadow-primary-500/30'}`} 
+                className={`w-full py-6 md:py-10 rounded-[2rem] md:rounded-[2.5rem] font-black text-xl md:text-2xl shadow-3xl transition-all active:scale-95 flex items-center justify-center gap-3 ${isEnrolled ? 'bg-green-500 hover:bg-green-600 shadow-green-100' : 'bg-primary-500 hover:bg-primary-600 shadow-primary-500/30'}`} 
                 onClick={handleEnroll} 
                 isLoading={isProcessing}
               >

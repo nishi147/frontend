@@ -605,9 +605,15 @@ const ContactSection = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
       
       {/* Floating Icons */}
-      <div className="absolute top-20 left-10 text-4xl opacity-20 animate-bounce">🎈</div>
-      <div className="absolute bottom-20 right-10 text-4xl opacity-20 animate-bounce" style={{ animationDelay: '1s' }}>🚀</div>
-      <div className="absolute top-1/2 right-[5%] text-4xl opacity-10 animate-pulse">✨</div>
+      <div className="absolute top-20 left-10 text-4xl opacity-40 animate-bounce">🎈</div>
+      <div className="absolute bottom-20 right-10 text-4xl opacity-40 animate-bounce" style={{ animationDelay: '1s' }}>🚀</div>
+      <div className="absolute top-1/2 right-[5%] text-4xl opacity-30 animate-pulse">✨</div>
+      <div className="absolute top-1/4 left-[10%] opacity-20 animate-spin-slow">
+        <Star size={60} className="text-primary-300" strokeWidth={1} />
+      </div>
+      <div className="absolute bottom-1/4 right-[15%] opacity-20 animate-float">
+        <Star size={80} className="text-secondary-300" strokeWidth={1} />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
         <div className="flex-1 text-center lg:text-left">
@@ -1298,6 +1304,63 @@ export default function Home() {
       </section>
 
       <BlogSection />
+
+      {/* 8. TEACH AT RUZANN CTA SECTION */}
+      <section className="py-12 relative overflow-hidden">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="relative group">
+            {/* Background decorative elements */}
+            <div className="absolute -top-10 -left-10 w-48 h-48 bg-primary-400/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-secondary-400/10 rounded-full blur-3xl animate-pulse delay-1000" />
+            
+            {/* Added Decorative Stars for White BG visibility */}
+            <div className="absolute top-10 right-10 opacity-20 animate-float">
+              <Star size={40} className="text-indigo-400" strokeWidth={2} />
+            </div>
+            <div className="absolute bottom-10 left-10 opacity-20 animate-spin-slow">
+              <Star size={30} className="text-primary-400" strokeWidth={2} />
+            </div>
+            <div className="absolute top-1/2 -left-20 opacity-10 rotate-12">
+              <Star size={120} className="text-indigo-200" strokeWidth={1} />
+            </div>
+            
+            <div className="relative z-10 glass-card bg-white/40 backdrop-blur-2xl border-2 border-white/60 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] text-center shadow-xl shadow-indigo-50/50 overflow-hidden transition-all duration-500">
+               {/* Animated Icon */}
+               <div className="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-lg shadow-indigo-200 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                  👨‍🏫
+               </div>
+               
+               <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                 Inspire the Next <span className="text-indigo-600">Generation</span> 🌟
+               </h2>
+               
+               <p className="text-base md:text-lg text-slate-600 font-bold max-w-xl mx-auto mb-8 leading-relaxed">
+                 Join Ruzann as an educator and help kids explore the magic of technology. Share your knowledge and mentor young minds.
+               </p>
+               
+               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                 <Link href="/teacher/signup" className="w-full sm:w-auto">
+                    <Button size="lg" className="w-full sm:w-auto px-10 py-6 rounded-2xl font-black text-lg bg-indigo-600 hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      Become a Teacher <ArrowRight size={20} />
+                    </Button>
+                 </Link>
+                 <Link href="/contact" className="w-full sm:w-auto font-black text-indigo-500 hover:text-indigo-600 transition-colors py-2 px-6 text-base">
+                    Contact HR
+                 </Link>
+               </div>
+               
+               {/* Bottom floating badge */}
+               <div className="mt-10 flex items-center justify-center gap-2 border-t border-indigo-50 pt-8">
+                 <div className="flex -space-x-2">
+                    {[1,2,3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-indigo-50 flex items-center justify-center text-[10px]">⭐</div>)}
+                 </div>
+                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">Join 500+ global educators</p>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <ContactSection />
       
       {/* Bottom AdSense Unit 
@@ -1305,6 +1368,8 @@ export default function Home() {
         <AdUnit slot="footer-banner" className="mt-0" />
       </div>
       */}
+
+
 
       <Footer />
       <ScrollToTop />

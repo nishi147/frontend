@@ -172,7 +172,7 @@ export default function TeacherBootcamps() {
                      )}
                   </div>
                   <h3 className="text-xl font-black text-slate-800 uppercase tracking-wide mb-1 line-clamp-1">{bc.title}</h3>
-                  <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mb-8 line-clamp-1">{bc.description}</p>
+                  <p className="text-slate-500 font-medium text-xs mb-8 line-clamp-2 leading-relaxed whitespace-pre-wrap">{bc.description}</p>
                   
                   <div className="space-y-4 mb-10 pl-1">
                     <div className="flex items-center gap-4 text-slate-700">
@@ -221,7 +221,7 @@ export default function TeacherBootcamps() {
               <h2 className="text-3xl font-black">{editingId ? 'Edit Bootcamp ✏️' : 'New Bootcamp 🚀'}</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-white hover:scale-110 p-2">✕</button>
             </div>
-            <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-5">
+            <form onSubmit={handleSubmit} className="p-6 md:p-8 flex flex-col gap-5">
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Bootcamp Title</label>
                 <input 
@@ -230,11 +230,14 @@ export default function TeacherBootcamps() {
                   value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}
                 />
               </div>
-              <textarea 
-                required placeholder="What will they learn?" rows={3}
-                className="w-full p-4 border-2 rounded-2xl focus:border-indigo-500 outline-none font-bold text-slate-700 bg-slate-50 transition-all resize-none"
-                value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
-              ></textarea>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Bootcamp Description</label>
+                <textarea 
+                  required placeholder="What will they learn? Tell them about the mission..." rows={5}
+                  className="w-full p-4 border-2 rounded-2xl focus:border-indigo-500 outline-none font-medium text-slate-700 bg-slate-50 transition-all resize-y min-h-[120px]"
+                  value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
+                ></textarea>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <input 
                   type="date" required
