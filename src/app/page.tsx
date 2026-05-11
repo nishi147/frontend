@@ -214,7 +214,10 @@ const BootcampSection = () => {
 
   if (bootcamps.length === 0) return null;
 
-  const bootcampCards = bootcamps.map((bc: any) => {
+  const now = new Date();
+  const upcomingBootcamps = bootcamps.filter(bc => new Date(bc.date || Date.now()) > now);
+
+  const renderBootcampCard = (bc: any) => {
     const thumbUrl = getThumbnailUrl(bc.image);
     return (
       <div key={bc._id} className="group cursor-pointer h-full" onClick={() => handleEnrollBootcamp(bc)}>
@@ -287,13 +290,34 @@ const BootcampSection = () => {
         </Card>
       </div>
     );
-  });
+  };
+
+  const bootcampCards = bootcamps.map(bc => renderBootcampCard(bc));
+  const upcomingBootcampCards = upcomingBootcamps.map(bc => renderBootcampCard(bc));
 
   return (
     <div className="px-6 md:px-8">
-      <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
-        {bootcampCards}
-      </SliderWrapper>
+      {upcomingBootcamps.length > 0 && (
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-700 font-bold mb-4">
+            <Sparkles size={16} className="text-yellow-500" />
+            <span className="text-sm">Newly Added & Upcoming</span>
+          </div>
+          <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
+            {upcomingBootcampCards}
+          </SliderWrapper>
+        </div>
+      )}
+
+      <div>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-4">
+          <Rocket size={16} />
+          <span className="text-sm">All Bootcamps</span>
+        </div>
+        <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
+          {bootcampCards}
+        </SliderWrapper>
+      </div>
       <EnrollLeadModal
         isOpen={isLeadModalOpen}
         onClose={() => setIsLeadModalOpen(false)}
@@ -948,31 +972,6 @@ export default function Home() {
       </div>
       */}
 
-      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
-      <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-left">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-100 rounded-full text-accent-600 font-bold mb-3">
-                <Rocket size={16} />
-                <span className="text-sm">Space Bootcamps</span>
-              </div>
-              <div className="flex items-center justify-start gap-3 mb-2">
-                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
-                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
-                </h2>
-              </div>
-            </div>
-            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
-            </p>
-          </div>
-
-          <WorkshopSection />
-        </div>
-      </section>
-
       {/* 2.7 BOOTCAMPS SECTION */}
       <section className="py-14 bg-white overflow-hidden" id="bootcamps">
         <div className="container mx-auto px-4">
@@ -997,6 +996,8 @@ export default function Home() {
           <BootcampSection />
         </div>
       </section>
+
+      <CourseSelection />
 
 
       {/* 4. MAGIC CODE EDITOR PREVIEW SECTION */}
@@ -1044,7 +1045,30 @@ export default function Home() {
         </div>
       </section>
 
-      <CourseSelection />
+      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
+      <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-left">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-100 rounded-full text-accent-600 font-bold mb-3">
+                <Rocket size={16} />
+                <span className="text-sm">Space Bootcamps</span>
+              </div>
+              <div className="flex items-center justify-start gap-3 mb-2">
+                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
+                </h2>
+              </div>
+            </div>
+            <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
+            </p>
+          </div>
+
+          <WorkshopSection />
+        </div>
+      </section>
 
       {/* After Courses AdSense Unit 
       <div className="max-w-7xl mx-auto px-4 py-8">

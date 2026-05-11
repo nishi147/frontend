@@ -117,7 +117,7 @@ export default function StudentDashboard() {
               <Card key={lc._id} className="bg-white border-l-8 border-primary-500">
                 <CardTitle className="text-xl mb-2">{lc.title}</CardTitle>
                 <CardContent>
-                  <p className="text-gray-600 font-semibold">Teacher: {lc.teacher.name}</p>
+                  <p className="text-gray-600 font-semibold">Teacher: {lc.teacher?.name || "TBA"}</p>
                   <p className="text-primary-600 font-bold mt-2">Date: {new Date(lc.scheduledDate).toLocaleString()}</p>
                   <a href={lc.meetingLink} target="_blank" rel="noreferrer">
                     <Button size="sm" className="mt-4" fullWidth>Join Class</Button>
