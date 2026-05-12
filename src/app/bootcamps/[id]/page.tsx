@@ -275,7 +275,7 @@ export default function BootcampDetailPage() {
                     placeholder="SUMMER25"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    className="flex-1 p-3 rounded-xl border-2 border-gray-50 font-bold bg-gray-50/30 focus:border-primary-400 focus:bg-white focus:outline-none transition-all text-sm"
+                    className="flex-1 p-3 rounded-xl border-2 border-gray-200 font-bold bg-white focus:border-primary-400 focus:outline-none transition-all text-sm text-slate-800"
                   />
                   <button 
                     onClick={handleApplyCoupon}
