@@ -14,8 +14,8 @@ export default function CouponsPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newCoupon, setNewCoupon] = useState({
     code: '',
-    discountType: 'percentage',
-    discountAmount: 0,
+    discountType: 'percent',
+    discountValue: 0,
     expiryDate: '',
     isActive: true
   });
@@ -46,10 +46,10 @@ export default function CouponsPage() {
       await api.post('/api/coupons', newCoupon);
       showToast("Coupon created successfully!", "success");
       setShowAddForm(false);
-      setNewCoupon({ code: '', discountType: 'percentage', discountAmount: 0, expiryDate: '', isActive: true });
+      setNewCoupon({ code: '', discountType: 'percent', discountValue: 0, expiryDate: '', isActive: true });
       fetchCoupons();
     } catch (err: any) {
-      showToast(err.response?.data?.message || "Failed to create coupon", "error");
+      showToast(err.response?.data?.message || err.response?.data?.error || "Failed to create coupon", "error");
     }
   };
 
@@ -117,7 +117,7 @@ export default function CouponsPage() {
                             value={newCoupon.discountType}
                             onChange={(e) => setNewCoupon({...newCoupon, discountType: e.target.value as any})}
                           >
-                             <option value="percentage">Percentage (%)</option>
+                             <option value="percent">Percentage (%)</option>
                              <option value="fixed">Fixed Amount (₹)</option>
                           </select>
                        </div>
@@ -127,8 +127,8 @@ export default function CouponsPage() {
                             required
                             type="number"
                             className="w-full p-5 rounded-2xl border-2 border-gray-100 focus:border-purple-500 bg-gray-50/30 outline-none font-black text-xl text-gray-700"
-                            value={newCoupon.discountAmount}
-                            onChange={(e) => setNewCoupon({...newCoupon, discountAmount: Number(e.target.value)})}
+                            value={newCoupon.discountValue}
+                            onChange={(e) => setNewCoupon({...newCoupon, discountValue: Number(e.target.value)})}
                           />
                        </div>
                     </div>
@@ -167,7 +167,7 @@ export default function CouponsPage() {
                 
                 <div className="relative z-10 flex justify-between items-start mb-6">
                    <div className="p-4 bg-purple-50 text-purple-600 rounded-2xl shadow-inner">
-                      {c.discountType === 'percentage' ? <Percent size={24} strokeWidth={3} /> : <IndianRupee size={24} strokeWidth={3} />}
+                      {c.discountType === 'percent' ? <Percent size={24} strokeWidth={3} /> : <IndianRupee size={24} strokeWidth={3} />}
                    </div>
                    <button 
                      onClick={() => deleteCoupon(c._id)}
@@ -187,7 +187,7 @@ export default function CouponsPage() {
                       <div className="flex flex-col">
                          <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Discount</span>
                          <span className="text-xl font-black text-purple-600">
-                           {c.discountType === 'percentage' ? `${c.discountAmount}%` : `₹${c.discountAmount}`}
+                           {c.discountType === 'percent' ? `${c.discountValue}%` : `₹${c.discountValue}`}
                          </span>
                       </div>
                       <div className="flex flex-col text-right">
