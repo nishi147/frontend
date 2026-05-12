@@ -30,6 +30,33 @@ export default function WorkshopDetailPage() {
   const [showRegModal, setShowRegModal] = useState(false);
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [couponError, setCouponError] = useState('');
+
+  const originalPrice = workshop?.price || 0;
+  const discountAmount = appliedCoupon ? (
+    appliedCoupon.discountType === 'percent' 
+      ? (originalPrice * appliedCoupon.discountValue) / 100 
+      : appliedCoupon.discountValue
+  ) : 0;
+  const finalPrice = Math.max(0, originalPrice - discountAmount);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    setCouponError('');
+    try {
+      const res = await api.post('/api/coupons/validate', { code: couponCode });
+      if (res.data.success) {
+        setAppliedCoupon(res.data.data);
+        showToast("Coupon applied successfully! ✨", "success");
+      }
+    } catch (err: any) {
+      setAppliedCoupon(null);
+      setCouponError(err.response?.data?.message || "Invalid coupon");
+    }
+  };
+
   useEffect(() => {
     const fetchWorkshop = async () => {
       try {
@@ -79,10 +106,15 @@ export default function WorkshopDetailPage() {
     }
   };
 
-  const proceedToPayment = async (registrationId: string) => {
+  const proceedToPayment = async (registrationId: string, currentCouponCode?: string) => {
     setIsProcessing(true);
     try {
-      const payload: any = { workshopId: workshop._id, registrationId };
+      const payload: any = { 
+        workshopId: workshop._id, 
+        registrationId, 
+        couponCode: currentCouponCode || appliedCoupon?.code,
+        amount: finalPrice 
+      };
       if (selectedSlotId) payload.slotId = selectedSlotId;
 
       const orderRes = await api.post('/api/payments/workshop-order', payload);
@@ -108,7 +140,9 @@ export default function WorkshopDetailPage() {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               workshopId: workshop._id,
-              registrationId
+              registrationId,
+              amount: finalPrice,
+              couponCode: appliedCoupon?.code
             };
             if (selectedSlotId) verifyPayload.slotId = selectedSlotId;
 
@@ -212,13 +246,41 @@ export default function WorkshopDetailPage() {
             <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(225,29,72,0.15)] rounded-[4rem] border-none relative overflow-visible">
               <div className="absolute -top-6 -right-6 bg-rose-600 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(225,29,72,0.4)] rotate-12 group-hover:rotate-6 transition-transform">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
-                 <p className="text-2xl font-black leading-none">₹{workshop.price}</p>
+                 <p className="text-2xl font-black leading-none">₹{finalPrice}</p>
               </div>
               
               <div className="text-center mb-10 pb-10 border-b-4 border-slate-50">
                 <div className="w-20 h-20 bg-rose-50 text-rose-600 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner group-hover:scale-110 transition-transform">🎟️</div>
                 <h3 className="text-3xl font-black text-slate-800 tracking-tighter mb-2">BOOK YOUR SEAT</h3>
                 <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Entry Ticket for Live Session</p>
+                {appliedCoupon && (
+                  <p className="text-green-600 text-[10px] font-bold mt-2 flex items-center justify-center gap-1">
+                      <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved ₹{discountAmount}
+                  </p>
+                )}
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-[10px] font-black text-gray-900 uppercase tracking-widest mb-2">
+                  Promo Code:
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="SUMMER25"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    className="flex-1 p-3 rounded-xl border-2 border-gray-50 font-bold bg-gray-50/30 focus:border-primary-400 focus:bg-white focus:outline-none transition-all text-sm"
+                  />
+                  <button 
+                    onClick={handleApplyCoupon}
+                    type="button"
+                    className="bg-slate-900 text-white px-4 rounded-xl font-black text-xs hover:bg-black transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponError && <p className="text-red-500 text-[10px] font-bold mt-1">{couponError}</p>}
               </div>
 
               <div className="space-y-6 mb-12">
@@ -310,12 +372,12 @@ export default function WorkshopDetailPage() {
           onClose={() => setShowRegModal(false)}
           onSuccess={(regId) => {
             setShowRegModal(false);
-            proceedToPayment(regId);
+            proceedToPayment(regId, appliedCoupon?.code);
           }}
           type="workshop"
           itemId={workshop._id}
           itemName={workshop.title}
-          amount={workshop.price}
+          amount={finalPrice}
         />
       )}
     </div>
