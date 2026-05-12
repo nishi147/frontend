@@ -12,12 +12,20 @@ export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newCoupon, setNewCoupon] = useState({
+  const [newCoupon, setNewCoupon] = useState<{
+    code: string;
+    discountType: string;
+    discountValue: number;
+    expiryDate: string;
+    isActive: boolean;
+    applicableTo: string[];
+  }>({
     code: '',
     discountType: 'percent',
     discountValue: 0,
     expiryDate: '',
-    isActive: true
+    isActive: true,
+    applicableTo: ['course', 'bootcamp', 'workshop']
   });
   const { showToast } = useToast();
 
@@ -46,7 +54,7 @@ export default function CouponsPage() {
       await api.post('/api/coupons', newCoupon);
       showToast("Coupon created successfully!", "success");
       setShowAddForm(false);
-      setNewCoupon({ code: '', discountType: 'percent', discountValue: 0, expiryDate: '', isActive: true });
+      setNewCoupon({ code: '', discountType: 'percent', discountValue: 0, expiryDate: '', isActive: true, applicableTo: ['course', 'bootcamp', 'workshop'] });
       fetchCoupons();
     } catch (err: any) {
       showToast(err.response?.data?.message || err.response?.data?.error || "Failed to create coupon", "error");
@@ -141,6 +149,54 @@ export default function CouponsPage() {
                          value={newCoupon.expiryDate}
                          onChange={(e) => setNewCoupon({...newCoupon, expiryDate: e.target.value})}
                        />
+                    </div>
+
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-4">Applicable To</label>
+                       <div className="flex gap-4 ml-4">
+                         <label className="flex items-center gap-2 font-bold text-gray-600 cursor-pointer">
+                           <input 
+                             type="checkbox"
+                             checked={newCoupon.applicableTo.includes('course')}
+                             onChange={(e) => {
+                               const arr = e.target.checked 
+                                 ? [...newCoupon.applicableTo, 'course']
+                                 : newCoupon.applicableTo.filter(x => x !== 'course');
+                               setNewCoupon({...newCoupon, applicableTo: arr});
+                             }}
+                             className="w-5 h-5 rounded border-2 border-gray-300 text-purple-600 focus:ring-purple-500"
+                           />
+                           Courses
+                         </label>
+                         <label className="flex items-center gap-2 font-bold text-gray-600 cursor-pointer">
+                           <input 
+                             type="checkbox"
+                             checked={newCoupon.applicableTo.includes('bootcamp')}
+                             onChange={(e) => {
+                               const arr = e.target.checked 
+                                 ? [...newCoupon.applicableTo, 'bootcamp']
+                                 : newCoupon.applicableTo.filter(x => x !== 'bootcamp');
+                               setNewCoupon({...newCoupon, applicableTo: arr});
+                             }}
+                             className="w-5 h-5 rounded border-2 border-gray-300 text-purple-600 focus:ring-purple-500"
+                           />
+                           Bootcamps
+                         </label>
+                         <label className="flex items-center gap-2 font-bold text-gray-600 cursor-pointer">
+                           <input 
+                             type="checkbox"
+                             checked={newCoupon.applicableTo.includes('workshop')}
+                             onChange={(e) => {
+                               const arr = e.target.checked 
+                                 ? [...newCoupon.applicableTo, 'workshop']
+                                 : newCoupon.applicableTo.filter(x => x !== 'workshop');
+                               setNewCoupon({...newCoupon, applicableTo: arr});
+                             }}
+                             className="w-5 h-5 rounded border-2 border-gray-300 text-purple-600 focus:ring-purple-500"
+                           />
+                           Workshops
+                         </label>
+                       </div>
                     </div>
                   </div>
 

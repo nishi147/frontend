@@ -41,7 +41,7 @@ export default function BootcampDetailPage() {
     if (!couponCode) return;
     setCouponError('');
     try {
-      const res = await api.post('/api/coupons/validate', { code: couponCode });
+      const res = await api.post('/api/coupons/validate', { code: couponCode, productType: 'bootcamp' });
       if (res.data.success) {
         setAppliedCoupon(res.data.data);
         showToast("Coupon applied successfully! ✨", "success");

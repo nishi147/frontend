@@ -47,7 +47,7 @@ export default function CourseDetailPage() {
     if (!couponCode) return;
     setCouponError('');
     try {
-      const res = await api.post('/api/coupons/validate', { code: couponCode });
+      const res = await api.post('/api/coupons/validate', { code: couponCode, productType: 'course' });
       if (res.data.success) {
         setAppliedCoupon(res.data.data);
         trackEvent('coupon_applied', { 
