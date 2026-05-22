@@ -12,12 +12,14 @@ import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackEvent } from '@/utils/analytics';
+import { useCurrency } from '@/context/CurrencyContext';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
 
 export default function WorkshopDetailPage() {
   const { id } = useParams();
   const { user, loading: authLoading } = useAuth();
+  const { currency, formatPrice } = useCurrency();
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -113,7 +115,8 @@ export default function WorkshopDetailPage() {
         workshopId: workshop._id, 
         registrationId, 
         couponCode: currentCouponCode || appliedCoupon?.code,
-        amount: finalPrice 
+        amount: finalPrice,
+        currency: currency
       };
       if (selectedSlotId) payload.slotId = selectedSlotId;
 
@@ -246,7 +249,7 @@ export default function WorkshopDetailPage() {
             <Card className="bg-white p-10 md:p-12 shadow-[0_40px_100px_rgba(225,29,72,0.15)] rounded-[4rem] border-none relative overflow-visible">
               <div className="absolute -top-6 -right-6 bg-rose-600 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(225,29,72,0.4)] rotate-12 group-hover:rotate-6 transition-transform">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
-                 <p className="text-2xl font-black leading-none">₹{finalPrice}</p>
+                 <p className="text-2xl font-black leading-none">{formatPrice(finalPrice)}</p>
               </div>
               
               <div className="text-center mb-10 pb-10 border-b-4 border-slate-50">
@@ -255,7 +258,7 @@ export default function WorkshopDetailPage() {
                 <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Entry Ticket for Live Session</p>
                 {appliedCoupon && (
                   <p className="text-green-600 text-[10px] font-bold mt-2 flex items-center justify-center gap-1">
-                      <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved ₹{discountAmount}
+                      <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved {formatPrice(discountAmount)}
                   </p>
                 )}
               </div>

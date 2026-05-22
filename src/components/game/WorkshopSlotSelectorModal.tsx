@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { X, Clock, Calendar as CalendarIcon, Users, CheckCircle } from 'lucide-react';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface WorkshopSlotSelectorModalProps {
   workshop: any;
@@ -19,6 +20,7 @@ export const WorkshopSlotSelectorModal: React.FC<WorkshopSlotSelectorModalProps>
   isProcessing
 }) => {
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
+  const { formatPrice } = useCurrency();
 
   const handleProceed = () => {
     onProceed(selectedSlotId);
@@ -110,7 +112,7 @@ export const WorkshopSlotSelectorModal: React.FC<WorkshopSlotSelectorModalProps>
         <div className="p-6 bg-white border-t border-gray-100 flex flex-col sm:flex-row gap-4 items-center justify-between">
            <div className="text-center sm:text-left">
              <div className="text-sm font-bold text-gray-500 uppercase tracking-widest">Total Price</div>
-             <div className="text-3xl font-black text-slate-800">₹{workshop.price}</div>
+             <div className="text-3xl font-black text-slate-800">{formatPrice(workshop.price)}</div>
            </div>
            
            <Button 

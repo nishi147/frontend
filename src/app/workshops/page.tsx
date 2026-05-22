@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
+import { useCurrency } from '@/context/CurrencyContext';
 
 import api from '@/utils/api';
 import { getThumbnailUrl } from '@/utils/image';
@@ -17,6 +18,7 @@ import { getThumbnailUrl } from '@/utils/image';
 export default function WorkshopsPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const { showToast } = useToast();
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -141,7 +143,7 @@ export default function WorkshopsPage() {
                     
                     <div className="absolute top-2 left-2 flex flex-col items-start gap-1.5 z-30">
                       <div className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm font-black text-slate-900 text-sm border border-white/20">
-                        ₹{ws.price}
+                        {formatPrice(ws.price)}
                       </div>
                       {ws.showStudentsEnrolled && ws.studentsEnrolled > 0 && (
                         <div className="bg-white/90 backdrop-blur-md px-2 py-0.5 rounded shadow-sm flex items-center gap-1 border border-white/20 animate-in fade-in duration-500">

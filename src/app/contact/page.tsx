@@ -7,8 +7,10 @@ import Link from 'next/link';
 import api from '@/utils/api';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import { trackEvent, trackContact } from '@/utils/analytics';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function ContactPage() {
+  const { formatPrice } = useCurrency();
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '', referralCode: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -99,9 +101,9 @@ export default function ContactPage() {
 
             <div className="bg-gradient-to-br from-[#6C5CE7] to-[#a29bfe] rounded-2xl p-6 text-white">
               <h3 className="font-black text-lg mb-2">🎯 Book a Free Trial</h3>
-              <p className="text-white/80 font-bold text-sm mb-4">Start your child's learning journey for just ₹99. No commitment needed!</p>
+              <p className="text-white/80 font-bold text-sm mb-4">Start your child's learning journey for just {formatPrice(99)}. No commitment needed!</p>
               <Link href="/signup" className="block w-full text-center py-3 rounded-xl bg-white text-[#6C5CE7] font-black hover:bg-yellow-300 transition-all">
-                Claim ₹99 Trial
+                Claim {formatPrice(99)} Trial
               </Link>
             </div>
           </div>

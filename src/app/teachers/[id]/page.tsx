@@ -12,10 +12,12 @@ import { getThumbnailUrl } from '@/utils/image';
 import { Star, BookOpen, Mail, Award, ArrowLeft, Calendar, MapPin, Rocket, Sparkles } from 'lucide-react';
 import CourseCard from '@/components/ui/CourseCard';
 import Link from 'next/link';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function TeacherDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -231,7 +233,7 @@ export default function TeacherDetailPage() {
                            </div>
 
                            <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                              <div className="text-2xl font-black text-slate-900">₹{bc.price}</div>
+                              <div className="text-2xl font-black text-slate-900">{formatPrice(bc.price)}</div>
                               <div className="bg-primary-500 text-white px-4 py-2 rounded-2xl font-black text-sm group-hover:bg-primary-600 transition-colors">Go Live →</div>
                            </div>
                         </CardContent>
@@ -265,7 +267,7 @@ export default function TeacherDetailPage() {
                            </div>
 
                            <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                              <div className="text-2xl font-black text-slate-900">₹{ws.price}</div>
+                              <div className="text-2xl font-black text-slate-900">{formatPrice(ws.price)}</div>
                               <div className="bg-primary-500 text-white px-4 py-2 rounded-2xl font-black text-sm group-hover:bg-primary-600 transition-colors">Book Seat →</div>
                            </div>
                         </CardContent>

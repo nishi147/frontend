@@ -12,11 +12,13 @@ import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
 import { trackLead } from '@/utils/analytics';
+import { useCurrency } from '@/context/CurrencyContext';
 import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
 
 export default function BootcampDetailPage() {
   const { id } = useParams();
   const { user, loading: authLoading } = useAuth();
+  const { currency, formatPrice } = useCurrency();
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -111,7 +113,8 @@ export default function BootcampDetailPage() {
       const payload = {
         bootcampId: bootcamp._id,
         couponCode: currentCouponCode || appliedCoupon?.code,
-        amount: finalPrice
+        amount: finalPrice,
+        currency: currency
       };
       // 1. Create order
       const orderRes = await api.post('/api/payments/bootcamp-order', payload);
@@ -251,7 +254,7 @@ export default function BootcampDetailPage() {
             <Card className="bg-white p-7 md:p-12 shadow-[0_40px_100px_rgba(244,63,94,0.1)] rounded-[2.5rem] md:rounded-[4rem] border-2 border-slate-50 relative overflow-visible group-hover:-translate-y-3 transition-transform duration-500">
               <div className="absolute -top-6 -right-6 bg-primary-500 text-white w-24 h-24 rounded-[2rem] flex flex-col items-center justify-center shadow-[0_20px_40px_rgba(244,63,94,0.3)] rotate-12 group-hover:rotate-6 transition-transform hover:scale-110">
                  <p className="text-[10px] font-black uppercase tracking-widest">Only</p>
-                 <p className="text-2xl font-black leading-none">₹{finalPrice}</p>
+                 <p className="text-2xl font-black leading-none">{formatPrice(finalPrice)}</p>
               </div>
               
               <div className="text-center mb-10 pb-10 border-b-4 border-slate-50">
@@ -260,7 +263,7 @@ export default function BootcampDetailPage() {
                 <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Secure your seat at HQ</p>
                 {appliedCoupon && (
                   <p className="text-green-600 text-[10px] font-bold mt-2 flex items-center justify-center gap-1">
-                      <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved ₹{discountAmount}
+                      <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved {formatPrice(discountAmount)}
                   </p>
                 )}
               </div>

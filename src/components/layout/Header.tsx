@@ -17,15 +17,15 @@ const CurrencySwitcher = ({ isMobile = false }) => {
   if (!availableCurrencies || availableCurrencies.length === 0) return null;
   
   return (
-    <div className={`flex items-center gap-1 ${isMobile ? 'bg-gray-50 p-1 rounded-xl border border-gray-100' : ''}`}>
+    <div className={`flex items-center gap-1.5 ${isMobile ? 'justify-start bg-gray-50/50 p-2 rounded-2xl border border-gray-100' : 'bg-gray-50/80 p-1 rounded-full border border-gray-100/60 shadow-sm'}`}>
       {availableCurrencies.map((curr: string) => (
         <button
           key={curr}
           onClick={() => setCurrency(curr)}
-          className={`px-2 py-1 rounded-lg text-[10px] font-black transition-all ${
+          className={`px-3 py-1.5 rounded-full text-xs font-black transition-all ${
             currency === curr 
-              ? 'bg-slate-900 text-white shadow-sm' 
-              : 'text-gray-900 hover:text-black hover:bg-gray-100'
+              ? 'bg-slate-900 text-white shadow-sm scale-105' 
+              : 'text-gray-600 hover:text-black hover:bg-gray-200/50'
           }`}
         >
           {curr}
@@ -159,9 +159,9 @@ export const Header = () => {
 
         {/* Right Section (Balanced for Centering) */}
         <div className="flex-1 flex justify-end items-center gap-2 md:gap-4 shrink-0">
-          {/* Currency Switcher Temporarily Removed */}
-
-          {/* Mobile Specific View: Currency Removed */}
+          <div className="hidden sm:block">
+            <CurrencySwitcher />
+          </div>
 
           {!user ? (
             <div className="flex items-center gap-2">
@@ -238,6 +238,10 @@ export const Header = () => {
           ))}
 
           <div className="border-t border-gray-100 pt-4 mt-2 flex flex-col gap-3">
+            <div className="sm:hidden mb-2 px-1">
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Select Currency</span>
+              <CurrencySwitcher isMobile={true} />
+            </div>
             {!user ? (
               <>
                 <Link href="/login" onClick={() => setIsMenuOpen(false)}>

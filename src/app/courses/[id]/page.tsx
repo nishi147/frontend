@@ -11,10 +11,12 @@ import { CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, Arro
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
 import { trackEvent, trackLead } from '@/utils/analytics';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
   const { user, loading: authLoading } = useAuth();
+  const { currency, formatPrice } = useCurrency();
   const router = useRouter();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -121,7 +123,8 @@ export default function CourseDetailPage() {
       const orderRes = await api.post('/api/payments/order', {
         courseId: course._id,
         sessions: selectedSessions,
-        couponCode: appliedCoupon?.code
+        couponCode: appliedCoupon?.code,
+        currency: currency
       });
       const order = orderRes.data.data;
 
@@ -262,12 +265,12 @@ export default function CourseDetailPage() {
                 <div className="text-gray-900 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Module</div>
                 <div className="flex flex-col items-center gap-1 mb-2">
                    <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-black text-navy-900 tracking-tighter">₹{effectivePricePerSession}</span>
+                      <span className="text-5xl font-black text-navy-900 tracking-tighter">{formatPrice(effectivePricePerSession)}</span>
                       <span className="text-sm font-black text-gray-900 uppercase tracking-widest">/ module</span>
                    </div>
                 </div>
                 <div className="text-navy-700 font-bold text-sm bg-navy-50 inline-block px-8 py-3 rounded-full mt-4 border border-navy-100 shadow-sm">
-                  Total Investment: ₹{finalPrice}
+                  Total Investment: {formatPrice(finalPrice)}
                 </div>
               </div>
 
@@ -294,7 +297,7 @@ export default function CourseDetailPage() {
                 {couponError && <p className="text-red-500 text-[10px] font-bold mt-2 ml-2">{couponError}</p>}
                 {appliedCoupon && (
                     <p className="text-green-600 text-[10px] font-bold mt-2 ml-2 flex items-center gap-1">
-                        <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved ₹{discountAmount}
+                        <CheckCircle size={10} /> {appliedCoupon.code} Applied! Saved {formatPrice(discountAmount)}
                     </p>
                 )}
               </div>

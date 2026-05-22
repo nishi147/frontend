@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface IntroOfferContextType {
   isModalOpen: boolean;
@@ -20,6 +21,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
   const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
   const { showToast } = useToast();
+  const { currency, formatPrice } = useCurrency();
 
   const openIntroModal = () => setIsModalOpen(true);
   const closeIntroModal = () => setIsModalOpen(false);
@@ -28,9 +30,12 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
     setIsProcessing(true);
     try {
       // 1. Create Order on Backend
-      const res = await api.post('/api/payments/intro-order', introData);
+      const res = await api.post('/api/payments/intro-order', {
+        ...introData,
+        currency: currency
+      });
       
-      const { id: orderId, amount, currency } = res.data.data;
+      const { id: orderId, amount, currency: orderCurrency } = res.data.data;
 
       const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_test_SPPoz25OmAiMsD';
 
@@ -38,9 +43,9 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
       const options = {
         key: key,
         amount: amount,
-        currency: currency,
+        currency: orderCurrency,
         name: "RUZANN EdTech",
-        description: "₹99 Introductory Offer",
+        description: `${formatPrice(99)} Introductory Offer`,
         order_id: orderId,
         handler: async function (response: any) {
           try {

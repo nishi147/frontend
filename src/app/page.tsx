@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/utils/api';
 import { useAuth } from '@/context/AuthContext';
 import { useIntroOffer } from '@/context/IntroOfferContext';
+import { useCurrency } from '@/context/CurrencyContext';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
@@ -83,6 +84,7 @@ import { getThumbnailUrl } from '@/utils/image';
 const BootcampSection = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { currency, formatPrice } = useCurrency();
   const router = useRouter();
   const [bootcamps, setBootcamps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -126,7 +128,7 @@ const BootcampSection = () => {
   const proceedToPayment = async (bootcamp: any, guestInfo: any) => {
     setIsProcessing(true);
     try {
-      const payload: any = { bootcampId: bootcamp._id };
+      const payload: any = { bootcampId: bootcamp._id, currency };
       if (guestInfo) {
         payload.guestName = guestInfo.name;
         payload.guestEmail = guestInfo.email;
@@ -273,8 +275,8 @@ const BootcampSection = () => {
             <div className="flex flex-col gap-4 mt-auto">
               <div className="flex flex-col pt-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl lg:text-3xl font-black text-black">₹{bc.price}</span>
-                  <span className="text-sm font-medium text-gray-400 line-through">₹{bc.price + 999}</span>
+                  <span className="text-2xl lg:text-3xl font-black text-black">{formatPrice(bc.price)}</span>
+                  <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(bc.price + 999)}</span>
                 </div>
                 <div className="text-sm font-bold text-black mt-1">(Total Bootcamp pass)</div>
               </div>
@@ -333,6 +335,7 @@ const WorkshopSection = () => {
   const { user, token } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
+  const { currency, formatPrice } = useCurrency();
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -390,7 +393,7 @@ const WorkshopSection = () => {
   const proceedToPayment = async (workshop: any, slotId: string | null, guestInfo: any) => {
     setIsProcessing(true);
     try {
-      const payload: any = { workshopId: workshop._id };
+      const payload: any = { workshopId: workshop._id, currency };
       if (slotId) payload.slotId = slotId;
       if (guestInfo) {
         payload.guestName = guestInfo.name;
@@ -542,8 +545,8 @@ const WorkshopSection = () => {
             <div className="flex flex-col gap-4 mt-auto">
               <div className="flex flex-col pt-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl lg:text-3xl font-black text-black">₹{ws.price}</span>
-                  <span className="text-sm font-medium text-gray-400 line-through">₹{ws.price + 999}</span>
+                  <span className="text-2xl lg:text-3xl font-black text-black">{formatPrice(ws.price)}</span>
+                  <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(ws.price + 999)}</span>
                 </div>
                 <div className="text-sm font-bold text-black mt-1">(Event ticket)</div>
               </div>
@@ -844,6 +847,7 @@ export default function Home() {
   const router = useRouter();
   const { user } = useAuth();
   const { openIntroModal } = useIntroOffer();
+  const { formatPrice } = useCurrency();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mentors, setMentors] = useState<any[]>([]);
   const [loadingMentors, setLoadingMentors] = useState(true);
@@ -950,7 +954,7 @@ export default function Home() {
               onClick={openIntroModal}
               className="text-lg px-10 py-4 rounded-full bg-white/10 backdrop-blur-lg border-2 border-white/20 hover:bg-white/20 font-black text-white"
             >
-              Claim ₹99 Offer ✨
+              Claim {formatPrice(99)} Offer ✨
             </Button>
           </div>
 
@@ -1091,7 +1095,7 @@ export default function Home() {
               </div>
               <h2 className="text-4xl md:text-6xl font-black mb-5 leading-[0.95]">
                 Get Your First <br/>
-              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">₹99</span>
+              <span className="text-yellow-200 inline-block -rotate-6 scale-110 mx-2 drop-shadow-xl">{formatPrice(99)}</span>
               </h2>
               <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-5 font-bold text-base">
                 <span className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-xl">✓ No Commitments</span>
@@ -1111,7 +1115,7 @@ export default function Home() {
                onClick={openIntroModal}
                className="bg-accent-500 text-white w-full py-4 rounded-xl text-xl font-black shadow-xl hover:bg-accent-600 transition-all border-b-4 border-accent-700 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3"
              >
-               Go Magic! ₹99 🚀
+               Go Magic! {formatPrice(99)} 🚀
              </button>
              <div className="mt-5 pt-5 border-t-2 border-gray-100 flex items-center justify-center gap-4 text-gray-900 font-bold">
                <span className="text-xs uppercase">Trusted by</span>
@@ -1405,6 +1409,7 @@ export default function Home() {
 const CourseCatalog = () => {
     const [gradeFilter, setGradeFilter] = useState('All Ages');
     const [typeFilter, setTypeFilter] = useState('All');
+    const { formatPrice } = useCurrency();
     const [courses, setCourses] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -1520,8 +1525,8 @@ const CourseCatalog = () => {
 
                             <div className="mt-auto pt-4 md:pt-6 border-t border-gray-50 flex items-center justify-between">
                                 <div>
-                                    <div className="text-xl md:text-3xl font-black text-gray-900">₹{(course.offerPrice || course.totalCoursePrice).toLocaleString()}</div>
-                                    <div className="text-[10px] font-black text-gray-900 uppercase tracking-tighter">₹{course.pricePerSession}/class</div>
+                                    <div className="text-xl md:text-3xl font-black text-gray-900">{formatPrice(course.offerPrice || course.totalCoursePrice)}</div>
+                                    <div className="text-[10px] font-black text-gray-900 uppercase tracking-tighter">{formatPrice(course.pricePerSession)}/class</div>
                                 </div>
                                 <Link href={`/courses/${course._id}`}>
                                     <Button className="rounded-2xl px-6 md:px-8 py-4 md:py-6 font-black text-base md:text-lg bg-primary-500 hover:bg-primary-600 shadow-lg shadow-primary-500/20">Enroll →</Button>

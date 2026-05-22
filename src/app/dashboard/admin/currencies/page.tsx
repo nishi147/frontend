@@ -115,7 +115,7 @@ export default function CurrencyManagement() {
                             <tr className="bg-gray-50/50 border-b border-gray-100 font-black text-gray-400 uppercase text-[10px] tracking-[0.2em]">
                                 <th className="px-8 py-6">Code</th>
                                 <th className="px-8 py-6">Symbol</th>
-                                <th className="px-8 py-6">Rate (Multiplier)</th>
+                                <th className="px-8 py-6">Exchange Rate (1 Foreign = X INR)</th>
                                 <th className="px-8 py-6">Default</th>
                                 <th className="px-8 py-6">Status</th>
                                 <th className="px-8 py-6 text-right">Action</th>
@@ -222,7 +222,7 @@ export default function CurrencyManagement() {
                                         onChange={(e) => setFormData({...formData, exchangeRate: Number(e.target.value)})}
                                         className="w-full p-4 md:p-5 bg-gray-50 border-2 border-transparent focus:border-primary-500 focus:bg-white rounded-xl md:rounded-2xl font-black outline-none transition-all text-sm md:text-base" 
                                     />
-                                    <p className="text-[9px] text-gray-400 font-bold mt-2 ml-1">Multiplier against base currency.</p>
+                                    <p className="text-[9px] text-gray-400 font-bold mt-2 ml-1">Exchange rate against base currency (e.g. 1 USD = 83 INR, so enter 83).</p>
                                 </div>
                             </div>
                             

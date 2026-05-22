@@ -69,9 +69,10 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const formatPrice = (price: number) => {
-    const rate = rates[currency] || 1;
+    let rate = rates[currency] || 1;
+    if (rate <= 0) rate = 1;
     const sym = symbols[currency] || '₹';
-    const converted = price * rate;
+    const converted = price / rate;
     return `${sym}${converted.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
   };
 
