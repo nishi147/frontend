@@ -23,7 +23,7 @@ export const Footer = () => {
                 { Icon: Instagram, href: 'https://www.instagram.com/ruzann_edtech?igsh=cGQ2enhuMXk2MXc2' },
                 { Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/' },
                 { Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad' },
-                { Icon: Facebook, href: 'https://www.facebook.com/share/1Ddf5fZuXE/' },
+                { Icon: Facebook, href: 'https://www.facebook.com/share/17fzhNSYkM/' },
                 { Icon: MessageCircle, href: 'https://wa.me/919960559894' }
               ].map((social, i) => (
                 <Link key={i} href={social.href} target="_blank" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary-500 transition-all hover:-translate-y-1">
