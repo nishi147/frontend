@@ -20,7 +20,7 @@ export const Footer = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               {[
-                { Icon: Instagram, href: 'https://www.instagram.com/learn_wd_ruzann?igsh=MWU0YnA2aTFwenJ1MA==' },
+                { Icon: Instagram, href: 'https://www.instagram.com/ruzann_edtech?igsh=cGQ2enhuMXk2MXc2' },
                 { Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/' },
                 { Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad' },
                 { Icon: Facebook, href: 'https://www.facebook.com/share/1Ddf5fZuXE/' },
