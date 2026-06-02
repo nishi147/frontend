@@ -12,6 +12,7 @@ import Script from 'next/script';
 // Component imports
 import Hero from './components/Hero';
 import LeadCapture from './components/LeadCapture';
+import SocialProof from './components/SocialProof';
 import AssessmentWizard from './components/AssessmentWizard';
 import ResultReport from './components/ResultReport';
 import ThankYou from './components/ThankYou';
@@ -164,6 +165,7 @@ function AssessmentFunnel() {
             >
               <Hero onStartClick={handleScrollToLeadForm} />
               <LeadCapture onSubmit={handleLeadSubmit} />
+              <SocialProof />
             </motion.div>
           )}
 

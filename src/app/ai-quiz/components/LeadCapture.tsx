@@ -131,14 +131,16 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
           <button
             type="button"
             onClick={() => setRole('parent')}
-            className={`rounded-3xl p-8 border-2 transition-all flex flex-col items-center text-center group ${
+            className={`rounded-[32px] p-8 border-2 transition-all duration-300 flex flex-col items-center text-center group ${
               role === 'parent'
-                ? 'border-[#6b4fbb] bg-[#EEE8FF]/20 shadow-md'
-                : 'border-gray-100 hover:border-gray-200 bg-gray-50/50 hover:bg-white'
+                ? 'border-[#6b4fbb] bg-gradient-to-br from-[#6b4fbb]/10 to-[#6b4fbb]/5 shadow-[0_20px_40px_rgba(107,79,187,0.15)] scale-[1.03]'
+                : 'border-[#6b4fbb]/10 hover:border-[#6b4fbb]/40 bg-white hover:bg-[#6b4fbb]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(107,79,187,0.08)]'
             }`}
           >
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 ${
-              role === 'parent' ? 'bg-[#6b4fbb] text-white' : 'bg-gray-100 text-gray-500 group-hover:scale-110'
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
+              role === 'parent'
+                ? 'bg-[#6b4fbb] text-white shadow-md'
+                : 'bg-[#6b4fbb]/5 text-[#6b4fbb]/70 group-hover:scale-110 group-hover:bg-[#6b4fbb]/10 group-hover:text-[#6b4fbb]'
             }`}>
               <UserCheck size={32} />
             </div>
@@ -151,14 +153,16 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
           <button
             type="button"
             onClick={() => setRole('student')}
-            className={`rounded-3xl p-8 border-2 transition-all flex flex-col items-center text-center group ${
+            className={`rounded-[32px] p-8 border-2 transition-all duration-300 flex flex-col items-center text-center group ${
               role === 'student'
-                ? 'border-[#ef4444] bg-[#FFEBEF]/20 shadow-md'
-                : 'border-gray-100 hover:border-gray-200 bg-gray-50/50 hover:bg-white'
+                ? 'border-[#ef4444] bg-gradient-to-br from-[#ef4444]/10 to-[#ef4444]/5 shadow-[0_20px_40px_rgba(239,68,68,0.15)] scale-[1.03]'
+                : 'border-[#ef4444]/10 hover:border-[#ef4444]/40 bg-white hover:bg-[#ef4444]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.08)]'
             }`}
           >
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 ${
-              role === 'student' ? 'bg-[#ef4444] text-white' : 'bg-gray-100 text-gray-500 group-hover:scale-110'
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
+              role === 'student'
+                ? 'bg-[#ef4444] text-white shadow-md'
+                : 'bg-[#ef4444]/5 text-[#ef4444]/70 group-hover:scale-110 group-hover:bg-[#ef4444]/10 group-hover:text-[#ef4444]'
             }`}>
               <GraduationCap size={32} />
             </div>

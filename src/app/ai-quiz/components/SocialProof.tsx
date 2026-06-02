@@ -10,7 +10,8 @@ export default function SocialProof() {
       city: "Pune",
       text: "The report categorized Aarav as an 'AI Explorer' and recommended the visual coding route. The insights were spot on! He's already building games on Scratch.",
       rating: 5,
-      avatar: "👩‍💼"
+      avatar: "/review_woman_blue.jpg",
+      studentAvatar: "/review_boy_red.jpg"
     },
     {
       parent: "Rajesh Kumar",
@@ -18,7 +19,8 @@ export default function SocialProof() {
       city: "Mumbai",
       text: "I was confused about whether Python or Web Dev was right for Sneha. This test showed her logical strengths and recommended the 'AI Creator' course. Extremely helpful!",
       rating: 5,
-      avatar: "👨‍💻"
+      avatar: "/review_girl_black.jpg",
+      studentAvatar: null
     },
     {
       parent: "Ananya Sen",
@@ -26,7 +28,8 @@ export default function SocialProof() {
       city: "Delhi",
       text: "Ishaan's report highlighted his innovative thinking but showed logic needed work. We booked the ₹99 demo class, and the mentor was fantastic at explaining the concepts.",
       rating: 5,
-      avatar: "👩‍🔬"
+      avatar: "/review_woman_maroon.jpg",
+      studentAvatar: "/review_boy_white.jpg"
     }
   ];
 
@@ -112,8 +115,19 @@ export default function SocialProof() {
 
               {/* Reviewer Details */}
               <div className="flex items-center gap-4 border-t border-gray-50 pt-5 mt-auto">
-                <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-xl shrink-0">
-                  {t.avatar}
+                <div className="flex items-center shrink-0">
+                  <div className="w-12 h-12 rounded-full border border-gray-100 overflow-hidden shadow-sm bg-gray-50 flex items-center justify-center">
+                    {t.avatar.startsWith('/') ? (
+                      <img src={t.avatar} alt={t.parent} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-xl">{t.avatar}</span>
+                    )}
+                  </div>
+                  {t.studentAvatar && (
+                    <div className="w-8 h-8 -ml-4 mt-6 rounded-full border-2 border-white overflow-hidden shrink-0 shadow-md">
+                      <img src={t.studentAvatar} alt={t.student} className="w-full h-full object-cover" />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <h4 className="font-baloo font-bold text-navy-900 text-sm leading-none">
