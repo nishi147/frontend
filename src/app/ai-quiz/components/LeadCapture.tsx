@@ -83,6 +83,37 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
   return (
     <section id="lead-capture-section" className="py-20 px-4 bg-white border-t border-gray-100Scroll">
       <div className="max-w-4xl mx-auto">
+        
+        {/* Trusted By Banner */}
+        <div className="flex flex-col items-center mb-16 pb-12 border-b border-gray-100/80 w-full">
+          <p className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mb-6">
+            Trusted By Parents & Educators
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8">
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 hover:scale-103 transition-transform">
+              <span className="text-2xl">🎓</span>
+              <div className="text-left">
+                <div className="text-sm font-black text-navy-900 font-baloo leading-none">10,000+</div>
+                <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-wider">Students</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 hover:scale-103 transition-transform">
+              <span className="text-2xl">🚀</span>
+              <div className="text-left">
+                <div className="text-sm font-black text-navy-900 font-baloo leading-none">1,000+</div>
+                <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-wider">Projects</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-5 py-3 hover:scale-103 transition-transform">
+              <span className="text-2xl">🏫</span>
+              <div className="text-left">
+                <div className="text-sm font-black text-navy-900 font-baloo leading-none">500+</div>
+                <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-wider">Workshops</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center mb-12">
           <span className="text-xs font-black text-primary-500 uppercase tracking-widest block mb-3">
             Get Started
