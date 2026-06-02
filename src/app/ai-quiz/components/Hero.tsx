@@ -94,35 +94,7 @@ export default function Hero({ onStartClick }: HeroProps) {
           </button>
         </motion.div>
 
-        {/* What You'll Get Checklist */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 flex flex-col items-center w-full"
-        >
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-6 bg-[#6b4fbb]/5 rounded-3xl p-5 md:py-4 md:px-8 border border-[#6b4fbb]/10 max-w-4xl shadow-sm w-full sm:w-auto">
-            <div className="flex items-center gap-2 text-navy-900 font-baloo font-bold text-sm">
-              <span className="text-lg shrink-0">✅</span> AI Readiness Score
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden sm:block" />
-            <div className="flex items-center gap-2 text-navy-900 font-baloo font-bold text-sm">
-              <span className="text-lg shrink-0">✅</span> Future Skills Analysis
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden sm:block" />
-            <div className="flex items-center gap-2 text-navy-900 font-baloo font-bold text-sm">
-              <span className="text-lg shrink-0">✅</span> Learning Strengths
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden sm:block" />
-            <div className="flex items-center gap-2 text-navy-900 font-baloo font-bold text-sm">
-              <span className="text-lg shrink-0">✅</span> Personalized Recommendations
-            </div>
-          </div>
-          
-          <div className="mt-4 flex items-center gap-2 text-[#EF4444] font-black text-xs uppercase tracking-widest bg-rose-50 px-4 py-2 rounded-full border border-rose-100/50 shadow-sm">
-            <span className="text-sm">⏱</span> Takes Only 3 Minutes
-          </div>
-        </motion.div>
+
 
         {/* Benefit Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-20 w-full">

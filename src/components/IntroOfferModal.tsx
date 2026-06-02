@@ -19,6 +19,11 @@ export const IntroOfferModal = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(introData.email.trim())) {
+      alert("Please enter a valid email address.");
+      return;
+    }
     await handleClaimOffer(introData);
   };
 
