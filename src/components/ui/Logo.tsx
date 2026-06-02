@@ -45,7 +45,7 @@ export const Logo = ({ className = "", size = "normal" }: { className?: string, 
 
   return (
     <div className={`flex items-center h-full ${className}`}>
-      <div className={`relative ${size === 'small' ? 'w-32 sm:w-40' : 'w-36 sm:w-52 lg:w-64'} h-full flex items-center justify-center transition-all duration-300`}>
+      <div className={`relative ${size === 'small' ? 'w-32 sm:w-40' : 'w-36 sm:w-40 lg:w-48'} h-full flex items-center justify-center transition-all duration-300`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={processedSrc}

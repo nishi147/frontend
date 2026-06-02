@@ -79,7 +79,7 @@ export const Header = () => {
         {/* Left: Logo Section (Balanced for Centering) */}
         <div className="flex-1 flex justify-start items-center h-full">
           <Link href="/" className="flex-shrink-0 flex items-center h-full">
-            <Logo className="scale-150 origin-left sm:scale-125 transition-transform duration-300" />
+            <Logo className="py-2 lg:py-2.5 transition-all duration-300" />
           </Link>
         </div>
 
