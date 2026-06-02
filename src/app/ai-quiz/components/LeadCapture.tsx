@@ -43,7 +43,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
       newErrors.mobile = 'Enter a valid 10-digit Indian mobile number';
     }
 
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = 'Enter a valid email address';
     }
 

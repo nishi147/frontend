@@ -36,7 +36,7 @@ export default function SocialProof() {
         
         {/* Statistics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm text-center">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100/80 shadow-[0_15px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 text-center">
             <div className="font-baloo text-4xl md:text-5xl font-black text-primary-500 mb-2">
               10,000+
             </div>
@@ -44,7 +44,7 @@ export default function SocialProof() {
             <p className="text-gray-400 text-xs mt-1">Across 15+ cities in India</p>
           </div>
           
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm text-center">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100/80 shadow-[0_15px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 text-center">
             <div className="font-baloo text-4xl md:text-5xl font-black text-secondary-500 mb-2">
               1,000+
             </div>
@@ -52,7 +52,7 @@ export default function SocialProof() {
             <p className="text-gray-400 text-xs mt-1">From Scratch games to Python models</p>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm text-center">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100/80 shadow-[0_15px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 text-center">
             <div className="font-baloo text-4xl md:text-5xl font-black text-accent-500 mb-2">
               500+
             </div>
@@ -60,7 +60,7 @@ export default function SocialProof() {
             <p className="text-gray-400 text-xs mt-1">Engaging, interactive tech bootcamps</p>
           </div>
 
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm text-center">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100/80 shadow-[0_15px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 text-center">
             <div className="font-baloo text-4xl md:text-5xl font-black text-navy-900 mb-2">
               100%
             </div>

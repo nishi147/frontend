@@ -39,6 +39,29 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
     }
   };
 
+  const renderQuestionText = (text: string) => {
+    const formatted = formatQuestionText(text);
+    if (!studentName || !isParent) {
+      return <span>{formatted}</span>;
+    }
+    const escapedName = studentName.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const regex = new RegExp(`\\b(${escapedName})\\b`, 'gi');
+    const parts = formatted.split(regex);
+    return (
+      <>
+        {parts.map((part, index) => 
+          regex.test(part) ? (
+            <span key={index} className="text-[#6C5CE7] font-black underline decoration-2 decoration-[#6C5CE7]/20 underline-offset-4">
+              {part}
+            </span>
+          ) : (
+            part
+          )
+        )}
+      </>
+    );
+  };
+
   const handleSelectSingle = (questionId: number, text: string, weight: number) => {
     setAnswers(prev => ({
       ...prev,
@@ -182,7 +205,7 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
                     </div>
 
                     <h4 className="font-baloo font-bold text-navy-900 text-base sm:text-lg mb-6 leading-relaxed pr-8">
-                      {formatQuestionText(q.text)}
+                      {renderQuestionText(q.text)}
                     </h4>
 
                     {/* SINGLE SELECT */}

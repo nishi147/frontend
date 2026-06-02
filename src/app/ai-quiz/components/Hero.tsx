@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Star, Award, TrendingUp, Sparkles, ShieldCheck } from 'lucide-react';
+import { Brain, Star, Award, TrendingUp, Sparkles, ShieldCheck, Users, Code2, Video } from 'lucide-react';
 
 interface HeroProps {
   onStartClick: () => void;
@@ -117,33 +117,63 @@ export default function Hero({ onStartClick }: HeroProps) {
           ))}
         </div>
 
-        {/* Trust Bar */}
-        <div className="mt-20 pt-8 border-t border-gray-200/60 w-full">
-          <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-6">
+        {/* Floating Trust Bar Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
+          className="mt-16 md:mt-20 w-full max-w-5xl bg-white rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-gray-100/80 relative z-20"
+        >
+          <p className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mb-6">
             Empowering the Next Generation of Tech Leaders
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl md:text-3xl font-black text-navy-900 font-baloo">10,000+</span>
-              <span className="text-xs md:text-sm font-bold text-gray-500 text-left">Students<br />Empowered</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {/* Stat 1 */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#EF4444] flex items-center justify-center shrink-0 shadow-sm border border-rose-100/50">
+                <Users size={22} />
+              </div>
+              <div>
+                <div className="text-2xl md:text-3xl font-black text-navy-900 font-baloo leading-none mb-1">10,000+</div>
+                <div className="text-xs font-bold text-gray-500">Students Empowered</div>
+              </div>
             </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden md:block" />
-            <div className="flex items-center gap-2">
-              <span className="text-2xl md:text-3xl font-black text-navy-900 font-baloo">1,000+</span>
-              <span className="text-xs md:text-sm font-bold text-gray-500 text-left">Projects<br />Built</span>
+
+            {/* Stat 2 */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0 shadow-sm border border-amber-100/50">
+                <Code2 size={22} />
+              </div>
+              <div>
+                <div className="text-2xl md:text-3xl font-black text-navy-900 font-baloo leading-none mb-1">1,000+</div>
+                <div className="text-xs font-bold text-gray-500">Projects Built</div>
+              </div>
             </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden md:block" />
-            <div className="flex items-center gap-2">
-              <span className="text-2xl md:text-3xl font-black text-navy-900 font-baloo">Live</span>
-              <span className="text-xs md:text-sm font-bold text-gray-500 text-left">Expert<br />Mentors</span>
+
+            {/* Stat 3 */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0 shadow-sm border border-emerald-100/50">
+                <Video size={22} />
+              </div>
+              <div>
+                <div className="text-2xl md:text-3xl font-black text-navy-900 font-baloo leading-none mb-1">Live</div>
+                <div className="text-xs font-bold text-gray-500">Expert Mentors</div>
+              </div>
             </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300 hidden md:block" />
-            <div className="flex items-center gap-2">
-              <span className="text-2xl md:text-3xl font-black text-[#EF4444] font-baloo">AI-First</span>
-              <span className="text-xs md:text-sm font-bold text-gray-500 text-left">Skills<br />Curriculum</span>
+
+            {/* Stat 4 */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 shadow-sm border border-purple-100/50">
+                <Brain size={22} />
+              </div>
+              <div>
+                <div className="text-2xl md:text-3xl font-black text-[#EF4444] font-baloo leading-none mb-1">AI-First</div>
+                <div className="text-xs font-bold text-gray-500">Skills Curriculum</div>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
