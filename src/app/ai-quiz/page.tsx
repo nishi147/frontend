@@ -11,6 +11,9 @@ import Script from 'next/script';
 
 // Component imports
 import Hero from './components/Hero';
+import WhyMatters from './components/WhyMatters';
+import Discover from './components/Discover';
+import HowItWorks from './components/HowItWorks';
 import LeadCapture from './components/LeadCapture';
 import SocialProof from './components/SocialProof';
 import AssessmentWizard from './components/AssessmentWizard';
@@ -164,8 +167,11 @@ function AssessmentFunnel() {
               className="flex flex-col"
             >
               <Hero onStartClick={handleScrollToLeadForm} />
-              <LeadCapture onSubmit={handleLeadSubmit} />
+              <WhyMatters />
+              <Discover />
+              <HowItWorks />
               <SocialProof />
+              <LeadCapture onSubmit={handleLeadSubmit} />
             </motion.div>
           )}
 

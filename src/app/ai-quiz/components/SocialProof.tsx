@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Star, Quote, Award } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function SocialProof() {
   const testimonials = [
@@ -19,8 +19,8 @@ export default function SocialProof() {
       city: "Mumbai",
       text: "I was confused about whether Python or Web Dev was right for Sneha. This test showed her logical strengths and recommended the 'AI Creator' course. Extremely helpful!",
       rating: 5,
-      avatar: "/review_girl_black.jpg",
-      studentAvatar: null
+      avatar: "/review_parent_rajesh.jpg",
+      studentAvatar: "/review_girl_black.jpg"
     },
     {
       parent: "Ananya Sen",
@@ -32,6 +32,43 @@ export default function SocialProof() {
       studentAvatar: "/review_boy_white.jpg"
     }
   ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handlePrev = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+  };
+
+  useEffect(() => {
+    if (isHovered) return;
+    const timer = setInterval(() => {
+      handleNext();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isHovered]);
+
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 120 : -120,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (dir: number) => ({
+      x: dir < 0 ? 120 : -120,
+      opacity: 0
+    })
+  };
 
   return (
     <section className="py-20 px-4 bg-[#f8fafc] border-t border-gray-100">
@@ -85,60 +122,109 @@ export default function SocialProof() {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.4, delay: 0.1 * idx }}
-              className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm relative flex flex-col justify-between hover:shadow-lg transition-shadow duration-300"
-            >
-              {/* Quote Icon */}
-              <div className="absolute top-6 right-6 text-gray-100 pointer-events-none">
-                <Quote size={40} className="fill-current" />
-              </div>
+        {/* Testimonials Slider */}
+        <div 
+          className="relative max-w-4xl mx-auto px-4 sm:px-16 flex items-center justify-center min-h-[360px]"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Left Arrow Button */}
+          <button
+            onClick={handlePrev}
+            className="absolute left-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#6b4fbb] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft size={24} />
+          </button>
 
-              {/* Stars */}
-              <div className="flex gap-1 mb-5">
-                {[...Array(t.rating)].map((_, i) => (
-                  <Star key={i} size={16} className="text-yellow-400 fill-current" />
-                ))}
-              </div>
+          {/* Card Container */}
+          <div className="w-full overflow-hidden py-4">
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <motion.div
+                key={currentIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 }
+                }}
+                className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-[0_15px_35px_rgba(0,0,0,0.03)] relative flex flex-col justify-between hover:shadow-md transition-shadow duration-300 w-full max-w-2xl mx-auto min-h-[280px]"
+              >
+                {/* Quote Icon */}
+                <div className="absolute top-6 right-8 text-gray-100 pointer-events-none">
+                  <Quote size={48} className="fill-current opacity-60" />
+                </div>
 
-              {/* Text */}
-              <p className="text-gray-500 font-semibold text-xs sm:text-sm leading-relaxed mb-6 italic">
-                "{t.text}"
-              </p>
+                {/* Stars */}
+                <div className="flex gap-1 mb-5">
+                  {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                    <Star key={i} size={18} className="text-yellow-400 fill-current" />
+                  ))}
+                </div>
 
-              {/* Reviewer Details */}
-              <div className="flex items-center gap-4 border-t border-gray-50 pt-5 mt-auto">
-                <div className="flex items-center shrink-0">
-                  <div className="w-12 h-12 rounded-full border border-gray-100 overflow-hidden shadow-sm bg-gray-50 flex items-center justify-center">
-                    {t.avatar.startsWith('/') ? (
-                      <img src={t.avatar} alt={t.parent} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-xl">{t.avatar}</span>
+                {/* Text */}
+                <p className="text-gray-500 font-semibold text-sm sm:text-base leading-relaxed mb-8 italic">
+                  "{testimonials[currentIndex].text}"
+                </p>
+
+                {/* Reviewer Details */}
+                <div className="flex items-center gap-4 border-t border-gray-50 pt-5 mt-auto">
+                  <div className="flex items-center shrink-0">
+                    <div className="w-14 h-14 rounded-full border-2 border-white overflow-hidden shadow-md bg-gray-50 flex items-center justify-center relative z-10">
+                      {testimonials[currentIndex].avatar.startsWith('/') ? (
+                        <img src={testimonials[currentIndex].avatar} alt={testimonials[currentIndex].parent} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-2xl">{testimonials[currentIndex].avatar}</span>
+                      )}
+                    </div>
+                    {testimonials[currentIndex].studentAvatar && (
+                      <div className="w-9 h-9 -ml-5 mt-6 rounded-full border-2 border-white overflow-hidden shrink-0 shadow-lg relative z-20">
+                        <img src={testimonials[currentIndex].studentAvatar} alt={testimonials[currentIndex].student} className="w-full h-full object-cover" />
+                      </div>
                     )}
                   </div>
-                  {t.studentAvatar && (
-                    <div className="w-8 h-8 -ml-4 mt-6 rounded-full border-2 border-white overflow-hidden shrink-0 shadow-md">
-                      <img src={t.studentAvatar} alt={t.student} className="w-full h-full object-cover" />
-                    </div>
-                  )}
+                  <div>
+                    <h4 className="font-baloo font-bold text-navy-900 text-base leading-none">
+                      {testimonials[currentIndex].parent}
+                    </h4>
+                    <p className="text-gray-400 font-extrabold text-[11px] sm:text-xs tracking-tighter mt-1.5">
+                      Parent of {testimonials[currentIndex].student} • {testimonials[currentIndex].city}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-baloo font-bold text-navy-900 text-sm leading-none">
-                    {t.parent}
-                  </h4>
-                  <p className="text-gray-400 font-extrabold text-[10px] sm:text-xs tracking-tighter mt-1">
-                    Parent of {t.student} • {t.city}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Right Arrow Button */}
+          <button
+            onClick={handleNext}
+            className="absolute right-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#6b4fbb] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight size={24} />
+          </button>
+        </div>
+
+        {/* Indicator Dots */}
+        <div className="flex justify-center gap-2 mt-8">
+          {testimonials.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setDirection(idx > currentIndex ? 1 : -1);
+                setCurrentIndex(idx);
+              }}
+              className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none ${
+                idx === currentIndex 
+                  ? 'bg-[#6b4fbb] w-8' 
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
           ))}
         </div>
 
@@ -146,3 +232,4 @@ export default function SocialProof() {
     </section>
   );
 }
+

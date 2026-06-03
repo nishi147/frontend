@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Star, Award, TrendingUp, Sparkles, ShieldCheck, Users, Code2, Video } from 'lucide-react';
+import FloatingCharacters from './FloatingCharacters';
 
 interface HeroProps {
   onStartClick: () => void;
@@ -42,6 +43,9 @@ export default function Hero({ onStartClick }: HeroProps) {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-white py-16 md:py-24 px-4">
+      {/* Interactive Floating Characters */}
+      <FloatingCharacters />
+
       {/* Playful Floating Shapes */}
       <div className="absolute top-10 left-10 w-24 h-24 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float-a pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float-b pointer-events-none" />
