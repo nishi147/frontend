@@ -7,7 +7,7 @@ export default function HowItWorks() {
     {
       num: "01",
       title: "Take Assessment",
-      desc: "Complete a fun, 3-minute diagnostic test consisting of 25 child-friendly questions.",
+      desc: "Complete a fun, 3-minute diagnostic test consisting of 20 child-friendly questions.",
       icon: ClipboardCheck,
       color: "bg-[#FFF5E6] text-[#FF7F50] border-[#FFEAD1]",
     },

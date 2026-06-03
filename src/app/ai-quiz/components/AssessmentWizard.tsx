@@ -13,7 +13,7 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
   const [currentPage, setCurrentPage] = useState(0);
   const [answers, setAnswers] = useState<Record<number, any>>({});
 
-  const QUESTIONS_PER_PAGE = 5;
+  const QUESTIONS_PER_PAGE = 4;
   const totalPages = 5;
 
   // Get questions for the current page
@@ -128,7 +128,7 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
   };
 
   const calculateAndSubmit = () => {
-    // Sum weights of all 25 questions
+    // Sum weights of all questions
     let totalScore = 0;
     questions.forEach(q => {
       const ans = answers[q.id];
@@ -137,8 +137,9 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
       }
     });
 
-    // Clamp score to a max of 100
-    const finalScore = Math.min(100, Math.round(totalScore));
+    // Scale score to a max of 100
+    const maxPossibleScore = questions.length * 4;
+    const finalScore = Math.min(100, Math.round((totalScore / maxPossibleScore) * 100));
     onSubmit(answers, finalScore);
   };
 

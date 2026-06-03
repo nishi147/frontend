@@ -9,7 +9,7 @@ export interface Question {
   category: 'tech' | 'logic' | 'innovation' | 'ai' | 'skills';
   categoryLabel: string;
   text: string;
-  type: 'single_select';
+  type: 'single_select' | 'multiple_choice' | 'rating_scale';
   options: QuestionOption[];
 }
 
@@ -58,19 +58,6 @@ export const questions: Question[] = [
     id: 4,
     category: 'tech',
     categoryLabel: 'Technology Interest',
-    text: "If your child gets a new gadget, what happens first?",
-    type: 'single_select',
-    options: [
-      { label: 'A', text: "Uses basic features only", weight: 1 },
-      { label: 'B', text: "Needs help to understand it", weight: 2 },
-      { label: 'C', text: "Explores settings", weight: 3 },
-      { label: 'D', text: "Experiments with all features", weight: 4 }
-    ]
-  },
-  {
-    id: 5,
-    category: 'tech',
-    categoryLabel: 'Technology Interest',
     text: "How excited is your child about learning new technology?",
     type: 'single_select',
     options: [
@@ -83,7 +70,7 @@ export const questions: Question[] = [
 
   // PAGE 2: Problem Solving Skills
   {
-    id: 6,
+    id: 5,
     category: 'logic',
     categoryLabel: 'Problem Solving Skills',
     text: "When faced with a difficult problem, your child usually:",
@@ -96,7 +83,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 7,
+    id: 6,
     category: 'logic',
     categoryLabel: 'Problem Solving Skills',
     text: "How does your child react to puzzles or brain games?",
@@ -109,7 +96,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 8,
+    id: 7,
     category: 'logic',
     categoryLabel: 'Problem Solving Skills',
     text: "If something doesn't work, your child:",
@@ -122,20 +109,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 9,
-    category: 'logic',
-    categoryLabel: 'Problem Solving Skills',
-    text: "How often does your child look for creative solutions?",
-    type: 'single_select',
-    options: [
-      { label: 'A', text: "Rarely", weight: 1 },
-      { label: 'B', text: "Sometimes", weight: 2 },
-      { label: 'C', text: "Frequently", weight: 3 },
-      { label: 'D', text: "Almost always", weight: 4 }
-    ]
-  },
-  {
-    id: 10,
+    id: 8,
     category: 'logic',
     categoryLabel: 'Problem Solving Skills',
     text: "Can your child follow multi-step instructions?",
@@ -150,7 +124,7 @@ export const questions: Question[] = [
 
   // PAGE 3: Creativity & Innovation
   {
-    id: 11,
+    id: 9,
     category: 'innovation',
     categoryLabel: 'Creativity & Innovation',
     text: "Does your child enjoy creating things?",
@@ -163,7 +137,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 12,
+    id: 10,
     category: 'innovation',
     categoryLabel: 'Creativity & Innovation',
     text: "What does your child prefer?",
@@ -176,7 +150,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 13,
+    id: 11,
     category: 'innovation',
     categoryLabel: 'Creativity & Innovation',
     text: "How imaginative is your child?",
@@ -189,20 +163,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 14,
-    category: 'innovation',
-    categoryLabel: 'Creativity & Innovation',
-    text: "Does your child enjoy drawing, designing, building, or storytelling?",
-    type: 'single_select',
-    options: [
-      { label: 'A', text: "Rarely", weight: 1 },
-      { label: 'B', text: "Sometimes", weight: 2 },
-      { label: 'C', text: "Often", weight: 3 },
-      { label: 'D', text: "Very Frequently", weight: 4 }
-    ]
-  },
-  {
-    id: 15,
+    id: 12,
     category: 'innovation',
     categoryLabel: 'Creativity & Innovation',
     text: "If given unlimited resources, your child would:",
@@ -217,7 +178,7 @@ export const questions: Question[] = [
 
   // PAGE 4: AI & Future Awareness
   {
-    id: 16,
+    id: 13,
     category: 'ai',
     categoryLabel: 'AI & Future Awareness',
     text: "Has your child ever used AI tools like ChatGPT or AI image generators?",
@@ -230,7 +191,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 17,
+    id: 14,
     category: 'ai',
     categoryLabel: 'AI & Future Awareness',
     text: "How curious is your child about future technologies?",
@@ -243,20 +204,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 18,
-    category: 'ai',
-    categoryLabel: 'AI & Future Awareness',
-    text: "Does your child ask 'How does this work?'",
-    type: 'single_select',
-    options: [
-      { label: 'A', text: "Rarely", weight: 1 },
-      { label: 'B', text: "Sometimes", weight: 2 },
-      { label: 'C', text: "Often", weight: 3 },
-      { label: 'D', text: "Almost every day", weight: 4 }
-    ]
-  },
-  {
-    id: 19,
+    id: 15,
     category: 'ai',
     categoryLabel: 'AI & Future Awareness',
     text: "How interested is your child in robotics, coding, or AI?",
@@ -269,7 +217,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 20,
+    id: 16,
     category: 'ai',
     categoryLabel: 'AI & Future Awareness',
     text: "Would your child like to build technology instead of only using it?",
@@ -284,7 +232,7 @@ export const questions: Question[] = [
 
   // PAGE 5: Future Skills Potential
   {
-    id: 21,
+    id: 17,
     category: 'skills',
     categoryLabel: 'Future Skills Potential',
     text: "How confident is your child while learning something new?",
@@ -297,7 +245,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 22,
+    id: 18,
     category: 'skills',
     categoryLabel: 'Future Skills Potential',
     text: "Can your child work independently on tasks?",
@@ -310,7 +258,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 23,
+    id: 19,
     category: 'skills',
     categoryLabel: 'Future Skills Potential',
     text: "How adaptable is your child to change?",
@@ -323,20 +271,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    id: 24,
-    category: 'skills',
-    categoryLabel: 'Future Skills Potential',
-    text: "How often does your child take initiative?",
-    type: 'single_select',
-    options: [
-      { label: 'A', text: "Rarely", weight: 1 },
-      { label: 'B', text: "Sometimes", weight: 2 },
-      { label: 'C', text: "Often", weight: 3 },
-      { label: 'D', text: "Very Frequently", weight: 4 }
-    ]
-  },
-  {
-    id: 25,
+    id: 20,
     category: 'skills',
     categoryLabel: 'Future Skills Potential',
     text: "Which best describes your child?",

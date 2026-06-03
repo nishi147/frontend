@@ -206,7 +206,6 @@ export default function AdminSettings() {
                 </SettingsSection>
               </div>
             )}
-          )}
         </div>
         </div>
       </div>

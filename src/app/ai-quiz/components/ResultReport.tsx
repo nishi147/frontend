@@ -37,7 +37,7 @@ export default function ResultReport({
   const { formatPrice } = useCurrency();
 
   // 1. Calculate Sub-Scores (out of 20) for the 5 categories
-  // Questions: Tech 1-5, Logic 6-10, Innovation 11-15, AI 16-20, Skills 21-25
+  // Questions: Tech 1-4, Logic 5-8, Innovation 9-12, AI 13-16, Skills 17-20
   const calculateSubScore = (start: number, end: number) => {
     let sum = 0;
     for (let i = start; i <= end; i++) {
@@ -46,15 +46,18 @@ export default function ResultReport({
         sum += ans.weight;
       }
     }
-    return Math.min(20, Math.round(sum));
+    // Scale subscore to a max of 20.
+    // Each question has a maximum weight of 4.
+    const maxWeight = (end - start + 1) * 4;
+    return Math.min(20, Math.round((sum / maxWeight) * 20));
   };
 
   const subScores = {
-    tech: calculateSubScore(1, 5),
-    logic: calculateSubScore(6, 10),
-    innovation: calculateSubScore(11, 15),
-    ai: calculateSubScore(16, 20),
-    skills: calculateSubScore(21, 25)
+    tech: calculateSubScore(1, 4),
+    logic: calculateSubScore(5, 8),
+    innovation: calculateSubScore(9, 12),
+    ai: calculateSubScore(13, 16),
+    skills: calculateSubScore(17, 20)
   };
 
   // 2. Custom text depending on categorization
