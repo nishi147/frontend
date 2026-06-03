@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/Card';
 import api from '@/utils/api';
-import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift, Shield, FileText } from 'lucide-react';
+import { Users, BookOpen, GraduationCap, IndianRupee, Video, Mail, UserCheck, UserX, Trash2, Settings, TrendingUp, Target, Gift, Shield, FileText, Brain } from 'lucide-react';
 
 interface Analytics {
   totalStudents: number;
@@ -221,6 +221,12 @@ export default function AdminDashboard() {
            description="Create discount codes and track marketing performance."
            href="/dashboard/admin/coupons"
            icon={<Gift className="w-10 h-10 md:w-12 md:h-12 text-purple-500" />}
+         />
+         <ManagementCard 
+           title="AI Quiz Funnel"
+           description="Track readiness quiz submissions, parent leads, and answers."
+           href="/dashboard/admin/ai-quiz"
+           icon={<Brain className="w-10 h-10 md:w-12 md:h-12 text-red-500" />}
          />
          <ManagementCard 
            title="System Settings"
