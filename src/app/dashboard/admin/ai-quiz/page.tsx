@@ -238,7 +238,7 @@ export default function AIQuizAnalyticsPage() {
         </div>
 
         {/* KPI Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 px-2 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 sm:px-0">
           <StatCard 
             title="Total submissions" 
             value={loadingAnalytics ? "..." : analytics?.totalSubmissions || 0} 
@@ -545,7 +545,7 @@ export default function AIQuizAnalyticsPage() {
           </div>
 
           {/* Search & Filters Controls */}
-          <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-50/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-50/80 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
              {/* Search Input */}
              <div className="relative">
                 <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -788,13 +788,13 @@ export default function AIQuizAnalyticsPage() {
 
         {/* Responses / Dossier Slide-out Modal */}
         {showDetailModal && selectedSubmission && (
-          <div className="fixed inset-0 z-50 flex items-center justify-end bg-navy-950/40 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:justify-end bg-navy-950/40 backdrop-blur-sm animate-in fade-in duration-300">
              
              {/* Backdrop Click */}
              <div className="absolute inset-0" onClick={() => setShowDetailModal(false)}></div>
              
              {/* Slide drawer container */}
-             <div className="relative w-full max-w-2xl h-screen bg-white shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 ease-out border-l border-gray-100">
+             <div className="relative w-full sm:max-w-2xl h-[85dvh] sm:h-screen bg-white rounded-t-[2rem] sm:rounded-none shadow-2xl flex flex-col justify-between animate-in slide-in-from-bottom sm:slide-in-from-right duration-300 ease-out border-t sm:border-t-0 sm:border-l border-gray-100">
                 
                 {/* Modal Header */}
                 <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between">
