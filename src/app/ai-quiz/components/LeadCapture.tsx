@@ -43,7 +43,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
       newErrors.mobile = 'Enter a valid 10-digit Indian mobile number';
     }
 
-    if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
+    if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(formData.email.trim())) {
       newErrors.email = 'Enter a valid email address';
     }
 
@@ -154,22 +154,22 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
               transition={{ duration: 0.4 }}
               className="bg-[#f8fafc] rounded-3xl border border-gray-200/60 p-6 sm:p-10 shadow-sm"
             >
-              <h3 className="font-baloo font-black text-navy-900 text-xl sm:text-2xl mb-8 flex items-center gap-3">
-                <Rocket className="text-primary-500" /> Enter Details to Start Assessment
+              <h3 className="font-baloo font-black text-navy-900 text-2xl sm:text-3xl mb-8 flex items-center gap-3">
+                <Rocket className="text-primary-500" size={28} /> Enter Details to Start Assessment
               </h3>
 
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 {/* Parent Details Section */}
                 <div className="md:col-span-2">
-                  <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 pb-2 border-b border-gray-200/60">
+                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#6b4fbb] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
                     Parent Details
                   </h4>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                    <User size={16} className="text-gray-400" /> Parent Name <span className="text-red-500">*</span>
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
+                    <User size={18} className="text-gray-500" /> Parent Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     name="parentName"
@@ -177,16 +177,16 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.parentName}
                     onChange={handleChange}
                     placeholder="Enter parent's full name"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.parentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.parentName && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.parentName}</span>}
+                  {errors.parentName && <span className="text-red-500 text-sm font-bold mt-1">{errors.parentName}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                    <Phone size={16} className="text-gray-400" /> Mobile Number <span className="text-red-500">*</span>
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
+                    <Phone size={18} className="text-gray-500" /> Mobile Number <span className="text-red-500">*</span>
                   </label>
                   <input
                     name="mobile"
@@ -195,16 +195,16 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.mobile}
                     onChange={handleChange}
                     placeholder="Enter 10-digit mobile number"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.mobile && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.mobile}</span>}
+                  {errors.mobile && <span className="text-red-500 text-sm font-bold mt-1">{errors.mobile}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1.5 md:col-span-2">
-                  <label className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                    <Mail size={16} className="text-gray-400" /> Email Address <span className="text-gray-400 font-medium">(Optional - to receive report)</span>
+                <div className="flex flex-col gap-2 md:col-span-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
+                    <Mail size={18} className="text-gray-500" /> Email Address <span className="text-gray-500 font-bold text-sm sm:text-base">(Optional - to receive report)</span>
                   </label>
                   <input
                     name="email"
@@ -212,23 +212,23 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="parent@example.com"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.email && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.email}</span>}
+                  {errors.email && <span className="text-red-500 text-sm font-bold mt-1">{errors.email}</span>}
                 </div>
 
                 {/* Student Details Section */}
                 <div className="md:col-span-2 mt-4">
-                  <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 pb-2 border-b border-gray-200/60">
+                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#6b4fbb] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
                     Student Details
                   </h4>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                    <User size={16} className="text-gray-400" /> Student Name <span className="text-red-500">*</span>
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
+                    <User size={18} className="text-gray-500" /> Student Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     name="studentName"
@@ -236,15 +236,15 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.studentName}
                     onChange={handleChange}
                     placeholder="Enter student's name"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.studentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.studentName && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.studentName}</span>}
+                  {errors.studentName && <span className="text-red-500 text-sm font-bold mt-1">{errors.studentName}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700">
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
                     Student Age <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -255,22 +255,22 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.age}
                     onChange={handleChange}
                     placeholder="e.g. 10"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.age ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.age && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.age}</span>}
+                  {errors.age && <span className="text-red-500 text-sm font-bold mt-1">{errors.age}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700">
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
                     Grade/Class <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-[#1e293b] text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg focus:outline-none transition-colors ${
                       errors.grade ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   >
@@ -288,12 +288,12 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     <option value="Class 11">Class 11</option>
                     <option value="Class 12">Class 12</option>
                   </select>
-                  {errors.grade && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.grade}</span>}
+                  {errors.grade && <span className="text-red-500 text-sm font-bold mt-1">{errors.grade}</span>}
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
-                    <MapPin size={16} className="text-gray-400" /> City <span className="text-red-500">*</span>
+                <div className="flex flex-col gap-2">
+                  <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
+                    <MapPin size={18} className="text-gray-500" /> City <span className="text-red-500">*</span>
                   </label>
                   <input
                     name="city"
@@ -301,18 +301,18 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.city}
                     onChange={handleChange}
                     placeholder="e.g. Pune"
-                    className={`px-4 py-3.5 rounded-2xl border-2 bg-white font-semibold text-gray-800 text-sm focus:outline-none transition-colors ${
+                    className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.city ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
                     }`}
                   />
-                  {errors.city && <span className="text-red-500 text-xs font-bold mt-0.5">{errors.city}</span>}
+                  {errors.city && <span className="text-red-500 text-sm font-bold mt-1">{errors.city}</span>}
                 </div>
 
                 {/* Submit Button */}
                 <div className="md:col-span-2 mt-6">
                   <button
                     type="submit"
-                    className="w-full py-4.5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-black text-lg transition-all shadow-md active:translate-y-1 uppercase tracking-wider inline-flex items-center justify-center gap-2"
+                    className="w-full py-5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-black text-lg sm:text-xl transition-all shadow-md active:translate-y-1 uppercase tracking-wider inline-flex items-center justify-center gap-2"
                   >
                     🚀 START MY FREE ASSESSMENT
                   </button>
