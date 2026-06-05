@@ -23,9 +23,66 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    if (errors[name]) {
+      if (name === 'email') {
+        const val = value.trim();
+        if (!val || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(val)) {
+          setErrors(prev => {
+            const copy = { ...prev };
+            delete copy.email;
+            return copy;
+          });
+        }
+      } else if (name === 'mobile') {
+        const val = value.trim();
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!val || phoneRegex.test(val)) {
+          setErrors(prev => {
+            const copy = { ...prev };
+            delete copy.mobile;
+            return copy;
+          });
+        }
+      } else {
+        if (value.trim()) {
+          setErrors(prev => {
+            const copy = { ...prev };
+            delete copy[name];
+            return copy;
+          });
+        }
+      }
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
+      const val = value.trim();
+      if (val && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(val)) {
+        setErrors(prev => ({ ...prev, email: 'Enter a valid email address' }));
+      } else {
+        setErrors(prev => {
+          const copy = { ...prev };
+          delete copy.email;
+          return copy;
+        });
+      }
+    } else if (name === 'mobile') {
+      const val = value.trim();
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (val && !phoneRegex.test(val)) {
+        setErrors(prev => ({ ...prev, mobile: 'Enter a valid 10-digit Indian mobile number' }));
+      } else {
+        setErrors(prev => {
+          const copy = { ...prev };
+          delete copy.mobile;
+          return copy;
+        });
+      }
     }
   };
 
@@ -184,7 +241,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                   {errors.parentName && <span className="text-red-500 text-sm font-bold mt-1">{errors.parentName}</span>}
                 </div>
 
-                <div className="flex flex-col gap-2">
+                 <div className="flex flex-col gap-2">
                   <label className="text-base sm:text-lg font-extrabold text-navy-900 flex items-center gap-2">
                     <Phone size={18} className="text-gray-500" /> Mobile Number <span className="text-red-500">*</span>
                   </label>
@@ -194,6 +251,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     maxLength={10}
                     value={formData.mobile}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Enter 10-digit mobile number"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
@@ -211,6 +269,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="parent@example.com"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
                       errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
