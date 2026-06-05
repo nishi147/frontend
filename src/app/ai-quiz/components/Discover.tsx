@@ -8,29 +8,33 @@ export default function Discover() {
       title: "AI Readiness",
       desc: "Measures familiarity with AI applications, prompt validation, and the difference between computational power and human ingenuity.",
       icon: Cpu,
-      color: "text-blue-500 bg-blue-50 border-blue-100",
-      accent: "bg-blue-500"
+      color: "text-blue-600 bg-blue-50/50 border-blue-100 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-[0_8px_20px_rgba(59,130,246,0.3)]",
+      gradient: "from-blue-500 to-indigo-600",
+      glowColor: "bg-blue-400"
     },
     {
       title: "Problem Solving",
       desc: "Evaluates procedural and analytical thinking: how your child decomposes a complex puzzle and devises step-by-step algorithms.",
       icon: Lightbulb,
-      color: "text-amber-500 bg-amber-50 border-amber-100",
-      accent: "bg-amber-500"
+      color: "text-amber-600 bg-amber-50/50 border-amber-100 group-hover:bg-amber-500 group-hover:text-white group-hover:shadow-[0_8px_20px_rgba(245,158,11,0.3)]",
+      gradient: "from-amber-500 to-orange-600",
+      glowColor: "bg-amber-400"
     },
     {
       title: "Innovation Potential",
       desc: "Assesses creative confidence, divergent thinking, and the ability to adapt design rules to invent brand-new concepts.",
       icon: Rocket,
-      color: "text-pink-500 bg-pink-50 border-pink-100",
-      accent: "bg-pink-500"
+      color: "text-pink-600 bg-pink-50/50 border-pink-100 group-hover:bg-pink-500 group-hover:text-white group-hover:shadow-[0_8px_20px_rgba(236,72,153,0.3)]",
+      gradient: "from-pink-500 to-rose-600",
+      glowColor: "bg-pink-400"
     },
     {
       title: "Future Skills Score",
       desc: "Measures core learning skills: collaboration dynamics, response to constructive feedback, and adaptability to new systems.",
       icon: Milestone,
-      color: "text-emerald-500 bg-emerald-50 border-emerald-100",
-      accent: "bg-emerald-500"
+      color: "text-emerald-600 bg-emerald-50/50 border-emerald-100 group-hover:bg-emerald-500 group-hover:text-white group-hover:shadow-[0_8px_20px_rgba(16,185,129,0.3)]",
+      gradient: "from-emerald-500 to-teal-600",
+      glowColor: "bg-emerald-400"
     }
   ];
 
@@ -57,21 +61,24 @@ export default function Discover() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: 0.1 * idx }}
-              className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm relative overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group"
+              className="bg-white rounded-[32px] p-8 border border-gray-200/60 shadow-sm relative overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-2.5 transition-all duration-500 group cursor-default"
             >
-              {/* Colored Corner Banner */}
-              <div className={`absolute top-0 right-0 w-24 h-1 bg-gradient-to-r ${card.accent} opacity-80`} />
+              {/* Top Gradient Banner Strip */}
+              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${card.gradient}`} />
+
+              {/* Glowing Ambient Background Circle on Hover */}
+              <div className={`absolute -bottom-8 -right-8 w-24 h-24 rounded-full ${card.glowColor} blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
               {/* Icon Container */}
-              <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center mb-6 shrink-0 ${card.color} group-hover:scale-115 transition-transform duration-300`}>
-                <card.icon size={26} />
+              <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center mb-6 shrink-0 transition-all duration-300 ${card.color}`}>
+                <card.icon size={28} className="transition-transform duration-500 group-hover:rotate-6" />
               </div>
 
               {/* Title & Desc */}
-              <h3 className="font-baloo font-black text-navy-900 text-lg sm:text-xl mb-3 leading-snug">
+              <h3 className="font-baloo font-black text-navy-900 text-xl mb-3 leading-snug group-hover:text-navy-900 transition-colors">
                 {card.title}
               </h3>
-              <p className="text-gray-400 font-bold text-xs sm:text-sm leading-relaxed flex-1">
+              <p className="text-slate-500 font-bold text-sm leading-relaxed flex-1">
                 {card.desc}
               </p>
             </motion.div>
