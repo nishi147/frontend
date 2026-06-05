@@ -19,6 +19,7 @@ import SocialProof from './components/SocialProof';
 import AssessmentWizard from './components/AssessmentWizard';
 import ResultReport from './components/ResultReport';
 import ThankYou from './components/ThankYou';
+import FAQSection from './components/FAQSection';
 
 import { Suspense } from 'react';
 
@@ -172,6 +173,7 @@ function AssessmentFunnel() {
               <HowItWorks />
               <SocialProof />
               <LeadCapture onSubmit={handleLeadSubmit} />
+              <FAQSection />
             </motion.div>
           )}
 
