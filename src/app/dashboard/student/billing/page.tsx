@@ -83,7 +83,15 @@ export default function BillingPage() {
                     </div>
 
                     <div className="flex justify-end gap-2">
-                       <Button size="sm" variant="outline" className="flex gap-2">
+                       <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex gap-2"
+                          onClick={() => {
+                            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                            window.open(`${apiUrl}/api/payments/invoice/${payment._id}`, '_blank');
+                          }}
+                        >
                           <Download className="w-4 h-4" /> Invoice
                        </Button>
                     </div>

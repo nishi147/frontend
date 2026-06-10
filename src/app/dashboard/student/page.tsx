@@ -14,16 +14,20 @@ import { BookOpen, Video, Star, Sparkles, Rocket, ArrowRight } from 'lucide-reac
 export default function StudentDashboard() {
   const { user } = useAuth();
   const router = useRouter();
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [liveClasses, setLiveClasses] = useState([]);
 
   useEffect(() => {
-    // Fetch student data later
     const fetchData = async () => {
       try {
         const classRes = await api.get('/api/live-classes');
         if (classRes.data.success) {
           setLiveClasses(classRes.data.data);
+        }
+
+        const courseRes = await api.get('/api/courses/student/my-courses');
+        if (courseRes.data.success) {
+          setCourses(courseRes.data.data);
         }
       } catch (e) {
         console.error(e);
@@ -64,7 +68,7 @@ export default function StudentDashboard() {
                <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                  <BookOpen className="text-primary-500" />
                </div>
-               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <div className="text-4xl font-black text-gray-800 mb-1">{courses.length}</div>
                <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Enrolled Courses</p>
              </CardContent>
            </Card>
@@ -74,17 +78,19 @@ export default function StudentDashboard() {
                <div className="w-12 h-12 bg-accent-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                  <Star className="text-accent-500" />
                </div>
-               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <div className="text-4xl font-black text-gray-800 mb-1">
+                 {user?.progress?.reduce((acc: number, curr: any) => acc + (curr.completedLessons?.length || 0), 0) || 0}
+               </div>
                <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Completed Lessons</p>
              </CardContent>
            </Card>
-
+ 
            <Card className="bg-white border-2 border-secondary-50 rounded-[2rem] shadow-sm hover:shadow-xl transition-all group">
              <CardContent className="p-8">
                <div className="w-12 h-12 bg-secondary-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                  <Sparkles className="text-secondary-500" />
                </div>
-               <div className="text-4xl font-black text-gray-800 mb-1">0</div>
+               <div className="text-4xl font-black text-gray-800 mb-1">{user?.stars || 0}</div>
                <p className="text-sm font-black text-gray-400 uppercase tracking-widest">Rewards Won</p>
              </CardContent>
            </Card>
