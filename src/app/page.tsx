@@ -1389,6 +1389,81 @@ export default function Home() {
         </div>
       </section>
 
+      {/* AI READINESS ASSESSMENT SECTION */}
+      <section className="relative py-20 px-4 overflow-hidden" id="ai-assessment">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] z-0" />
+        {/* Glowing orbs */}
+        <div className="absolute top-[-60px] left-[-60px] w-72 h-72 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-float z-0" />
+        <div className="absolute bottom-[-60px] right-[-60px] w-80 h-80 bg-indigo-500 rounded-full mix-blend-screen filter blur-[100px] opacity-25 animate-float z-0" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500 rounded-full mix-blend-screen filter blur-[160px] opacity-10 z-0" />
+
+        {/* Floating stars */}
+        <div className="absolute top-8 left-[10%] text-yellow-300 text-2xl opacity-40 animate-bounce">✦</div>
+        <div className="absolute top-12 right-[12%] text-cyan-300 text-xl opacity-30 animate-pulse">✦</div>
+        <div className="absolute bottom-12 left-[15%] text-purple-300 text-3xl opacity-25 animate-float">✦</div>
+        <div className="absolute bottom-8 right-[8%] text-pink-300 text-2xl opacity-35 animate-bounce" style={{ animationDelay: '1s' }}>✦</div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-5 py-2 mb-6 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-cyan-300 font-black uppercase tracking-widest text-xs shadow-xl">
+            <span className="animate-spin-slow text-lg">🤖</span> FREE AI READINESS CHECK
+          </div>
+
+          {/* Headline */}
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight drop-shadow-lg">
+            Is Your Child Ready for the{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
+              AI Future?
+            </span>
+          </h2>
+
+          {/* Sub-headline */}
+          <p className="text-lg md:text-xl font-bold text-white/70 mb-10 max-w-xl mx-auto leading-relaxed">
+            FREE 3-Minute Assessment — Discover your child's AI potential right now!
+          </p>
+
+          {/* Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 max-w-3xl mx-auto">
+            {[
+              { icon: '🏆', label: 'AI Readiness Score', desc: 'See exactly where your child stands in AI skills' },
+              { icon: '📊', label: 'Future Skills Report', desc: 'Personalised breakdown of key 21st-century skills' },
+              { icon: '🎯', label: 'Recommendations', desc: 'Custom learning path tailored for your child' },
+            ].map(({ icon, label, desc }) => (
+              <div
+                key={label}
+                className="flex flex-col items-center gap-2 p-5 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1"
+              >
+                <span className="text-3xl">{icon}</span>
+                <span className="text-white font-black text-sm tracking-wide">{label}</span>
+                <span className="text-white/50 text-xs font-medium leading-relaxed">{desc}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Button */}
+          <Link href="/ai-quiz">
+            <button
+              id="start-ai-assessment-btn"
+              className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full font-black text-xl text-white shadow-2xl shadow-purple-500/30 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4)' }}
+            >
+              {/* Shimmer effect */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+              <span className="relative z-10">🚀 Start Free Assessment</span>
+              <ArrowRight size={22} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
+
+          {/* Trust indicators */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-white/40 text-xs font-bold uppercase tracking-widest">
+            <span>✓ No sign-up required</span>
+            <span>✓ 100% Free</span>
+            <span>✓ Results in 3 minutes</span>
+          </div>
+        </div>
+      </section>
+
       <ContactSection />
       
       {/* Bottom AdSense Unit 
