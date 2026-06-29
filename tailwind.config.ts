@@ -34,7 +34,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-nunito)', 'sans-serif'],
-        baloo: ['var(--font-baloo)', 'cursive'],
+        baloo: ['var(--font-nunito)', 'sans-serif'],
       },
       borderRadius: {
         'xl': '1rem',

@@ -15,10 +15,13 @@ export default function AdminLegalPage() {
   // Legal Docs State
   const [privacyContent, setPrivacyContent] = useState('');
   const [termsContent, setTermsContent] = useState('');
+  const [refundContent, setRefundContent] = useState('');
   const [privacyFile, setPrivacyFile] = useState<File | null>(null);
   const [termsFile, setTermsFile] = useState<File | null>(null);
+  const [refundFile, setRefundFile] = useState<File | null>(null);
   const [currentPrivacyFile, setCurrentPrivacyFile] = useState('');
   const [currentTermsFile, setCurrentTermsFile] = useState('');
+  const [currentRefundFile, setCurrentRefundFile] = useState('');
 
   useEffect(() => {
     fetchSettings();
@@ -30,8 +33,10 @@ export default function AdminLegalPage() {
       if (res.data.success) {
         setPrivacyContent(res.data.data.privacyPolicy?.content || '');
         setTermsContent(res.data.data.termsAndConditions?.content || '');
+        setRefundContent(res.data.data.refundPolicy?.content || '');
         setCurrentPrivacyFile(res.data.data.privacyPolicy?.fileUrl || '');
         setCurrentTermsFile(res.data.data.termsAndConditions?.fileUrl || '');
+        setCurrentRefundFile(res.data.data.refundPolicy?.fileUrl || '');
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -47,19 +52,23 @@ export default function AdminLegalPage() {
       const formData = new FormData();
       formData.append('privacyContent', privacyContent);
       formData.append('termsContent', termsContent);
+      formData.append('refundContent', refundContent);
       if (privacyFile) formData.append('privacyFile', privacyFile);
       if (termsFile) formData.append('termsFile', termsFile);
+      if (refundFile) formData.append('refundFile', refundFile);
 
       const res = await api.put('/api/settings', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       if (res.data.success) {
         showToast("Legal documents updated successfully!", "success");
         setCurrentPrivacyFile(res.data.data.privacyPolicy?.fileUrl || '');
         setCurrentTermsFile(res.data.data.termsAndConditions?.fileUrl || '');
+        setCurrentRefundFile(res.data.data.refundPolicy?.fileUrl || '');
         setPrivacyFile(null);
         setTermsFile(null);
+        setRefundFile(null);
       }
     } catch (error) {
       console.error("Error saving settings:", error);
@@ -237,6 +246,72 @@ export default function AdminLegalPage() {
                            </div>
                         </div>
                         <a href={currentTermsFile} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-all hover:shadow-md">
+                           <ExternalLink size={20} />
+                        </a>
+                     </div>
+                   )}
+                </div>
+              </div>
+            </LegalSection>
+
+            {/* Refund Policy Section */}
+            <LegalSection title="Refund Policy" icon={<FileText className="w-8 h-8 text-rose-500" />}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Refund Content (Markdown)</label>
+                  <textarea 
+                    value={refundContent}
+                    onChange={(e) => setRefundContent(e.target.value)}
+                    className="w-full px-6 py-5 rounded-[2rem] bg-gray-50 border-2 border-transparent focus:border-rose-400 focus:bg-white transition-all outline-none font-medium text-sm md:text-base h-[30rem] text-gray-800 leading-relaxed shadow-inner"
+                    placeholder="Paste your Refund Policy here..."
+                  />
+                </div>
+                <div className="space-y-8">
+                   <div className="space-y-4">
+                      <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Official PDF Document</label>
+                      <div className={`relative border-2 border-dashed rounded-[2.5rem] p-12 transition-all text-center ${refundFile ? 'border-rose-400 bg-rose-50/30 shadow-lg' : 'border-gray-200 bg-gray-50/50 hover:border-rose-200'}`}>
+                         <input 
+                           type="file" 
+                           accept=".pdf" 
+                           onChange={(e) => setRefundFile(e.target.files?.[0] || null)}
+                           className="absolute inset-0 opacity-0 cursor-pointer" 
+                         />
+                         <div className="flex flex-col items-center">
+                            {refundFile ? (
+                              <>
+                                <div className="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-rose-100">
+                                   <FileCheck className="w-8 h-8" />
+                                </div>
+                                <span className="text-sm font-black text-rose-700 truncate max-w-[250px]">{refundFile.name}</span>
+                                <button onClick={(e) => { e.stopPropagation(); setRefundFile(null); }} className="mt-3 text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline bg-red-50 px-4 py-2 rounded-full">Remove File</button>
+                              </>
+                            ) : (
+                              <>
+                                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-gray-300 mb-4 shadow-sm">
+                                   <Upload className="w-8 h-8" />
+                                </div>
+                                <span className="text-sm font-black text-gray-500">Drop PDF here or click to upload</span>
+                                <span className="text-[10px] font-bold text-gray-300 mt-2 uppercase tracking-[0.2em]">Max file size: 4.5MB</span>
+                              </>
+                            )}
+                         </div>
+                      </div>
+                   </div>
+
+                   {currentRefundFile && (
+                     <div className="p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-100/50 flex items-center justify-between group">
+                        <div className="flex items-center gap-5">
+                           <div className="p-4 bg-rose-50 rounded-2xl text-rose-500 group-hover:scale-110 transition-transform">
+                              <FileText size={24} />
+                           </div>
+                           <div>
+                              <h4 className="text-md font-black text-gray-800">Live Refund Policy</h4>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1.5 mt-0.5">
+                                 <CheckCircle size={10} className="text-green-500" /> Currently stored on cloud
+                              </p>
+                           </div>
+                        </div>
+                        <a href={currentRefundFile} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-all hover:shadow-md">
                            <ExternalLink size={20} />
                         </a>
                      </div>

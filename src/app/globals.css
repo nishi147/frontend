@@ -26,7 +26,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-baloo), var(--font-nunito), Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
 }
 
 .container {

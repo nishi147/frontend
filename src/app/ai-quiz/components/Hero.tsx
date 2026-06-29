@@ -101,7 +101,7 @@ export default function Hero({ onStartClick }: HeroProps) {
 
 
         {/* Benefit Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-20 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-20 w-full">
           {benefits.map((benefit, idx) => (
             <motion.div
               key={idx}

@@ -37,11 +37,17 @@ export const Footer = () => {
           <div>
             <h4 className="text-xl font-black mb-8 border-b-4 border-primary-500 pb-2 inline-block">Quick Links</h4>
             <ul className="flex flex-col gap-4 font-bold text-white/90">
-              {['Home', 'About Us', 'Courses', 'Reviews', 'Blog'].map(link => (
-                <li key={link}>
-                  <Link href="#" className="hover:text-white transition-colors flex items-center gap-2 group">
+              {[
+                { label: 'Home', href: '/' },
+                { label: 'About Us', href: '/about' },
+                { label: 'Courses', href: '/courses' },
+                { label: 'Reviews', href: '/#testimonials' },
+                { label: 'Blog', href: '/blog' }
+              ].map(link => (
+                <li key={link.label}>
+                  <Link href={link.href} className="hover:text-white transition-colors flex items-center gap-2 group">
                     <span className="w-2 h-2 rounded-full bg-primary-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {link}
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -54,7 +60,7 @@ export const Footer = () => {
             <ul className="flex flex-col gap-4 font-bold text-white/90">
               {['Coding', 'Robotics', 'Python', 'AI & ML', 'Data Science', 'Math', 'Science'].map(cat => (
                 <li key={cat}>
-                  <Link href="#" className="hover:text-white transition-colors flex items-center gap-2 group">
+                  <Link href="/courses" className="hover:text-white transition-colors flex items-center gap-2 group">
                     <span className="w-2 h-2 rounded-full bg-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {cat}
                   </Link>
@@ -102,10 +108,12 @@ export const Footer = () => {
             <p className="text-white opacity-60 font-bold">
               © {new Date().getFullYear()} RUZANN EdTech. Crafted with ✨ for future innovators.
             </p>
-            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-white/40">
                <Link href="/privacy-policy" className="hover:text-primary-500 transition-colors">Privacy Policy</Link>
                <span className="w-1 h-1 rounded-full bg-white/20" />
                <Link href="/terms-conditions" className="hover:text-secondary-500 transition-colors">Terms & Conditions</Link>
+               <span className="w-1 h-1 rounded-full bg-white/20" />
+               <Link href="/refund-policy" className="hover:text-amber-500 transition-colors">Refund Policy</Link>
             </div>
           </div>
         </div>

@@ -16,7 +16,6 @@ import { useToast } from '@/context/ToastContext';
 import axios from 'axios';
 import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon, Ticket, GraduationCap } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
-import { PlayAndLearnSection } from '@/components/sections/PlayAndLearnSection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
@@ -625,7 +624,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="relative py-24 px-4 overflow-hidden" id="contact">
+    <section className="relative py-12 px-4 overflow-hidden" id="contact">
       {/* Playful Background Elements */}
       <div className="absolute inset-0 bg-slate-50 z-0" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" />
@@ -642,87 +641,87 @@ const ContactSection = () => {
         <Star size={80} className="text-secondary-300" strokeWidth={1} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
         <div className="flex-1 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-secondary-600 font-bold mb-6 shadow-sm border border-gray-100">
-            <MessageCircle size={16} />
-            <span className="text-sm">Have a Question?</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-secondary-600 font-bold mb-4 shadow-sm border border-gray-100">
+            <MessageCircle size={14} />
+            <span className="text-xs">Have a Question?</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 leading-tight">
             Let's Start a <br/><span className="text-primary-600">Magical</span> Conversation!
           </h2>
-          <p className="text-lg font-bold text-black mb-10 max-w-xl leading-relaxed">
+          <p className="text-base font-bold text-gray-600 mb-6 max-w-xl leading-relaxed">
             Whether you're curious about our courses, need a demo, or just want to say hi, we're all ears!
           </p>
           
-          <div className="space-y-6 max-w-md mx-auto lg:mx-0">
-             <div className="flex items-center gap-6 p-4 bg-white rounded-3xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
-               <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center shadow-inner">
-                 <Mail size={24} />
+          <div className="space-y-4 max-w-md mx-auto lg:mx-0">
+             <div className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
+               <div className="w-11 h-11 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center shadow-inner">
+                 <Mail size={18} />
                </div>
                <div className="text-left">
-                 <p className="text-xs font-black text-gray-900 uppercase tracking-widest mb-1">Email Us</p>
-                 <p className="font-bold text-gray-800">support@ruzann.com</p>
+                 <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-0.5">Email Us</p>
+                 <p className="font-bold text-gray-800 text-sm">support@ruzann.com</p>
                </div>
              </div>
-             <div className="flex items-center gap-6 p-4 bg-white rounded-3xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
-               <div className="w-14 h-14 bg-secondary-100 text-secondary-600 rounded-2xl flex items-center justify-center shadow-inner">
-                 <Phone size={24} />
+             <div className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:translate-x-2 transition-transform">
+               <div className="w-11 h-11 bg-secondary-100 text-secondary-600 rounded-xl flex items-center justify-center shadow-inner">
+                 <Phone size={18} />
                </div>
                <div className="text-left">
-                 <p className="text-xs font-black text-gray-900 uppercase tracking-widest mb-1">Call Us</p>
-                 <p className="font-bold text-gray-800">+91 9960559894</p>
+                 <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-0.5">Call Us</p>
+                 <p className="font-bold text-gray-800 text-sm">+91 9960559894</p>
                </div>
              </div>
           </div>
         </div>
 
-        <Card className="w-full lg:w-[500px] bg-white p-8 md:p-12 rounded-[3.5rem] shadow-2xl border-none relative">
-           <div className="absolute -top-6 -left-6 bg-yellow-400 text-white w-16 h-16 rounded-3xl flex items-center justify-center text-3xl shadow-lg rotate-12 animate-wiggle">✍️</div>
+        <Card className="w-full lg:w-[450px] bg-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl border-none relative">
+           <div className="absolute -top-4 -left-4 bg-yellow-400 text-white w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-lg rotate-12 animate-wiggle">✍️</div>
            
-           <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Your Name</label>
+           <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">Your Name</label>
                 <input 
                   required
                   type="text"
                   placeholder="Superstar's Name"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm placeholder:text-gray-500"
                   value={form.name}
                   onChange={(e) => setForm({...form, name: e.target.value})}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Email Address</label>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">Email Address</label>
                 <input 
                   required
                   type="email"
                   placeholder="parent@example.com"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm placeholder:text-gray-500"
                   value={form.email}
                   onChange={(e) => setForm({...form, email: e.target.value})}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Phone Number</label>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">Phone Number</label>
                 <input 
                   required
                   type="tel"
                   placeholder="+91 00000 00000"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black placeholder:text-gray-500"
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm placeholder:text-gray-500"
                   value={form.phone}
                   onChange={(e) => setForm({...form, phone: e.target.value})}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">What's on your mind?</label>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">What's on your mind?</label>
                 <div className="relative group">
                   <select 
                     required
-                    className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black appearance-none pr-12"
+                    className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm appearance-none pr-12"
                     value={form.subject}
                     onChange={(e) => setForm({...form, subject: e.target.value})}
                   >
@@ -731,30 +730,30 @@ const ContactSection = () => {
                     <option value="Demo">Free Demo Session 🎁</option>
                     <option value="Feedback">Just Saying Hi 👋</option>
                   </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900">
-                    <ChevronDown size={20} />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900">
+                    <ChevronDown size={16} />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Referral Code (Optional)</label>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">Referral Code (Optional)</label>
                 <input 
                   type="text"
                   placeholder="e.g. RUZ-X4K"
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black uppercase placeholder:text-gray-500"
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm uppercase placeholder:text-gray-500"
                   value={form.referralCode}
                   onChange={(e) => setForm({...form, referralCode: e.target.value})}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-4">Message</label>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-900 uppercase tracking-widest ml-4">Message</label>
                 <textarea 
                   required
-                  rows={4}
+                  rows={2}
                   placeholder="Share your magic thoughts..."
-                  className="w-full px-6 py-4 rounded-2xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black resize-none placeholder:text-gray-500"
+                  className="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white focus:border-primary-400 focus:outline-none transition-all font-bold text-black text-sm resize-none placeholder:text-gray-500"
                   value={form.message}
                   onChange={(e) => setForm({...form, message: e.target.value})}
                 />
@@ -764,10 +763,10 @@ const ContactSection = () => {
                 type="submit" 
                 size="lg" 
                 fullWidth 
-                className="py-8 rounded-[2rem] font-black text-xl bg-[#EF4444] hover:bg-[#DC2626] border-none shadow-xl shadow-[#EF4444]/20 transition-all flex items-center justify-center gap-3 active:scale-95"
+                className="py-4 rounded-xl font-black text-base bg-[#EF4444] hover:bg-[#DC2626] border-none shadow-xl shadow-[#EF4444]/20 transition-all flex items-center justify-center gap-3 active:scale-95 text-white"
                 isLoading={isSubmitting}
               >
-                Send Some Magic! <Send size={20} />
+                Send Some Magic! <Send size={16} />
               </Button>
            </form>
         </Card>
@@ -943,9 +942,9 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/courses">
+            <Link href="/ai-quiz">
               <Button size="lg" className="text-lg px-10 py-4 rounded-full bg-primary-500 hover:bg-primary-600 shadow-lg font-black">
-                Start Learning 🚀
+                Start Assessment 🚀
               </Button>
             </Link>
             <Button 
@@ -966,9 +965,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* NEW PLAY & LEARN SECTION */}
-      <PlayAndLearnSection />
 
       {/* Mid-Page AdSense Unit 
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -1049,7 +1045,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION */}
+      {/* 2.6 WORKSHOPS & BOOTCAMPS SECTION
       <section className="py-14 bg-gradient-to-b from-white to-gray-50 overflow-hidden" id="workshops">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 text-left">
@@ -1073,6 +1069,7 @@ export default function Home() {
           <WorkshopSection />
         </div>
       </section>
+      */}
 
       {/* After Courses AdSense Unit 
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -1083,7 +1080,7 @@ export default function Home() {
       {/* UPDATED SUPERSTAR PROJECTS SECTION */}
       <SuperstarProjects />
 
-      {/* 2. ₹99 ATTRACTIVE SECTION */}
+      {/* 2. ₹99 ATTRACTIVE SECTION
       <section className="relative py-16 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-accent-500 -skew-y-3 origin-left z-0" />
         <div className="absolute inset-0 bg-yellow-400 -skew-y-3 origin-right opacity-50 translate-y-4 z-0" />
@@ -1128,37 +1125,46 @@ export default function Home() {
         </div>
       </section>
 
-
       {/* 3. ABOUT RUZANN SECTION */}
-      <section className="py-14 px-4 container mx-auto" id="about">
-         <div className="text-center max-w-3xl mx-auto mb-10">
-           <h2 className="text-3xl md:text-5xl font-black text-gray-800 mb-4">Why kids love <span className="text-primary-500">RUZANN</span>?</h2>
-           <p className="text-base font-bold text-gray-500">We make education an enchanting experience, combining play with meaningful skill-building.</p>
-         </div>
+      <section className="py-20 px-4 bg-slate-950 text-white relative overflow-hidden" id="about">
+         {/* Glow effects */}
+         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none" />
+         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none" />
+         
+         <div className="relative z-10 max-w-7xl mx-auto">
+           <div className="text-center max-w-3xl mx-auto mb-16">
+             <h2 className="text-3xl md:text-5xl font-black mb-4">
+               Why kids love <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-secondary-400">RUZANN</span>?
+             </h2>
+             <p className="text-base font-bold text-gray-400">
+               We make education an enchanting experience, combining play with meaningful skill-building.
+             </p>
+           </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-blue-50 border-b-8 border-primary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-md shadow-primary-200">🎮</div>
-              <h3 className="text-xl font-black text-primary-700 mb-3">Game-Based Learning</h3>
-              <p className="text-gray-600 font-semibold">Every lesson feels like a mission. Complete quests and earn badges!</p>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-primary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
+                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">🎮</div>
+                <h3 className="text-xl font-black text-white mb-3">Game-Based Learning</h3>
+                <p className="text-gray-300 font-semibold">Every lesson feels like a mission. Complete quests and earn badges!</p>
+              </div>
+              
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-secondary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
+                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">👨‍🏫</div>
+                <h3 className="text-xl font-black text-white mb-3">Live Mentorship</h3>
+                <p className="text-gray-300 font-semibold">Learn directly from top educators in small, interactive live sessions.</p>
+              </div>
+              
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-accent-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
+                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">🏆</div>
+                <h3 className="text-xl font-black text-white mb-3">Real Skills</h3>
+                <p className="text-gray-300 font-semibold">From coding to creativity, kids learn skills that matter for their future.</p>
+              </div>
             </div>
-            
-            <div className="bg-purple-50 border-b-8 border-secondary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-md shadow-secondary-200">👨‍🏫</div>
-              <h3 className="text-xl font-black text-secondary-700 mb-3">Live Mentorship</h3>
-              <p className="text-gray-600 font-semibold">Learn directly from top educators in small, interactive live sessions.</p>
-            </div>
-            
-            <div className="bg-yellow-50 border-b-8 border-accent-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-md shadow-accent-200">🏆</div>
-              <h3 className="text-xl font-black text-accent-700 mb-3">Real Skills</h3>
-              <p className="text-gray-600 font-semibold">From coding to creativity, kids learn skills that matter for their future.</p>
-            </div>
-          </div>
+         </div>
       </section>
 
       {/* 5. TESTIMONIALS SECTION */}
-      <section className="py-12 px-4 bg-primary-50">
+      <section className="py-12 px-4 bg-primary-50" id="testimonials">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-10">Stories from our <span className="text-secondary-500">Superstars</span>! 🌟</h2>
           
