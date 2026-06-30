@@ -33,11 +33,11 @@ export default function FAQSection() {
       <div className="max-w-4xl mx-auto">
         
         <div className="text-center mb-12">
-          <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-secondary-100 text-[#0D47A1] flex items-center justify-center mx-auto mb-4">
             <HelpCircle size={28} />
           </div>
           <h2 className="font-baloo text-3xl sm:text-4xl font-black text-navy-900 leading-tight">
-            Common Parent <span className="text-[#6b4fbb]">Questions</span>
+            Common Parent <span className="text-[#0D47A1]">Questions</span>
           </h2>
           <p className="text-gray-500 font-bold mt-3 text-sm sm:text-base">
             Frequently Asked Questions
@@ -51,7 +51,7 @@ export default function FAQSection() {
               <div 
                 key={idx} 
                 className={`bg-white rounded-3xl border transition-all duration-300 ${
-                  isOpen ? 'border-[#6b4fbb] shadow-md' : 'border-gray-200/60 hover:border-gray-300'
+                  isOpen ? 'border-[#0D47A1] shadow-md' : 'border-gray-200/60 hover:border-gray-300'
                 }`}
               >
                 <button
@@ -64,7 +64,7 @@ export default function FAQSection() {
                   <ChevronDown 
                     size={20} 
                     className={`text-gray-400 transition-transform duration-300 shrink-0 ${
-                      isOpen ? 'rotate-180 text-[#6b4fbb]' : ''
+                      isOpen ? 'rotate-180 text-[#0D47A1]' : ''
                     }`} 
                   />
                 </button>

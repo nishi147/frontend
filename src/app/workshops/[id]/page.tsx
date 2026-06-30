@@ -169,7 +169,7 @@ export default function WorkshopDetailPage() {
           email: user?.email,
         },
         theme: {
-          color: "#EF4444"
+          color: "#E91E63"
         }
       };
 

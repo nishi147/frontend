@@ -70,7 +70,7 @@ export default function Hero({ onStartClick }: HeroProps) {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="font-baloo text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-navy-900 leading-[1.1] tracking-tight max-w-4xl"
         >
-          🚀 Is Your Child Ready for the <span className="text-[#EF4444] bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">AI Future?</span>
+          🚀 Is Your Child Ready for the <span className="text-[#E91E63] bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">AI Future?</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -92,7 +92,7 @@ export default function Hero({ onStartClick }: HeroProps) {
         >
           <button
             onClick={onStartClick}
-            className="px-10 py-5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-black text-xl md:text-2xl transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide border-b-8 border-[#DC2626] active:border-b-0 active:translate-y-2 inline-flex items-center gap-3"
+            className="px-10 py-5 rounded-2xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-xl md:text-2xl transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 uppercase tracking-wide border-b-8 border-[#D81B60] active:border-b-0 active:translate-y-2 inline-flex items-center gap-3"
           >
             START FREE ASSESSMENT
           </button>
@@ -101,22 +101,22 @@ export default function Hero({ onStartClick }: HeroProps) {
 
 
         {/* Benefit Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mt-20 w-full">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-20 w-full">
           {benefits.map((benefit, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 * idx + 0.3 }}
-              className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+              className="bg-white rounded-[2rem] p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center aspect-square hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
             >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${benefit.color} text-white flex items-center justify-center shadow-md mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                <benefit.icon size={26} />
+              <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${benefit.color} text-white flex items-center justify-center shadow-md mb-3 sm:mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                <benefit.icon className="w-5 h-5 sm:w-7 sm:h-7" />
               </div>
-              <h3 className="font-baloo font-bold text-navy-900 text-base leading-snug mb-2">
+              <h3 className="font-baloo font-bold text-navy-900 text-xs sm:text-base leading-snug mb-1 sm:mb-2 text-center line-clamp-2 select-none">
                 {benefit.title}
               </h3>
-              <p className="text-gray-400 font-bold text-xs leading-relaxed">
+              <p className="text-gray-400 font-bold text-[10px] sm:text-xs leading-relaxed text-center hidden sm:block">
                 {benefit.description}
               </p>
             </motion.div>
@@ -129,7 +129,7 @@ export default function Hero({ onStartClick }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          className="mt-16 md:mt-20 w-full max-w-5xl bg-white rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-gray-100/80 relative z-20"
+          className="mt-16 md:mt-20 w-full max-w-5xl bg-white rounded-3xl p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-gray-100/80 relative z-20 hidden md:block"
         >
           <p className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mb-6">
             Empowering the Next Generation of Tech Leaders
@@ -137,7 +137,7 @@ export default function Hero({ onStartClick }: HeroProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {/* Stat 1 */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#EF4444] flex items-center justify-center shrink-0 shadow-sm border border-rose-100/50">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#E91E63] flex items-center justify-center shrink-0 shadow-sm border border-rose-100/50">
                 <Users size={22} />
               </div>
               <div>
@@ -170,11 +170,11 @@ export default function Hero({ onStartClick }: HeroProps) {
 
             {/* Stat 4 */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
-              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 shadow-sm border border-purple-100/50">
+              <div className="w-12 h-12 rounded-2xl bg-secondary-50 text-[#0D47A1] flex items-center justify-center shrink-0 shadow-sm border border-secondary-100/50">
                 <Brain size={22} />
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-black text-[#EF4444] font-baloo leading-none mb-1">AI-First</div>
+                <div className="text-2xl md:text-3xl font-black text-[#E91E63] font-baloo leading-none mb-1">AI-First</div>
                 <div className="text-xs font-bold text-gray-500">Skills Curriculum</div>
               </div>
             </div>

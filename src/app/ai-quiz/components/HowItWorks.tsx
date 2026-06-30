@@ -16,7 +16,7 @@ export default function HowItWorks() {
       title: "Get Personalized Report",
       desc: "Instant assessment scores, badges, strengths analysis, and areas of growth sent to your email.",
       icon: FileText,
-      color: "bg-[#EEE8FF] text-[#6C5CE7] border-[#DFD3FF]",
+      color: "bg-[#EEE8FF] text-[#0D47A1] border-[#DFD3FF]",
     },
     {
       num: "03",
@@ -30,7 +30,7 @@ export default function HowItWorks() {
       title: "Reserve ₹99 Demo Class",
       desc: "Activate a 1-on-1 live session with our AI expert mentors to build their first practical project.",
       icon: CalendarCheck,
-      color: "bg-[#FFEBEF] text-[#EF4444] border-[#FFD1DA]",
+      color: "bg-[#FCE4EC] text-[#E91E63] border-[#FFD1DA]",
     }
   ];
 
@@ -42,7 +42,7 @@ export default function HowItWorks() {
             Funnel Flow
           </span>
           <h2 className="font-baloo text-3xl sm:text-4xl md:text-5xl font-black text-navy-900 leading-tight">
-            How It <span className="text-[#6b4fbb]">Works</span>
+            How It <span className="text-[#0D47A1]">Works</span>
           </h2>
           <p className="text-gray-500 font-bold mt-4 text-sm sm:text-base">
             From the initial diagnostic quiz to your first live mentor session, here is what to expect.

@@ -299,8 +299,8 @@ export default function AIQuizAnalyticsPage() {
                     <svg viewBox="0 0 600 240" className="w-full h-full overflow-visible">
                       <defs>
                         <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#ef4444" stopOpacity="0.2" />
-                          <stop offset="100%" stopColor="#ef4444" stopOpacity="0.0" />
+                          <stop offset="0%" stopColor="#E91E63" stopOpacity="0.2" />
+                          <stop offset="100%" stopColor="#E91E63" stopOpacity="0.0" />
                         </linearGradient>
                       </defs>
 
@@ -335,7 +335,7 @@ export default function AIQuizAnalyticsPage() {
                             {areaPath && <path d={areaPath} fill="url(#areaGradient)" />}
 
                             {/* Main Line */}
-                            {linePath && <path d={linePath} fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-md" />}
+                            {linePath && <path d={linePath} fill="none" stroke="#E91E63" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-md" />}
 
                             {/* Data Point Circles */}
                             {points.map((p, i) => {
@@ -343,7 +343,7 @@ export default function AIQuizAnalyticsPage() {
                               const dateString = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
                               return (
                                 <g key={i} className="group cursor-pointer">
-                                  <circle cx={p.x} cy={p.y} r="4.5" className="fill-white stroke-[#ef4444] stroke-2 hover:r-6 hover:stroke-width-3 transition-all" />
+                                  <circle cx={p.x} cy={p.y} r="4.5" className="fill-white stroke-[#E91E63] stroke-2 hover:r-6 hover:stroke-width-3 transition-all" />
                                   <title>{`${dateString}: ${p.count} submissions (Avg Score: ${p.avgScore.toFixed(0)}%)`}</title>
                                 </g>
                               );
@@ -673,7 +673,7 @@ export default function AIQuizAnalyticsPage() {
                           </td>
                           <td className="px-8 py-5">
                             <div className="flex items-center gap-2">
-                              <span className={`w-10 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white ${isHigh ? 'bg-[#ef4444]' : 'bg-[#6C5CE7]'}`}>
+                              <span className={`w-10 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white ${isHigh ? 'bg-[#E91E63]' : 'bg-[#6C5CE7]'}`}>
                                 {sub.score}
                               </span>
                               <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getCategoryColor(sub.category)}`}>
@@ -724,7 +724,7 @@ export default function AIQuizAnalyticsPage() {
                     <div key={sub._id} className="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm space-y-4">
                       <div className="flex justify-between items-start">
                          <div className="text-[10px] font-bold text-gray-400 flex items-center gap-1"><Clock size={11} /> {subDate}</div>
-                         <span className={`w-10 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white ${isHigh ? 'bg-[#ef4444]' : 'bg-[#6C5CE7]'}`}>
+                         <span className={`w-10 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white ${isHigh ? 'bg-[#E91E63]' : 'bg-[#6C5CE7]'}`}>
                            {sub.score}
                          </span>
                       </div>
@@ -966,7 +966,7 @@ export default function AIQuizAnalyticsPage() {
                       </button>
                       <Link 
                         href={`/sales-dashboard?search=${selectedSubmission.mobile}`}
-                        className="flex-1 sm:flex-none px-6 py-3 bg-[#ef4444] hover:bg-[#dc2626] text-white font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-100"
+                        className="flex-1 sm:flex-none px-6 py-3 bg-[#E91E63] hover:bg-[#D81B60] text-white font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-100"
                         onClick={() => setShowDetailModal(false)}
                       >
                          Open in CRM <ExternalLink size={13} />

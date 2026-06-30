@@ -101,7 +101,7 @@ export default function ThankYou({
             <h4 className="font-baloo font-bold text-navy-900 text-lg">
               🏆 {category}
             </h4>
-            <span className="font-baloo font-black text-[#EF4444] text-lg bg-[#FFEBEF] px-3 py-1 rounded-full">
+            <span className="font-baloo font-black text-[#E91E63] text-lg bg-[#FCE4EC] px-3 py-1 rounded-full">
               Score: {score}/100
             </span>
           </div>
@@ -118,7 +118,7 @@ export default function ThankYou({
         <div className="mt-10 flex flex-col gap-3 w-full">
           <button
             onClick={onViewReport}
-            className="w-full py-4 rounded-xl bg-[#6C5CE7] hover:bg-[#5B4BCB] text-white font-black text-sm uppercase tracking-wider transition-colors cursor-pointer"
+            className="w-full py-4 rounded-xl bg-[#0D47A1] hover:bg-[#0B3C87] text-white font-black text-sm uppercase tracking-wider transition-colors cursor-pointer"
           >
             📊 View Full Diagnostic Report Card
           </button>
@@ -126,7 +126,7 @@ export default function ThankYou({
           <button
             onClick={handleBookDemo}
             disabled={isProcessing}
-            className="w-full py-4 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] disabled:opacity-75 text-white font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#EF444420]"
+            className="w-full py-4 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] disabled:opacity-75 text-white font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#E91E6320]"
           >
             {isProcessing ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

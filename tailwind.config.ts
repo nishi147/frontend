@@ -12,24 +12,36 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444', // Ruzann Red (matches logo R)
-          600: '#dc2626',
+          50: '#fdf2f7',
+          100: '#fce4ec',
+          200: '#f8bbd0',
+          300: '#f48fb1',
+          400: '#f06292',
+          500: '#e91e63', // Electric Rose
+          600: '#d81b60',
         },
         secondary: {
-          500: '#6b4fbb', // Ruzann Purple
-          600: '#5a42a0',
+          50: '#e3f2fd',
+          100: '#bbdefb',
+          200: '#90caf9',
+          300: '#64b5f6',
+          400: '#42a5f5',
+          500: '#0d47a1', // Royal Deep Blue
+          600: '#0b3c87',
         },
         accent: {
-          500: '#0d9488', // Ruzann Teal
+          50: '#e0f7fa',
+          100: '#b2ebf2',
+          200: '#80deea',
+          300: '#4dd0e1',
+          400: '#26c6da',
+          500: '#00acc1', // Azure
+          600: '#0097a7',
         },
         navy: {
-          900: '#0f172a', // Hero Navy
-          800: '#1e293b',
+          950: '#030f21',
+          900: '#051b3b', // Deep Blue dark bg
+          800: '#082b5e',
         }
       },
       fontFamily: {

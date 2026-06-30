@@ -173,7 +173,7 @@ export default function CourseDetailPage() {
           email: user.email,
         },
         theme: {
-          color: "#EF4444"
+          color: "#E91E63"
         }
       };
 
@@ -261,7 +261,7 @@ export default function CourseDetailPage() {
           <div className="w-full lg:w-[420px]">
             <Card className="bg-white text-gray-800 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[3rem] border-none overflow-visible relative">
               {/* Hot tag */}
-              <div className="absolute -top-4 -right-4 bg-[#EF4444] text-white px-6 py-2 rounded-2xl font-black text-sm shadow-xl animate-bounce">BEST SELLER</div>
+              <div className="absolute -top-4 -right-4 bg-[#E91E63] text-white px-6 py-2 rounded-2xl font-black text-sm shadow-xl animate-bounce">BEST SELLER</div>
               
               <div className="text-center mb-8 border-b border-gray-50 pb-8">
                 <div className="text-gray-900 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Module</div>

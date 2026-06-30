@@ -46,14 +46,14 @@ export default function Discover() {
             Assessment Blueprint
           </span>
           <h2 className="font-baloo text-3xl sm:text-4xl md:text-5xl font-black text-navy-900 leading-tight">
-            What You Will <span className="text-[#EF4444]">Discover</span>
+            What You Will <span className="text-[#E91E63]">Discover</span>
           </h2>
           <p className="text-gray-500 font-bold mt-4 text-sm sm:text-base">
             Our multi-dimensional engine evaluates four key pillars to deliver a holistic evaluation of your child's technical aptitude.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {cards.map((card, idx) => (
             <motion.div
               key={idx}
@@ -61,7 +61,7 @@ export default function Discover() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: 0.1 * idx }}
-              className="bg-white rounded-[32px] p-8 border border-gray-200/60 shadow-sm relative overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-2.5 transition-all duration-500 group cursor-default"
+              className="bg-white rounded-[2rem] sm:rounded-[32px] p-4 sm:p-8 border border-gray-200/60 shadow-sm relative overflow-hidden flex flex-col items-center justify-center aspect-square hover:shadow-xl hover:-translate-y-2.5 transition-all duration-500 group cursor-default"
             >
               {/* Top Gradient Banner Strip */}
               <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${card.gradient}`} />
@@ -70,15 +70,15 @@ export default function Discover() {
               <div className={`absolute -bottom-8 -right-8 w-24 h-24 rounded-full ${card.glowColor} blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
               {/* Icon Container */}
-              <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center mb-6 shrink-0 transition-all duration-300 ${card.color}`}>
-                <card.icon size={28} className="transition-transform duration-500 group-hover:rotate-6" />
+              <div className={`w-11 h-11 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl border flex items-center justify-center mb-3 sm:mb-6 shrink-0 transition-all duration-300 ${card.color}`}>
+                <card.icon className="w-5 h-5 sm:w-7 sm:h-7 transition-transform duration-500 group-hover:rotate-6" />
               </div>
 
               {/* Title & Desc */}
-              <h3 className="font-baloo font-black text-navy-900 text-xl mb-3 leading-snug group-hover:text-navy-900 transition-colors">
+              <h3 className="font-baloo font-black text-navy-900 text-xs sm:text-xl mb-1 sm:mb-3 text-center leading-snug group-hover:text-navy-900 transition-colors">
                 {card.title}
               </h3>
-              <p className="text-slate-500 font-bold text-sm leading-relaxed flex-1">
+              <p className="text-slate-500 font-bold text-[10px] sm:text-sm leading-relaxed text-center hidden sm:block flex-1">
                 {card.desc}
               </p>
             </motion.div>

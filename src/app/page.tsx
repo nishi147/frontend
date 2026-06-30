@@ -22,6 +22,7 @@ import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
 import { BlogSection } from '@/components/sections/BlogSection';
 import { SliderWrapper } from '@/components/ui/SliderWrapper';
+import AiPlayground from '@/components/sections/AiPlayground';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -455,7 +456,7 @@ const WorkshopSection = () => {
           contact: guestInfo?.phone
         },
         theme: {
-          color: "#EF4444"
+          color: "#E91E63"
         }
       };
 
@@ -763,7 +764,7 @@ const ContactSection = () => {
                 type="submit" 
                 size="lg" 
                 fullWidth 
-                className="py-4 rounded-xl font-black text-base bg-[#EF4444] hover:bg-[#DC2626] border-none shadow-xl shadow-[#EF4444]/20 transition-all flex items-center justify-center gap-3 active:scale-95 text-white"
+                className="py-4 rounded-xl font-black text-base bg-[#E91E63] hover:bg-[#D81B60] border-none shadow-xl shadow-[#E91E63]/20 transition-all flex items-center justify-center gap-3 active:scale-95 text-white"
                 isLoading={isSubmitting}
               >
                 Send Some Magic! <Send size={16} />
@@ -934,7 +935,7 @@ export default function Home() {
           </div>
           
           <h1 className="text-4xl md:text-7xl font-baloo font-black text-white tracking-tight leading-tight mb-6 drop-shadow-[0_6px_6px_rgba(0,0,0,0.5)]">
-            Where Kids <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-white to-secondary-400">GROW</span> and Glow!
+            Where Kids <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">GROW</span> and Glow!
           </h1>
           
           <p className="text-lg md:text-2xl text-gray-300 font-bold mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -966,6 +967,8 @@ export default function Home() {
         </div>
       </section>
 
+      <AiPlayground />
+
       {/* Mid-Page AdSense Unit 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <AdUnit slot="mid-page-interstitial" className="my-0" />
@@ -982,14 +985,15 @@ export default function Home() {
                 <span className="text-sm">Extended Learning</span>
               </div>
               <div className="flex items-center justify-start gap-3 mb-2">
-                <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
-                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Specialized Bootcamps</span>
+                <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-secondary-500" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm text-slate-900">
+                  Specialized{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Bootcamps</span>
                 </h2>
               </div>
             </div>
             <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Long-term intensive programs to master advanced technologies.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Long-term intensive programs to master advanced technologies.</span>
             </p>
           </div>
 
@@ -1055,14 +1059,15 @@ export default function Home() {
                 <span className="text-sm">Space Bootcamps</span>
               </div>
               <div className="flex items-center justify-start gap-3 mb-2">
-                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500 animate-bounce-slow" />
-                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm animate-float">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Magical Workshops</span>
+                <Ticket className="w-8 h-8 md:w-10 md:h-10 text-secondary-500" />
+                <h2 className="text-3xl md:text-5xl font-black leading-tight drop-shadow-sm text-slate-900">
+                  Magical{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Workshops</span>
                 </h2>
               </div>
             </div>
             <p className="text-base font-bold md:max-w-xs animate-pulse opacity-90 mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Intensive learning experiences designed to spark creative magic.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Intensive learning experiences designed to spark creative magic.</span>
             </p>
           </div>
 
@@ -1134,7 +1139,7 @@ export default function Home() {
          <div className="relative z-10 max-w-7xl mx-auto">
            <div className="text-center max-w-3xl mx-auto mb-16">
              <h2 className="text-3xl md:text-5xl font-black mb-4">
-               Why kids love <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-secondary-400">RUZANN</span>?
+               Why kids love <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">RUZANN</span>?
              </h2>
              <p className="text-base font-bold text-gray-400">
                We make education an enchanting experience, combining play with meaningful skill-building.
@@ -1218,7 +1223,7 @@ export default function Home() {
               <span className="text-4xl">⭐</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-3">
-              Our Team of <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-500">Educators</span>
+              Our Team of <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Educators</span>
             </h2>
             <p className="text-base md:text-lg font-bold text-gray-500 max-w-xl">
               Guiding stars committed to student success
@@ -1398,7 +1403,7 @@ export default function Home() {
       {/* AI READINESS ASSESSMENT SECTION */}
       <section className="relative py-20 px-4 overflow-hidden" id="ai-assessment">
         {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0D47A1] via-[#051B3B] to-[#000000] z-0" />
         {/* Glowing orbs */}
         <div className="absolute top-[-60px] left-[-60px] w-72 h-72 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-float z-0" />
         <div className="absolute bottom-[-60px] right-[-60px] w-80 h-80 bg-indigo-500 rounded-full mix-blend-screen filter blur-[100px] opacity-25 animate-float z-0" style={{ animationDelay: '2s' }} />
@@ -1419,7 +1424,7 @@ export default function Home() {
           {/* Headline */}
           <h2 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight drop-shadow-lg">
             Is Your Child Ready for the{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
               AI Future?
             </span>
           </h2>
@@ -1451,8 +1456,8 @@ export default function Home() {
           <Link href="/ai-quiz">
             <button
               id="start-ai-assessment-btn"
-              className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full font-black text-xl text-white shadow-2xl shadow-purple-500/30 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4)' }}
+              className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full font-black text-xl text-white shadow-2xl shadow-primary-500/30 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #E91E63, #00ACC1)' }}
             >
               {/* Shimmer effect */}
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
@@ -1522,7 +1527,7 @@ const CourseCatalog = () => {
 
     const getCourseColor = (category: string) => {
         const cat = category?.toLowerCase() || '';
-        if (cat.includes('robot')) return "bg-[#EF444410]";
+        if (cat.includes('robot')) return "bg-[#E91E6310]";
         if (cat.includes('cod')) return "bg-[#FF767510]";
         if (cat.includes('ai')) return "bg-[#FDCB6E10]";
         if (cat.includes('math')) return "bg-[#00B89410]";

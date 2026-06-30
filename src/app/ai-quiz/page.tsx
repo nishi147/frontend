@@ -303,7 +303,7 @@ export default function AssessmentFunnelPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[#ef4444] border-t-transparent rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-[#E91E63] border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <AssessmentFunnel />

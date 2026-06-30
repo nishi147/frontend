@@ -146,7 +146,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
             Get Started
           </span>
           <h2 className="font-baloo text-3xl sm:text-4xl md:text-5xl font-black text-navy-900 leading-tight">
-            Who Is Taking the <span className="text-[#EF4444]">Assessment?</span>
+            Who Is Taking the <span className="text-[#E91E63]">Assessment?</span>
           </h2>
           <p className="text-gray-500 font-bold mt-4 text-sm sm:text-base">
             Select your role to unlock the 3-minute AI Readiness Diagnostic.
@@ -160,14 +160,14 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
             onClick={() => setRole('parent')}
             className={`rounded-[32px] p-8 border-2 transition-all duration-300 flex flex-col items-center text-center group ${
               role === 'parent'
-                ? 'border-[#6b4fbb] bg-gradient-to-br from-[#6b4fbb]/10 to-[#6b4fbb]/5 shadow-[0_20px_40px_rgba(107,79,187,0.15)] scale-[1.03]'
-                : 'border-[#6b4fbb]/10 hover:border-[#6b4fbb]/40 bg-white hover:bg-[#6b4fbb]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(107,79,187,0.08)]'
+                ? 'border-[#0D47A1] bg-gradient-to-br from-[#0D47A1]/10 to-[#0D47A1]/5 shadow-[0_20px_40px_rgba(107,79,187,0.15)] scale-[1.03]'
+                : 'border-[#0D47A1]/10 hover:border-[#0D47A1]/40 bg-white hover:bg-[#0D47A1]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(107,79,187,0.08)]'
             }`}
           >
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
               role === 'parent'
-                ? 'bg-[#6b4fbb] text-white shadow-md'
-                : 'bg-[#6b4fbb]/5 text-[#6b4fbb]/70 group-hover:scale-110 group-hover:bg-[#6b4fbb]/10 group-hover:text-[#6b4fbb]'
+                ? 'bg-[#0D47A1] text-white shadow-md'
+                : 'bg-[#0D47A1]/5 text-[#0D47A1]/70 group-hover:scale-110 group-hover:bg-[#0D47A1]/10 group-hover:text-[#0D47A1]'
             }`}>
               <UserCheck size={32} />
             </div>
@@ -182,14 +182,14 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
             onClick={() => setRole('student')}
             className={`rounded-[32px] p-8 border-2 transition-all duration-300 flex flex-col items-center text-center group ${
               role === 'student'
-                ? 'border-[#ef4444] bg-gradient-to-br from-[#ef4444]/10 to-[#ef4444]/5 shadow-[0_20px_40px_rgba(239,68,68,0.15)] scale-[1.03]'
-                : 'border-[#ef4444]/10 hover:border-[#ef4444]/40 bg-white hover:bg-[#ef4444]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.08)]'
+                ? 'border-[#E91E63] bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/5 shadow-[0_20px_40px_rgba(239,68,68,0.15)] scale-[1.03]'
+                : 'border-[#E91E63]/10 hover:border-[#E91E63]/40 bg-white hover:bg-[#E91E63]/5 hover:-translate-y-1.5 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.08)]'
             }`}
           >
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
               role === 'student'
-                ? 'bg-[#ef4444] text-white shadow-md'
-                : 'bg-[#ef4444]/5 text-[#ef4444]/70 group-hover:scale-110 group-hover:bg-[#ef4444]/10 group-hover:text-[#ef4444]'
+                ? 'bg-[#E91E63] text-white shadow-md'
+                : 'bg-[#E91E63]/5 text-[#E91E63]/70 group-hover:scale-110 group-hover:bg-[#E91E63]/10 group-hover:text-[#E91E63]'
             }`}>
               <GraduationCap size={32} />
             </div>
@@ -219,7 +219,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                 
                 {/* Parent Details Section */}
                 <div className="md:col-span-2">
-                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#6b4fbb] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
+                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#0D47A1] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
                     Parent Details
                   </h4>
                 </div>
@@ -235,7 +235,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onChange={handleChange}
                     placeholder="Enter parent's full name"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.parentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.parentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.parentName && <span className="text-red-500 text-sm font-bold mt-1">{errors.parentName}</span>}
@@ -254,7 +254,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onBlur={handleBlur}
                     placeholder="Enter 10-digit mobile number"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.mobile && <span className="text-red-500 text-sm font-bold mt-1">{errors.mobile}</span>}
@@ -272,7 +272,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onBlur={handleBlur}
                     placeholder="parent@example.com"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.email && <span className="text-red-500 text-sm font-bold mt-1">{errors.email}</span>}
@@ -280,7 +280,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
 
                 {/* Student Details Section */}
                 <div className="md:col-span-2 mt-4">
-                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#6b4fbb] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
+                  <h4 className="text-sm sm:text-base font-baloo font-black text-[#0D47A1] uppercase tracking-wider mb-4 pb-2 border-b border-gray-200">
                     Student Details
                   </h4>
                 </div>
@@ -296,7 +296,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onChange={handleChange}
                     placeholder="Enter student's name"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.studentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.studentName ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.studentName && <span className="text-red-500 text-sm font-bold mt-1">{errors.studentName}</span>}
@@ -315,7 +315,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onChange={handleChange}
                     placeholder="e.g. 10"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.age ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.age ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.age && <span className="text-red-500 text-sm font-bold mt-1">{errors.age}</span>}
@@ -330,7 +330,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     value={formData.grade}
                     onChange={handleChange}
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg focus:outline-none transition-colors ${
-                      errors.grade ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.grade ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   >
                     <option value="">Select Grade</option>
@@ -361,7 +361,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                     onChange={handleChange}
                     placeholder="e.g. Pune"
                     className={`px-5 py-4 rounded-2xl border-2 bg-white font-bold text-navy-900 text-base sm:text-lg placeholder:text-gray-400 focus:outline-none transition-colors ${
-                      errors.city ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#6C5CE7]'
+                      errors.city ? 'border-red-500 focus:border-red-500' : 'border-gray-200/80 focus:border-[#0D47A1]'
                     }`}
                   />
                   {errors.city && <span className="text-red-500 text-sm font-bold mt-1">{errors.city}</span>}
@@ -371,7 +371,7 @@ export default function LeadCapture({ onSubmit }: LeadCaptureProps) {
                 <div className="md:col-span-2 mt-6">
                   <button
                     type="submit"
-                    className="w-full py-5 rounded-2xl bg-[#EF4444] hover:bg-[#DC2626] text-white font-black text-lg sm:text-xl transition-all shadow-md active:translate-y-1 uppercase tracking-wider inline-flex items-center justify-center gap-2"
+                    className="w-full py-5 rounded-2xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-lg sm:text-xl transition-all shadow-md active:translate-y-1 uppercase tracking-wider inline-flex items-center justify-center gap-2"
                   >
                     🚀 START MY FREE ASSESSMENT
                   </button>

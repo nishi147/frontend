@@ -51,7 +51,7 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
       <>
         {parts.map((part, index) => 
           regex.test(part) ? (
-            <span key={index} className="text-[#6C5CE7] font-black underline decoration-2 decoration-[#6C5CE7]/20 underline-offset-4">
+            <span key={index} className="text-[#0D47A1] font-black underline decoration-2 decoration-[#0D47A1]/20 underline-offset-4">
               {part}
             </span>
           ) : (
@@ -221,20 +221,20 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
                               onClick={() => handleSelectSingle(q.id, opt.text, opt.weight)}
                               className={`w-full px-5 py-4 rounded-2xl border-2 text-left font-bold text-sm sm:text-base flex items-center justify-between transition-all ${
                                 isSelected
-                                  ? 'border-[#6C5CE7] bg-[#EEE8FF]/20 text-[#6C5CE7]'
+                                  ? 'border-[#0D47A1] bg-[#EEE8FF]/20 text-[#0D47A1]'
                                   : 'border-gray-100 hover:border-gray-200 text-gray-600 hover:bg-gray-50/50'
                               }`}
                             >
                               <div className="flex items-center gap-3">
                                 <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-baloo font-black text-sm transition-colors ${
-                                  isSelected ? 'bg-[#6C5CE7] text-white' : 'bg-gray-100 text-[#6C5CE7]'
+                                  isSelected ? 'bg-[#0D47A1] text-white' : 'bg-gray-100 text-[#0D47A1]'
                                 }`}>
                                   {opt.label}
                                 </span>
                                 <span>{opt.text}</span>
                               </div>
                               {isSelected && (
-                                <div className="w-5 h-5 rounded-full bg-[#6C5CE7] text-white flex items-center justify-center shrink-0 ml-3">
+                                <div className="w-5 h-5 rounded-full bg-[#0D47A1] text-white flex items-center justify-center shrink-0 ml-3">
                                   <Check size={12} strokeWidth={3} />
                                 </div>
                               )}
@@ -289,9 +289,9 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
                                 onClick={() => handleSelectRating(q.id, num)}
                                 className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 font-baloo font-black text-lg sm:text-xl flex items-center justify-center transition-all ${
                                   isSelected
-                                    ? 'border-[#EF4444] bg-[#EF4444] text-white scale-110 shadow-md shadow-[#EF444420]'
+                                    ? 'border-[#E91E63] bg-[#E91E63] text-white scale-110 shadow-md shadow-[#E91E6320]'
                                     : isHoveredOrBelow
-                                      ? 'border-[#FFEBEF] bg-[#FFEBEF] text-[#EF4444]'
+                                      ? 'border-[#FCE4EC] bg-[#FCE4EC] text-[#E91E63]'
                                       : 'border-gray-100 hover:border-gray-200 text-gray-400 hover:bg-gray-50/50'
                                 }`}
                               >
@@ -334,8 +334,8 @@ export default function AssessmentWizard({ studentName, isParent, onSubmit }: As
                 !isPageComplete()
                   ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
                   : currentPage === totalPages - 1
-                    ? 'bg-[#EF4444] hover:bg-[#DC2626] text-white hover:scale-103 active:translate-y-0.5'
-                    : 'bg-[#6C5CE7] hover:bg-[#5B4BCB] text-white hover:scale-103 active:translate-y-0.5'
+                    ? 'bg-[#E91E63] hover:bg-[#D81B60] text-white hover:scale-103 active:translate-y-0.5'
+                    : 'bg-[#0D47A1] hover:bg-[#0B3C87] text-white hover:scale-103 active:translate-y-0.5'
               }`}
             >
               {currentPage === totalPages - 1 ? (

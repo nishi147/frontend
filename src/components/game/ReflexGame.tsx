@@ -266,12 +266,12 @@ export const ReflexGame = () => {
             let boxClass = 'bg-white border-4 border-gray-100 shadow-sm text-gray-500';
             
             if (isWaiting) {
-              boxClass = 'bg-[#EF4444] text-white/80 cursor-wait shadow-xl border-[#B91C1C] animate-pulse'; 
+              boxClass = 'bg-[#E91E63] text-white/80 cursor-wait shadow-xl border-[#B91C1C] animate-pulse'; 
             } else if (isReady) {
               if (isActive) {
                 boxClass = 'bg-green-500 text-white cursor-crosshair shadow-[0_0_40px_rgba(34,197,94,0.6)] border-green-400 scale-[1.02] transition-transform'; // Green target
               } else {
-                boxClass = 'bg-[#EF4444] text-white/80 cursor-pointer shadow-md border-[#B91C1C] opacity-90'; 
+                boxClass = 'bg-[#E91E63] text-white/80 cursor-pointer shadow-md border-[#B91C1C] opacity-90'; 
               }
             } else if (gameState === 'early' || gameState === 'miss') {
               boxClass = 'bg-gray-200 text-gray-400 border-gray-300 opacity-50 grayscale';

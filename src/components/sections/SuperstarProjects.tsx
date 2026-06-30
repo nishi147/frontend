@@ -86,13 +86,14 @@ export const SuperstarProjects = () => {
         {/* Decorative Header Area */}
         <div className="text-center mb-12 md:mb-20 relative">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Trophy className="w-8 h-8 md:w-10 md:h-10 text-yellow-500 animate-bounce-slow" />
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter drop-shadow-sm animate-float">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400">Projects by Students</span>
+            <Trophy className="w-8 h-8 md:w-10 md:h-10 text-yellow-500" />
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter drop-shadow-sm text-slate-900">
+              Projects by{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Students</span>
             </h2>
           </div>
-          <p className="text-base md:text-xl font-bold max-w-2xl mx-auto leading-relaxed opacity-90 animate-pulse mt-2">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Explore amazing creations built by our young innovators that are out of this world!</span>
+          <p className="text-base md:text-xl font-bold max-w-2xl mx-auto leading-relaxed text-slate-500 mt-2">
+            Explore amazing creations built by our young innovators that are out of this world!
           </p>
         </div>
 

@@ -81,7 +81,7 @@ export default function SocialProof() {
             Parent Feedback
           </span>
           <h2 className="font-baloo text-3xl sm:text-4xl md:text-5xl font-black text-navy-900 leading-tight">
-            Hear What <span className="text-[#6b4fbb]">Parents</span> Say About Ruzann
+            Hear What <span className="text-[#0D47A1]">Parents</span> Say About Ruzann
           </h2>
           <p className="text-gray-500 font-bold mt-4 text-sm sm:text-base">
             See how the AI Readiness assessment helps families make clear academic decisions.
@@ -97,7 +97,7 @@ export default function SocialProof() {
           {/* Left Arrow Button */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#6b4fbb] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
+            className="absolute left-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#0D47A1] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
             aria-label="Previous testimonial"
           >
             <ChevronLeft size={24} />
@@ -168,7 +168,7 @@ export default function SocialProof() {
           {/* Right Arrow Button */}
           <button
             onClick={handleNext}
-            className="absolute right-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#6b4fbb] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
+            className="absolute right-0 z-10 p-3 rounded-full bg-white border border-gray-100 shadow-md text-navy-900 hover:text-[#0D47A1] hover:scale-110 active:scale-95 transition-all duration-200 focus:outline-none"
             aria-label="Next testimonial"
           >
             <ChevronRight size={24} />
@@ -186,7 +186,7 @@ export default function SocialProof() {
               }}
               className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none ${
                 idx === currentIndex 
-                  ? 'bg-[#6b4fbb] w-8' 
+                  ? 'bg-[#0D47A1] w-8' 
                   : 'bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`Go to slide ${idx + 1}`}

@@ -34,7 +34,7 @@ export default function WhyMatters() {
       title: "Logical Coding",
       short: "Decomposing complex problems.",
       details: "Breaking a big system down into step-by-step algorithms. Instead of just memorization, kids learn computational logic.",
-      icon: <Brain size={22} className="text-purple-600" />
+      icon: <Brain size={22} className="text-[#0D47A1]" />
     },
     {
       title: "Prompt Engineering",
@@ -93,7 +93,7 @@ export default function WhyMatters() {
             Why It Matters
           </span>
           <h2 className="font-baloo text-3xl sm:text-4xl md:text-5xl font-black text-navy-900 leading-tight">
-            Is Your Child Ready for <span className="text-[#ef4444]">2030?</span>
+            Is Your Child Ready for <span className="text-[#E91E63]">2030?</span>
           </h2>
           <p className="text-gray-500 font-bold mt-4 text-sm sm:text-base max-w-xl mx-auto">
             Click through our interactive interactive landscape to see how the world is shifting and what skills your child needs.
@@ -150,7 +150,7 @@ export default function WhyMatters() {
               >
                 <div>
                   <h3 className="font-baloo font-black text-navy-900 text-2xl mb-4 flex items-center gap-2">
-                    <Briefcase className="text-[#6b4fbb]" /> Choose a Future Path:
+                    <Briefcase className="text-[#0D47A1]" /> Choose a Future Path:
                   </h3>
                   <div className="flex flex-col gap-3">
                     {Object.keys(jobsData).map((jobKey) => {
@@ -161,14 +161,14 @@ export default function WhyMatters() {
                           onClick={() => setSelectedJob(jobKey as any)}
                           className={`w-full text-left p-4.5 rounded-2xl border-2 transition-all flex items-center justify-between ${
                             isActive
-                              ? 'border-[#6b4fbb] bg-white shadow-sm font-bold text-navy-900'
+                              ? 'border-[#0D47A1] bg-white shadow-sm font-bold text-navy-900'
                               : 'border-gray-200/80 bg-white/50 text-gray-500 hover:bg-white'
                           }`}
                         >
                           <span className="font-baloo text-base sm:text-lg font-black">
                             {jobsData[jobKey as keyof typeof jobsData].title}
                           </span>
-                          <ChevronRight size={18} className={isActive ? 'text-[#6b4fbb]' : 'text-gray-400'} />
+                          <ChevronRight size={18} className={isActive ? 'text-[#0D47A1]' : 'text-gray-400'} />
                         </button>
                       );
                     })}
@@ -178,7 +178,7 @@ export default function WhyMatters() {
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/60 shadow-sm flex flex-col justify-between h-full">
                   <div>
                     <div className="flex justify-between items-center mb-6">
-                      <span className="text-xs font-black text-purple-600 uppercase tracking-widest">
+                      <span className="text-xs font-black text-[#0D47A1] uppercase tracking-widest">
                         AI Integration Index
                       </span>
                       <span className="text-lg font-black text-navy-900">
@@ -189,7 +189,7 @@ export default function WhyMatters() {
                     {/* Progress Bar */}
                     <div className="w-full h-3.5 bg-gray-100 rounded-full overflow-hidden mb-6">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-[#6b4fbb] to-[#ef4444]"
+                        className="h-full bg-gradient-to-r from-[#0D47A1] to-[#E91E63]"
                         initial={{ width: 0 }}
                         animate={{ width: `${jobsData[selectedJob].impact}%` }}
                         transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -246,7 +246,7 @@ export default function WhyMatters() {
                         onClick={() => setSelectedSkill(isOpen ? null : idx)}
                         className={`p-5 rounded-2xl border-2 bg-white cursor-pointer transition-all duration-300 flex flex-col justify-between ${
                           isOpen
-                            ? 'border-[#6b4fbb] shadow-md scale-[1.01]'
+                            ? 'border-[#0D47A1] shadow-md scale-[1.01]'
                             : 'border-gray-200/60 hover:border-gray-300 hover:shadow-sm'
                         }`}
                       >
@@ -298,7 +298,7 @@ export default function WhyMatters() {
               >
                 <div>
                   <h3 className="font-baloo font-black text-navy-900 text-2xl mb-4 flex items-center gap-2">
-                    <Award className="text-[#ef4444]" /> Select Student Age Group:
+                    <Award className="text-[#E91E63]" /> Select Student Age Group:
                   </h3>
                   <div className="flex gap-2.5 mb-6">
                     {(['6-9', '10-13', '14-18'] as const).map((ageGroup) => (
@@ -307,7 +307,7 @@ export default function WhyMatters() {
                         onClick={() => setSelectedAge(ageGroup)}
                         className={`flex-1 py-3.5 px-3 rounded-2xl border-2 font-black text-xs sm:text-sm transition-all ${
                           selectedAge === ageGroup
-                            ? 'border-[#ef4444] bg-[#ef4444] text-white shadow-sm'
+                            ? 'border-[#E91E63] bg-[#E91E63] text-white shadow-sm'
                             : 'border-gray-200/80 bg-white text-gray-500 hover:bg-gray-50'
                         }`}
                       >
@@ -317,7 +317,7 @@ export default function WhyMatters() {
                   </div>
 
                   <div className="p-5 rounded-2xl bg-white border border-gray-200/60 shadow-sm">
-                    <span className="text-xs font-black text-[#ef4444] uppercase tracking-widest block mb-1">
+                    <span className="text-xs font-black text-[#E91E63] uppercase tracking-widest block mb-1">
                       Focus Area
                     </span>
                     <h4 className="font-baloo font-black text-navy-900 text-lg mb-2">
@@ -337,7 +337,7 @@ export default function WhyMatters() {
                     <div className="text-4xl font-black text-navy-900">
                       {reportData[selectedAge].score}<span className="text-lg text-gray-400 font-bold">/100</span>
                     </div>
-                    <div className="inline-block bg-purple-50 border border-purple-100 text-[#6b4fbb] font-black text-xs px-3.5 py-1.5 rounded-full mt-2">
+                    <div className="inline-block bg-secondary-50 border border-secondary-100 text-[#0D47A1] font-black text-xs px-3.5 py-1.5 rounded-full mt-2">
                       🚀 {reportData[selectedAge].program}
                     </div>
                   </div>

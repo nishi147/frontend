@@ -226,7 +226,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
                 cx="88"
                 cy="88"
                 r={strokeRadius}
-                className="stroke-[#ef4444] fill-none"
+                className="stroke-[#E91E63] fill-none"
                 strokeWidth="12"
                 strokeLinecap="round"
                 initial={{ strokeDashoffset: strokeCircumference }}
@@ -262,7 +262,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
         {/* Diagnostic Pillar Breakdowns (SVG/HTML Bar Charts) */}
         <div className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm">
           <h3 className="font-baloo font-black text-navy-900 text-lg sm:text-xl mb-6 flex items-center gap-2">
-            <Sparkles size={20} className="text-[#6C5CE7]" /> Diagnostic Pillars Evaluation
+            <Sparkles size={20} className="text-[#0D47A1]" /> Diagnostic Pillars Evaluation
           </h3>
 
           <div className="flex flex-col gap-5">
@@ -329,17 +329,17 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
         </div>
 
         {/* Recommended Path Card */}
-        <div className="bg-gradient-to-br from-[#6b4fbb]/10 to-indigo-500/10 rounded-3xl border-2 border-[#6b4fbb]/30 p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 bg-[#6b4fbb] text-white font-baloo font-black text-xs px-4 py-2 rounded-bl-3xl">
+        <div className="bg-gradient-to-br from-[#0D47A1]/10 to-indigo-500/10 rounded-3xl border-2 border-[#0D47A1]/30 p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-[#0D47A1] text-white font-baloo font-black text-xs px-4 py-2 rounded-bl-3xl">
             Top Recommendation
           </div>
 
           <div className="flex-1">
-            <span className="text-xs font-black text-[#6b4fbb] uppercase tracking-widest block mb-2">
+            <span className="text-xs font-black text-[#0D47A1] uppercase tracking-widest block mb-2">
               Learning Pathway
             </span>
             <h3 className="font-baloo font-black text-navy-900 text-2xl mb-1.5 flex items-center gap-2">
-              <BookOpen className="text-[#6b4fbb]" /> {recommendedProgram}
+              <BookOpen className="text-[#0D47A1]" /> {recommendedProgram}
             </h3>
             <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-4">
               🎯 Group: {programDetails.ageGroup} • Duration: {programDetails.duration}
@@ -366,7 +366,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 text-sm text-slate-200">
               {["Live Mentor-Led Session", "AI & Robotics Activities", "Interactive Coding Projects", "Future Skills Learning Path", "Personalized Report Guidance"].map((feat, idx) => (
                 <li key={idx} className="flex gap-2.5 items-center font-bold">
-                  <CheckCircle size={16} className="text-[#EF4444] fill-current text-white shrink-0" />
+                  <CheckCircle size={16} className="text-[#E91E63] fill-current text-white shrink-0" />
                   <span>{feat}</span>
                 </li>
               ))}
@@ -376,7 +376,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
           {/* Pricing & CTA Card */}
           <div className="mt-10 bg-white/5 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <span className="text-xs font-black text-[#EF4444] uppercase tracking-widest block mb-1">
+              <span className="text-xs font-black text-[#E91E63] uppercase tracking-widest block mb-1">
                 LIMITED OFFER OFFERED DIRECTLY
               </span>
               <h4 className="font-baloo font-black text-xl text-white">
@@ -391,7 +391,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
               <button
                 onClick={handleBookDemo}
                 disabled={isProcessing}
-                className="px-6 py-4 rounded-xl bg-[#EF4444] hover:bg-[#DC2626] disabled:opacity-70 text-white font-black text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-lg shadow-[#EF444420] transition-all hover:scale-103 cursor-pointer"
+                className="px-6 py-4 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] disabled:opacity-70 text-white font-black text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2 shadow-lg shadow-[#E91E6320] transition-all hover:scale-103 cursor-pointer"
               >
                 {isProcessing ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

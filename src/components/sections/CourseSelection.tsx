@@ -123,11 +123,12 @@ const CourseSelection = () => {
     <section className="py-8 md:py-16 px-0 md:px-4 w-full max-w-7xl mx-auto overflow-hidden bg-white" id="course-selection">
     <div className="text-left mb-6 md:mb-10 px-4 relative">
 
-        <h2 className="text-3xl md:text-6xl font-black mb-3 tracking-tight drop-shadow-sm">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 via-purple-500 to-pink-500">Choose Your Course</span>
+        <h2 className="text-3xl md:text-6xl font-black mb-3 tracking-tight drop-shadow-sm text-slate-900">
+          Choose Your{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Course</span>
         </h2>
-        <p className="text-base md:text-xl font-bold max-w-2xl leading-relaxed opacity-90 mt-2">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-secondary-500">Exciting and effective programs, curated by experts!</span>
+        <p className="text-base md:text-xl font-bold max-w-2xl leading-relaxed text-slate-500 mt-2">
+          Exciting and effective programs, curated by experts!
         </p>
       </div>
 
