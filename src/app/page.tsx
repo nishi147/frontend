@@ -20,7 +20,6 @@ import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
-import { BlogSection } from '@/components/sections/BlogSection';
 import { SliderWrapper } from '@/components/ui/SliderWrapper';
 import AiPlayground from '@/components/sections/AiPlayground';
 
@@ -1417,8 +1416,6 @@ export default function Home() {
       </section>
 
       <ContactSection />
-
-      <BlogSection />
 
       {/* 8. TEACH AT RUZANN CTA SECTION */}
       <section className="py-12 relative overflow-hidden">
