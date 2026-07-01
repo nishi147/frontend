@@ -847,9 +847,42 @@ export default function Home() {
   const { user } = useAuth();
   const { openIntroModal } = useIntroOffer();
   const { formatPrice } = useCurrency();
+  const { showToast } = useToast();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mentors, setMentors] = useState<any[]>([]);
   const [loadingMentors, setLoadingMentors] = useState(true);
+
+  // Enquiry Modal States
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  const [enquiryForm, setEnquiryForm] = useState({ name: '', email: '', phone: '', subject: 'Demo', message: '' });
+  const [isEnquirySubmitting, setIsEnquirySubmitting] = useState(false);
+
+  const handleEnquirySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsEnquirySubmitting(true);
+    try {
+      await axios.post('/api/leads', {
+        name: enquiryForm.name,
+        email: enquiryForm.email,
+        phone: enquiryForm.phone || 'Not provided',
+        source: 'Popup Enquiry',
+        notes: [{ text: `Topic: ${enquiryForm.subject}\nMessage: ${enquiryForm.message || 'No additional details.'}` }]
+      });
+      trackContact({
+        content_category: 'Popup Enquiry Form',
+        subject: enquiryForm.subject
+      });
+      trackEvent('enquiry_form_submit', { subject: enquiryForm.subject });
+      showToast("Enquiry submitted successfully! Our team will reach out to you soon. 🎉", "success");
+      setEnquiryForm({ name: '', email: '', phone: '', subject: 'Demo', message: '' });
+      setIsEnquiryOpen(false);
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to submit enquiry. Please try again.", "error");
+    } finally {
+      setIsEnquirySubmitting(false);
+    }
+  };
 
 
   useEffect(() => {
@@ -899,70 +932,221 @@ export default function Home() {
       </div>
       */}
 
-      {/* 1. BALANCED HERO SECTION: COSMIC KINDERGARTEN */}
-      <section className="relative flex min-h-[70vh] items-center justify-center p-4 overflow-hidden bg-navy-900">
-        {/* Background Layer: Playful Illustration with Navy Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="/kindergarten_learning_hero_bg_1773385613471.png" 
-            alt="Kindergarten background" 
-            className="w-full h-full object-cover opacity-20 grayscale brightness-50" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-navy-900 via-navy-900/40 to-secondary-600/20" />
-        </div>
+      {/* 1. LMS-STYLE HERO SECTION */}
+      <section className="relative flex min-h-[85vh] lg:min-h-screen items-center justify-center py-16 px-4 md:px-8 overflow-hidden bg-slate-950 text-white">
+        
+        {/* Background Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-40 z-0" />
 
-        {/* Technical Elements: SVG Orbit lines & Stars */}
-        <div className="absolute inset-0 z-1 pointer-events-none opacity-40">
-           <svg className="w-full h-full" viewBox="0 0 1440 800" fill="none" preserveAspectRatio="xMidYMid slice">
-              <circle cx="200" cy="200" r="150" stroke="white" strokeWidth="0.5" strokeDasharray="10 10" />
-              <circle cx="1200" cy="600" r="250" stroke="white" strokeWidth="0.5" strokeDasharray="15 15" />
-              <path d="M-100,400 Q720,-200 1540,400" stroke="white" strokeWidth="1" strokeDasharray="20 20" />
-              {/* Star-like dots */}
-              {[...Array(20)].map((_, i) => (
-                <circle key={i} cx={Math.random() * 1440} cy={Math.random() * 800} r={Math.random() * 2} fill="white" className="animate-pulse" style={{ animationDelay: `${Math.random() * 2}s` }} />
-              ))}
-           </svg>
-        </div>
+        {/* Floating Glowing Blobs */}
+        <div className="absolute top-10 left-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-gradient-to-tr from-cyan-500 to-primary-600 rounded-full mix-blend-screen filter blur-[80px] md:blur-[150px] opacity-35 animate-float z-0" />
+        <div className="absolute bottom-10 right-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-gradient-to-tr from-purple-500 to-secondary-600 rounded-full mix-blend-screen filter blur-[80px] md:blur-[150px] opacity-35 animate-float z-0" style={{ animationDelay: '3s' }} />
 
-        {/* Glowing Blobs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float z-0" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-500 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-float z-0" style={{ animationDelay: '2s' }} />
-
-        <div className="relative z-20 max-w-6xl mx-auto text-center px-4">
-          <div className="inline-flex items-center gap-2 mb-6 px-5 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl text-primary-300 font-black uppercase tracking-widest text-sm shadow-xl">
-            <span className="text-xl animate-spin-slow">✨</span> THE MOST FUN LEARNING EXPERIENCE!
-          </div>
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          <h1 className="text-4xl md:text-7xl font-baloo font-black text-white tracking-tight leading-tight mb-6 drop-shadow-[0_6px_6px_rgba(0,0,0,0.5)]">
-            Where Kids <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">GROW</span> and Glow!
-          </h1>
-          
-          <p className="text-lg md:text-2xl text-gray-300 font-bold mb-8 max-w-3xl mx-auto leading-relaxed">
-            Interactive courses, live classes, and <span className="text-white border-b-4 border-primary-500">magic coding</span> for the next generation of explorers.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/ai-quiz">
-              <Button size="lg" className="text-lg px-10 py-4 rounded-full bg-primary-500 hover:bg-primary-600 shadow-lg font-black">
-                Start Assessment 🚀
-              </Button>
-            </Link>
-            <Button 
-              variant="secondary"
-              size="lg"
-              onClick={openIntroModal}
-              className="text-lg px-10 py-4 rounded-full bg-white/10 backdrop-blur-lg border-2 border-white/20 hover:bg-white/20 font-black text-white"
-            >
-              Claim {formatPrice(99)} Offer ✨
-            </Button>
+          {/* Left Column: Core Value Proposition & CTAs */}
+          <div className="lg:col-span-7 text-left space-y-6 md:space-y-8">
+            
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-xs md:text-sm font-black text-primary-300 shadow-lg shadow-black/10">
+              <span className="flex text-yellow-400 gap-0.5">⭐⭐⭐⭐⭐</span>
+              <span className="text-white/80">Loved by 10,000+ happy parents</span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-4xl md:text-6xl lg:text-[4.25rem] font-baloo font-black text-white leading-[1.1] tracking-tight drop-shadow-sm">
+              Empower Your Child <br />
+              to Create with <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-primary-400 to-purple-400">AI & Coding</span>
+            </h1>
+
+            {/* Sub-headline */}
+            <p className="text-sm md:text-xl text-gray-300 font-bold max-w-2xl leading-relaxed">
+              Interactive video courses, live cohorts, and a fun coding playground. <span className="hidden md:inline">Turn screen time into creative skill-building and set your child up for success.</span>
+            </p>
+
+            {/* Key bullet benefits */}
+            <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-bold text-gray-200">
+              <div className="flex items-center gap-2">
+                <CheckCircle size={18} className="text-cyan-400 flex-shrink-0" />
+                <span>Gamified Missions & Rewards</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle size={18} className="text-cyan-400 flex-shrink-0" />
+                <span>Live Support from Expert Mentors</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle size={18} className="text-cyan-400 flex-shrink-0" />
+                <span>Real Python, JS & Scratch Projects</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle size={18} className="text-cyan-400 flex-shrink-0" />
+                <span>No Credit Card Required to Start</span>
+              </div>
+            </div>
+
+            {/* Dual CTAs */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <Link href="/ai-quiz" className="flex-1 sm:flex-initial">
+                <button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 font-bold text-white shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                  Start Assessment 🚀
+                </button>
+              </Link>
+              <button 
+                onClick={() => setIsEnquiryOpen(true)}
+                className="w-full sm:w-auto text-base md:text-lg px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/20 font-bold text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                Book Free Demo 💬
+              </button>
+            </div>
+
+            {/* Secondary offer quicklink */}
+            <div className="text-sm font-semibold text-gray-400 text-left">
+              Want to start immediately?{" "}
+              <button 
+                onClick={openIntroModal}
+                className="text-primary-400 hover:text-primary-300 underline font-bold cursor-pointer transition-colors bg-transparent border-none p-0 outline-none"
+              >
+                Claim the {formatPrice(99)} offer here ✨
+              </button>
+            </div>
+
+            {/* Quick Stats Grid */}
+            <div className="hidden md:flex pt-6 border-t border-white/10 flex-wrap gap-8 md:gap-12">
+              <div>
+                <div className="text-3xl font-black text-white">10K+</div>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Students Enrolled</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-cyan-400">98.4%</div>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Completion Rate</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-purple-400">50+</div>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">AI & Code Sandbox Quests</div>
+              </div>
+            </div>
+
           </div>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-             <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-tighter"><span className="text-xl">🤖</span> Gen AI</div>
-             <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-tighter"><span className="text-xl">💻</span> Web Dev</div>
-             <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-tighter"><span className="text-xl">⚡</span> Python</div>
-             <div className="flex items-center gap-2 text-white font-black text-xs uppercase tracking-tighter"><span className="text-xl">🎮</span> Game Dev</div>
+          {/* Right Column: Premium LMS Dashboard Mockup */}
+          <div className="flex lg:col-span-5 relative w-full justify-center items-center mt-12 lg:mt-0 px-4 sm:px-0">
+            
+            {/* Background glowing rings/orbits */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div className="w-[300px] h-[300px] md:w-[450px] md:h-[450px] rounded-full border border-white/5 animate-spin-slow" />
+              <div className="absolute w-[200px] h-[200px] md:w-[350px] md:h-[350px] rounded-full border border-dashed border-white/5 animate-spin-slow" style={{ animationDirection: 'reverse' }} />
+            </div>
+
+            {/* Main Dashboard Preview Card */}
+            <div className="relative w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-[2rem] p-6 md:p-8 shadow-2xl backdrop-blur-xl hover:border-slate-700/80 transition-all duration-500 group">
+              
+              {/* Inner header */}
+              <div className="flex items-center justify-between pb-5 border-b border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-xl font-bold shadow-md">
+                    👦🏻
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm text-white">Alex's Portal</h3>
+                    <p className="text-[10px] text-gray-400 font-bold">Lvl 4 Junior AI Creator</p>
+                  </div>
+                </div>
+                <span className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wide uppercase">
+                  Premium Student
+                </span>
+              </div>
+
+              {/* Learning stats row */}
+              <div className="grid grid-cols-2 gap-4 py-5 border-b border-slate-800">
+                <div className="bg-slate-950/50 border border-slate-800/80 p-3 rounded-2xl flex items-center gap-3">
+                  <div className="text-2xl">🔥</div>
+                  <div>
+                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black">Streak</p>
+                    <p className="font-black text-sm text-white">12 Days</p>
+                  </div>
+                </div>
+                <div className="bg-slate-950/50 border border-slate-800/80 p-3 rounded-2xl flex items-center gap-3">
+                  <div className="text-2xl">🏆</div>
+                  <div>
+                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black">Quests</p>
+                    <p className="font-black text-sm text-white">34 Done</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Active course widget */}
+              <div className="py-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Active Course</span>
+                  <span className="text-xs font-bold text-primary-400 hover:underline cursor-pointer flex items-center gap-1">
+                    Continue <ArrowRight size={12} />
+                  </span>
+                </div>
+
+                <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <h4 className="font-black text-sm text-white group-hover:text-cyan-400 transition-colors">Python Game Creator 🚀</h4>
+                      <p className="text-[11px] text-gray-400 font-semibold">Module 3: Visual Animations</p>
+                    </div>
+                    <span className="bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-2 py-0.5 rounded text-[9px] font-black uppercase">
+                      Class 8/12
+                    </span>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-[10px] font-black text-gray-400">
+                      <span>Course Progress</span>
+                      <span className="text-white">66%</span>
+                    </div>
+                    <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-cyan-400 to-primary-500 rounded-full" style={{ width: '66%' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Upcoming live session */}
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="relative flex h-3.5 w-3.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-500"></span>
+                  </span>
+                  <div>
+                    <h5 className="font-black text-[11px] text-white">Live AI Class Starting Soon</h5>
+                    <p className="text-[10px] text-gray-400 font-semibold">with Mentor Ruzann</p>
+                  </div>
+                </div>
+                <Link href="/ai-quiz">
+                  <button className="bg-red-500 hover:bg-red-600 text-white font-black text-xs px-4 py-2 rounded-xl shadow-lg shadow-red-500/20 active:scale-95 transition-all">
+                    Join Room
+                  </button>
+                </Link>
+              </div>
+
+            </div>
+
+            {/* Floating visual highlights */}
+            <div className="hidden sm:flex absolute -top-6 -right-6 bg-slate-900 border border-slate-800 px-4 py-2 rounded-2xl items-center gap-2 shadow-xl backdrop-blur-xl animate-float" style={{ animationDelay: '1s' }}>
+              <span className="text-xl">🤖</span>
+              <div className="text-left leading-none">
+                <span className="text-[8px] text-gray-400 uppercase tracking-widest font-black">Interactive</span>
+                <p className="text-xs font-black text-white">AI Sandbox</p>
+              </div>
+            </div>
+
+            <div className="hidden sm:flex absolute -bottom-6 -left-6 bg-slate-900 border border-slate-800 px-4 py-2 rounded-2xl items-center gap-2 shadow-xl backdrop-blur-xl animate-float" style={{ animationDelay: '2.5s' }}>
+              <span className="text-xl">🏆</span>
+              <div className="text-left leading-none">
+                <span className="text-[8px] text-gray-400 uppercase tracking-widest font-black">Award</span>
+                <p className="text-xs font-black text-white">Genius Badge</p>
+              </div>
+            </div>
+
           </div>
+
         </div>
       </section>
 
@@ -1483,6 +1667,104 @@ export default function Home() {
 
       <Footer />
       <ScrollToTop />
+
+      {/* Popup Enquiry Modal */}
+      {isEnquiryOpen && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl p-6 md:p-8 relative animate-in zoom-in-95 duration-250">
+            <button 
+              onClick={() => setIsEnquiryOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-xl p-1"
+            >
+              ✕
+            </button>
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-primary-500/10 text-primary-400 border border-primary-500/20 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
+                💬
+              </div>
+              <h3 className="text-2xl font-black text-white">Book Free Demo / Enquire</h3>
+              <p className="text-sm font-bold text-gray-400 mt-1">Get in touch with our learning experts.</p>
+            </div>
+            
+            <form onSubmit={handleEnquirySubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Your Name</label>
+                <input 
+                  required
+                  type="text"
+                  placeholder="Superstar Parent/Student Name"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-850 bg-slate-950 focus:border-primary-500 focus:outline-none transition-all font-semibold text-white text-sm placeholder:text-gray-600"
+                  value={enquiryForm.name}
+                  onChange={(e) => setEnquiryForm({...enquiryForm, name: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                <input 
+                  required
+                  type="email"
+                  placeholder="parent@example.com"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-850 bg-slate-950 focus:border-primary-500 focus:outline-none transition-all font-semibold text-white text-sm placeholder:text-gray-600"
+                  value={enquiryForm.email}
+                  onChange={(e) => setEnquiryForm({...enquiryForm, email: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
+                <input 
+                  required
+                  type="tel"
+                  placeholder="e.g. +91 98765 43210"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-850 bg-slate-950 focus:border-primary-500 focus:outline-none transition-all font-semibold text-white text-sm placeholder:text-gray-600"
+                  value={enquiryForm.phone}
+                  onChange={(e) => setEnquiryForm({...enquiryForm, phone: e.target.value})}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">What's on your mind?</label>
+                <div className="relative">
+                  <select 
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-slate-850 bg-slate-950 focus:border-primary-500 focus:outline-none transition-all font-semibold text-white text-sm appearance-none pr-10"
+                    value={enquiryForm.subject}
+                    onChange={(e) => setEnquiryForm({...enquiryForm, subject: e.target.value})}
+                  >
+                    <option value="Demo">Book Free Demo Session 🎁</option>
+                    <option value="Courses">Course Enquiry 📚</option>
+                    <option value="Pricing">Fee Details & Offers 💰</option>
+                    <option value="General">Other General Enquiry 👋</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <ChevronDown size={14} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Additional Notes (Optional)</label>
+                <textarea 
+                  rows={2}
+                  placeholder="Tell us a bit about your child..."
+                  className="w-full px-4 py-3 rounded-xl border border-slate-850 bg-slate-950 focus:border-primary-500 focus:outline-none transition-all font-semibold text-white text-sm resize-none placeholder:text-gray-600"
+                  value={enquiryForm.message}
+                  onChange={(e) => setEnquiryForm({...enquiryForm, message: e.target.value})}
+                />
+              </div>
+
+              <button 
+                type="submit"
+                disabled={isEnquirySubmitting}
+                className="w-full py-4 rounded-xl font-black text-base bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white shadow-xl shadow-primary-500/20 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+              >
+                {isEnquirySubmitting ? "Sending..." : "Submit Enquiry 🚀"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
