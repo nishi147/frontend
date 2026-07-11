@@ -140,7 +140,7 @@ export default function AiPlayground() {
   const optionLetters = ["A", "B", "C", "D"];
 
   return (
-    <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-[#FCE4EC]/20 via-[#E8EAF6]/30 to-[#E0F7FA]/20 border-t border-b border-slate-100 overflow-hidden relative" id="ai-playground">
+    <section className="py-10 md:py-16 px-4 bg-gradient-to-b from-[#FCE4EC]/20 via-[#E8EAF6]/30 to-[#E0F7FA]/20 border-t border-b border-slate-100 overflow-hidden relative" id="ai-playground">
       
       {/* Background Floating Decorative Elements */}
       <div className="absolute top-12 left-[10%] opacity-15 animate-float pointer-events-none hidden md:block">
@@ -157,384 +157,388 @@ export default function AiPlayground() {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        
-        {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00ACC1]/10 text-[#00ACC1] rounded-full text-xs font-black uppercase tracking-widest shadow-sm">
-            <span>🎮</span> Play & Learn
-          </div>
-          <h2 className="font-baloo text-4xl md:text-6xl font-black text-slate-900 leading-tight mt-5">
-            Interactive <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E91E63] via-[#0D47A1] to-[#00ACC1] filter drop-shadow-sm">AI Playground</span>
-          </h2>
-          <p className="text-slate-500 font-bold mt-4 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Test your knowledge, play our creative guessing game, or discover mind-blowing artificial intelligence facts!
-          </p>
-        </div>
-
-        {/* Navigation Tabs Container */}
-        <div className="flex justify-center p-2 bg-white/80 backdrop-blur-md border-2 border-slate-100 rounded-3xl sm:rounded-full max-w-lg mx-auto mb-10 md:mb-12 shadow-lg shadow-blue-900/5">
-          <button
-            onClick={() => setActiveMode('quiz')}
-            className={`flex-1 py-3.5 px-5 rounded-2xl sm:rounded-full text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              activeMode === 'quiz'
-                ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
-                : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
-            }`}
-          >
-            <Brain size={16} /> Trivia Quiz
-          </button>
-          <button
-            onClick={() => setActiveMode('game')}
-            className={`flex-1 py-3.5 px-5 rounded-2xl sm:rounded-full text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              activeMode === 'game'
-                ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
-                : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
-            }`}
-          >
-            <Gamepad2 size={16} /> AI or Human?
-          </button>
-          <button
-            onClick={() => setActiveMode('facts')}
-            className={`flex-1 py-3.5 px-5 rounded-2xl sm:rounded-full text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              activeMode === 'facts'
-                ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
-                : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
-            }`}
-          >
-            <Lightbulb size={16} /> Fun Facts
-          </button>
-        </div>
-
-        {/* Structured Glassmorphic Content Box */}
-        <div className="max-w-3xl mx-auto min-h-[420px] bg-white rounded-[2.5rem] p-6 sm:p-10 border-4 border-slate-50 shadow-2xl shadow-slate-200/50 relative overflow-hidden flex flex-col justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Accent corners */}
-          <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-[#E91E63]/10 to-transparent pointer-events-none rounded-tl-[2.5rem]" />
-          <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-[#00ACC1]/10 to-transparent pointer-events-none rounded-br-[2.5rem]" />
+          {/* Left Column: Header, Description & Navigation Tabs */}
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00ACC1]/10 text-[#00ACC1] rounded-full text-xs font-black uppercase tracking-widest shadow-sm">
+              <span>🎮</span> Play & Learn
+            </div>
+            <h2 className="font-baloo text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight mt-5">
+              Interactive <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E91E63] via-[#0D47A1] to-[#00ACC1] filter drop-shadow-sm">AI Playground</span>
+            </h2>
+            <p className="text-slate-500 font-bold mt-4 text-sm sm:text-base max-w-xl leading-relaxed">
+              Test your knowledge, play our creative guessing game, or discover mind-blowing artificial intelligence facts!
+            </p>
 
-          <AnimatePresence mode="wait">
-            
-            {/* MODE 1: TRIVIA QUIZ */}
-            {activeMode === 'quiz' && (
-              <motion.div
-                key="quiz"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="w-full flex-1 flex flex-col justify-between min-h-[340px]"
+            {/* Navigation Tabs Container */}
+            <div className="w-full flex flex-row lg:flex-col justify-center p-1.5 bg-white/80 backdrop-blur-md border-2 border-slate-100 rounded-2xl lg:rounded-3xl max-w-lg lg:max-w-none mt-6 lg:mt-8 gap-1.5 shadow-lg shadow-blue-900/5">
+              <button
+                onClick={() => setActiveMode('quiz')}
+                className={`flex-1 py-2.5 lg:py-3 px-1.5 sm:px-4 rounded-xl lg:rounded-2xl text-[10px] sm:text-xs lg:text-sm font-black transition-all flex items-center justify-center lg:justify-start gap-1 lg:gap-2.5 cursor-pointer ${
+                  activeMode === 'quiz'
+                    ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
+                    : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
+                }`}
               >
-                {!quizFinished ? (
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Header with structured badges */}
-                      <div className="flex justify-between items-center mb-8">
-                        <span className="px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-xs font-black uppercase tracking-wider">
-                          Question {currentQuizIdx + 1} of {quizQuestions.length}
-                        </span>
-                        <div className="flex items-center gap-2 bg-[#0D47A1]/10 text-[#0D47A1] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
-                          <span>🏆 Score:</span>
-                          <span className="font-extrabold">{quizScore}</span>
-                        </div>
-                      </div>
-                      
-                      <h3 className="font-baloo font-black text-slate-900 text-xl sm:text-2xl mb-8 leading-snug">
-                        {quizQuestions[currentQuizIdx].question}
-                      </h3>
+                <Brain size={16} /> Trivia Quiz
+              </button>
+              <button
+                onClick={() => setActiveMode('game')}
+                className={`flex-1 py-2.5 lg:py-3 px-1.5 sm:px-4 rounded-xl lg:rounded-2xl text-[10px] sm:text-xs lg:text-sm font-black transition-all flex items-center justify-center lg:justify-start gap-1 lg:gap-2.5 cursor-pointer ${
+                  activeMode === 'game'
+                    ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
+                    : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
+                }`}
+              >
+                <Gamepad2 size={16} /> AI or Human?
+              </button>
+              <button
+                onClick={() => setActiveMode('facts')}
+                className={`flex-1 py-2.5 lg:py-3 px-1.5 sm:px-4 rounded-xl lg:rounded-2xl text-[10px] sm:text-xs lg:text-sm font-black transition-all flex items-center justify-center lg:justify-start gap-1 lg:gap-2.5 cursor-pointer ${
+                  activeMode === 'facts'
+                    ? 'bg-[#0D47A1] text-white shadow-md shadow-blue-900/20'
+                    : 'text-slate-500 hover:text-[#0D47A1] hover:bg-slate-50'
+                }`}
+              >
+                <Lightbulb size={16} /> Fun Facts
+              </button>
+            </div>
+          </div>
 
-                      {/* Options Grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {quizQuestions[currentQuizIdx].options.map((option, idx) => {
-                          const isSelected = selectedOption === idx;
-                          const isCorrect = idx === quizQuestions[currentQuizIdx].answerIdx;
+          {/* Right Column: Structured Glassmorphic Content Box */}
+          <div className="lg:col-span-7 w-full">
+            <div className="w-full min-h-[300px] md:min-h-[420px] bg-white rounded-[2rem] md:rounded-[2.5rem] p-4 sm:p-8 border-4 border-slate-50 shadow-2xl shadow-slate-200/50 relative overflow-hidden flex flex-col justify-between">
+              
+              {/* Accent corners */}
+              <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-[#E91E63]/10 to-transparent pointer-events-none rounded-tl-[2rem] md:rounded-tl-[2.5rem]" />
+              <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-[#00ACC1]/10 to-transparent pointer-events-none rounded-br-[2rem] md:rounded-br-[2.5rem]" />
+
+              <AnimatePresence mode="wait">
+                
+                {/* MODE 1: TRIVIA QUIZ */}
+                {activeMode === 'quiz' && (
+                  <motion.div
+                    key="quiz"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full flex-1 flex flex-col justify-between min-h-[240px] md:min-h-[340px]"
+                  >
+                    {!quizFinished ? (
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          {/* Header with structured badges */}
+                          <div className="flex justify-between items-center mb-4 md:mb-8">
+                            <span className="px-3 py-1 md:px-4 md:py-1.5 bg-slate-100 text-slate-600 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider">
+                              Question {currentQuizIdx + 1} of {quizQuestions.length}
+                            </span>
+                            <div className="flex items-center gap-1.5 md:gap-2 bg-[#0D47A1]/10 text-[#0D47A1] px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider">
+                              <span>🏆 Score:</span>
+                              <span className="font-extrabold">{quizScore}</span>
+                            </div>
+                          </div>
                           
-                          let cardBg = "bg-slate-50 border-slate-200/80 hover:border-[#0D47A1]/30 hover:bg-[#0D47A1]/5 text-slate-800";
-                          let badgeBg = "bg-blue-50 text-[#0D47A1] group-hover:bg-[#0D47A1] group-hover:text-white";
-                          
-                          if (selectedOption !== null) {
-                            if (isSelected) {
-                              if (isCorrect) {
-                                cardBg = "bg-emerald-500/10 border-emerald-500 text-emerald-900";
-                                badgeBg = "bg-emerald-500 text-white";
-                              } else {
-                                cardBg = "bg-[#E91E63]/10 border-[#E91E63] text-rose-900";
-                                badgeBg = "bg-[#E91E63] text-white";
+                          <h3 className="font-baloo font-black text-slate-900 text-lg md:text-2xl mb-4 md:mb-8 leading-snug">
+                            {quizQuestions[currentQuizIdx].question}
+                          </h3>
+
+                          {/* Options Grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 md:gap-4">
+                            {quizQuestions[currentQuizIdx].options.map((option, idx) => {
+                              const isSelected = selectedOption === idx;
+                              const isCorrect = idx === quizQuestions[currentQuizIdx].answerIdx;
+                              
+                              let cardBg = "bg-slate-50 border-slate-200/80 hover:border-[#0D47A1]/30 hover:bg-[#0D47A1]/5 text-slate-800";
+                              let badgeBg = "bg-blue-50 text-[#0D47A1] group-hover:bg-[#0D47A1] group-hover:text-white";
+                              
+                              if (selectedOption !== null) {
+                                if (isSelected) {
+                                  if (isCorrect) {
+                                    cardBg = "bg-emerald-500/10 border-emerald-500 text-emerald-900";
+                                    badgeBg = "bg-emerald-500 text-white";
+                                  } else {
+                                    cardBg = "bg-[#E91E63]/10 border-[#E91E63] text-rose-900";
+                                    badgeBg = "bg-[#E91E63] text-white";
+                                  }
+                                } else if (isCorrect) {
+                                  cardBg = "bg-emerald-500/10 border-emerald-400 text-emerald-900";
+                                  badgeBg = "bg-emerald-500 text-white";
+                                } else {
+                                  cardBg = "opacity-40 border-slate-100 bg-white text-slate-400";
+                                  badgeBg = "bg-slate-100 text-slate-400";
+                                }
                               }
-                            } else if (isCorrect) {
-                              cardBg = "bg-emerald-500/10 border-emerald-400 text-emerald-900";
-                              badgeBg = "bg-emerald-500 text-white";
-                            } else {
-                              cardBg = "opacity-40 border-slate-100 bg-white text-slate-400";
-                              badgeBg = "bg-slate-100 text-slate-400";
-                            }
-                          }
 
-                          return (
+                              return (
+                                <button
+                                  key={idx}
+                                  disabled={selectedOption !== null}
+                                  onClick={() => {
+                                    setSelectedOption(idx);
+                                    if (isCorrect) {
+                                      setQuizScore(prev => prev + 1);
+                                    }
+                                  }}
+                                  className={`p-3.5 md:p-5 rounded-xl md:rounded-2xl border-2 font-bold text-xs md:text-base text-left transition-all flex items-center justify-between cursor-pointer group hover:-translate-y-0.5 ${cardBg}`}
+                                >
+                                  <div className="flex items-center gap-2 md:gap-3">
+                                    <span className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 transition-colors ${badgeBg}`}>
+                                      {optionLetters[idx]}
+                                    </span>
+                                    <span>{option}</span>
+                                  </div>
+                                  {selectedOption !== null && isCorrect && (
+                                    <CheckCircle2 size={18} className="text-emerald-600 shrink-0 ml-2" />
+                                  )}
+                                  {selectedOption !== null && isSelected && !isCorrect && (
+                                    <XCircle size={18} className="text-[#E91E63] shrink-0 ml-2" />
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Explanations Area */}
+                        {selectedOption !== null && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 pt-4 md:mt-8 md:pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                          >
+                            <div className="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-500 leading-relaxed max-w-xl">
+                              <strong className="text-slate-800 block mb-1">Explanation: </strong>
+                              {quizQuestions[currentQuizIdx].explanation}
+                            </div>
+                            
                             <button
-                              key={idx}
-                              disabled={selectedOption !== null}
                               onClick={() => {
-                                setSelectedOption(idx);
-                                if (isCorrect) {
-                                  setQuizScore(prev => prev + 1);
+                                if (currentQuizIdx + 1 < quizQuestions.length) {
+                                  setCurrentQuizIdx(prev => prev + 1);
+                                  setSelectedOption(null);
+                                } else {
+                                  setQuizFinished(true);
                                 }
                               }}
-                              className={`p-5 rounded-2xl border-2 font-bold text-sm sm:text-base text-left transition-all flex items-center justify-between cursor-pointer group hover:-translate-y-0.5 ${cardBg}`}
+                              className="px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-[10px] md:text-xs uppercase tracking-wider flex items-center gap-1 transition-colors self-end sm:self-auto cursor-pointer shadow-md shadow-[#E91E6320]"
                             >
-                              <div className="flex items-center gap-3">
-                                <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 transition-colors ${badgeBg}`}>
-                                  {optionLetters[idx]}
-                                </span>
-                                <span>{option}</span>
-                              </div>
-                              {selectedOption !== null && isCorrect && (
-                                <CheckCircle2 size={20} className="text-emerald-600 shrink-0 ml-2" />
-                              )}
-                              {selectedOption !== null && isSelected && !isCorrect && (
-                                <XCircle size={20} className="text-[#E91E63] shrink-0 ml-2" />
-                              )}
+                              Next <ChevronRight size={14} />
                             </button>
-                          );
-                        })}
+                          </motion.div>
+                        )}
                       </div>
-                    </div>
-
-                    {/* Explanations Area */}
-                    {selectedOption !== null && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                      >
-                        <div className="text-xs sm:text-sm font-semibold text-slate-500 leading-relaxed max-w-xl">
-                          <strong className="text-slate-800 block mb-1">Explanation: </strong>
-                          {quizQuestions[currentQuizIdx].explanation}
+                    ) : (
+                      // Quiz Finish Card
+                      <div className="flex-1 flex flex-col items-center justify-center text-center py-6 md:py-8">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center text-emerald-500 mb-4 md:mb-6 animate-bounce">
+                          <Trophy className="w-8 h-8 md:w-9 md:h-9" />
                         </div>
-                        
-                        <button
-                          onClick={() => {
-                            if (currentQuizIdx + 1 < quizQuestions.length) {
-                              setCurrentQuizIdx(prev => prev + 1);
-                              setSelectedOption(null);
-                            } else {
-                              setQuizFinished(true);
-                            }
-                          }}
-                          className="px-6 py-3 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-xs uppercase tracking-wider flex items-center gap-1 transition-colors self-end sm:self-auto cursor-pointer shadow-md shadow-[#E91E6320]"
-                        >
-                          Next <ChevronRight size={16} />
-                        </button>
-                      </motion.div>
-                    )}
-                  </div>
-                ) : (
-                  // Quiz Finish Card
-                  <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                    <div className="w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center text-emerald-500 mb-6 animate-bounce">
-                      <Trophy size={36} />
-                    </div>
-                    <h3 className="font-baloo font-black text-slate-950 text-3xl mb-3">
-                      Trivia Finished!
-                    </h3>
-                    <p className="text-slate-500 font-bold text-sm sm:text-base mb-8 max-w-sm">
-                      You scored <span className="text-[#0D47A1] font-black">{quizScore}</span> out of <span className="font-black">{quizQuestions.length}</span> correct answers!
-                    </p>
-                    <button
-                      onClick={resetQuiz}
-                      className="px-8 py-4 rounded-xl border-2 border-[#0D47A1] text-[#0D47A1] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-blue-50/20 transition-all cursor-pointer"
-                    >
-                      <RefreshCw size={16} /> Retry Quiz
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            )}
-
-            {/* MODE 2: GAME (AI VS HUMAN) */}
-            {activeMode === 'game' && (
-              <motion.div
-                key="game"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="w-full flex-1 flex flex-col justify-between min-h-[340px]"
-              >
-                {!gameFinished ? (
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Header */}
-                      <div className="flex justify-between items-center mb-8">
-                        <span className="px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-xs font-black uppercase tracking-wider">
-                          Work {currentGameIdx + 1} of {guessItems.length}
-                        </span>
-                        <div className="flex items-center gap-2 bg-[#0D47A1]/10 text-[#0D47A1] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
-                          <span>🏆 Score:</span>
-                          <span className="font-extrabold">{gameScore}</span>
-                        </div>
-                      </div>
-
-                      {/* Content Prompt box designed like terminal / code display */}
-                      <div className="bg-gradient-to-tr from-slate-50 to-slate-100/50 border-2 border-slate-200/50 p-6 rounded-3xl mb-8 relative overflow-hidden shadow-inner">
-                        <div className="absolute top-3 right-4 px-3 py-1 bg-[#00ACC1]/15 text-[#00ACC1] rounded-full text-[9px] font-black uppercase tracking-widest">
-                          {guessItems[currentGameIdx].type}
-                        </div>
-                        <p className="font-mono text-sm sm:text-base text-slate-800 font-bold italic leading-relaxed pt-3">
-                          {guessItems[currentGameIdx].prompt}
+                        <h3 className="font-baloo font-black text-slate-950 text-2xl md:text-3xl mb-2 md:mb-3">
+                          Trivia Finished!
+                        </h3>
+                        <p className="text-slate-500 font-bold text-xs md:text-base mb-6 md:mb-8 max-w-sm">
+                          You scored <span className="text-[#0D47A1] font-black">{quizScore}</span> out of <span className="font-black">{quizQuestions.length}</span> correct answers!
                         </p>
-                      </div>
-
-                      <h4 className="text-slate-700 font-black text-xs uppercase tracking-widest text-center mb-6">
-                        Who created this?
-                      </h4>
-
-                      {/* Game CTA choices with cards */}
-                      <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
                         <button
-                          disabled={guessAnswered !== null}
-                          onClick={() => {
-                            const isCorrect = guessItems[currentGameIdx].isAi;
-                            setGuessAnswered(true);
-                            setIsCorrectGuess(isCorrect);
-                            if (isCorrect) setGameScore(prev => prev + 1);
-                          }}
-                          className={`flex-1 px-8 py-5 border-2 rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 ${
-                            guessAnswered !== null
-                              ? guessItems[currentGameIdx].isAi
-                                ? "bg-emerald-500/10 border-emerald-500 text-emerald-900"
-                                : guessAnswered && !isCorrectGuess
-                                  ? "bg-[#E91E63]/10 border-[#E91E63] text-rose-900"
-                                  : "opacity-40 border-slate-100 bg-slate-50 text-slate-400"
-                              : "border-slate-200 hover:border-[#0D47A1] hover:bg-blue-50/10 text-slate-700 bg-slate-50/50"
-                          }`}
+                          onClick={resetQuiz}
+                          className="px-6 py-3 md:px-8 md:py-4 rounded-xl border-2 border-[#0D47A1] text-[#0D47A1] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-blue-50/20 transition-all cursor-pointer"
                         >
-                          <Bot size={18} /> 🤖 AI-Generated
-                        </button>
-
-                        <button
-                          disabled={guessAnswered !== null}
-                          onClick={() => {
-                            const isCorrect = !guessItems[currentGameIdx].isAi;
-                            setGuessAnswered(true);
-                            setIsCorrectGuess(isCorrect);
-                            if (isCorrect) setGameScore(prev => prev + 1);
-                          }}
-                          className={`flex-1 px-8 py-5 border-2 rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 ${
-                            guessAnswered !== null
-                              ? !guessItems[currentGameIdx].isAi
-                                ? "bg-emerald-500/10 border-emerald-500 text-emerald-900"
-                                : guessAnswered && !isCorrectGuess
-                                  ? "bg-[#E91E63]/10 border-[#E91E63] text-rose-900"
-                                  : "opacity-40 border-slate-100 bg-slate-50 text-slate-400"
-                              : "border-slate-200 hover:border-[#0D47A1] hover:bg-blue-50/10 text-slate-700 bg-slate-50/50"
-                          }`}
-                        >
-                          <User size={18} /> 🎨 Human Creator
+                          <RefreshCw size={14} /> Retry Quiz
                         </button>
                       </div>
-                    </div>
-
-                    {/* Explanations */}
-                    {guessAnswered !== null && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                      >
-                        <div className="text-xs sm:text-sm font-semibold text-slate-500 leading-relaxed max-w-xl">
-                          <strong className={`block mb-1 uppercase tracking-wide text-xs ${isCorrectGuess ? "text-emerald-600" : "text-[#E91E63]"}`}>
-                            {isCorrectGuess ? "🎉 Correct! " : "❌ Incorrect! "}
-                          </strong>
-                          {guessItems[currentGameIdx].explanation}
-                        </div>
-                        
-                        <button
-                          onClick={() => {
-                            if (currentGameIdx + 1 < guessItems.length) {
-                              setCurrentGameIdx(prev => prev + 1);
-                              setGuessAnswered(null);
-                              setIsCorrectGuess(null);
-                            } else {
-                              setGameFinished(true);
-                            }
-                          }}
-                          className="px-6 py-3 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-xs uppercase tracking-wider flex items-center gap-1 transition-colors self-end sm:self-auto cursor-pointer shadow-md shadow-[#E91E6310]"
-                        >
-                          Next <ChevronRight size={16} />
-                        </button>
-                      </motion.div>
                     )}
-                  </div>
-                ) : (
-                  // Game Finish Card
-                  <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                    <div className="w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center text-emerald-500 mb-6 animate-bounce">
-                      <Sparkles size={36} />
-                    </div>
-                    <h3 className="font-baloo font-black text-slate-950 text-3xl mb-3">
-                      Guesses Complete!
-                    </h3>
-                    <p className="text-slate-500 font-bold text-sm sm:text-base mb-8 max-w-sm">
-                      You guessed <span className="text-[#0D47A1] font-black">{gameScore}</span> out of <span className="font-black">{guessItems.length}</span> creations correctly!
-                    </p>
-                    <button
-                      onClick={resetGame}
-                      className="px-8 py-4 rounded-xl border-2 border-[#0D47A1] text-[#0D47A1] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-blue-50/20 transition-all cursor-pointer"
-                    >
-                      <RefreshCw size={16} /> Play Again
-                    </button>
-                  </div>
+                  </motion.div>
                 )}
-              </motion.div>
-            )}
 
-            {/* MODE 3: FACTS */}
-            {activeMode === 'facts' && (
-              <motion.div
-                key="facts"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="w-full flex-1 flex flex-col justify-between min-h-[340px]"
-              >
-                <div className="flex-1 flex flex-col justify-between">
-                  <div>
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-8 text-xs font-black text-slate-400 uppercase tracking-wider">
-                      <span>Fact explorer</span>
-                      <span>Did you know?</span>
-                    </div>
+                {/* MODE 2: GAME (AI VS HUMAN) */}
+                {activeMode === 'game' && (
+                  <motion.div
+                    key="game"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full flex-1 flex flex-col justify-between min-h-[240px] md:min-h-[340px]"
+                  >
+                    {!gameFinished ? (
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          {/* Header */}
+                          <div className="flex justify-between items-center mb-4 md:mb-8">
+                            <span className="px-3 py-1 md:px-4 md:py-1.5 bg-slate-100 text-slate-600 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider">
+                              Work {currentGameIdx + 1} of {guessItems.length}
+                            </span>
+                            <div className="flex items-center gap-1.5 md:gap-2 bg-[#0D47A1]/10 text-[#0D47A1] px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-wider">
+                              <span>🏆 Score:</span>
+                              <span className="font-extrabold">{gameScore}</span>
+                            </div>
+                          </div>
 
-                    <div className="flex flex-col items-center text-center">
-                      <div className="text-7xl mb-6 transform hover:scale-110 transition-transform duration-300 select-none filter drop-shadow-md">
-                        {facts[currentFactIdx].emoji}
+                          {/* Content Prompt box designed like terminal / code display */}
+                          <div className="bg-gradient-to-tr from-slate-50 to-slate-100/50 border-2 border-slate-200/50 p-4 md:p-6 rounded-2xl md:rounded-3xl mb-4 md:mb-8 relative overflow-hidden shadow-inner">
+                            <div className="absolute top-2.5 right-3 md:top-3 md:right-4 px-2 md:px-3 py-0.5 md:py-1 bg-[#00ACC1]/15 text-[#00ACC1] rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest">
+                              {guessItems[currentGameIdx].type}
+                            </div>
+                            <p className="font-mono text-xs md:text-base text-slate-800 font-bold italic leading-relaxed pt-2 md:pt-3">
+                              {guessItems[currentGameIdx].prompt}
+                            </p>
+                          </div>
+
+                          <h4 className="text-slate-700 font-black text-[10px] md:text-xs uppercase tracking-widest text-center mb-3 md:mb-6">
+                            Who created this?
+                          </h4>
+
+                          {/* Game CTA choices with cards */}
+                          <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 max-w-lg mx-auto">
+                            <button
+                              disabled={guessAnswered !== null}
+                              onClick={() => {
+                                const isCorrect = guessItems[currentGameIdx].isAi;
+                                setGuessAnswered(true);
+                                setIsCorrectGuess(isCorrect);
+                                if (isCorrect) setGameScore(prev => prev + 1);
+                              }}
+                              className={`flex-1 px-4 py-3 md:px-8 md:py-5 border-2 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 ${
+                                guessAnswered !== null
+                                  ? guessItems[currentGameIdx].isAi
+                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-900"
+                                    : guessAnswered && !isCorrectGuess
+                                      ? "bg-[#E91E63]/10 border-[#E91E63] text-rose-900"
+                                      : "opacity-40 border-slate-100 bg-slate-50 text-slate-400"
+                                  : "border-slate-200 hover:border-[#0D47A1] hover:bg-blue-50/10 text-slate-700 bg-slate-50/50"
+                              }`}
+                            >
+                              <Bot className="w-4 h-4 md:w-[18px] md:h-[18px]" /> 🤖 AI-Generated
+                            </button>
+
+                            <button
+                              disabled={guessAnswered !== null}
+                              onClick={() => {
+                                const isCorrect = !guessItems[currentGameIdx].isAi;
+                                setGuessAnswered(true);
+                                setIsCorrectGuess(isCorrect);
+                                if (isCorrect) setGameScore(prev => prev + 1);
+                              }}
+                              className={`flex-1 px-4 py-3 md:px-8 md:py-5 border-2 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 ${
+                                guessAnswered !== null
+                                  ? !guessItems[currentGameIdx].isAi
+                                    ? "bg-emerald-500/10 border-emerald-500 text-emerald-900"
+                                    : guessAnswered && !isCorrectGuess
+                                      ? "bg-[#E91E63]/10 border-[#E91E63] text-rose-900"
+                                      : "opacity-40 border-slate-100 bg-slate-50 text-slate-400"
+                                  : "border-slate-200 hover:border-[#0D47A1] hover:bg-blue-50/10 text-slate-700 bg-slate-50/50"
+                              }`}
+                            >
+                              <User className="w-4 h-4 md:w-[18px] md:h-[18px]" /> 🎨 Human Creator
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Explanations */}
+                        {guessAnswered !== null && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 pt-4 md:mt-8 md:pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                          >
+                            <div className="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-500 leading-relaxed max-w-xl">
+                              <strong className={`block mb-1 uppercase tracking-wide text-[10px] md:text-xs ${isCorrectGuess ? "text-emerald-600" : "text-[#E91E63]"}`}>
+                                {isCorrectGuess ? "🎉 Correct! " : "❌ Incorrect! "}
+                              </strong>
+                              {guessItems[currentGameIdx].explanation}
+                            </div>
+                            
+                            <button
+                              onClick={() => {
+                                if (currentGameIdx + 1 < guessItems.length) {
+                                  setCurrentGameIdx(prev => prev + 1);
+                                  setGuessAnswered(null);
+                                  setIsCorrectGuess(null);
+                                } else {
+                                  setGameFinished(true);
+                                }
+                              }}
+                              className="px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-[10px] md:text-xs uppercase tracking-wider flex items-center gap-1 transition-colors self-end sm:self-auto cursor-pointer shadow-md shadow-[#E91E6310]"
+                            >
+                              Next <ChevronRight size={14} />
+                            </button>
+                          </motion.div>
+                        )}
                       </div>
-                      
-                      <h3 className="font-baloo font-black text-slate-900 text-2xl sm:text-3xl mb-4 leading-snug">
-                        {facts[currentFactIdx].title}
-                      </h3>
-                      
-                      <p className="text-slate-600 font-bold text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
-                        {facts[currentFactIdx].content}
-                      </p>
+                    ) : (
+                      // Game Finish Card
+                      <div className="flex-1 flex flex-col items-center justify-center text-center py-6 md:py-8">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center text-emerald-500 mb-4 md:mb-6 animate-bounce">
+                          <Sparkles className="w-8 h-8 md:w-9 md:h-9" />
+                        </div>
+                        <h3 className="font-baloo font-black text-slate-950 text-2xl md:text-3xl mb-2 md:mb-3">
+                          Guesses Complete!
+                        </h3>
+                        <p className="text-slate-500 font-bold text-xs md:text-base mb-6 md:mb-8 max-w-sm">
+                          You guessed <span className="text-[#0D47A1] font-black">{gameScore}</span> out of <span className="font-black">{guessItems.length}</span> creations correctly!
+                        </p>
+                        <button
+                          onClick={resetGame}
+                          className="px-6 py-3 md:px-8 md:py-4 rounded-xl border-2 border-[#0D47A1] text-[#0D47A1] font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-blue-50/20 transition-all cursor-pointer"
+                        >
+                          <RefreshCw size={14} /> Play Again
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* MODE 3: FACTS */}
+                {activeMode === 'facts' && (
+                  <motion.div
+                    key="facts"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full flex-1 flex flex-col justify-between min-h-[240px] md:min-h-[340px]"
+                  >
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Header */}
+                        <div className="flex justify-between items-center mb-4 md:mb-8 text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-wider">
+                          <span>Fact explorer</span>
+                          <span>Did you know?</span>
+                        </div>
+
+                        <div className="flex flex-col items-center text-center">
+                          <div className="text-5xl md:text-7xl mb-3 md:mb-6 transform hover:scale-110 transition-transform duration-300 select-none filter drop-shadow-md">
+                            {facts[currentFactIdx].emoji}
+                          </div>
+                          
+                          <h3 className="font-baloo font-black text-slate-900 text-lg sm:text-2xl md:text-3xl mb-2 md:mb-4 leading-snug">
+                            {facts[currentFactIdx].title}
+                          </h3>
+                          
+                          <p className="text-slate-600 font-bold text-xs md:text-base leading-relaxed max-w-xl mx-auto">
+                            {facts[currentFactIdx].content}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Fact Navigation Buttons */}
+                      <div className="mt-4 pt-4 md:mt-8 md:pt-6 border-t border-slate-100 flex justify-center">
+                        <button
+                          onClick={showNextFact}
+                          className="px-6 py-3 md:px-8 md:py-4 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-103 cursor-pointer shadow-md shadow-[#E91E6320]"
+                        >
+                          Show Another Fact 🎲
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  </motion.div>
+                )}
 
-                  {/* Fact Navigation Buttons */}
-                  <div className="mt-8 pt-6 border-t border-slate-100 flex justify-center">
-                    <button
-                      onClick={showNextFact}
-                      className="px-8 py-4 rounded-xl bg-[#E91E63] hover:bg-[#D81B60] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all hover:scale-103 cursor-pointer shadow-md shadow-[#E91E6320]"
-                    >
-                      Show Another Fact 🎲
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            )}
+              </AnimatePresence>
 
-          </AnimatePresence>
+            </div>
+          </div>
 
         </div>
-
       </div>
     </section>
   );

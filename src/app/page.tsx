@@ -14,7 +14,7 @@ import { Footer } from '@/components/layout/Footer';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { useToast } from '@/context/ToastContext';
 import axios from 'axios';
-import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon, Ticket, GraduationCap } from 'lucide-react';
+import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag, Trophy, ArrowRight, Check, BookOpen, Mail, Phone, Send, CheckCircle, ChevronDown, Users as UsersIcon, Ticket, GraduationCap, BarChart3, Target, Brain, Bot, Award, Flame } from 'lucide-react';
 import CourseSelection from '@/components/sections/CourseSelection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
@@ -933,7 +933,7 @@ export default function Home() {
       */}
 
       {/* 1. LMS-STYLE HERO SECTION */}
-      <section className="relative flex min-h-[85vh] lg:min-h-screen items-center justify-center py-16 px-4 md:px-8 overflow-hidden bg-slate-950 text-white">
+      <section className="relative flex min-h-[70vh] lg:min-h-screen items-center justify-center py-8 md:py-16 px-4 md:px-8 overflow-hidden bg-slate-950 text-white">
         
         {/* Background Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-40 z-0" />
@@ -942,25 +942,27 @@ export default function Home() {
         <div className="absolute top-10 left-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-gradient-to-tr from-cyan-500 to-primary-600 rounded-full mix-blend-screen filter blur-[80px] md:blur-[150px] opacity-35 animate-float z-0" />
         <div className="absolute bottom-10 right-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-gradient-to-tr from-purple-500 to-secondary-600 rounded-full mix-blend-screen filter blur-[80px] md:blur-[150px] opacity-35 animate-float z-0" style={{ animationDelay: '3s' }} />
 
-        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
           
           {/* Left Column: Core Value Proposition & CTAs */}
-          <div className="lg:col-span-7 text-left space-y-6 md:space-y-8">
+          <div className="lg:col-span-7 text-left space-y-4 md:space-y-8">
             
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-xs md:text-sm font-black text-primary-300 shadow-lg shadow-black/10">
-              <span className="flex text-yellow-400 gap-0.5">⭐⭐⭐⭐⭐</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-[10px] md:text-sm font-black text-primary-300 shadow-lg shadow-black/10">
+              <span className="flex text-yellow-400 gap-0.5">
+                {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 md:w-3.5 md:h-3.5 fill-yellow-400 text-yellow-400" />)}
+              </span>
               <span className="text-white/80">Loved by 10,000+ happy parents</span>
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl md:text-6xl lg:text-[4.25rem] font-baloo font-black text-white leading-[1.1] tracking-tight drop-shadow-sm">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-[4.25rem] font-baloo font-black text-white leading-[1.1] tracking-tight drop-shadow-sm">
               Empower Your Child <br />
               to Create with <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-primary-400 to-purple-400">AI & Coding</span>
             </h1>
 
             {/* Sub-headline */}
-            <p className="text-sm md:text-xl text-gray-300 font-bold max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-base md:text-xl text-gray-300 font-bold max-w-2xl leading-relaxed">
               Interactive video courses, live cohorts, and a fun coding playground. <span className="hidden md:inline">Turn screen time into creative skill-building and set your child up for success.</span>
             </p>
 
@@ -985,28 +987,27 @@ export default function Home() {
             </div>
 
             {/* Dual CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 md:gap-4">
               <Link href="/ai-quiz" className="flex-1 sm:flex-initial">
-                <button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 font-bold text-white shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
-                  Start Assessment 🚀
+                <button className="w-full sm:w-auto text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded-xl bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 font-bold text-white shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                  Start Assessment <Rocket className="w-4 h-4 md:w-5 md:h-5 text-white animate-pulse" />
                 </button>
               </Link>
               <button 
                 onClick={() => setIsEnquiryOpen(true)}
-                className="w-full sm:w-auto text-base md:text-lg px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/20 font-bold text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/20 font-bold text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
               >
-                Book Free Demo 💬
+                Book Free Demo <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </button>
             </div>
 
-            {/* Secondary offer quicklink */}
-            <div className="text-sm font-semibold text-gray-400 text-left">
+            <div className="text-xs md:text-sm font-semibold text-gray-400 text-left flex items-center gap-1">
               Want to start immediately?{" "}
               <button 
                 onClick={openIntroModal}
-                className="text-primary-400 hover:text-primary-300 underline font-bold cursor-pointer transition-colors bg-transparent border-none p-0 outline-none"
+                className="text-primary-400 hover:text-primary-300 underline font-bold cursor-pointer transition-colors bg-transparent border-none p-0 outline-none flex items-center gap-1"
               >
-                Claim the {formatPrice(99)} offer here ✨
+                Claim the {formatPrice(99)} offer here <Sparkles className="w-3.5 h-3.5 text-primary-400 animate-pulse" />
               </button>
             </div>
 
@@ -1029,7 +1030,7 @@ export default function Home() {
           </div>
 
           {/* Right Column: Premium LMS Dashboard Mockup */}
-          <div className="flex lg:col-span-5 relative w-full justify-center items-center mt-12 lg:mt-0 px-4 sm:px-0">
+          <div className="flex lg:col-span-5 relative w-full justify-center items-center mt-6 lg:mt-0 px-4 sm:px-0">
             
             {/* Background glowing rings/orbits */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
@@ -1038,69 +1039,69 @@ export default function Home() {
             </div>
 
             {/* Main Dashboard Preview Card */}
-            <div className="relative w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-[2rem] p-6 md:p-8 shadow-2xl backdrop-blur-xl hover:border-slate-700/80 transition-all duration-500 group">
+            <div className="relative w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl md:rounded-[2rem] p-4 md:p-8 shadow-2xl backdrop-blur-xl hover:border-slate-700/80 transition-all duration-500 group">
               
               {/* Inner header */}
-              <div className="flex items-center justify-between pb-5 border-b border-slate-800">
+              <div className="flex items-center justify-between pb-3.5 md:pb-5 border-b border-slate-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-xl font-bold shadow-md">
-                    👦🏻
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-white shadow-md">
+                    <GraduationCap className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-white">Alex's Portal</h3>
-                    <p className="text-[10px] text-gray-400 font-bold">Lvl 4 Junior AI Creator</p>
+                    <h3 className="font-black text-xs md:text-sm text-white">Alex's Portal</h3>
+                    <p className="text-[9px] md:text-[10px] text-gray-400 font-bold">Lvl 4 Junior AI Creator</p>
                   </div>
                 </div>
-                <span className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-1 rounded-full text-[10px] font-black tracking-wide uppercase">
+                <span className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[8px] md:text-[10px] font-black tracking-wide uppercase">
                   Premium Student
                 </span>
               </div>
 
               {/* Learning stats row */}
-              <div className="grid grid-cols-2 gap-4 py-5 border-b border-slate-800">
-                <div className="bg-slate-950/50 border border-slate-800/80 p-3 rounded-2xl flex items-center gap-3">
-                  <div className="text-2xl">🔥</div>
+              <div className="grid grid-cols-2 gap-3 py-3.5 md:py-5 border-b border-slate-800">
+                <div className="bg-slate-950/50 border border-slate-800/80 p-2 md:p-3 rounded-2xl flex items-center gap-3">
+                  <Flame className="w-5 h-5 text-orange-500 shrink-0 animate-pulse" />
                   <div>
-                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black">Streak</p>
-                    <p className="font-black text-sm text-white">12 Days</p>
+                    <p className="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-widest font-black">Streak</p>
+                    <p className="font-black text-xs md:text-sm text-white">12 Days</p>
                   </div>
                 </div>
-                <div className="bg-slate-950/50 border border-slate-800/80 p-3 rounded-2xl flex items-center gap-3">
-                  <div className="text-2xl">🏆</div>
+                <div className="bg-slate-950/50 border border-slate-800/80 p-2 md:p-3 rounded-2xl flex items-center gap-3">
+                  <Trophy className="w-5 h-5 text-yellow-500 shrink-0" />
                   <div>
-                    <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black">Quests</p>
-                    <p className="font-black text-sm text-white">34 Done</p>
+                    <p className="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-widest font-black">Quests</p>
+                    <p className="font-black text-xs md:text-sm text-white">34 Done</p>
                   </div>
                 </div>
               </div>
 
               {/* Active course widget */}
-              <div className="py-5">
+              <div className="py-3.5 md:py-5">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Active Course</span>
-                  <span className="text-xs font-bold text-primary-400 hover:underline cursor-pointer flex items-center gap-1">
+                  <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-wider">Active Course</span>
+                  <span className="text-[10px] md:text-xs font-bold text-primary-400 hover:underline cursor-pointer flex items-center gap-1">
                     Continue <ArrowRight size={12} />
                   </span>
                 </div>
 
-                <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl space-y-4">
+                <div className="bg-slate-950/80 border border-slate-800 p-3 md:p-4 rounded-xl md:rounded-2xl space-y-3 md:space-y-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
-                      <h4 className="font-black text-sm text-white group-hover:text-cyan-400 transition-colors">Python Game Creator 🚀</h4>
-                      <p className="text-[11px] text-gray-400 font-semibold">Module 3: Visual Animations</p>
+                      <h4 className="font-black text-xs md:text-sm text-white group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">Python Game Creator <Rocket className="w-3.5 h-3.5 text-cyan-400 animate-pulse" /></h4>
+                      <p className="text-[10px] md:text-[11px] text-gray-400 font-semibold">Module 3: Visual Animations</p>
                     </div>
-                    <span className="bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-2 py-0.5 rounded text-[9px] font-black uppercase">
+                    <span className="bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-1.5 py-0.5 md:px-2 md:py-0.5 rounded text-[8px] md:text-[9px] font-black uppercase">
                       Class 8/12
                     </span>
                   </div>
 
                   {/* Progress bar */}
                   <div className="space-y-1.5">
-                    <div className="flex justify-between text-[10px] font-black text-gray-400">
+                    <div className="flex justify-between text-[9px] md:text-[10px] font-black text-gray-400">
                       <span>Course Progress</span>
                       <span className="text-white">66%</span>
                     </div>
-                    <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 md:h-2.5 bg-slate-800 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-cyan-400 to-primary-500 rounded-full" style={{ width: '66%' }} />
                     </div>
                   </div>
@@ -1108,19 +1109,19 @@ export default function Home() {
               </div>
 
               {/* Upcoming live session */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-4">
+              <div className="pt-3 md:pt-4 border-t border-slate-800 flex items-center justify-between gap-3 md:gap-4">
                 <div className="flex items-center gap-3">
-                  <span className="relative flex h-3.5 w-3.5">
+                  <span className="relative flex h-3 w-3 md:h-3.5 md:w-3.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-500"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 md:h-3.5 md:w-3.5 bg-red-500"></span>
                   </span>
                   <div>
-                    <h5 className="font-black text-[11px] text-white">Live AI Class Starting Soon</h5>
-                    <p className="text-[10px] text-gray-400 font-semibold">with Mentor Ruzann</p>
+                    <h5 className="font-black text-[10px] md:text-[11px] text-white">Live AI Class Starting Soon</h5>
+                    <p className="text-[9px] md:text-[10px] text-gray-400 font-semibold">with Mentor Ruzann</p>
                   </div>
                 </div>
                 <Link href="/ai-quiz">
-                  <button className="bg-red-500 hover:bg-red-600 text-white font-black text-xs px-4 py-2 rounded-xl shadow-lg shadow-red-500/20 active:scale-95 transition-all">
+                  <button className="bg-red-500 hover:bg-red-600 text-white font-black text-[10px] md:text-xs px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl shadow-lg shadow-red-500/20 active:scale-95 transition-all">
                     Join Room
                   </button>
                 </Link>
@@ -1130,7 +1131,7 @@ export default function Home() {
 
             {/* Floating visual highlights */}
             <div className="hidden sm:flex absolute -top-6 -right-6 bg-slate-900 border border-slate-800 px-4 py-2 rounded-2xl items-center gap-2 shadow-xl backdrop-blur-xl animate-float" style={{ animationDelay: '1s' }}>
-              <span className="text-xl">🤖</span>
+              <Bot className="w-5 h-5 text-cyan-400" />
               <div className="text-left leading-none">
                 <span className="text-[8px] text-gray-400 uppercase tracking-widest font-black">Interactive</span>
                 <p className="text-xs font-black text-white">AI Sandbox</p>
@@ -1138,7 +1139,7 @@ export default function Home() {
             </div>
 
             <div className="hidden sm:flex absolute -bottom-6 -left-6 bg-slate-900 border border-slate-800 px-4 py-2 rounded-2xl items-center gap-2 shadow-xl backdrop-blur-xl animate-float" style={{ animationDelay: '2.5s' }}>
-              <span className="text-xl">🏆</span>
+              <Award className="w-5 h-5 text-yellow-400" />
               <div className="text-left leading-none">
                 <span className="text-[8px] text-gray-400 uppercase tracking-widest font-black">Award</span>
                 <p className="text-xs font-black text-white">Genius Badge</p>
@@ -1312,40 +1313,41 @@ export default function Home() {
            </Card>
         </div>
       </section>
+      */}
 
       {/* 3. ABOUT RUZANN SECTION */}
-      <section className="py-20 px-4 bg-slate-950 text-white relative overflow-hidden" id="about">
+      <section className="py-10 md:py-20 px-4 bg-slate-950 text-white relative overflow-hidden" id="about">
          {/* Glow effects */}
          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none" />
          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-600 rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none" />
          
          <div className="relative z-10 max-w-7xl mx-auto">
-           <div className="text-center max-w-3xl mx-auto mb-16">
-             <h2 className="text-3xl md:text-5xl font-black mb-4">
-               Why kids love <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">RUZANN</span>?
-             </h2>
-             <p className="text-base font-bold text-gray-400">
-               We make education an enchanting experience, combining play with meaningful skill-building.
-             </p>
-           </div>
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 md:mb-4">
+                Why kids love <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">RUZANN</span>?
+              </h2>
+              <p className="text-xs sm:text-base font-bold text-gray-400">
+                We make education an enchanting experience, combining play with meaningful skill-building.
+              </p>
+            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-primary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">🎮</div>
-                <h3 className="text-xl font-black text-white mb-3">Game-Based Learning</h3>
-                <p className="text-gray-300 font-semibold">Every lesson feels like a mission. Complete quests and earn badges!</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-primary-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
+                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🎮</div>
+                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Game-Based Learning</h3>
+                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">Every lesson feels like a mission. Complete quests and earn badges!</p>
               </div>
               
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-secondary-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
-                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">👨‍🏫</div>
-                <h3 className="text-xl font-black text-white mb-3">Live Mentorship</h3>
-                <p className="text-gray-300 font-semibold">Learn directly from top educators in small, interactive live sessions.</p>
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-secondary-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
+                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">👨‍🏫</div>
+                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Live Mentorship</h3>
+                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">Learn directly from top educators in small, interactive live sessions.</p>
               </div>
               
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-accent-500 p-8 rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-black/30">🏆</div>
-                <h3 className="text-xl font-black text-white mb-3">Real Skills</h3>
-                <p className="text-gray-300 font-semibold">From coding to creativity, kids learn skills that matter for their future.</p>
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-accent-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
+                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🏆</div>
+                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Real Skills</h3>
+                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">From coding to creativity, kids learn skills that matter for their future.</p>
               </div>
             </div>
          </div>
@@ -1525,12 +1527,13 @@ export default function Home() {
       </section>
 
       {/* AI READINESS ASSESSMENT SECTION */}
-      <section className="relative py-20 px-4 overflow-hidden" id="ai-assessment">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0D47A1] via-[#051B3B] to-[#000000] z-0" />
-        {/* Glowing orbs */}
-        <div className="absolute top-[-60px] left-[-60px] w-72 h-72 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-float z-0" />
-        <div className="absolute bottom-[-60px] right-[-60px] w-80 h-80 bg-indigo-500 rounded-full mix-blend-screen filter blur-[100px] opacity-25 animate-float z-0" style={{ animationDelay: '2s' }} />
+      <section className="relative py-10 md:py-16 px-4 overflow-hidden bg-slate-950 text-white" id="ai-assessment">
+        {/* Background Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 z-0" />
+        
+        {/* Glowing orbs matching rest of the dark sections */}
+        <div className="absolute top-[-60px] left-[-60px] w-72 h-72 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-float z-0" />
+        <div className="absolute bottom-[-60px] right-[-60px] w-80 h-80 bg-indigo-500 rounded-full mix-blend-screen filter blur-[100px] opacity-15 animate-float z-0" style={{ animationDelay: '2s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500 rounded-full mix-blend-screen filter blur-[160px] opacity-10 z-0" />
 
         {/* Floating stars */}
@@ -1541,12 +1544,12 @@ export default function Home() {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-5 py-2 mb-6 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-cyan-300 font-black uppercase tracking-widest text-xs shadow-xl">
-            <span className="animate-spin-slow text-lg">🤖</span> FREE AI READINESS CHECK
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-cyan-300 font-black uppercase tracking-widest text-[10px] md:text-xs shadow-xl">
+            <Brain className="w-3.5 h-3.5 text-cyan-300 animate-pulse" /> FREE AI READINESS CHECK
           </div>
 
           {/* Headline */}
-          <h2 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight drop-shadow-lg">
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-2 md:mb-4 leading-tight drop-shadow-lg">
             Is Your Child Ready for the{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
               AI Future?
@@ -1554,24 +1557,26 @@ export default function Home() {
           </h2>
 
           {/* Sub-headline */}
-          <p className="text-lg md:text-xl font-bold text-white/70 mb-10 max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base font-bold text-white/70 mb-6 md:mb-8 max-w-xl mx-auto leading-relaxed">
             FREE 3-Minute Assessment — Discover your child's AI potential right now!
           </p>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8 max-w-3xl mx-auto">
             {[
-              { icon: '🏆', label: 'AI Readiness Score', desc: 'See exactly where your child stands in AI skills' },
-              { icon: '📊', label: 'Future Skills Report', desc: 'Personalised breakdown of key 21st-century skills' },
-              { icon: '🎯', label: 'Recommendations', desc: 'Custom learning path tailored for your child' },
+              { icon: <Trophy className="w-7 h-7 text-yellow-400" />, label: 'AI Readiness Score', desc: 'See exactly where your child stands in AI skills' },
+              { icon: <BarChart3 className="w-7 h-7 text-cyan-400" />, label: 'Future Skills Report', desc: 'Personalised breakdown of key 21st-century skills' },
+              { icon: <Target className="w-7 h-7 text-pink-500" />, label: 'Recommendations', desc: 'Custom learning path tailored for your child' },
             ].map(({ icon, label, desc }) => (
               <div
                 key={label}
-                className="flex flex-col items-center gap-2 p-5 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1"
+                className="flex flex-col items-center gap-1.5 p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1"
               >
-                <span className="text-3xl">{icon}</span>
-                <span className="text-white font-black text-sm tracking-wide">{label}</span>
-                <span className="text-white/50 text-xs font-medium leading-relaxed">{desc}</span>
+                <div className="mb-1.5 transform hover:scale-115 transition-transform duration-300 select-none filter drop-shadow-md">
+                  {icon}
+                </div>
+                <span className="text-white font-black text-xs md:text-sm tracking-wide">{label}</span>
+                <span className="text-white/50 text-[10px] md:text-xs font-semibold leading-relaxed">{desc}</span>
               </div>
             ))}
           </div>
@@ -1580,18 +1585,18 @@ export default function Home() {
           <Link href="/ai-quiz">
             <button
               id="start-ai-assessment-btn"
-              className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full font-black text-xl text-white shadow-2xl shadow-primary-500/30 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
+              className="group relative inline-flex items-center gap-2.5 px-8 py-3.5 md:px-12 md:py-5 rounded-full font-black text-base md:text-xl text-white shadow-2xl shadow-primary-500/30 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden"
               style={{ background: 'linear-gradient(135deg, #E91E63, #00ACC1)' }}
             >
               {/* Shimmer effect */}
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
               <span className="relative z-10">🚀 Start Free Assessment</span>
-              <ArrowRight size={22} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
 
           {/* Trust indicators */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-white/40 text-xs font-bold uppercase tracking-widest">
+          <div className="mt-5 md:mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-6 text-white/40 text-[10px] md:text-xs font-bold uppercase tracking-widest">
             <span>✓ No sign-up required</span>
             <span>✓ 100% Free</span>
             <span>✓ Results in 3 minutes</span>
