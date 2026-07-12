@@ -22,6 +22,7 @@ import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
 import { SliderWrapper } from '@/components/ui/SliderWrapper';
 import AiPlayground from '@/components/sections/AiPlayground';
+import { HowToUseSection } from '@/components/sections/HowToUseSection';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -1150,6 +1151,8 @@ export default function Home() {
 
         </div>
       </section>
+
+      <HowToUseSection />
 
       <AiPlayground />
 
