@@ -41,10 +41,14 @@ export const SliderWrapper: React.FC<SliderWrapperProps> = ({
   const width = useWindowWidth();
   const items = React.Children.toArray(children);
 
-  const slidesPerView =
-    width >= 1024 ? slidesPerViewLg :
-    width >= 768  ? slidesPerViewMd :
-    slidesPerViewSm;
+  let slidesPerView = slidesPerViewSm;
+  if (width >= 1024) {
+    slidesPerView = slidesPerViewLg;
+  } else if (width >= 768) {
+    slidesPerView = slidesPerViewMd;
+  } else if (slidesPerViewSm !== 1) {
+    slidesPerView = width >= 550 ? slidesPerViewSm * 1.5 : slidesPerViewSm;
+  }
 
   const maxIndex = Math.max(0, items.length - slidesPerView);
   const [current, setCurrent] = useState(0);
@@ -75,7 +79,6 @@ export const SliderWrapper: React.FC<SliderWrapperProps> = ({
   }, [maxIndex, current]);
 
   const cardWidthPercent = 100 / slidesPerView;
-  const translateX = current * cardWidthPercent;
 
   const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const onTouchMove  = (e: React.TouchEvent) => { touchEndX.current = e.touches[0].clientX; };
@@ -102,7 +105,7 @@ export const SliderWrapper: React.FC<SliderWrapperProps> = ({
         <div
           className="flex transition-transform duration-500 ease-in-out"
           style={{
-            transform: `translateX(-${translateX}%)`,
+            transform: `translateX(calc(-${current * cardWidthPercent}% - ${(current * gap) / slidesPerView}px))`,
             gap: `${gap}px`,
           }}
           onTouchStart={onTouchStart}

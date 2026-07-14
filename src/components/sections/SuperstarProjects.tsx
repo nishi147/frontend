@@ -105,7 +105,13 @@ export const SuperstarProjects = () => {
              const previewUrl = `https://cdn2.scratch.mit.edu/get_image/project/${scratchId}_282x210.png`;
 
              return (
-               <div key={project._id} className="min-w-[280px] md:min-w-[380px] snap-center group">
+               <a 
+                 key={project._id} 
+                 href={project.url} 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="min-w-[280px] md:min-w-[380px] snap-center group block cursor-pointer"
+               >
                  <div className="h-full bg-white rounded-[3rem] p-4 md:p-6 shadow-xl shadow-blue-500/5 hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 hover:-translate-y-2 flex flex-col border border-white">
                     {/* Image Container with rounded corners to match iSchool */}
                     <div className="relative aspect-[4/3] bg-slate-50 rounded-[2.5rem] overflow-hidden mb-6">
@@ -135,7 +141,7 @@ export const SuperstarProjects = () => {
                        </div>
                     </div>
                  </div>
-               </div>
+               </a>
              );
           })}
         </div>

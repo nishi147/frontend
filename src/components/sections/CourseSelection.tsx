@@ -243,7 +243,7 @@ const CourseSelection = () => {
         {filteredCourses.length > 0 ? (
           <div className="flex flex-col items-center">
             <div className="w-full">
-              <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={5000} gap={24}>
+              <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1.2} autoPlay={5000} gap={24}>
                 {filteredCourses.slice(0, 6).map((course) => (
                   <div key={course._id} className="h-full">
                     <CourseCard course={course} typeFilter={typeFilter} />

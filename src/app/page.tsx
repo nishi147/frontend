@@ -219,20 +219,25 @@ const BootcampSection = () => {
   const now = new Date();
   const upcomingBootcamps = bootcamps.filter(bc => new Date(bc.date || Date.now()) > now);
 
-  const renderBootcampCard = (bc: any) => {
+  const renderBootcampCard = (bc: any, isUpcoming: boolean) => {
     const thumbUrl = getThumbnailUrl(bc.image);
     return (
       <div key={bc._id} className="group cursor-pointer h-full" onClick={() => handleEnrollBootcamp(bc)}>
-        <Card className="h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col bg-white overflow-hidden">
+        <Card className={`h-full rounded-[1.5rem] transition-all duration-300 flex flex-col bg-white overflow-hidden relative ${isUpcoming ? 'border-2 border-amber-400 shadow-md shadow-amber-500/5 hover:shadow-2xl hover:shadow-amber-500/10' : 'border border-gray-200 shadow-sm hover:shadow-xl'}`}>
           <div className="relative aspect-[16/10] bg-[#eef5ff] flex items-center justify-center group-hover:bg-[#e4efff] transition-colors overflow-hidden">
             {bc.showStudentsEnrolled && bc.studentsEnrolled > 0 && (
-            <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white z-20">
-              <div className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                <span className="text-[8px]">👦</span>
-              </div>
-              <span className="text-[10px] font-bold text-gray-700">{bc.studentsEnrolled} Enrolled</span>
+            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm border border-white z-20">
+              <UserIcon size={10} className="text-blue-500 shrink-0" />
+              <span className="text-[10px] font-black text-gray-700">{bc.studentsEnrolled} Enrolled</span>
             </div>
             )}
+            
+            {isUpcoming && (
+              <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-black text-[9px] tracking-widest px-3 py-1 rounded-full z-20 uppercase shadow-md animate-pulse">
+                Featured
+              </div>
+            )}
+            
             <div className="w-full h-full relative z-10 flex items-center justify-center">
               {bc.image && bc.image !== 'no-image.jpg' ? (
                 <img src={thumbUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={bc.title} />
@@ -255,8 +260,8 @@ const BootcampSection = () => {
               </div>
               )}
               {bc.showStudentsEnrolled && (
-              <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
-                <span className="text-gray-600">👤</span> {bc.studentsEnrolled || 0} students
+              <div className="flex items-center gap-1.5 text-black font-black text-xs ml-auto">
+                <UserIcon size={12} className="text-gray-400 shrink-0" /> {bc.studentsEnrolled || 0} students
               </div>
               )}
             </div>
@@ -280,13 +285,22 @@ const BootcampSection = () => {
                 </div>
                 <div className="text-sm font-bold text-black mt-1">(Total Bootcamp pass)</div>
               </div>
-              <Button
-                variant="outline"
-                isLoading={isProcessing && pendingBootcamp?._id === bc._id}
-                className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
-              >
-                Enroll Now
-              </Button>
+              {isUpcoming ? (
+                <Button
+                  isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                  className="w-full rounded-full py-5 bg-[#E91E63] text-white hover:bg-pink-600 border-none font-bold text-base transition-all mt-2 shadow-md shadow-pink-500/20 active:scale-95 flex items-center justify-center gap-2"
+                >
+                  Enroll Now <Sparkles size={16} className="text-yellow-200 animate-pulse" />
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  isLoading={isProcessing && pendingBootcamp?._id === bc._id}
+                  className="w-full rounded-full py-5 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-bold text-base transition-colors mt-2 shadow-none"
+                >
+                  Enroll Now
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -294,27 +308,32 @@ const BootcampSection = () => {
     );
   };
 
-  const bootcampCards = bootcamps.map(bc => renderBootcampCard(bc));
-  const upcomingBootcampCards = upcomingBootcamps.map(bc => renderBootcampCard(bc));
+  const bootcampCards = bootcamps.map(bc => renderBootcampCard(bc, false));
+  const upcomingBootcampCards = upcomingBootcamps.map(bc => renderBootcampCard(bc, true));
 
   return (
-    <div className="px-6 md:px-8">
+    <div className="px-6 md:px-8 space-y-12">
       {upcomingBootcamps.length > 0 && (
-        <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-700 font-bold mb-4">
-            <Sparkles size={16} className="text-yellow-500" />
-            <span className="text-sm">Newly Added & Upcoming</span>
+        <div className="bg-gradient-to-br from-amber-50/50 via-yellow-50/30 to-orange-50/60 rounded-[3rem] p-8 border border-amber-100 shadow-sm relative overflow-hidden">
+          {/* Decorative background overlay */}
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-200/20 rounded-full blur-2xl pointer-events-none" />
+          
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full text-white font-black mb-6 tracking-wide shadow-md shadow-orange-500/20">
+              <Sparkles size={14} className="animate-pulse" />
+              <span className="text-xs uppercase tracking-wider">Specialized & Featured</span>
+            </div>
+            <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
+              {upcomingBootcampCards}
+            </SliderWrapper>
           </div>
-          <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
-            {upcomingBootcampCards}
-          </SliderWrapper>
         </div>
       )}
 
-      <div>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-600 font-bold mb-4">
-          <Rocket size={16} />
-          <span className="text-sm">All Bootcamps</span>
+      <div className="pt-4">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-slate-700 font-bold mb-6 border border-slate-200">
+          <Rocket size={14} className="text-slate-500" />
+          <span className="text-xs uppercase tracking-wider">All Bootcamps</span>
         </div>
         <SliderWrapper slidesPerViewLg={3} slidesPerViewMd={2} slidesPerViewSm={1} autoPlay={4500} gap={24}>
           {bootcampCards}
@@ -1334,23 +1353,23 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-primary-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🎮</div>
-                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Game-Based Learning</h3>
-                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">Every lesson feels like a mission. Complete quests and earn badges!</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-8">
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-primary-500 p-4 sm:p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🎮</div>
+                <h3 className="text-sm sm:text-lg md:text-xl font-black text-white mb-2 md:mb-3">Game-Based Learning</h3>
+                <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-gray-300 font-semibold leading-relaxed">Every lesson feels like a mission. Complete quests and earn badges!</p>
               </div>
               
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-secondary-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
-                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">👨‍🏫</div>
-                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Live Mentorship</h3>
-                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">Learn directly from top educators in small, interactive live sessions.</p>
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-secondary-500 p-4 sm:p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 md:mt-10">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">👨‍🏫</div>
+                <h3 className="text-sm sm:text-lg md:text-xl font-black text-white mb-2 md:mb-3">Live Mentorship</h3>
+                <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-gray-300 font-semibold leading-relaxed">Learn directly from top educators in small, interactive live sessions.</p>
               </div>
               
-              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-accent-500 p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300">
-                <div className="w-14 h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🏆</div>
-                <h3 className="text-lg md:text-xl font-black text-white mb-2 md:mb-3">Real Skills</h3>
-                <p className="text-xs md:text-sm lg:text-base text-gray-300 font-semibold">From coding to creativity, kids learn skills that matter for their future.</p>
+              <div className="bg-slate-900/80 border border-slate-800 border-b-8 border-b-accent-500 p-4 sm:p-5 md:p-8 rounded-2xl md:rounded-[2rem] text-center hover:-translate-y-3 transition-transform duration-300 col-span-2 md:col-span-1">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-slate-800 rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-4xl mx-auto mb-3 md:mb-6 shadow-lg shadow-black/30">🏆</div>
+                <h3 className="text-sm sm:text-lg md:text-xl font-black text-white mb-2 md:mb-3">Real Skills</h3>
+                <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-gray-300 font-semibold leading-relaxed">From coding to creativity, kids learn skills that matter for their future.</p>
               </div>
             </div>
          </div>

@@ -7,11 +7,164 @@ import { Button } from '@/components/ui/Button';
 import api from '@/utils/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, ArrowRight } from 'lucide-react';
+import { 
+  CheckCircle, PlayCircle, FileText, X, ChevronDown, BookOpen, Star, ArrowRight,
+  Sparkles, Palette, Cpu, Rocket, Trophy, Lightbulb, Laptop, Settings, Calendar, Key,
+  Target, GraduationCap, Clock, Puzzle, Lock, ShieldCheck, Award, Compass, HelpCircle,
+  ChevronRight, Check, Gamepad2, Brain
+} from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
 import { trackEvent, trackLead } from '@/utils/analytics';
 import { useCurrency } from '@/context/CurrencyContext';
+
+const emojiToIcon: { [key: string]: React.ReactNode } = {
+  '🌟': <Sparkles className="text-amber-400 w-5 h-5 shrink-0" />,
+  '⭐': <Star className="text-amber-400 w-5 h-5 shrink-0" />,
+  '🎨': <Palette className="text-purple-400 w-5 h-5 shrink-0" />,
+  '🤖': <Cpu className="text-cyan-400 w-5 h-5 shrink-0" />,
+  '📖': <BookOpen className="text-blue-400 w-5 h-5 shrink-0" />,
+  '👉': <ChevronRight className="text-pink-500 w-5 h-5 shrink-0 animate-pulse" />,
+  '🚀': <Rocket className="text-violet-400 w-5 h-5 shrink-0" />,
+  '🏆': <Trophy className="text-yellow-500 w-5 h-5 shrink-0" />,
+  '💡': <Lightbulb className="text-yellow-300 w-5 h-5 shrink-0" />,
+  '💻': <Laptop className="text-indigo-400 w-5 h-5 shrink-0" />,
+  '⚙️': <Settings className="text-slate-400 w-5 h-5 shrink-0" />,
+  '🛠️': <Settings className="text-slate-400 w-5 h-5 shrink-0" />,
+  '🗓️': <Calendar className="text-emerald-400 w-5 h-5 shrink-0" />,
+  '📅': <Calendar className="text-emerald-400 w-5 h-5 shrink-0" />,
+  '🔑': <Key className="text-amber-400 w-5 h-5 shrink-0" />,
+  '🗝️': <Key className="text-amber-400 w-5 h-5 shrink-0" />,
+  '🎯': <Target className="text-rose-400 w-5 h-5 shrink-0" />,
+  '🎓': <GraduationCap className="text-indigo-400 w-5 h-5 shrink-0" />,
+  '⏱️': <Clock className="text-cyan-400 w-5 h-5 shrink-0" />,
+  '🕒': <Clock className="text-cyan-400 w-5 h-5 shrink-0" />,
+  '🧩': <Puzzle className="text-orange-400 w-5 h-5 shrink-0" />,
+  '✨': <Sparkles className="text-pink-400 w-5 h-5 shrink-0" />,
+  '✔️': <Check className="text-green-400 w-5 h-5 shrink-0" />,
+  '✅': <CheckCircle className="text-green-400 w-5 h-5 shrink-0" />,
+  '🎮': <Gamepad2 className="text-rose-400 w-5 h-5 shrink-0" />,
+  '🧠': <Brain className="text-pink-400 w-5 h-5 shrink-0" />,
+};
+
+interface DescriptionParserProps {
+  description: string;
+}
+
+const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) => {
+  if (!description) return null;
+
+  // Split by newlines and trim each line
+  const rawLines = description.split('\n');
+  const lines: string[] = [];
+  
+  // Clean up duplicate consecutive empty lines to prevent excessive vertical spacing
+  let lastWasEmpty = false;
+  for (const line of rawLines) {
+    const trimmed = line.trim();
+    if (trimmed === '') {
+      if (!lastWasEmpty) {
+        lines.push('');
+        lastWasEmpty = true;
+      }
+    } else {
+      lines.push(trimmed);
+      lastWasEmpty = false;
+    }
+  }
+
+  return (
+    <div className="space-y-2.5 max-w-3xl text-left">
+      {lines.map((line, idx) => {
+        if (line === '') {
+          return <div key={idx} className="h-1.5" />;
+        }
+
+        // Check for emoji at the start
+        let matchedEmoji = '';
+        let cleanedText = line;
+
+        for (const emoji of Object.keys(emojiToIcon)) {
+          if (line.startsWith(emoji)) {
+            matchedEmoji = emoji;
+            cleanedText = line.slice(emoji.length).trim();
+            break;
+          }
+        }
+
+        // Handle bullet points like "* 🌟" or "- 🌟"
+        if (!matchedEmoji && (line.startsWith('*') || line.startsWith('-'))) {
+          const subStr = line.slice(1).trim();
+          for (const emoji of Object.keys(emojiToIcon)) {
+            if (subStr.startsWith(emoji)) {
+              matchedEmoji = emoji;
+              cleanedText = subStr.slice(emoji.length).trim();
+              break;
+            }
+          }
+          if (!matchedEmoji) {
+            return (
+              <div key={idx} className="flex items-start gap-2.5 pl-4 text-gray-200">
+                <ChevronRight className="w-4 h-4 text-primary-400 mt-1 shrink-0" />
+                <span className="text-sm md:text-base font-semibold leading-relaxed">{subStr}</span>
+              </div>
+            );
+          }
+        }
+
+        const isHeader = cleanedText === cleanedText.toUpperCase() && cleanedText.length > 3 && !cleanedText.includes('HTTP');
+        const isTransition = cleanedText.endsWith(':');
+
+        if (matchedEmoji) {
+          const icon = emojiToIcon[matchedEmoji];
+          if (isHeader) {
+            return (
+              <h3 key={idx} className="text-lg md:text-xl font-black text-white tracking-wide mt-5 mb-2.5 flex items-center gap-2 border-b border-white/10 pb-1.5 uppercase">
+                {icon}
+                {cleanedText}
+              </h3>
+            );
+          } else {
+            return (
+              <div key={idx} className="flex items-start gap-2.5 my-1 text-gray-200 pl-1">
+                <div className="mt-1">{icon}</div>
+                <span className="text-sm md:text-base font-semibold leading-relaxed">{cleanedText}</span>
+              </div>
+            );
+          }
+        }
+
+        if (isHeader) {
+          return (
+            <h3 key={idx} className="text-lg md:text-xl font-black text-white tracking-wide mt-5 mb-2.5 border-b border-white/10 pb-1.5 uppercase">
+              {cleanedText}
+            </h3>
+          );
+        }
+
+        if (isTransition) {
+          return (
+            <p key={idx} className="text-sm md:text-base font-black text-primary-300 mt-3 mb-1">
+              {cleanedText}
+            </p>
+          );
+        }
+
+        return (
+          <p key={idx} className="text-sm md:text-base font-semibold text-gray-200 leading-relaxed">
+            {cleanedText}
+          </p>
+        );
+      })}
+    </div>
+  );
+};
+
+const stripEmojis = (text: string): string => {
+  if (!text) return '';
+  // Strips standard unicode emojis
+  return text.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '').trim();
+};
 
 export default function CourseDetailPage() {
   const { id } = useParams();
@@ -203,7 +356,7 @@ export default function CourseDetailPage() {
   
   if (!course) return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 text-center">
-       <span className="text-8xl mb-6 last:">🎒</span>
+       <Compass className="w-24 h-24 text-gray-400 mb-6 animate-pulse" />
        <h1 className="text-4xl font-black text-gray-800 mb-2">Oops! Course Not Found</h1>
        <p className="text-gray-900 font-bold mb-8">The magic scroll for this course seems to be missing.</p>
        <Button onClick={() => router.push('/courses')}>Explore Other Courses</Button>
@@ -215,7 +368,7 @@ export default function CourseDetailPage() {
       <Header />
       
       {/* Course Hero Header */}
-      <div className="bg-navy-900 text-white py-16 md:py-24 relative overflow-hidden">
+      <div className="bg-navy-900 text-white py-10 md:py-14 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full mix-blend-screen filter blur-[100px] opacity-10" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary-500 rounded-full mix-blend-screen filter blur-[80px] opacity-10" />
@@ -227,8 +380,10 @@ export default function CourseDetailPage() {
               <span className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary-300 border border-white/10">{course.category?.name}</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-md">{course.title}</h1>
-            <p className="text-lg md:text-xl text-gray-100 font-bold mb-10 max-w-3xl leading-relaxed whitespace-pre-wrap">{course.description}</p>
+            <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight drop-shadow-md tracking-tight">{course.title}</h1>
+            <div className="mb-8">
+              <DescriptionParser description={course.description} />
+            </div>
             
             <div className="flex flex-wrap items-center gap-8">
               <div className="flex items-center gap-4">
@@ -261,7 +416,7 @@ export default function CourseDetailPage() {
           <div className="w-full lg:w-[420px]">
             <Card className="bg-white text-gray-800 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[3rem] border-none overflow-visible relative">
               {/* Hot tag */}
-              <div className="absolute -top-4 -right-4 bg-[#E91E63] text-white px-6 py-2 rounded-2xl font-black text-sm shadow-xl animate-bounce">BEST SELLER</div>
+              <div className="absolute -top-3.5 -right-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-1.5 rounded-full font-black text-[11px] tracking-wider shadow-lg shadow-primary-500/30 uppercase">BEST SELLER</div>
               
               <div className="text-center mb-8 border-b border-gray-50 pb-8">
                 <div className="text-gray-900 font-black uppercase tracking-widest text-[10px] mb-3 italic">Investment per Amazing Module</div>
@@ -335,9 +490,9 @@ export default function CourseDetailPage() {
                 isLoading={isProcessing}
               >
                 {isEnrolled ? (
-                  <>Go to Course <ArrowRight size={22} /></>
+                  <span className="flex items-center gap-2">Go to Course <ArrowRight size={22} /></span>
                 ) : (
-                  <>Enroll Now ✨</>
+                  <span className="flex items-center gap-2">Enroll Now <Sparkles size={20} className="text-yellow-300 animate-pulse" /></span>
                 )}
               </Button>
 
@@ -388,7 +543,7 @@ export default function CourseDetailPage() {
                           {i + 1}
                         </div>
                         <div>
-                          <h3 className={`text-2xl font-black transition-colors uppercase tracking-tight ${isExpanded ? 'text-primary-600' : 'text-navy-900 group-hover:text-primary-500'}`}>{m.title}</h3>
+                          <h3 className={`text-2xl font-black transition-colors uppercase tracking-tight ${isExpanded ? 'text-primary-600' : 'text-navy-900 group-hover:text-primary-500'}`}>{stripEmojis(m.title)}</h3>
                           <p className="text-xs font-black text-gray-900 uppercase tracking-widest">{m.lessons?.length || 0} Lessons</p>
                         </div>
                       </div>
@@ -422,7 +577,9 @@ export default function CourseDetailPage() {
             </div>
           ) : (
              <div className="bg-white p-12 rounded-[3.5rem] border-4 border-dashed border-gray-100 text-center flex flex-col items-center">
-               <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center text-4xl mb-6 grayscale opacity-50">📑</div>
+               <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mb-6 shadow-inner">
+                 <Compass className="w-10 h-10 animate-spin duration-3000" />
+               </div>
                <h4 className="text-2xl font-black text-gray-900 mb-2">Curriculum Under Construction</h4>
                <p className="text-gray-900 font-bold max-w-sm">Our mentors are busy polishing the magic scrolls for this course. Check back soon!</p>
              </div>
@@ -432,10 +589,10 @@ export default function CourseDetailPage() {
         <div className="lg:w-[380px] space-y-10">
            <div className="bg-primary-50 p-10 rounded-[3rem] relative overflow-hidden">
              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full opacity-20" />
-             <h4 className="text-2xl font-black text-primary-900 mb-4 relative z-10">Need Help? 🪄</h4>
+             <h4 className="text-2xl font-black text-primary-900 mb-4 relative z-10 flex items-center gap-2">Need Help? <HelpCircle className="text-primary-500 w-6 h-6 shrink-0" /></h4>
              <p className="text-primary-700 font-bold mb-8 relative z-10 leading-relaxed">Our magic support team is here to guide you through your learning adventure.</p>
              <Link href="/contact" className="inline-block bg-white text-primary-600 px-8 py-4 rounded-2xl font-black text-sm shadow-xl shadow-primary-500/10 hover:-translate-y-1 transition-transform relative z-10">
-               Contact Support →
+               Contact Support <ArrowRight className="inline ml-1" size={16} />
              </Link>
            </div>
            
@@ -443,14 +600,18 @@ export default function CourseDetailPage() {
              <h5 className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-6 border-b border-gray-100 pb-4">Our Commitment</h5>
              <div className="space-y-6">
                 <div className="flex gap-5">
-                   <div className="w-12 h-12 flex-shrink-0 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">🏆</div>
+                   <div className="w-12 h-12 flex-shrink-0 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center shadow-sm border border-yellow-100">
+                     <Award className="w-6 h-6" />
+                   </div>
                    <div>
                      <p className="font-black text-gray-800 text-sm mb-1 uppercase tracking-tight">Verified Content</p>
                      <p className="text-gray-900 font-bold text-xs leading-relaxed">Expert-approved courses designed for maximum impact.</p>
                    </div>
                 </div>
                 <div className="flex gap-5">
-                   <div className="w-12 h-12 flex-shrink-0 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-sm">🔒</div>
+                   <div className="w-12 h-12 flex-shrink-0 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-sm border border-blue-100">
+                     <Lock className="w-6 h-6" />
+                   </div>
                    <div>
                      <p className="font-black text-gray-800 text-sm mb-1 uppercase tracking-tight">Secure Learning</p>
                      <p className="text-gray-900 font-bold text-xs leading-relaxed">Safe and moderated environment for all superstars.</p>

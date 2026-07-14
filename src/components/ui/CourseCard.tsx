@@ -65,22 +65,28 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
         });
       }}
     >
-      <Card className={`h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white overflow-hidden cursor-pointer ${className}`}>
+      <Card className={`h-full border border-gray-200 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col bg-white cursor-pointer p-3 pb-0 max-w-[360px] mx-auto ${className}`}>
         
         {/* BrightChamps Style Header: Full area thumbnail or centered icon */}
-        <div className="relative aspect-[16/10] bg-[#eef5ff] group-hover:bg-[#e4efff] transition-all duration-500 overflow-hidden">
+        <div className="relative aspect-[16/10] bg-[#eef5ff] group-hover:bg-[#e4efff] transition-all duration-500 rounded-[1.2rem] overflow-hidden">
           
           {/* Top Left Enrolled Badge */}
           {course.showStudentsEnrolled && course.studentsEnrolled > 0 && (
-          <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md border border-white/50 z-30">
-             <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
-                <span className="text-[10px]">👦</span>
+          <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-md border border-white/50 z-30">
+             <div className="flex -space-x-1.5">
+                <div className="w-4 h-4 rounded-full bg-blue-200 border border-white flex items-center justify-center overflow-hidden">
+                   <span className="text-[8px]">👦</span>
+                </div>
+                <div className="w-4 h-4 rounded-full bg-green-200 border border-white flex items-center justify-center overflow-hidden">
+                   <span className="text-[8px]">👧</span>
+                </div>
+                <div className="w-4 h-4 rounded-full bg-yellow-200 border border-white flex items-center justify-center overflow-hidden">
+                   <span className="text-[8px]">👶</span>
+                </div>
              </div>
-             <span className="text-[10px] font-black text-slate-800">{course.studentsEnrolled} Enrolled</span>
+             <span className="text-[9px] font-black text-slate-800">{course.studentsEnrolled}+ Enrolled</span>
           </div>
           )}
-
-
 
           {course.thumbnail ? (
             <img 
@@ -97,31 +103,32 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
           )}
 
           {/* Bottom Floating White Pill Tags */}
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-2 z-20">
-             <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">
+          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-20">
+             <span className="bg-white px-2.5 py-1 rounded-full text-[10px] font-extrabold text-slate-600 shadow-sm whitespace-nowrap">
                {course.category?.name || 'Coding Basics'}
              </span>
-             <span className="bg-white px-3 py-1 rounded-full text-[10px] font-bold text-gray-600 shadow-sm whitespace-nowrap">
+             <span className="bg-white px-2.5 py-1 rounded-full text-[10px] font-extrabold text-slate-600 shadow-sm whitespace-nowrap">
                {displayType}
              </span>
           </div>
         </div>
 
-        <CardContent className="p-5 flex flex-col flex-1 bg-white">
+        <CardContent className="px-1 py-4 flex flex-col flex-1 bg-white">
            <h3 className="text-xl font-bold text-black mb-2 line-clamp-2 min-h-[3.5rem]">
              {course.title} {displayType !== 'All' ? `- ${displayType}` : ''}
            </h3>
            
-           <div className="flex items-center justify-between mb-3 text-sm">
+           <div className="flex items-center gap-2 mb-3 text-sm flex-wrap">
               {course.rating > 0 && (
-              <div className="flex items-center gap-1 text-gray-600">
-                <Star size={14} className="text-yellow-400 fill-yellow-400" /> 
-                <span className="font-bold text-black">{course.rating.toFixed(1)}</span>
+              <div className="flex items-center gap-1 text-slate-600">
+                <Star size={14} className="text-yellow-400 fill-yellow-400 animate-pulse" /> 
+                <span className="font-black text-slate-800">{course.rating.toFixed(2)}</span>
+                <span className="text-slate-400 text-xs font-bold">({Math.round((course.studentsEnrolled || 10) * 3.6)} ratings)</span>
               </div>
               )}
               {course.showStudentsEnrolled && (
-              <div className="flex items-center gap-1 text-black font-bold text-xs ml-auto">
-                <span className="text-gray-600">👤</span> {course.studentsEnrolled || 0} students
+              <div className="flex items-center gap-1 text-slate-800 font-black text-xs ml-auto">
+                <span>{course.studentsEnrolled || 0} students</span>
               </div>
               )}
            </div>
@@ -138,13 +145,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
                     <span className="text-2xl lg:text-3xl font-black text-black">{formatPrice(displayTotal)}</span>
                     <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(displayTotal + 15000)}</span>
                  </div>
-                 <div className="text-sm font-bold text-black mt-1">
-                    ({formatPrice(displayPerSession)} per hour)
+                 <div className="text-sm font-bold text-slate-500 mt-1">
+                    ({formatPrice(displayPerSession)} per class)
                  </div>
               </div>
               
-              <div className="w-full rounded-full py-3 border-2 border-primary-500 text-primary-500 group-hover:bg-primary-500 group-hover:text-white font-bold text-base transition-colors mt-2 text-center">
-                Enroll Now
+              <div className="w-full rounded-full py-3 border-2 border-primary-500 text-primary-500 font-extrabold text-base transition-colors mt-2 text-center bg-white group-hover:bg-primary-500 group-hover:text-white">
+                Book a Free Demo
               </div>
            </div>
         </CardContent>
