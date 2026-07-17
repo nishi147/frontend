@@ -104,16 +104,16 @@ export const Footer = () => {
               </span>
             ))}
           </div>
-          <div className="flex flex-col items-center md:items-end gap-2">
+          <div className="flex flex-col items-center md:items-end gap-3">
             <p className="text-white opacity-60 font-bold">
               © {new Date().getFullYear()} RUZANN EdTech. Crafted with ✨ for future innovators.
             </p>
-            <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest text-white/40">
-               <Link href="/privacy-policy" className="hover:text-primary-500 transition-colors">Privacy Policy</Link>
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-1 gap-y-2">
+               <Link href="/privacy-policy" className="text-[11px] font-black uppercase tracking-widest text-white/60 hover:text-primary-400 transition-colors px-3 py-1 rounded-full hover:bg-white/5">Privacy Policy</Link>
                <span className="w-1 h-1 rounded-full bg-white/20" />
-               <Link href="/terms-conditions" className="hover:text-secondary-500 transition-colors">Terms & Conditions</Link>
+               <Link href="/terms-conditions" className="text-[11px] font-black uppercase tracking-widest text-white/60 hover:text-secondary-400 transition-colors px-3 py-1 rounded-full hover:bg-white/5">Terms & Conditions</Link>
                <span className="w-1 h-1 rounded-full bg-white/20" />
-               <Link href="/refund-policy" className="hover:text-amber-500 transition-colors">Refund Policy</Link>
+               <Link href="/refund-policy" className="text-[11px] font-black uppercase tracking-widest text-white/60 hover:text-amber-400 transition-colors px-3 py-1 rounded-full hover:bg-white/5">Refund Policy</Link>
             </div>
           </div>
         </div>
