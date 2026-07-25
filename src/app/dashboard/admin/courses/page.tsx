@@ -186,8 +186,11 @@ export default function AdminCourseManagement() {
       }
 
       // Price calculations
-      formDataToSubmit.set('pricePerSession', formData.offerPrice.toString());
-      formDataToSubmit.set('numberOfSessions', (formData.numberOfSessions > 0 ? formData.numberOfSessions : 1).toString());
+      // pricePerSession = offerPrice / numberOfSessions so that total stays = offerPrice
+      const sessions = formData.numberOfSessions > 0 ? formData.numberOfSessions : 1;
+      const pricePerSess = sessions > 0 ? Math.round(formData.offerPrice / sessions) : formData.offerPrice;
+      formDataToSubmit.set('pricePerSession', pricePerSess.toString());
+      formDataToSubmit.set('numberOfSessions', sessions.toString());
 
       const response = await (editingCourse 
         ? api.put(`/api/courses/${editingCourse._id}`, formDataToSubmit)

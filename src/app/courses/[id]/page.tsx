@@ -74,13 +74,12 @@ const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) =>
   }
 
   return (
-    <div className="space-y-2.5 max-w-3xl text-left">
+    <div className="space-y-1.5 max-w-3xl text-left">
       {lines.map((line, idx) => {
         if (line === '') {
-          return <div key={idx} className="h-1.5" />;
+          return <div key={idx} className="h-3" />;
         }
 
-        // Check for emoji at the start
         let matchedEmoji = '';
         let cleanedText = line;
 
@@ -92,7 +91,6 @@ const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) =>
           }
         }
 
-        // Handle bullet points like "* 🌟" or "- 🌟"
         if (!matchedEmoji && (line.startsWith('*') || line.startsWith('-'))) {
           const subStr = line.slice(1).trim();
           for (const emoji of Object.keys(emojiToIcon)) {
@@ -104,9 +102,11 @@ const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) =>
           }
           if (!matchedEmoji) {
             return (
-              <div key={idx} className="flex items-start gap-2.5 pl-4 text-gray-200">
-                <ChevronRight className="w-4 h-4 text-primary-400 mt-1 shrink-0" />
-                <span className="text-sm md:text-base font-semibold leading-relaxed">{subStr}</span>
+              <div key={idx} className="flex items-center gap-2.5 py-1">
+                <div className="w-5 h-5 rounded-md bg-primary-500/20 border border-primary-400/30 flex-shrink-0 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                </div>
+                <span className="text-sm font-bold text-white/90 leading-snug tracking-wide">{subStr}</span>
               </div>
             );
           }
@@ -119,16 +119,21 @@ const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) =>
           const icon = emojiToIcon[matchedEmoji];
           if (isHeader) {
             return (
-              <h3 key={idx} className="text-lg md:text-xl font-black text-white tracking-wide mt-5 mb-2.5 flex items-center gap-2 border-b border-white/10 pb-1.5 uppercase">
-                {icon}
-                {cleanedText}
-              </h3>
+              <div key={idx} className="flex items-center gap-2.5 mt-5 mb-2">
+                <div className="w-6 h-6 rounded-lg bg-primary-500/20 border border-primary-400/40 flex-shrink-0 flex items-center justify-center">{icon}</div>
+                <h3 className="text-xs font-black tracking-[0.2em] uppercase" style={{background:'linear-gradient(90deg,#e91e63,#f9a8d4)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+                  {cleanedText}
+                </h3>
+                <div className="flex-1 h-px bg-gradient-to-r from-primary-500/30 to-transparent" />
+              </div>
             );
           } else {
             return (
-              <div key={idx} className="flex items-start gap-2.5 my-1 text-gray-200 pl-1">
-                <div className="mt-1">{icon}</div>
-                <span className="text-sm md:text-base font-semibold leading-relaxed">{cleanedText}</span>
+              <div key={idx} className="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-white/5 transition-colors group">
+                <div className="w-6 h-6 rounded-lg bg-white/10 border border-white/10 flex-shrink-0 flex items-center justify-center group-hover:bg-primary-500/20 group-hover:border-primary-500/30 transition-colors">
+                  {icon}
+                </div>
+                <span className="text-sm font-semibold text-white/85 leading-snug tracking-wide">{cleanedText}</span>
               </div>
             );
           }
@@ -136,22 +141,26 @@ const DescriptionParser: React.FC<DescriptionParserProps> = ({ description }) =>
 
         if (isHeader) {
           return (
-            <h3 key={idx} className="text-lg md:text-xl font-black text-white tracking-wide mt-5 mb-2.5 border-b border-white/10 pb-1.5 uppercase">
-              {cleanedText}
-            </h3>
+            <div key={idx} className="flex items-center gap-2.5 mt-5 mb-2">
+              <h3 className="text-xs font-black tracking-[0.2em] uppercase" style={{background:'linear-gradient(90deg,#e91e63,#f9a8d4)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+                {cleanedText}
+              </h3>
+              <div className="flex-1 h-px bg-gradient-to-r from-primary-500/40 to-transparent" />
+            </div>
           );
         }
 
         if (isTransition) {
           return (
-            <p key={idx} className="text-sm md:text-base font-black text-primary-300 mt-3 mb-1">
-              {cleanedText}
-            </p>
+            <div key={idx} className="inline-flex items-center gap-1.5 mt-3 mb-1">
+              <Sparkles className="w-3 h-3 text-primary-400 flex-shrink-0" />
+              <span className="text-[11px] font-black text-primary-300 uppercase tracking-[0.15em] bg-primary-500/10 border border-primary-500/20 px-2.5 py-0.5 rounded-full">{cleanedText}</span>
+            </div>
           );
         }
 
         return (
-          <p key={idx} className="text-sm md:text-base font-semibold text-gray-200 leading-relaxed">
+          <p key={idx} className="text-sm font-medium text-white/75 leading-relaxed tracking-wide">
             {cleanedText}
           </p>
         );
@@ -368,45 +377,68 @@ export default function CourseDetailPage() {
       <Header />
       
       {/* Course Hero Header */}
-      <div className="bg-navy-900 text-white py-10 md:py-14 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full mix-blend-screen filter blur-[100px] opacity-10" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary-500 rounded-full mix-blend-screen filter blur-[80px] opacity-10" />
+      <div className="relative overflow-hidden" style={{background:'linear-gradient(135deg, #030f21 0%, #051b3b 50%, #0a0a23 100%)'}}>
+        {/* Rich animated background mesh */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full" style={{background:'radial-gradient(circle, rgba(233,30,99,0.18) 0%, transparent 70%)', filter:'blur(60px)'}} />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full" style={{background:'radial-gradient(circle, rgba(13,71,161,0.2) 0%, transparent 70%)', filter:'blur(60px)'}} />
+          <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] rounded-full" style={{background:'radial-gradient(circle, rgba(233,30,99,0.08) 0%, transparent 70%)', filter:'blur(80px)'}} />
+          {/* Grid pattern overlay */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage:'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize:'40px 40px'}} />
+        </div>
 
-        <div className="container mx-auto px-4 md:px-6 flex flex-col lg:flex-row gap-12 items-center relative z-10">
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="bg-primary-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-primary-500/30">FEATURED PATH</span>
-              <span className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-primary-300 border border-white/10">{course.category?.name}</span>
+        <div className="container mx-auto px-4 md:px-6 py-10 md:py-16 flex flex-col lg:flex-row gap-12 items-start relative z-10">
+          <div className="flex-1 text-white">
+            {/* Top badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-5">
+              <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.18em] text-white border border-primary-500/50" style={{background:'linear-gradient(135deg,rgba(233,30,99,0.3),rgba(216,27,96,0.15))', backdropFilter:'blur(10px)'}}>
+                🚀 Intensive Bootcamp
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white/70 border border-white/10 bg-white/5">
+                {course.category?.name}
+              </span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight drop-shadow-md tracking-tight">{course.title}</h1>
+            {/* Course Title — bold gradient */}
+            <h1 className="text-3xl md:text-5xl font-black mb-5 leading-[1.1] tracking-tight uppercase">
+              <span style={{background:'linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f9a8d4 80%,#e91e63 100%)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+                {course.title}
+              </span>
+            </h1>
+
+            {/* Accent line */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-0.5 w-8 rounded-full" style={{background:'linear-gradient(90deg,#e91e63,transparent)'}} />
+              <div className="h-0.5 w-4 rounded-full bg-white/20" />
+            </div>
+            
             <div className="mb-8">
               <DescriptionParser description={course.description} />
             </div>
             
-            <div className="flex flex-wrap items-center gap-8">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center font-black text-white text-2xl shadow-lg">
+            {/* Instructor + Stats bar */}
+            <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg shadow-primary-500/30 flex-shrink-0" style={{background:'linear-gradient(135deg,#e91e63,#d81b60)'}}>
                    {(course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name))?.[0]}
                 </div>
                 <div>
-                  <p className="text-xs text-white/60 font-black uppercase tracking-widest mb-1">Mentor</p>
-                  <p className="font-bold text-xl">{course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name)}</p>
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-primary-400 mb-0.5">Chief Instructor</p>
+                  <p className="font-black text-base text-white leading-tight">{course.teacher?.systemCode || (course.teacher?.name === 'Super Admin' ? 'RU-ADM-A01' : course.teacher?.name)}</p>
                 </div>
               </div>
               
-              <div className="hidden md:block h-12 w-px bg-white/10" />
+              <div className="hidden md:block h-10 w-px bg-white/10" />
               
-              <div className="flex items-center gap-6">
-                 <div>
-                   <p className="text-xs text-secondary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><BookOpen size={12} /> Modules</p>
-                   <p className="font-bold text-xl">{course.numberOfSessions}</p>
+              <div className="flex items-center gap-5">
+                 <div className="text-center">
+                   <p className="text-[9px] text-white/40 font-black uppercase tracking-[0.15em] mb-0.5 flex items-center gap-1"><BookOpen size={9} /> Modules</p>
+                   <p className="font-black text-2xl text-white leading-none">{course.numberOfSessions}</p>
                  </div>
                  {course.rating > 0 && (
-                 <div>
-                   <p className="text-xs text-primary-400 font-black uppercase tracking-widest mb-1 items-center flex gap-1"><Star size={12} fill="currentColor" /> Rating</p>
-                   <p className="font-bold text-xl">{course.rating.toFixed(1)}</p>
+                 <div className="text-center">
+                   <p className="text-[9px] text-primary-400 font-black uppercase tracking-[0.15em] mb-0.5 flex items-center gap-1"><Star size={9} fill="currentColor" /> Rating</p>
+                   <p className="font-black text-2xl text-white leading-none">{course.rating.toFixed(1)}</p>
                  </div>
                  )}
               </div>
@@ -529,41 +561,42 @@ export default function CourseDetailPage() {
           </div>
           
           {course.modules && course.modules.length > 0 ? (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2 md:gap-6">
               {course.modules.map((m: any, i: number) => {
                 const isExpanded = expandedModules.includes(i);
                 return (
-                  <div key={m._id || i} className={`bg-white rounded-[2.5rem] border-2 transition-all duration-300 ${isExpanded ? 'border-primary-100 shadow-xl shadow-primary-50' : 'border-gray-50 hover:border-gray-200'}`}>
+                  <div key={m._id || i} className={`bg-white rounded-2xl md:rounded-[2.5rem] border-2 transition-all duration-300 ${isExpanded ? 'border-primary-100 shadow-lg shadow-primary-50' : 'border-gray-50 hover:border-gray-200'}`}>
                     <button 
                       onClick={() => toggleModule(i)}
-                      className="w-full text-left p-8 flex items-center justify-between group"
+                      className="w-full text-left px-3 py-3 md:p-8 flex items-center justify-between group"
                     >
-                      <div className="flex items-center gap-6">
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl shadow-inner transition-all duration-500 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-gray-50 text-gray-900 group-hover:bg-primary-50 group-hover:text-primary-500'}`}>
+                      <div className="flex items-center gap-3 md:gap-6 min-w-0">
+                        <div className={`w-8 h-8 md:w-14 md:h-14 flex-shrink-0 rounded-xl md:rounded-2xl flex items-center justify-center font-black text-sm md:text-xl shadow-inner transition-all duration-500 ${isExpanded ? 'bg-primary-500 text-white shadow-primary-200' : 'bg-gray-50 text-gray-900 group-hover:bg-primary-50 group-hover:text-primary-500'}`}>
                           {i + 1}
                         </div>
-                        <div>
-                          <h3 className={`text-2xl font-black transition-colors uppercase tracking-tight ${isExpanded ? 'text-primary-600' : 'text-navy-900 group-hover:text-primary-500'}`}>{stripEmojis(m.title)}</h3>
-                          <p className="text-xs font-black text-gray-900 uppercase tracking-widest">{m.lessons?.length || 0} Lessons</p>
+                        <div className="min-w-0">
+                          <h3 className={`text-sm md:text-2xl font-black transition-colors uppercase tracking-tight leading-tight truncate ${isExpanded ? 'text-primary-600' : 'text-navy-900 group-hover:text-primary-500'}`}>{stripEmojis(m.title)}</h3>
+                          <p className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">{m.lessons?.length || 0} Lessons</p>
                         </div>
                       </div>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-gray-100 text-gray-900 group-hover:border-primary-200 group-hover:text-primary-500'}`}>
-                        <ChevronDown size={20} />
+                      <div className={`w-7 h-7 md:w-10 md:h-10 flex-shrink-0 ml-2 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isExpanded ? 'bg-primary-50 border-primary-100 text-primary-500 rotate-180' : 'border-gray-100 text-gray-900 group-hover:border-primary-200 group-hover:text-primary-500'}`}>
+                        <ChevronDown size={14} className="md:hidden" />
+                        <ChevronDown size={20} className="hidden md:block" />
                       </div>
                     </button>
                     
                     {isExpanded && (
-                      <div className="px-8 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div className="flex flex-col gap-3 pl-4 border-l-2 border-primary-50 ml-7 space-y-1">
+                      <div className="px-3 pb-3 md:px-8 md:pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex flex-col gap-1 md:gap-3 pl-3 md:pl-4 border-l-2 border-primary-50 ml-4 md:ml-7">
                           {m.lessons.map((l: any, idx: number) => (
-                            <div key={l._id || idx} className="flex items-center justify-between p-4 rounded-2xl hover:bg-primary-50/50 transition-all group/lesson cursor-pointer">
-                              <div className="flex items-center gap-4 font-bold text-black group-hover/lesson:text-navy-900">
-                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs shadow-sm border border-gray-100 group-hover/lesson:border-primary-200">
-                                  {l.videoUrl ? <PlayCircle size={14} className="text-primary-700" /> : <FileText size={14} className="text-accent-400" />}
+                            <div key={l._id || idx} className="flex items-center justify-between px-2 py-2 md:p-4 rounded-xl md:rounded-2xl hover:bg-primary-50/50 transition-all group/lesson cursor-pointer">
+                              <div className="flex items-center gap-2 md:gap-4 font-bold text-black group-hover/lesson:text-navy-900 min-w-0">
+                                <div className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-100 group-hover/lesson:border-primary-200">
+                                  {l.videoUrl ? <PlayCircle size={11} className="text-primary-700" /> : <FileText size={11} className="text-accent-400" />}
                                 </div>
-                                <span>{l.title}</span>
+                                <span className="text-xs md:text-sm truncate">{l.title}</span>
                               </div>
-                              <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest group-hover/lesson:text-primary-500 transition-colors">
+                              <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover/lesson:text-primary-500 transition-colors flex-shrink-0 ml-2">
                                 {l.videoUrl ? 'Video' : 'Lecture'}
                               </span>
                             </div>
