@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
+import { useCurrency } from '@/context/CurrencyContext';
 import { trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 
 interface IntroOfferContextType {
