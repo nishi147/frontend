@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 import api from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
-import { useCurrency } from '@/context/CurrencyContext';
+import { trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 
 interface IntroOfferContextType {
   isModalOpen: boolean;
@@ -27,6 +27,14 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
   const closeIntroModal = () => setIsModalOpen(false);
 
   const handleClaimOffer = async (introData: any) => {
+    // Meta Pixel AddToCart
+    trackAddToCart({
+      content_name: 'Introductory Offer',
+      content_category: 'IntroOffer',
+      value: 99,
+      currency: 'INR'
+    });
+
     setIsProcessing(true);
     try {
       // 1. Create Order on Backend
@@ -54,6 +62,13 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
               ...introData
             });
             if (verifyRes.data.success) {
+              // Meta Pixel Purchase Event
+              trackPurchase({
+                value: 99,
+                currency: 'INR',
+                content_name: 'Introductory Offer',
+                content_type: 'product',
+              });
               router.push('/payment-success');
               setIsModalOpen(false);
             }
@@ -73,6 +88,14 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
       };
 
       const rzp1 = new (window as any).Razorpay(options);
+
+      // Meta Pixel InitiateCheckout
+      trackInitiateCheckout({
+        content_name: 'Introductory Offer',
+        value: 99,
+        currency: 'INR'
+      });
+
       rzp1.open();
     } catch (error: any) {
       console.error(error);

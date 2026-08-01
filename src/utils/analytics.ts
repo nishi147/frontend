@@ -40,6 +40,87 @@ export const trackLead = (params: Record<string, any> = {}) => {
 };
 
 /**
+ * Tracks AddToCart — fired when user clicks Enroll/Book button
+ */
+export const trackAddToCart = (params: {
+  content_name?: string;
+  content_category?: string;
+  content_ids?: string[];
+  content_type?: string;
+  value?: number;
+  currency?: string;
+  [key: string]: any;
+}) => {
+  if (typeof window === 'undefined') return;
+  if ((window as any).fbq) {
+    (window as any).fbq('track', 'AddToCart', params);
+  }
+  if ((window as any).gtag) {
+    (window as any).gtag('event', 'add_to_cart', {
+      currency: params.currency || 'INR',
+      value: params.value,
+      items: [{ item_name: params.content_name, item_category: params.content_category }]
+    });
+  }
+};
+
+/**
+ * Tracks InitiateCheckout — fired just before Razorpay widget opens
+ */
+export const trackInitiateCheckout = (params: {
+  content_name?: string;
+  num_items?: number;
+  value?: number;
+  currency?: string;
+  [key: string]: any;
+}) => {
+  if (typeof window === 'undefined') return;
+  if ((window as any).fbq) {
+    (window as any).fbq('track', 'InitiateCheckout', params);
+  }
+  if ((window as any).gtag) {
+    (window as any).gtag('event', 'begin_checkout', {
+      currency: params.currency || 'INR',
+      value: params.value,
+    });
+  }
+};
+
+/**
+ * Tracks Purchase — fired after payment is successfully verified
+ */
+export const trackPurchase = (params: {
+  value: number;
+  currency?: string;
+  content_name?: string;
+  content_ids?: string[];
+  content_type?: string;
+  transaction_id?: string;
+  [key: string]: any;
+}) => {
+  if (typeof window === 'undefined') return;
+  if ((window as any).fbq) {
+    (window as any).fbq('track', 'Purchase', {
+      value: params.value,
+      currency: params.currency || 'INR',
+      content_name: params.content_name,
+      content_ids: params.content_ids,
+      content_type: params.content_type || 'product',
+    });
+  }
+  if ((window as any).gtag) {
+    (window as any).gtag('event', 'purchase', {
+      transaction_id: params.transaction_id || Date.now().toString(),
+      currency: params.currency || 'INR',
+      value: params.value,
+      items: [{ item_name: params.content_name }]
+    });
+  }
+};
+
+
+
+/**
  * Specifically tracks a Contact - triggered when contact form is submitted
  */
 export const trackContact = (params: Record<string, any> = {}) => {

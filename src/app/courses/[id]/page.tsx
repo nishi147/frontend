@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
-import { trackEvent, trackLead } from '@/utils/analytics';
+import { trackEvent, trackLead, trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 import { useCurrency } from '@/context/CurrencyContext';
 
 const emojiToIcon: { [key: string]: React.ReactNode } = {
@@ -270,10 +270,28 @@ export default function CourseDetailPage() {
 
     // If not logged in → show guest checkout modal instead of redirecting
     if (!user) {
+      // AddToCart before showing guest modal
+      trackAddToCart({
+        content_name: course.title,
+        content_category: course.category?.name,
+        content_ids: [course._id],
+        content_type: 'product',
+        value: finalPrice,
+        currency: 'INR'
+      });
       setShowGuestModal(true);
       return;
     }
 
+    // AddToCart for logged-in users
+    trackAddToCart({
+      content_name: course.title,
+      content_category: course.category?.name,
+      content_ids: [course._id],
+      content_type: 'product',
+      value: finalPrice,
+      currency: 'INR'
+    });
     await startRazorpayCheckout(user.name, user.email, false);
   };
 
@@ -345,6 +363,14 @@ export default function CourseDetailPage() {
                 sessions: selectedSessions,
                 guest: isGuest
               });
+              // Purchase event — standard Meta Pixel conversion
+              trackPurchase({
+                value: finalPrice,
+                currency: 'INR',
+                content_name: course.title,
+                content_ids: [course._id],
+                content_type: 'product',
+              });
               showToast("Payment successful! Check your email for confirmation. 🚀", "success");
               router.push('/payment-success');
             }
@@ -363,6 +389,15 @@ export default function CourseDetailPage() {
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      // InitiateCheckout — fired just before Razorpay widget opens
+      trackInitiateCheckout({
+        content_name: course.title,
+        num_items: selectedSessions,
+        value: finalPrice,
+        currency: 'INR'
+      });
+
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){

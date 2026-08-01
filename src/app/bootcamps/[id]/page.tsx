@@ -11,7 +11,7 @@ import { CheckCircle, PlayCircle, FileText, ChevronDown, Calendar, MapPin, User,
 import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
-import { trackLead } from '@/utils/analytics';
+import { trackLead, trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 import { useCurrency } from '@/context/CurrencyContext';
 import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
 
@@ -94,8 +94,16 @@ export default function BootcampDetailPage() {
       return;
     }
     
-    // Tracking Lead Event
+    // Tracking Lead + AddToCart Events
     trackLead({
+      content_name: bootcamp.title,
+      content_category: 'Bootcamp',
+      content_ids: [bootcamp._id],
+      content_type: 'product',
+      value: finalPrice,
+      currency: 'INR'
+    });
+    trackAddToCart({
       content_name: bootcamp.title,
       content_category: 'Bootcamp',
       content_ids: [bootcamp._id],
@@ -142,6 +150,14 @@ export default function BootcampDetailPage() {
             });
             
             if (verifyRes.data.success) {
+              // Purchase event
+              trackPurchase({
+                value: finalPrice,
+                currency: 'INR',
+                content_name: bootcamp.title,
+                content_ids: [bootcamp._id],
+                content_type: 'product',
+              });
               showToast("Mission Accepted! You're enrolled. 🚀", "success");
               router.push('/payment-success');
             }
@@ -159,6 +175,15 @@ export default function BootcampDetailPage() {
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      // InitiateCheckout — before Razorpay opens
+      trackInitiateCheckout({
+        content_name: bootcamp.title,
+        num_items: 1,
+        value: finalPrice,
+        currency: 'INR'
+      });
+
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){

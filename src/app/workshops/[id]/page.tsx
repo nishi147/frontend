@@ -11,7 +11,7 @@ import { CheckCircle, Calendar, MapPin, ArrowRight, Sparkles, Clock, ShieldCheck
 import { useToast } from '@/context/ToastContext';
 import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
-import { trackEvent } from '@/utils/analytics';
+import { trackEvent, trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 import { useCurrency } from '@/context/CurrencyContext';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
 import { StudentRegistrationModal } from '@/components/modals/StudentRegistrationModal';
@@ -84,6 +84,16 @@ export default function WorkshopDetailPage() {
   const handleBookWorkshop = async () => {
     if (authLoading) return;
     
+    // Meta Pixel AddToCart Event
+    trackAddToCart({
+      content_name: workshop?.title,
+      content_category: 'Workshop',
+      content_ids: [workshop?._id],
+      content_type: 'product',
+      value: finalPrice,
+      currency: 'INR'
+    });
+
     setIsProcessing(true);
     try {
       const slotRes = await api.get(`/api/workshops/${workshop._id}/slots`);
@@ -157,6 +167,14 @@ export default function WorkshopDetailPage() {
                 amount: order.amount / 100, 
                 currency: order.currency 
               });
+              // Meta Pixel Purchase Event
+              trackPurchase({
+                value: finalPrice,
+                currency: 'INR',
+                content_name: workshop.title,
+                content_ids: [workshop._id],
+                content_type: 'product',
+              });
               showToast("Successful booking! See you there. 🚀", "success");
               router.push('/payment-success');
             }
@@ -174,6 +192,15 @@ export default function WorkshopDetailPage() {
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      // Meta Pixel InitiateCheckout Event
+      trackInitiateCheckout({
+        content_name: workshop.title,
+        num_items: 1,
+        value: finalPrice,
+        currency: 'INR'
+      });
+
       rzp.open();
     } catch (err: any) {
       showToast(err.response?.data?.message || "Failed to initiate payment", "error");

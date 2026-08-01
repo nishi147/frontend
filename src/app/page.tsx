@@ -18,7 +18,7 @@ import { UserIcon, Rocket, Sparkles, MessageCircle, Star, Calendar, MapPin, Tag,
 import CourseSelection from '@/components/sections/CourseSelection';
 import { SuperstarProjects } from '@/components/sections/SuperstarProjects';
 import { WorkshopSlotSelectorModal } from '@/components/game/WorkshopSlotSelectorModal';
-import { trackEvent, trackLead, trackContact } from '@/utils/analytics';
+import { trackEvent, trackLead, trackContact, trackAddToCart, trackInitiateCheckout, trackPurchase } from '@/utils/analytics';
 import { AdUnit } from '@/components/AdSense';
 import { SliderWrapper } from '@/components/ui/SliderWrapper';
 import AiPlayground from '@/components/sections/AiPlayground';
@@ -175,6 +175,13 @@ const BootcampSection = () => {
                 amount: order.amount / 100, 
                 currency: order.currency 
               });
+              trackPurchase({
+                value: order.amount / 100,
+                currency: order.currency || 'INR',
+                content_name: bootcamp.title,
+                content_ids: [bootcamp._id],
+                content_type: 'product',
+              });
               router.push('/payment-success');
             }
           } catch (err: any) {
@@ -193,6 +200,14 @@ const BootcampSection = () => {
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      trackInitiateCheckout({
+        content_name: bootcamp.title,
+        num_items: 1,
+        value: order.amount / 100,
+        currency: order.currency || 'INR'
+      });
+
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){
@@ -462,6 +477,13 @@ const WorkshopSection = () => {
                 amount: order.amount / 100, 
                 currency: order.currency 
               });
+              trackPurchase({
+                value: order.amount / 100,
+                currency: order.currency || 'INR',
+                content_name: workshop.title,
+                content_ids: [workshop._id],
+                content_type: 'product',
+              });
               router.push('/payment-success');
             }
           } catch (err: any) {
@@ -480,6 +502,14 @@ const WorkshopSection = () => {
       };
 
       const rzp = new (window as any).Razorpay(options);
+
+      trackInitiateCheckout({
+        content_name: workshop.title,
+        num_items: 1,
+        value: order.amount / 100,
+        currency: order.currency || 'INR'
+      });
+
       rzp.open();
       
       rzp.on('payment.failed', function (response: any){
