@@ -33,6 +33,16 @@ export default function ContactPage() {
         referralCode: form.referralCode,
         notes: [{ text: `Subject: ${form.subject}\nMessage: ${form.message}` }]
       });
+
+      // Subscribe to Klaviyo (fire-and-forget — never block UX on this)
+      api.post('/api/klaviyo/subscribe', {
+        email: form.email,
+        firstName: form.name.split(' ')[0],
+        lastName: form.name.split(' ').slice(1).join(' ') || undefined,
+        phone: form.phone || undefined,
+        source: 'Contact Form',
+      }).catch(() => {}); // Silently ignore Klaviyo errors
+
       trackContact({
         content_category: 'Contact Page',
         subject: form.subject

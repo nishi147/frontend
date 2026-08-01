@@ -74,3 +74,49 @@ export const trackPageView = (url: string) => {
     (window as any).fbq('track', 'PageView');
   }
 };
+
+// ---------------------------------------------------------------------------
+// Klaviyo Client-Side Helpers
+// Uses the window._learnq push API loaded by the Klaviyo JS snippet
+// ---------------------------------------------------------------------------
+
+/**
+ * Identifies a user in Klaviyo (call after login / signup / form submit)
+ * @param profile - User profile data
+ */
+export const klaviyoIdentify = (profile: {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  [key: string]: any;
+}) => {
+  if (typeof window === 'undefined') return;
+  const learnq = (window as any)._learnq;
+  if (!learnq) return;
+
+  learnq.push(['identify', {
+    $email: profile.email,
+    ...(profile.firstName && { $first_name: profile.firstName }),
+    ...(profile.lastName && { $last_name: profile.lastName }),
+    ...(profile.phone && { $phone_number: profile.phone }),
+    // Any extra properties
+    ...Object.fromEntries(
+      Object.entries(profile).filter(([k]) => !['email', 'firstName', 'lastName', 'phone'].includes(k))
+    ),
+  }]);
+};
+
+/**
+ * Tracks a custom Klaviyo event client-side
+ * @param eventName - Name of the event (e.g. "Viewed Course", "Started Trial")
+ * @param properties - Event properties
+ */
+export const klaviyoTrack = (eventName: string, properties: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const learnq = (window as any)._learnq;
+  if (!learnq) return;
+
+  learnq.push(['track', eventName, properties]);
+};
+

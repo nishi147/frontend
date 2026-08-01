@@ -60,6 +60,12 @@ export default function RootLayout({
     })(window, document, "clarity", "script", "xvkfr68ou1");`,
           }}
         />
+        {/* Klaviyo - Client-side tracking & email identification */}
+        <Script
+          id="klaviyo-js"
+          src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${process.env.NEXT_PUBLIC_KLAVIYO_PUBLIC_KEY}`}
+          strategy="afterInteractive"
+        />
         
         <AnalyticsProviders>
           <AuthProvider>

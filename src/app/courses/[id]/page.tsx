@@ -189,6 +189,11 @@ export default function CourseDetailPage() {
   const [couponError, setCouponError] = useState('');
   const [expandedModules, setExpandedModules] = useState<number[]>([0]);
 
+  // Guest checkout state
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guestForm, setGuestForm] = useState({ name: '', email: '', phone: '' });
+  const [guestFormError, setGuestFormError] = useState('');
+
   const toggleModule = (index: number) => {
     setExpandedModules(prev => 
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -258,17 +263,22 @@ export default function CourseDetailPage() {
       return;
     }
 
-    if (!user) {
-      showToast("Please login to enroll in this course", "info");
-      router.push('/login');
-      return;
-    }
-
     if (isEnrolled) {
       router.push(`/dashboard/student/courses/${id}`);
       return;
     }
-    
+
+    // If not logged in → show guest checkout modal instead of redirecting
+    if (!user) {
+      setShowGuestModal(true);
+      return;
+    }
+
+    await startRazorpayCheckout(user.name, user.email, false);
+  };
+
+  // Handles Razorpay for both logged-in users and guests
+  const startRazorpayCheckout = async (buyerName: string, buyerEmail: string, isGuest: boolean, buyerPhone?: string) => {
     // Tracking Lead Event
     trackLead({
       content_name: course.title,
@@ -281,8 +291,9 @@ export default function CourseDetailPage() {
 
     setIsProcessing(true);
     try {
-      // 1. Create order
-      const orderRes = await api.post('/api/payments/order', {
+      // 1. Create order (guest or authenticated)
+      const orderEndpoint = isGuest ? '/api/payments/guest-order' : '/api/payments/order';
+      const orderRes = await api.post(orderEndpoint, {
         courseId: course._id,
         sessions: selectedSessions,
         couponCode: appliedCoupon?.code,
@@ -293,7 +304,8 @@ export default function CourseDetailPage() {
       trackEvent('course_payment_init', { 
         course_id: course._id, 
         amount: finalPrice, 
-        sessions: selectedSessions 
+        sessions: selectedSessions,
+        guest: isGuest
       });
 
       // 2. Open Razorpay Widget
@@ -306,8 +318,8 @@ export default function CourseDetailPage() {
         order_id: order.id,
         handler: async function (response: any) {
           try {
-            // 3. Verify Payment
-            const verifyRes = await api.post('/api/payments/verify', {
+            const verifyEndpoint = isGuest ? '/api/payments/guest-verify' : '/api/payments/verify';
+            const verifyPayload: any = {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
@@ -315,24 +327,35 @@ export default function CourseDetailPage() {
               sessions: selectedSessions,
               amount: finalPrice,
               couponCode: appliedCoupon?.code
-            });
+            };
+
+            // Guest-specific fields
+            if (isGuest) {
+              verifyPayload.guestName = buyerName;
+              verifyPayload.guestEmail = buyerEmail;
+              verifyPayload.guestPhone = buyerPhone || '';
+            }
+
+            const verifyRes = await api.post(verifyEndpoint, verifyPayload);
             
             if (verifyRes.data.success) {
               trackEvent('course_payment_success', { 
                 course_id: course._id, 
                 amount: finalPrice, 
-                sessions: selectedSessions 
+                sessions: selectedSessions,
+                guest: isGuest
               });
-              showToast("Successfully enrolled! Welcome aboard. 🚀", "success");
+              showToast("Payment successful! Check your email for confirmation. 🚀", "success");
               router.push('/payment-success');
             }
           } catch (err) {
-             showToast("Payment verification failed. Please contact support.", "error");
+            showToast("Payment verification failed. Please contact support.", "error");
           }
         },
         prefill: {
-          name: user.name,
-          email: user.email,
+          name: buyerName,
+          email: buyerEmail,
+          contact: buyerPhone || ''
         },
         theme: {
           color: "#E91E63"
@@ -354,6 +377,17 @@ export default function CourseDetailPage() {
     }
   };
 
+  const handleGuestSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGuestFormError('');
+    if (!guestForm.name.trim() || !guestForm.email.trim()) {
+      setGuestFormError('Name and email are required.');
+      return;
+    }
+    setShowGuestModal(false);
+    await startRazorpayCheckout(guestForm.name, guestForm.email, true, guestForm.phone);
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
@@ -373,6 +407,7 @@ export default function CourseDetailPage() {
   );
 
   return (
+    <>
     <div className="min-h-screen bg-[#FDFDFD]">
       <Header />
       
@@ -655,5 +690,94 @@ export default function CourseDetailPage() {
         </div>
       </div>
     </div>
+
+      {/* ── Guest Checkout Modal ── */}
+      {showGuestModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setShowGuestModal(false)}
+        >
+          <div
+            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 relative animate-in zoom-in-95 duration-200"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Close */}
+            <button
+              onClick={() => setShowGuestModal(false)}
+              className="absolute top-5 right-5 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+            >
+              <X size={18} className="text-gray-600" />
+            </button>
+
+            <div className="mb-6 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-4">
+                <ShieldCheck size={28} className="text-primary-500" />
+              </div>
+              <h2 className="text-2xl font-black text-gray-900 mb-1">Quick Checkout</h2>
+              <p className="text-gray-500 font-semibold text-sm">No account needed — just fill in your details</p>
+            </div>
+
+            <form onSubmit={handleGuestSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest">Full Name *</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="e.g. Priya Sharma"
+                  value={guestForm.name}
+                  onChange={e => setGuestForm(p => ({ ...p, name: e.target.value }))}
+                  className="px-4 py-3 rounded-xl border-2 border-gray-100 font-semibold text-gray-800 focus:border-primary-400 focus:outline-none transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest">Email Address *</label>
+                <input
+                  required
+                  type="email"
+                  placeholder="you@example.com"
+                  value={guestForm.email}
+                  onChange={e => setGuestForm(p => ({ ...p, email: e.target.value }))}
+                  className="px-4 py-3 rounded-xl border-2 border-gray-100 font-semibold text-gray-800 focus:border-primary-400 focus:outline-none transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest">Phone (optional)</label>
+                <input
+                  type="tel"
+                  placeholder="+91 00000 00000"
+                  value={guestForm.phone}
+                  onChange={e => setGuestForm(p => ({ ...p, phone: e.target.value }))}
+                  className="px-4 py-3 rounded-xl border-2 border-gray-100 font-semibold text-gray-800 focus:border-primary-400 focus:outline-none transition-colors"
+                />
+              </div>
+
+              {guestFormError && (
+                <p className="text-red-500 text-sm font-bold bg-red-50 px-4 py-2 rounded-xl">{guestFormError}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={isProcessing}
+                className="w-full py-4 rounded-2xl bg-primary-500 hover:bg-primary-600 disabled:opacity-70 text-white font-black text-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary-200 mt-2"
+              >
+                <ShieldCheck size={20} /> Continue to Payment
+              </button>
+
+              <p className="text-center text-xs text-gray-400 font-semibold">
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => { setShowGuestModal(false); router.push('/login'); }}
+                  className="text-primary-500 font-black hover:underline"
+                >
+                  Log in instead
+                </button>
+              </p>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
