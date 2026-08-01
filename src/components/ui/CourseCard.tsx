@@ -40,9 +40,20 @@ interface CourseCardProps {
 const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', className = '' }) => {
   const { formatPrice } = useCurrency();
   const multiplier = typeFilter === '3:1' ? 0.8 : typeFilter === '5:1' ? 0.6 : typeFilter === 'Group' ? 0.5 : 1;
-  const displayPerSession = Math.round(course.pricePerSession * multiplier);
-  const displayTotal = Math.round(displayPerSession * course.numberOfSessions);
   const displayType = typeFilter === 'All' ? course.courseType : typeFilter;
+  const sessionsCount = course.numberOfSessions > 0 ? course.numberOfSessions : 1;
+
+  let displayTotal = 0;
+  let displayPerSession = 0;
+
+  if (course.numberOfSessions && course.numberOfSessions > 1 && course.pricePerSession && course.totalCoursePrice && course.pricePerSession < course.totalCoursePrice) {
+    displayPerSession = Math.round(course.pricePerSession * multiplier);
+    displayTotal = Math.round(displayPerSession * course.numberOfSessions);
+  } else {
+    const baseTotal = course.totalCoursePrice || course.pricePerSession || 0;
+    displayTotal = Math.round(baseTotal * multiplier);
+    displayPerSession = sessionsCount > 1 ? Math.round(displayTotal / sessionsCount) : displayTotal;
+  }
 
   return (
     <Link
@@ -54,7 +65,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
           content_category: course.category?.name,
           content_ids: [course._id],
           content_type: 'product',
-          value: Math.round(course.pricePerSession * multiplier * course.numberOfSessions),
+          value: displayTotal,
           currency: 'INR'
         });
         trackEvent('course_details_click', {
@@ -143,11 +154,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
               <div className="flex flex-col pt-1">
                  <div className="flex items-baseline gap-2">
                     <span className="text-2xl lg:text-3xl font-black text-black">{formatPrice(displayTotal)}</span>
-                    <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(displayTotal + 15000)}</span>
+                    <span className="text-sm font-medium text-gray-400 line-through">{formatPrice(Math.round(displayTotal * 2.36))}</span>
                  </div>
-                 <div className="text-sm font-bold text-slate-500 mt-1">
-                    ({formatPrice(displayPerSession)} per class)
-                 </div>
+                 {displayPerSession > 0 && displayPerSession < displayTotal && (
+                   <div className="text-sm font-bold text-slate-500 mt-1">
+                      ({formatPrice(displayPerSession)} per class)
+                   </div>
+                 )}
               </div>
               
               <div className="w-full rounded-full py-3 border-2 border-primary-500 text-primary-500 font-extrabold text-base transition-colors mt-2 text-center bg-white group-hover:bg-primary-500 group-hover:text-white">
