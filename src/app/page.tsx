@@ -777,7 +777,7 @@ const ContactSection = () => {
                   >
                     <option value="">Choose a Magic Topic</option>
                     <option value="Courses">Course Enquiry 📚</option>
-                    <option value="Demo">Free Demo Session 🎁</option>
+                    <option value="Demo">Demo Session 🎁</option>
                     <option value="Feedback">Just Saying Hi 👋</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900">
@@ -1047,7 +1047,7 @@ export default function Home() {
                 onClick={() => setIsEnquiryOpen(true)}
                 className="w-full sm:w-auto text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/20 font-bold text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
               >
-                Book Free Demo <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                Book Demo <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </button>
             </div>
 
@@ -1739,7 +1739,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-primary-500/10 text-primary-400 border border-primary-500/20 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
                 💬
               </div>
-              <h3 className="text-2xl font-black text-white">Book Free Demo / Enquire</h3>
+              <h3 className="text-2xl font-black text-white">Book Demo / Enquire</h3>
               <p className="text-sm font-bold text-gray-400 mt-1">Get in touch with our learning experts.</p>
             </div>
             
@@ -1789,7 +1789,7 @@ export default function Home() {
                     value={enquiryForm.subject}
                     onChange={(e) => setEnquiryForm({...enquiryForm, subject: e.target.value})}
                   >
-                    <option value="Demo">Book Free Demo Session 🎁</option>
+                    <option value="Demo">Book Demo Session 🎁</option>
                     <option value="Courses">Course Enquiry 📚</option>
                     <option value="Pricing">Fee Details & Offers 💰</option>
                     <option value="General">Other General Enquiry 👋</option>

@@ -164,7 +164,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, typeFilter = 'All', cla
               </div>
               
               <div className="w-full rounded-full py-3 border-2 border-primary-500 text-primary-500 font-extrabold text-base transition-colors mt-2 text-center bg-white group-hover:bg-primary-500 group-hover:text-white">
-                Book a Free Demo
+                Book Demo
               </div>
            </div>
         </CardContent>

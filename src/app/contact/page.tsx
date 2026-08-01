@@ -110,7 +110,7 @@ export default function ContactPage() {
             </div>
 
             <div className="bg-gradient-to-br from-[#6C5CE7] to-[#a29bfe] rounded-2xl p-6 text-white">
-              <h3 className="font-black text-lg mb-2">🎯 Book a Free Trial</h3>
+              <h3 className="font-black text-lg mb-2">🎯 Book a Trial</h3>
               <p className="text-white/80 font-bold text-sm mb-4">Start your child's learning journey for just {formatPrice(99)}. No commitment needed!</p>
               <Link href="/signup" className="block w-full text-center py-3 rounded-xl bg-white text-[#6C5CE7] font-black hover:bg-yellow-300 transition-all">
                 Claim {formatPrice(99)} Trial

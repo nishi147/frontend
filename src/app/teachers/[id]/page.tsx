@@ -289,7 +289,7 @@ export default function TeacherDetailPage() {
                     Want to learn from <br/><span className="text-primary-400 font-baloo">{profile.name}</span>?
                  </h2>
                  <p className="text-xl text-slate-400 font-bold mb-10 max-w-2xl mx-auto leading-relaxed">
-                    Book a free demo session today and experience the magic of learning with our verified experts.
+                    Book a demo session today and experience the magic of learning with our verified experts.
                  </p>
                  <Link href="/courses">
                     <Button className="bg-primary-500 hover:bg-primary-600 text-white rounded-3xl px-12 py-8 text-2xl font-black shadow-xl shadow-primary-500/30 transition-all hover:scale-105">
