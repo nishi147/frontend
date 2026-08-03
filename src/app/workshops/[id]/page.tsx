@@ -162,22 +162,31 @@ export default function WorkshopDetailPage() {
             const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
             if (verifyRes.data.success) {
-              trackEvent('workshop_payment_success', { 
-                workshop_id: workshop._id, 
-                amount: order.amount / 100, 
-                currency: order.currency 
-              });
-              // Meta Pixel Purchase Event
-              trackPurchase({
+              const purchaseData = {
                 value: finalPrice,
                 currency: 'INR',
                 content_name: workshop.title,
                 content_ids: [workshop._id],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
+              };
+
+              trackEvent('workshop_payment_success', { 
+                workshop_id: workshop._id, 
+                amount: order.amount / 100, 
+                currency: order.currency 
               });
+
+              // Meta Pixel Purchase Event
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
               showToast("Successful booking! See you there. 🚀", "success");
-              router.push('/payment-success');
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=${finalPrice}&title=${encodeURIComponent(workshop.title)}`);
             }
           } catch (err: any) {
             showToast("Payment verification failed. Please contact support.", "error");

@@ -170,20 +170,28 @@ const BootcampSection = () => {
             const verifyRes = await api.post('/api/payments/bootcamp-verify', verifyPayload);
 
             if (verifyRes.data.success) {
-              trackEvent('bootcamp_payment_success', { 
-                bootcamp_id: bootcamp._id, 
-                amount: order.amount / 100, 
-                currency: order.currency 
-              });
-              trackPurchase({
+              const purchaseData = {
                 value: order.amount / 100,
                 currency: order.currency || 'INR',
                 content_name: bootcamp.title,
                 content_ids: [bootcamp._id],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
+              };
+
+              trackEvent('bootcamp_payment_success', { 
+                bootcamp_id: bootcamp._id, 
+                amount: order.amount / 100, 
+                currency: order.currency 
               });
-              router.push('/payment-success');
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=${order.amount / 100}&title=${encodeURIComponent(bootcamp.title)}`);
             }
           } catch (err: any) {
             console.error("Verification error:", err);
@@ -473,20 +481,28 @@ const WorkshopSection = () => {
             const verifyRes = await api.post('/api/payments/workshop-verify', verifyPayload);
 
             if (verifyRes.data.success) {
-              trackEvent('workshop_payment_success', { 
-                workshop_id: workshop._id, 
-                amount: order.amount / 100, 
-                currency: order.currency 
-              });
-              trackPurchase({
+              const purchaseData = {
                 value: order.amount / 100,
                 currency: order.currency || 'INR',
                 content_name: workshop.title,
                 content_ids: [workshop._id],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
+              };
+
+              trackEvent('workshop_payment_success', { 
+                workshop_id: workshop._id, 
+                amount: order.amount / 100, 
+                currency: order.currency 
               });
-              router.push('/payment-success');
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=${order.amount / 100}&title=${encodeURIComponent(workshop.title)}`);
             }
           } catch (err: any) {
             console.error("Verification error:", err);

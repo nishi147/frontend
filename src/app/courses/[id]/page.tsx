@@ -357,23 +357,32 @@ export default function CourseDetailPage() {
             const verifyRes = await api.post(verifyEndpoint, verifyPayload);
             
             if (verifyRes.data.success) {
-              trackEvent('course_payment_success', { 
-                course_id: course._id, 
-                amount: finalPrice, 
-                sessions: selectedSessions,
-                guest: isGuest
-              });
-              // Purchase event — standard Meta Pixel conversion
-              trackPurchase({
+              const purchaseData = {
                 value: finalPrice,
                 currency: 'INR',
                 content_name: course.title,
                 content_ids: [course._id],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
+              };
+
+              trackEvent('course_payment_success', { 
+                course_id: course._id, 
+                amount: finalPrice, 
+                sessions: selectedSessions,
+                guest: isGuest
               });
+              
+              // Purchase event — standard Meta Pixel conversion
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
               showToast("Payment successful! Check your email for confirmation. 🚀", "success");
-              router.push('/payment-success');
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=${finalPrice}&title=${encodeURIComponent(course.title)}`);
             }
           } catch (err) {
             showToast("Payment verification failed. Please contact support.", "error");

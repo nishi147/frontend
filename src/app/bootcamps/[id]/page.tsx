@@ -150,17 +150,25 @@ export default function BootcampDetailPage() {
             });
             
             if (verifyRes.data.success) {
-              // Purchase event
-              trackPurchase({
+              const purchaseData = {
                 value: finalPrice,
                 currency: 'INR',
                 content_name: bootcamp.title,
                 content_ids: [bootcamp._id],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
-              });
+              };
+
+              // Purchase event
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
               showToast("Mission Accepted! You're enrolled. 🚀", "success");
-              router.push('/payment-success');
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=${finalPrice}&title=${encodeURIComponent(bootcamp.title)}`);
             }
           } catch (err) {
              showToast("Payment verification failed. Please contact support.", "error");

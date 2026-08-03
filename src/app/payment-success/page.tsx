@@ -1,13 +1,47 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { CheckCircle, Sparkles, Rocket, ArrowRight, Mail } from 'lucide-react';
+import { trackPurchase } from '@/utils/analytics';
 
 export default function PaymentSuccessPage() {
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const tx = searchParams.get('tx') || searchParams.get('transaction_id');
+    const amountStr = searchParams.get('amount') || searchParams.get('value');
+    const title = searchParams.get('title') || searchParams.get('item');
+
+    let purchaseData: any = null;
+    const stored = sessionStorage.getItem('latest_purchase');
+    if (stored) {
+      try {
+        purchaseData = JSON.parse(stored);
+      } catch (e) {}
+    }
+
+    if (!purchaseData && (tx || amountStr || title)) {
+      purchaseData = {
+        value: amountStr ? parseFloat(amountStr) : 0,
+        currency: 'INR',
+        content_name: title || 'Course Purchase',
+        transaction_id: tx || undefined
+      };
+    }
+
+    if (purchaseData) {
+      const dedupKey = `tracked_purchase_${purchaseData.transaction_id || purchaseData.content_name || 'default'}`;
+      if (!sessionStorage.getItem(dedupKey)) {
+        sessionStorage.setItem(dedupKey, 'true');
+        trackPurchase(purchaseData);
+      }
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <Header />

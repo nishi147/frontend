@@ -63,15 +63,23 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
               ...introData
             });
             if (verifyRes.data.success) {
-              // Meta Pixel Purchase Event
-              trackPurchase({
+              const purchaseData = {
                 value: 99,
                 currency: 'INR',
                 content_name: 'Introductory Offer',
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
-              });
-              router.push('/payment-success');
+              };
+
+              // Meta Pixel Purchase Event
+              trackPurchase(purchaseData);
+
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('latest_purchase', JSON.stringify(purchaseData));
+              }
+
+              await new Promise(r => setTimeout(r, 400));
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=99&title=${encodeURIComponent('Introductory Offer')}`);
               setIsModalOpen(false);
             }
           } catch (err) {
