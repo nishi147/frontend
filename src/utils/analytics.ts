@@ -1,6 +1,6 @@
 // Centralized tracking utility for Meta Pixel and Google Analytics
 
-export const META_PIXEL_ID = '1210254384412672';
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1210254384412672';
 export const GA_MEASUREMENT_ID = 'G-JK7E9ELJNE';
 
 /**
@@ -88,6 +88,7 @@ export const trackInitiateCheckout = (params: {
 
 /**
  * Tracks Purchase — fired after payment is successfully verified
+ * Includes eventID matching for Meta Conversions API (CAPI) deduplication
  */
 export const trackPurchase = (params: {
   value: number;
@@ -99,26 +100,34 @@ export const trackPurchase = (params: {
   [key: string]: any;
 }) => {
   if (typeof window === 'undefined') return;
+
+  const eventId = params.transaction_id || params.order_id;
+  const pixelData = {
+    value: params.value,
+    currency: params.currency || 'INR',
+    content_name: params.content_name,
+    content_ids: params.content_ids,
+    content_type: params.content_type || 'product',
+  };
+
   if ((window as any).fbq) {
-    (window as any).fbq('track', 'Purchase', {
-      value: params.value,
-      currency: params.currency || 'INR',
-      content_name: params.content_name,
-      content_ids: params.content_ids,
-      content_type: params.content_type || 'product',
-    });
+    if (eventId) {
+      // Pass eventID as 4th parameter for Meta Pixel & CAPI deduplication
+      (window as any).fbq('track', 'Purchase', pixelData, { eventID: eventId });
+    } else {
+      (window as any).fbq('track', 'Purchase', pixelData);
+    }
   }
+
   if ((window as any).gtag) {
     (window as any).gtag('event', 'purchase', {
-      transaction_id: params.transaction_id || Date.now().toString(),
+      transaction_id: eventId || Date.now().toString(),
       currency: params.currency || 'INR',
       value: params.value,
       items: [{ item_name: params.content_name }]
     });
   }
 };
-
-
 
 /**
  * Specifically tracks a Contact - triggered when contact form is submitted
@@ -138,7 +147,8 @@ export const trackContact = (params: Record<string, any> = {}) => {
 };
 
 /**
- * Tracks PageView - especially for SPA route changes
+ * Tracks PageView for Google Analytics SPA route changes
+ * (Meta Pixel PageView is handled automatically via MetaPixel.tsx on route change)
  */
 export const trackPageView = (url: string) => {
   if (typeof window === 'undefined') return;
@@ -148,11 +158,6 @@ export const trackPageView = (url: string) => {
     (window as any).gtag('config', GA_MEASUREMENT_ID, {
       page_path: url,
     });
-  }
-
-  // Meta Pixel
-  if ((window as any).fbq) {
-    (window as any).fbq('track', 'PageView');
   }
 };
 

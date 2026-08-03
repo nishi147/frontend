@@ -181,6 +181,7 @@ const BootcampSection = () => {
                 content_name: bootcamp.title,
                 content_ids: [bootcamp._id],
                 content_type: 'product',
+                transaction_id: response.razorpay_payment_id
               });
               router.push('/payment-success');
             }
@@ -483,6 +484,7 @@ const WorkshopSection = () => {
                 content_name: workshop.title,
                 content_ids: [workshop._id],
                 content_type: 'product',
+                transaction_id: response.razorpay_payment_id
               });
               router.push('/payment-success');
             }

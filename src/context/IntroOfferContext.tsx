@@ -69,6 +69,7 @@ export const IntroOfferProvider = ({ children }: { children: React.ReactNode }) 
                 currency: 'INR',
                 content_name: 'Introductory Offer',
                 content_type: 'product',
+                transaction_id: response.razorpay_payment_id
               });
               router.push('/payment-success');
               setIsModalOpen(false);

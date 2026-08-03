@@ -157,6 +157,7 @@ export default function BootcampDetailPage() {
                 content_name: bootcamp.title,
                 content_ids: [bootcamp._id],
                 content_type: 'product',
+                transaction_id: response.razorpay_payment_id
               });
               showToast("Mission Accepted! You're enrolled. 🚀", "success");
               router.push('/payment-success');

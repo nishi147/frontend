@@ -8,7 +8,7 @@ export default function MetaPixel() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const pixelId = '1210254384412672';
+  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1210254384412672';
 
   useEffect(() => {
     // Track PageView on route change
@@ -33,7 +33,6 @@ export default function MetaPixel() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${pixelId}');
-            fbq('track', 'PageView');
           `,
         }}
       />

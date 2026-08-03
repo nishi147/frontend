@@ -370,6 +370,7 @@ export default function CourseDetailPage() {
                 content_name: course.title,
                 content_ids: [course._id],
                 content_type: 'product',
+                transaction_id: response.razorpay_payment_id
               });
               showToast("Payment successful! Check your email for confirmation. 🚀", "success");
               router.push('/payment-success');
