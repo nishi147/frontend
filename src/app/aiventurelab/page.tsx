@@ -257,7 +257,7 @@ export default function AIVentureLabPage() {
             <div className="lg:col-span-7 space-y-4 md:space-y-6">
               <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl md:rounded-3xl p-4 md:p-8 backdrop-blur-xl shadow-xl space-y-3 md:space-y-4">
                 <h3 className="text-sm md:text-lg font-black text-rose-400 flex items-center gap-2">
-                  <Zap size={18} className="text-amber-400" /> What You Will Achieve in 3 Hours:
+                  <Zap size={18} className="text-amber-400" /> What You Will Achieve:
                 </h3>
                 <ul className="space-y-2 md:space-y-3 text-xs md:text-base text-slate-200">
                   <li className="flex items-start gap-2 md:gap-3">
@@ -300,7 +300,7 @@ export default function AIVentureLabPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
                 <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
                   <BadgeCheck size={18} className="text-rose-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">ISO Certified</span>
+                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">Official Certificate</span>
                   <span className="text-[9px] md:text-[10px] text-slate-400">Quality Training</span>
                 </div>
                 <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
@@ -310,8 +310,8 @@ export default function AIVentureLabPage() {
                 </div>
                 <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
                   <Lock size={18} className="text-emerald-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">100% Guaranteed</span>
-                  <span className="text-[9px] md:text-[10px] text-slate-400">Money Back Protection</span>
+                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">Instant Access</span>
+                  <span className="text-[9px] md:text-[10px] text-slate-400">Secure Enrollment</span>
                 </div>
                 <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
                   <Award size={18} className="text-amber-400 mx-auto mb-0.5" />
@@ -333,7 +333,7 @@ export default function AIVentureLabPage() {
                     <Video size={24} />
                   </div>
                   <h3 className="text-base md:text-xl font-black text-white">AI Venture Lab Masterclass</h3>
-                  <p className="text-[11px] md:text-xs text-rose-300 font-semibold mt-0.5">3-Hour Interactive Live Session</p>
+                  <p className="text-[11px] md:text-xs text-rose-300 font-semibold mt-0.5">Interactive Live Session</p>
                 </div>
 
                 {/* Event Key Info */}
@@ -343,16 +343,12 @@ export default function AIVentureLabPage() {
                     <span className="font-bold text-white">Upcoming Saturday</span>
                   </div>
                   <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Clock size={14} className="text-rose-400" /> Time:</span>
-                    <span className="font-bold text-white">11:00 AM - 2:00 PM IST</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
                     <span className="text-slate-400 flex items-center gap-1.5"><Globe size={14} className="text-rose-400" /> Mode:</span>
-                    <span className="font-bold text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" /> Zoom Live</span>
+                    <span className="font-bold text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" /> Google Meet Live</span>
                   </div>
                   <div className="flex items-center justify-between py-1">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Gift size={14} className="text-rose-400" /> Bonuses:</span>
-                    <span className="font-bold text-amber-300">{formatPrice(25000)}+ Free</span>
+                    <span className="text-slate-400 flex items-center gap-1.5"><Gift size={14} className="text-rose-400" /> WhatsApp API:</span>
+                    <span className="font-bold text-amber-300">1 Year FREE ({formatPrice(25000)})</span>
                   </div>
                 </div>
 
@@ -408,11 +404,11 @@ export default function AIVentureLabPage() {
             </div>
 
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-3">
-              Join Our Live Masterclass at Just <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 bg-clip-text text-transparent">{formatPrice(99)}</span>
+              Join Our Live Masterclass <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 bg-clip-text text-transparent">Today</span>
             </h2>
 
             <p className="text-slate-300 text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-6">
-              Get 3 hours of live interactive AI training, {formatPrice(25000)}+ free bonuses, ISO certificate & 100% money-back guarantee for less than a cup of coffee.
+              Get live interactive AI training, {formatPrice(25000)}+ free bonuses, Certificate of Completion & 1-year WhatsApp API access for less than a cup of coffee.
             </p>
 
             <div className="flex items-center justify-center gap-3 mb-6">
@@ -434,9 +430,9 @@ export default function AIVentureLabPage() {
               </button>
 
               <div className="flex items-center justify-center gap-4 text-[10px] md:text-xs text-slate-400 mt-3 font-medium">
-                <span className="flex items-center gap-1 text-amber-300"><Flame size={12} /> Only 7 seats remaining</span>
+                <span className="flex items-center gap-1 text-amber-300"><Flame size={12} /> Only 14 seats remaining</span>
                 <span>•</span>
-                <span className="flex items-center gap-1 text-emerald-400"><ShieldCheck size={12} /> 100% Refund Guarantee</span>
+                <span className="flex items-center gap-1 text-emerald-400"><ShieldCheck size={12} /> Instant Access & Bonus Included</span>
               </div>
             </div>
           </div>
@@ -598,17 +594,17 @@ export default function AIVentureLabPage() {
               SYLLABUS BREAKDOWN
             </span>
             <h2 className="text-xl md:text-4xl font-black text-white mb-2">
-              What You Will Learn In 3 Hours
+              What You Will Learn
             </h2>
           </div>
 
           <div className="space-y-3">
             {[
-              { num: '01', title: 'Foundational AI & Executive Prompting', desc: 'Master the 4-step framework for razor-sharp business outputs.', time: '35 Mins' },
-              { num: '02', title: 'AI Marketing & Content Factory', desc: 'Generate ad copy, Canva graphics & video scripts in seconds.', time: '40 Mins' },
-              { num: '03', title: 'Automated Sales & Lead Funnels', desc: 'Set up auto-responding lead magnets & WhatsApp capture.', time: '35 Mins' },
-              { num: '04', title: 'Finance & Admin Automation', desc: 'Automate invoice parsing, meeting notes & vendor emails.', time: '30 Mins' },
-              { num: '05', title: 'Custom AI Business Assistant', desc: 'Deploy a private AI trained on your business SOPs.', time: '40 Mins' },
+              { num: '01', title: 'Foundational AI & Executive Prompting', desc: 'Master the 4-step framework for razor-sharp business outputs.' },
+              { num: '02', title: 'AI Marketing & Content Factory', desc: 'Generate ad copy, Canva graphics & video scripts in seconds.' },
+              { num: '03', title: 'Automated Sales & Lead Funnels', desc: 'Set up auto-responding lead magnets & WhatsApp capture.' },
+              { num: '04', title: 'Finance & Admin Automation', desc: 'Automate invoice parsing, meeting notes & vendor emails.' },
+              { num: '05', title: 'Custom AI Business Assistant', desc: 'Deploy a private AI trained on your business SOPs.' },
             ].map((m, idx) => (
               <div key={idx} className="bg-slate-950 border border-slate-800 rounded-xl md:rounded-2xl p-3.5 md:p-6 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
@@ -620,54 +616,80 @@ export default function AIVentureLabPage() {
                     <p className="text-slate-400 text-[11px] md:text-sm line-clamp-1">{m.desc}</p>
                   </div>
                 </div>
-                <span className="text-[10px] md:text-xs font-bold bg-slate-800 text-slate-300 px-2 py-1 md:px-3 md:py-1.5 rounded-full shrink-0">
-                  {m.time}
-                </span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 8. EXCLUSIVE BONUSES */}
+      {/* 8. MAJOR INCLUSION: FREE WHATSAPP API */}
       <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-950">
         <div className="container mx-auto max-w-6xl">
-          <div className="bg-gradient-to-br from-rose-950/40 via-slate-900 to-slate-950 border-2 border-rose-500/30 rounded-2xl md:rounded-3xl p-5 md:p-12 shadow-xl">
-            <div className="text-center max-w-3xl mx-auto mb-6 md:mb-12">
-              <span className="bg-amber-400 text-slate-950 text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-2">
-                FREE INCLUSIONS
+          <div className="bg-gradient-to-br from-rose-950/60 via-slate-900 to-rose-950 border-2 border-rose-500/40 rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-rose-500/20 rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="text-center max-w-3xl mx-auto mb-6 md:mb-10 relative z-10">
+              <span className="bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 text-[10px] md:text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5 mb-3 shadow-md">
+                <Sparkles size={14} className="fill-slate-950" />
+                MAJOR INCLUSION - WORTH {formatPrice(25000)}
               </span>
-              <h2 className="text-xl md:text-4xl font-black text-white mb-2">
-                Bonus Suite Worth {formatPrice(25000)} FREE!
+              <h2 className="text-2xl md:text-5xl font-black text-white mb-3 leading-tight">
+                1-Year Free <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 bg-clip-text text-transparent">WhatsApp API Access</span>
               </h2>
+              <p className="text-slate-300 text-xs md:text-base leading-relaxed max-w-2xl mx-auto">
+                Get full 1-year complimentary access to the WhatsApp Business API (Worth {formatPrice(25000)}/year) absolutely FREE with your enrollment.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-                <div className="text-[10px] font-black text-rose-400 uppercase mb-1">BONUS #1 ({formatPrice(7999)})</div>
-                <h4 className="text-sm md:text-lg font-bold text-white mb-1">500+ Business Prompts</h4>
-                <p className="text-xs text-slate-400">Ready-to-use prompts for sales, email funnels & social posts.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 relative z-10 mb-8">
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold mb-3">
+                  <Zap size={20} />
+                </div>
+                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">24/7 Auto Responses</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Auto-respond to client questions, send instant product catalogs, and handle inquiries around the clock.
+                </p>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-                <div className="text-[10px] font-black text-rose-400 uppercase mb-1">BONUS #2 ({formatPrice(9999)})</div>
-                <h4 className="text-sm md:text-lg font-bold text-white mb-1">AI Automation Blueprint</h4>
-                <p className="text-xs text-slate-400">Step-by-step Zapier & Make automation templates.</p>
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold mb-3">
+                  <Users size={20} />
+                </div>
+                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Lead Capture & Funnels</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Capture hot incoming leads from ads & social media directly into WhatsApp with automatic follow-up sequences.
+                </p>
               </div>
 
-              <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-                <div className="text-[10px] font-black text-rose-400 uppercase mb-1">BONUS #3 ({formatPrice(7000)})</div>
-                <h4 className="text-sm md:text-lg font-bold text-white mb-1">VIP Founders Network</h4>
-                <p className="text-xs text-slate-400">Lifelong access to our private community of entrepreneurs.</p>
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
+                <div className="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 flex items-center justify-center font-bold mb-3">
+                  <Gift size={20} />
+                </div>
+                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Zero Subscription Fee</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Save {formatPrice(25000)} per year. You pay ₹0 subscription for the entire first year as an eligible student.
+                </p>
+              </div>
+
+              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
+                <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold mb-3">
+                  <CheckCircle2 size={20} />
+                </div>
+                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Plug & Play Integration</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Easily integrate with your CRM, website, or marketing campaigns without any complex coding required.
+                </p>
               </div>
             </div>
 
-            <div className="mt-6 text-center">
+            <div className="text-center relative z-10">
               <button
                 onClick={openBookingModal}
-                className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-black text-sm md:text-lg px-8 py-3.5 rounded-xl shadow-lg"
+                className="bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:from-rose-600 hover:to-pink-600 text-white font-black text-sm md:text-lg px-8 py-4 rounded-xl shadow-xl shadow-rose-500/30 transition-all transform hover:-translate-y-0.5"
               >
-                PAY {formatPrice(99)} & UNLOCK BONUSES
+                PAY {formatPrice(99)} & CLAIM FREE WHATSAPP API
               </button>
             </div>
           </div>
@@ -747,10 +769,10 @@ export default function AIVentureLabPage() {
           <div className="text-center max-w-3xl mx-auto mb-8 md:mb-14">
             <div className="inline-flex items-center gap-1.5 bg-amber-400/10 border border-amber-400/30 px-3 py-1 rounded-full text-amber-300 font-bold text-[10px] md:text-xs mb-3">
               <Award size={14} className="text-amber-400 shrink-0" />
-              <span>OFFICIAL ACCREDITATION</span>
+              <span>OFFICIAL CERTIFICATION</span>
             </div>
             <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white mb-2 md:mb-4">
-              Get ISO-Certified Credentials Upon Completion
+              Get Your Official Certificate of Completion
             </h2>
             <p className="text-slate-400 text-xs md:text-base max-w-2xl mx-auto">
               Showcase your expertise to clients, investors, and peers with your verified digital Certificate of Completion.
@@ -766,9 +788,9 @@ export default function AIVentureLabPage() {
                     <BadgeCheck size={20} />
                   </div>
                   <div>
-                    <h4 className="text-sm md:text-base font-bold text-white mb-1">ISO 9001:2015 Accredited</h4>
+                    <h4 className="text-sm md:text-base font-bold text-white mb-1">Official Completion Certificate</h4>
                     <p className="text-xs text-slate-400 leading-relaxed">
-                      Internationally recognized certification validating your hands-on mastery of business AI automation.
+                      Verified digital credential validating your hands-on mastery of business AI automation.
                     </p>
                   </div>
                 </div>
@@ -825,12 +847,28 @@ export default function AIVentureLabPage() {
           </div>
 
           <div className="space-y-3">
-            {[
-              { q: "Do I need coding knowledge to attend?", a: "No! Built specifically for non-technical women entrepreneurs & business owners. All tools are no-code." },
-              { q: "Will I get a recording of the masterclass?", a: "Yes! 1-year recording access + all prompt kits are included." },
-              { q: "Will I receive a certificate?", a: "Yes, an ISO-certified digital Certificate of Completion from Ruzann AI Venture Lab." },
-              { q: "What if I am unhappy with the session?", a: "We offer a 100% money-back satisfaction guarantee." }
-            ].map((item, idx) => (
+              {[
+                {
+                  q: "1. Is the WhatsApp API included with the course?",
+                  a: "Yes! Every eligible learner receives 1 year of WhatsApp API access worth ₹25,000 absolutely FREE. This allows you to automate customer communication, send notifications, manage leads, and engage with clients using WhatsApp Business as part of your learning experience."
+                },
+                {
+                  q: "2. Why is the WhatsApp API valuable?",
+                  a: "The WhatsApp API is widely used by businesses to automate customer support, lead follow-ups, appointment reminders, order updates, and marketing campaigns. Purchasing it separately can cost around ₹25,000 per year, but it's included at no additional cost with this course for eligible students."
+                },
+                {
+                  q: "3. Who is eligible for the free WhatsApp API offer?",
+                  a: "The complimentary 1-year WhatsApp API subscription is available to eligible students enrolled in this course. Please review the course details or contact our support team for any activation requirements or applicable terms."
+                },
+                {
+                  q: "4. Can I use the WhatsApp API for my own business?",
+                  a: "Absolutely! Once activated, you can integrate the WhatsApp API into your own business to communicate professionally with customers, automate workflows, and improve customer engagement while applying what you learn throughout the course."
+                },
+                {
+                  q: "5. Are there any hidden charges for the WhatsApp API?",
+                  a: "No hidden subscription fee for the API itself during the first year. Your ₹25,000 annual WhatsApp API access is included FREE with the course for eligible learners. Standard WhatsApp conversation charges or third-party platform fees (if applicable under Meta's pricing policy) are separate and are not included."
+                }
+              ].map((item, idx) => (
               <div key={idx} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
