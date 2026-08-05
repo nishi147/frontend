@@ -111,12 +111,15 @@ export const trackPurchase = (params: {
   };
 
   if ((window as any).fbq) {
+    console.log('[MetaPixel] Fired Purchase Event:', pixelData, 'eventId:', eventId);
     if (eventId) {
       // Pass eventID as 4th parameter for Meta Pixel & CAPI deduplication
       (window as any).fbq('track', 'Purchase', pixelData, { eventID: eventId });
     } else {
       (window as any).fbq('track', 'Purchase', pixelData);
     }
+  } else {
+    console.warn('[MetaPixel] window.fbq is not loaded on window');
   }
 
   if ((window as any).gtag) {
