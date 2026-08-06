@@ -7,7 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { useToast } from '@/context/ToastContext';
 import { useCurrency } from '@/context/CurrencyContext';
 import api from '@/utils/api';
-import { trackAddToCart, trackInitiateCheckout, trackPurchase, trackEvent } from '@/utils/analytics';
+import { trackAddToCart, trackInitiateCheckout, trackPurchase, trackEvent, trackViewContent, trackLead } from '@/utils/analytics';
 import {
   Sparkles,
   Award,
@@ -86,6 +86,18 @@ export default function AIVentureLabPage() {
     };
   }, []);
 
+  // Track Meta Pixel ViewContent event on page view
+  useEffect(() => {
+    trackViewContent({
+      content_name: 'AI Venture Lab Masterclass',
+      content_category: 'Masterclass',
+      content_ids: ['aiventurelab_99'],
+      content_type: 'product',
+      value: 99,
+      currency: currency || 'INR'
+    });
+  }, [currency]);
+
   const openBookingModal = () => {
     setRegSuccess(false);
     setIsRegModalOpen(true);
@@ -107,6 +119,15 @@ export default function AIVentureLabPage() {
     }
 
     setIsSubmitting(true);
+
+    // Track Meta Pixel Lead Event
+    trackLead({
+      content_name: 'AI Venture Lab Masterclass',
+      value: 99,
+      currency: currency || 'INR',
+      role: formData.role
+    });
+
     try {
       // 1. Create Razorpay order via intro-order endpoint (₹99)
       const orderRes = await api.post('/api/payments/intro-order', {

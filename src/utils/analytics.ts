@@ -40,6 +40,35 @@ export const trackLead = (params: Record<string, any> = {}) => {
 };
 
 /**
+ * Tracks ViewContent — fired when user views a product or sales landing page
+ */
+export const trackViewContent = (params: {
+  content_name?: string;
+  content_category?: string;
+  content_ids?: string[];
+  content_type?: string;
+  value?: number;
+  currency?: string;
+  [key: string]: any;
+} = {}) => {
+  if (typeof window === 'undefined') return;
+
+  // Meta Pixel Standard Event
+  if ((window as any).fbq) {
+    (window as any).fbq('track', 'ViewContent', params);
+  }
+
+  // GA4 Recommended Event
+  if ((window as any).gtag) {
+    (window as any).gtag('event', 'view_item', {
+      currency: params.currency || 'INR',
+      value: params.value,
+      items: [{ item_name: params.content_name, item_category: params.content_category }]
+    });
+  }
+};
+
+/**
  * Tracks AddToCart — fired when user clicks Enroll/Book button
  */
 export const trackAddToCart = (params: {
