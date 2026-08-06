@@ -477,8 +477,8 @@ export default function AIVentureLabPage() {
             </p>
           </div>
 
-          {/* Milestone Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Milestone Cards Grid — 2 points in a row on mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {[
               {
                 num: "01",
@@ -496,28 +496,28 @@ export default function AIVentureLabPage() {
               },
               {
                 num: "03",
-                title: "Automated Content & Marketing Engine",
+                title: "Automated Content Factory",
                 desc: "Generate 30 days of high-converting social copy, graphics & video scripts in 15 minutes.",
                 icon: Rocket,
                 color: "from-indigo-500 to-purple-600"
               },
               {
                 num: "04",
-                title: "24/7 AI Lead & Support Automation",
+                title: "24/7 AI Lead Automation",
                 desc: "Setup intelligent WhatsApp & web agents that capture and convert incoming leads on autopilot.",
                 icon: Bot,
                 color: "from-purple-500 to-pink-600"
               },
               {
                 num: "05",
-                title: "Step-By-Step Business Execution Roadmap",
+                title: "Step-By-Step Business Roadmap",
                 desc: "Get an actionable, zero-code blueprint to launch your digital brand with minimal overhead.",
                 icon: Layers,
                 color: "from-amber-400 to-orange-500"
               },
               {
                 num: "06",
-                title: "The Complete Transformation (AI Venture Lab)",
+                title: "The Complete Transformation",
                 desc: "Understand how the 8-Week AI Venture Lab takes complete beginners across the bridge to scale.",
                 icon: Trophy,
                 color: "from-emerald-400 to-teal-500"
@@ -525,16 +525,18 @@ export default function AIVentureLabPage() {
             ].map((m, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/40 rounded-3xl p-6 space-y-4 backdrop-blur-xl hover:-translate-y-1 transition-all group shadow-xl"
+                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/40 rounded-2xl md:rounded-3xl p-3.5 md:p-6 space-y-2 md:space-y-4 backdrop-blur-xl hover:-translate-y-1 transition-all group shadow-xl flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-black font-mono text-slate-500 group-hover:text-cyan-400 transition-colors">{m.num}</span>
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${m.color} text-white flex items-center justify-center shadow-md`}>
-                    <m.icon size={20} />
+                  <span className="text-lg md:text-2xl font-black font-mono text-slate-500 group-hover:text-cyan-400 transition-colors">{m.num}</span>
+                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-gradient-to-r ${m.color} text-white flex items-center justify-center shadow-md`}>
+                    <m.icon size={16} className="md:w-5 md:h-5" />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">{m.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{m.desc}</p>
+                <div>
+                  <h3 className="text-xs sm:text-base md:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors leading-tight mb-1">{m.title}</h3>
+                  <p className="text-[11px] md:text-xs text-slate-400 leading-relaxed line-clamp-3 md:line-clamp-none">{m.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -655,7 +657,8 @@ export default function AIVentureLabPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* 8-Week Roadmap — 2 points in a row on mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
             {[
               { week: "Week 1", title: "Business Discovery", desc: "Identify & validate your high-profit AI business niche." },
               { week: "Week 2", title: "Brand Building", desc: "Generate logos, color schemes & brand assets using AI." },
@@ -669,20 +672,20 @@ export default function AIVentureLabPage() {
               <div
                 key={idx}
                 onClick={() => setActiveRoadmapWeek(idx + 1)}
-                className={`cursor-pointer rounded-2xl p-5 border transition-all ${
+                className={`cursor-pointer rounded-2xl p-3 md:p-5 border transition-all ${
                   activeRoadmapWeek === idx + 1
                     ? 'bg-gradient-to-b from-blue-950 to-slate-900 border-cyan-400 shadow-xl shadow-cyan-500/10'
                     : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
                 }`}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <span className="text-[10px] md:text-[11px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
                     {w.week}
                   </span>
-                  <Sparkles size={14} className={activeRoadmapWeek === idx + 1 ? 'text-amber-400' : 'text-slate-600'} />
+                  <Sparkles size={12} className={activeRoadmapWeek === idx + 1 ? 'text-amber-400' : 'text-slate-600'} />
                 </div>
-                <h4 className="text-base font-bold text-white mb-1">{w.title}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">{w.desc}</p>
+                <h4 className="text-xs sm:text-base font-bold text-white mb-1 leading-tight">{w.title}</h4>
+                <p className="text-[10px] md:text-xs text-slate-400 leading-relaxed line-clamp-2 md:line-clamp-none">{w.desc}</p>
               </div>
             ))}
           </div>
@@ -704,7 +707,8 @@ export default function AIVentureLabPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* 12 Build Cards — 2 points in a row on mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
             {[
               { name: "1. Business Idea & Strategy", icon: Compass },
               { name: "2. Complete Brand Identity", icon: Sparkles },
@@ -721,12 +725,12 @@ export default function AIVentureLabPage() {
             ].map((card, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/30 rounded-2xl p-4 flex items-center gap-3 transition-all hover:-translate-y-1"
+                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/30 rounded-2xl p-3 md:p-4 flex items-center gap-2.5 md:gap-3 transition-all hover:-translate-y-1"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-600/10 text-cyan-300 flex items-center justify-center shrink-0 border border-blue-500/20">
-                  <card.icon size={20} />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-blue-600/10 text-cyan-300 flex items-center justify-center shrink-0 border border-blue-500/20">
+                  <card.icon size={16} className="md:w-5 md:h-5" />
                 </div>
-                <span className="text-xs font-bold text-slate-200">{card.name}</span>
+                <span className="text-[11px] md:text-xs font-bold text-slate-200 leading-tight">{card.name}</span>
               </div>
             ))}
           </div>
@@ -782,8 +786,8 @@ export default function AIVentureLabPage() {
             </div>
           </div>
 
-          {/* ADDITIONAL BONUS STACK */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* ADDITIONAL BONUS STACK — 2 points in a row on mobile */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
             {[
               { title: "40+ Curated AI Tools Suite", val: formatPrice(5000), desc: "Direct directory of top AI software for graphics, video, text & code." },
               { title: "500+ Master Prompt Library", val: formatPrice(3000), desc: "Copy-paste prompts engineered specifically for business automation." },
@@ -792,12 +796,12 @@ export default function AIVentureLabPage() {
               { title: "Private Founder Community", val: "Priceless", desc: "Lifetime access to networking, peer feedback & expert support." },
               { title: "Verifiable Digital Certificate", val: formatPrice(2000), desc: "Official Certificate of Completion with unique QR validation." },
             ].map((b, idx) => (
-              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-2 hover:border-amber-400/30 transition-all">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-amber-300">{b.title}</span>
-                  <span className="text-slate-400 text-[10px] font-mono">{b.val}</span>
+              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 md:p-5 space-y-1.5 md:space-y-2 hover:border-amber-400/30 transition-all flex flex-col justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1">
+                  <span className="font-bold text-amber-300 text-[11px] sm:text-xs leading-tight">{b.title}</span>
+                  <span className="text-slate-400 text-[9px] sm:text-[10px] font-mono shrink-0">{b.val}</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">{b.desc}</p>
+                <p className="text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-3 sm:line-clamp-none">{b.desc}</p>
               </div>
             ))}
           </div>
