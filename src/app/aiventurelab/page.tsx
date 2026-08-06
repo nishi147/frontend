@@ -2,12 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useToast } from '@/context/ToastContext';
 import { useCurrency } from '@/context/CurrencyContext';
 import api from '@/utils/api';
-import { trackAddToCart, trackInitiateCheckout, trackPurchase, trackEvent, trackViewContent, trackLead } from '@/utils/analytics';
+import {
+  trackAddToCart,
+  trackInitiateCheckout,
+  trackPurchase,
+  trackEvent,
+  trackViewContent,
+  trackLead
+} from '@/utils/analytics';
 import {
   Sparkles,
   Award,
@@ -32,7 +40,21 @@ import {
   Tag,
   ShieldCheck,
   Loader2,
-  XCircle
+  XCircle,
+  TrendingUp,
+  Cpu,
+  Layers,
+  Bot,
+  Compass,
+  Rocket,
+  MessageSquare,
+  Layout,
+  BarChart3,
+  Database,
+  Share2,
+  HelpCircle,
+  ArrowUpRight,
+  Play
 } from 'lucide-react';
 
 export default function AIVentureLabPage() {
@@ -44,7 +66,8 @@ export default function AIVentureLabPage() {
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 14, seconds: 35 });
   const [isRegModalOpen, setIsRegModalOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [activeTrackTab, setActiveTrackTab] = useState<'women' | 'business'>('women');
+  const [splitScreenTab, setSplitScreenTab] = useState<'current' | 'future'>('future');
+  const [activeRoadmapWeek, setActiveRoadmapWeek] = useState<number>(1);
 
   // Registration Form State
   const [formData, setFormData] = useState({
@@ -55,11 +78,9 @@ export default function AIVentureLabPage() {
     businessName: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [regSuccess, setRegSuccess] = useState(false);
 
   // Load Razorpay script & handle ticking timer
   useEffect(() => {
-    // Dynamically load Razorpay checkout script
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
@@ -89,8 +110,8 @@ export default function AIVentureLabPage() {
   // Track Meta Pixel ViewContent event on page view
   useEffect(() => {
     trackViewContent({
-      content_name: 'AI Venture Lab Masterclass',
-      content_category: 'Masterclass',
+      content_name: 'AI Venture Lab LIVE Webinar',
+      content_category: 'Webinar',
       content_ids: ['aiventurelab_99'],
       content_type: 'product',
       value: 99,
@@ -99,11 +120,10 @@ export default function AIVentureLabPage() {
   }, [currency]);
 
   const openBookingModal = () => {
-    setRegSuccess(false);
     setIsRegModalOpen(true);
     trackAddToCart({
-      content_name: 'AI Venture Lab Masterclass',
-      content_category: 'Masterclass',
+      content_name: 'AI Venture Lab LIVE Webinar',
+      content_category: 'Webinar',
       content_ids: ['aiventurelab_99'],
       content_type: 'product',
       value: 99,
@@ -120,16 +140,14 @@ export default function AIVentureLabPage() {
 
     setIsSubmitting(true);
 
-    // Track Meta Pixel Lead Event
     trackLead({
-      content_name: 'AI Venture Lab Masterclass',
+      content_name: 'AI Venture Lab LIVE Webinar',
       value: 99,
       currency: currency || 'INR',
       role: formData.role
     });
 
     try {
-      // 1. Create Razorpay order via intro-order endpoint (₹99)
       const orderRes = await api.post('/api/payments/intro-order', {
         currency: currency || 'INR'
       });
@@ -140,21 +158,19 @@ export default function AIVentureLabPage() {
 
       const order = orderRes.data.data;
 
-      // Track InitiateCheckout
       trackInitiateCheckout({
-        content_name: 'AI Venture Lab Masterclass',
+        content_name: 'AI Venture Lab LIVE Webinar',
         num_items: 1,
         value: 99,
         currency: currency || 'INR'
       });
 
-      // 2. Configure Razorpay Gateway Popup
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY || 'rzp_live_SQl3GLrpIJFRGe',
         amount: order.amount,
         currency: order.currency || 'INR',
         name: "RUZANN",
-        description: "AI Venture Lab Live Masterclass Seat (₹99)",
+        description: "AI Venture Lab LIVE Webinar Seat (₹99)",
         order_id: order.id,
         prefill: {
           name: formData.name,
@@ -162,11 +178,10 @@ export default function AIVentureLabPage() {
           contact: formData.phone
         },
         theme: {
-          color: "#E91E63"
+          color: "#2563EB"
         },
         handler: async function (response: any) {
           try {
-            // Verify payment on backend
             const verifyRes = await api.post('/api/payments/intro-verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -176,7 +191,7 @@ export default function AIVentureLabPage() {
               email: formData.email,
               phone: formData.phone,
               role: formData.role,
-              programName: 'AI Venture Lab Live Masterclass',
+              programName: 'AI Venture Lab LIVE Webinar',
               isAIVentureLab: true,
               age: 25
             });
@@ -185,7 +200,7 @@ export default function AIVentureLabPage() {
               const purchaseData = {
                 value: 99,
                 currency: currency || 'INR',
-                content_name: 'AI Venture Lab Masterclass',
+                content_name: 'AI Venture Lab LIVE Webinar',
                 content_ids: ['aiventurelab_99'],
                 content_type: 'product',
                 transaction_id: response.razorpay_payment_id
@@ -198,9 +213,9 @@ export default function AIVentureLabPage() {
                 payment_id: response.razorpay_payment_id
               });
 
-              showToast("Payment successful! Welcome to AI Venture Lab.", "success");
+              showToast("Seat confirmed! Welcome to Ruzann AI Venture Lab.", "success");
               setIsRegModalOpen(false);
-              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=99&title=${encodeURIComponent('AI Venture Lab Masterclass')}`);
+              router.push(`/payment-success?tx=${response.razorpay_payment_id}&amount=99&title=${encodeURIComponent('AI Venture Lab LIVE Webinar')}`);
             } else {
               showToast("Payment verification failed. Please contact support.", "error");
             }
@@ -231,626 +246,627 @@ export default function AIVentureLabPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white pb-16 lg:pb-0">
-      <Header />
-
-      {/* 1. TOP URGENT ANNOUNCEMENT BAR */}
-      <div className="bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white py-1.5 md:py-2.5 px-3 text-center text-[11px] md:text-sm font-bold shadow-md sticky top-0 z-40 flex items-center justify-center gap-2 md:gap-3">
-        <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-amber-300 text-[10px] md:text-xs animate-pulse shrink-0">
-          <Flame size={12} className="fill-amber-300" /> LIVE BATCH
+    <div className="min-h-screen bg-[#0B1020] text-slate-100 font-sans selection:bg-blue-600 selection:text-white pb-20 lg:pb-0 overflow-x-hidden">
+      {/* 0. STICKY TOP URGENCY BANNER */}
+      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 border-b border-blue-500/20 text-white py-2 px-4 text-center text-xs font-semibold sticky top-0 z-50 backdrop-blur-xl flex items-center justify-center gap-3">
+        <span className="flex items-center gap-1 bg-blue-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full text-[11px] font-bold border border-cyan-400/30 animate-pulse">
+          <Flame size={12} className="text-amber-400 fill-amber-400" /> LIVE BATCH
         </span>
-        <span className="hidden sm:inline">Admissions Closing Soon:</span>
-        <span className="font-mono bg-slate-900/60 px-2 py-0.5 md:px-2.5 md:py-1 rounded border border-white/20 tracking-wider text-amber-300 text-xs md:text-sm">
+        <span className="hidden sm:inline text-slate-200">Registration Closing Soon:</span>
+        <span className="font-mono bg-slate-950/80 px-2.5 py-0.5 rounded border border-cyan-500/30 text-cyan-300 font-bold text-xs tracking-wider">
           {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
         </span>
-        <span className="bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider hidden sm:inline-block">
-          Special ₹99 Offer
+        <span className="hidden md:inline-block bg-amber-400 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
+          Special ₹99 Webinar Pass
         </span>
+        <button
+          onClick={openBookingModal}
+          className="ml-2 underline text-cyan-300 hover:text-white font-bold text-xs hidden sm:inline"
+        >
+          Claim Seat &rarr;
+        </button>
       </div>
 
-      {/* 2. HERO SECTION */}
-      <section className="relative pt-4 pb-8 md:pt-12 md:pb-20 px-3 md:px-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-slate-950 overflow-hidden">
-        {/* Background Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[600px] h-[200px] md:h-[350px] bg-rose-500/15 rounded-full blur-[100px] md:blur-[140px] pointer-events-none" />
+      <Header />
 
-        <div className="container mx-auto max-w-6xl relative z-10">
-          {/* Target Audience Pill */}
-          <div className="flex justify-center mb-3 md:mb-6">
-            <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-rose-500/20 via-sky-500/20 to-purple-500/20 border border-rose-400/30 px-3 py-1 md:px-4 md:py-2 rounded-full text-rose-300 font-bold text-[11px] md:text-sm backdrop-blur-md text-center">
-              <Sparkles size={14} className="text-amber-400 shrink-0" />
-              <span>For Women Entrepreneurs & Business Owners</span>
-            </div>
-          </div>
+      {/* 1. FULL-SCREEN HERO SECTION — CROSSING THE BRIDGE */}
+      <section className="relative min-h-[92vh] pt-12 pb-20 px-4 md:px-8 flex flex-col justify-center items-center overflow-hidden bg-radial-at-c from-[#111827] via-[#0B1020] to-[#050814]">
+        {/* Glowing Ambient Light Orbs */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-cyan-400/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none" />
 
-          {/* Headline & Subheadline */}
-          <div className="text-center max-w-4xl mx-auto mb-4 md:mb-10">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-2 md:mb-6 tracking-tight">
-              Master <span className="bg-gradient-to-r from-rose-400 via-pink-300 to-amber-300 bg-clip-text text-transparent">AI Tools & Automation</span> to Scale 10X
+        {/* Futuristic Illuminated Bridge Canvas (SVG Graphic) */}
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-35">
+          <svg className="w-full h-full max-w-6xl" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bridgeGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.2" />
+                <stop offset="50%" stopColor="#22D3EE" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.9" />
+              </linearGradient>
+              <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#22D3EE" stopOpacity="0" />
+                <stop offset="50%" stopColor="#22D3EE" stopOpacity="1" />
+                <stop offset="100%" stopColor="#FBBF24" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+
+            {/* Left Bank — Dark & Uncertain */}
+            <path d="M 0,450 Q 200,430 350,480 L 350,600 L 0,600 Z" fill="#0F172A" opacity="0.6" />
+            <circle cx="150" cy="450" r="8" fill="#64748B" />
+            <text x="100" y="490" fill="#94A3B8" fontSize="14" fontFamily="Inter" fontWeight="600">The Uncertain Side</text>
+
+            {/* Right Bank — Radiant AI Future City */}
+            <path d="M 850,480 Q 1000,430 1200,450 L 1200,600 L 850,600 Z" fill="#1E293B" opacity="0.8" />
+            <circle cx="1050" cy="450" r="12" fill="#FBBF24" />
+            <text x="1000" y="490" fill="#FBBF24" fontSize="14" fontFamily="Inter" fontWeight="700">AI Powered Future</text>
+
+            {/* The Illuminated Cyber Bridge */}
+            <path d="M 150,450 Q 600,280 1050,450" stroke="url(#bridgeGrad)" strokeWidth="6" strokeLinecap="round" />
+            <path d="M 150,455 Q 600,285 1050,455" stroke="#22D3EE" strokeWidth="2" strokeDasharray="8 8" opacity="0.8" />
+
+            {/* Bridge Support Pillars */}
+            <line x1="400" y1="360" x2="400" y2="580" stroke="#334155" strokeWidth="2" opacity="0.5" />
+            <line x1="800" y1="360" x2="800" y2="580" stroke="#334155" strokeWidth="2" opacity="0.5" />
+          </svg>
+        </div>
+
+        <div className="container mx-auto max-w-6xl relative z-10 text-center space-y-8">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-900/60 via-slate-900/80 to-indigo-900/60 border border-cyan-500/30 px-4 py-2 rounded-full text-cyan-300 font-medium text-xs md:text-sm backdrop-blur-xl shadow-xl shadow-cyan-500/10"
+          >
+            <Sparkles size={16} className="text-amber-400 animate-spin-slow" />
+            <span>The Premier AI Business Transformation Webinar</span>
+          </motion.div>
+
+          {/* Main Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-4xl mx-auto space-y-4"
+          >
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1]">
+              Every Dream Has <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-amber-300 bg-clip-text text-transparent">Two Sides.</span>
             </h1>
-            <p className="text-slate-300 text-xs sm:text-base md:text-xl font-medium leading-relaxed max-w-3xl mx-auto">
-              Save 20+ hours weekly, drop agency costs & automate sales, marketing & admin—<strong className="text-white underline decoration-rose-500 underline-offset-2">no coding required.</strong>
+            <p className="text-slate-300 text-sm sm:text-lg md:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
+              On one side... <span className="text-slate-400 font-semibold">Confusion. Ideas. Fear of AI. No Direction.</span><br className="hidden sm:inline" />
+              On the other... <span className="text-cyan-300 font-bold">AI Business. Customers. Freedom. Automation. Growth.</span>
             </p>
-          </div>
-
-          {/* Hero Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 items-center">
-            {/* Left Column: Key Highlights & Primary CTA */}
-            <div className="lg:col-span-7 space-y-4 md:space-y-6">
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl md:rounded-3xl p-4 md:p-8 backdrop-blur-xl shadow-xl space-y-3 md:space-y-4">
-                <h3 className="text-sm md:text-lg font-black text-rose-400 flex items-center gap-2">
-                  <Zap size={18} className="text-amber-400" /> What You Will Achieve:
-                </h3>
-                <ul className="space-y-2 md:space-y-3 text-xs md:text-base text-slate-200">
-                  <li className="flex items-start gap-2 md:gap-3">
-                    <CheckCircle2 size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                    <span><strong>Automate Marketing & Visuals:</strong> Create 30 days of high-converting posts & scripts in 15 mins.</span>
-                  </li>
-                  <li className="flex items-start gap-2 md:gap-3">
-                    <CheckCircle2 size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                    <span><strong>24/7 AI Sales Assistants:</strong> Auto-respond to client inquiries & nurture leads on autopilot.</span>
-                  </li>
-                  <li className="flex items-start gap-2 md:gap-3">
-                    <CheckCircle2 size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                    <span><strong>Streamline Admin & Finance:</strong> Replace tedious manual invoicing, bookkeeping & proposals.</span>
-                  </li>
-                  <li className="flex items-start gap-2 md:gap-3">
-                    <CheckCircle2 size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                    <span><strong>Scale Profitably:</strong> Achieve output of a 10-person team with minimal overhead.</span>
-                  </li>
-                </ul>
-
-                {/* Primary CTA Button Box */}
-                <div className="pt-3 border-t border-slate-700/60 flex flex-col sm:flex-row items-center gap-3">
-                  <button
-                    onClick={openBookingModal}
-                    className="w-full sm:w-auto flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-black text-base md:text-lg px-6 py-3.5 md:py-4 rounded-xl md:rounded-2xl shadow-lg shadow-rose-500/25 transition-all flex items-center justify-center gap-2 group"
-                  >
-                    <span>PAY {formatPrice(99)} & JOIN LIVE</span>
-                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                  <div className="text-center sm:text-left text-[11px] md:text-xs text-slate-400 font-medium">
-                    <div className="text-amber-300 font-bold flex items-center justify-center sm:justify-start gap-1">
-                      <Star size={12} className="fill-amber-300" /> 4.9/5 Rating (2,400+ Reviews)
-                    </div>
-                    <span>Regular: <span className="line-through text-slate-500">{formatPrice(1999)}</span> (95% OFF)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Trust Badges Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
-                <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
-                  <BadgeCheck size={18} className="text-rose-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">Official Certificate</span>
-                  <span className="text-[9px] md:text-[10px] text-slate-400">Quality Training</span>
-                </div>
-                <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
-                  <Users size={18} className="text-sky-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">15,000+ Alumni</span>
-                  <span className="text-[9px] md:text-[10px] text-slate-400">Business Owners</span>
-                </div>
-                <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
-                  <Lock size={18} className="text-emerald-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">Instant Access</span>
-                  <span className="text-[9px] md:text-[10px] text-slate-400">Secure Enrollment</span>
-                </div>
-                <div className="bg-slate-800/40 border border-slate-700/40 rounded-xl p-2.5 text-center">
-                  <Award size={18} className="text-amber-400 mx-auto mb-0.5" />
-                  <span className="text-[11px] md:text-xs font-bold text-slate-300 block">Verified Certificate</span>
-                  <span className="text-[9px] md:text-[10px] text-slate-400">Included Free</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Interactive Card / Workshop Details */}
-            <div className="lg:col-span-5 mt-2 md:mt-0">
-              <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-rose-500/30 rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-gradient-to-l from-rose-500 to-pink-600 text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-                  Live Workshop
-                </div>
-
-                <div className="text-center mb-4 pt-1">
-                  <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto mb-2 text-rose-400">
-                    <Video size={24} />
-                  </div>
-                  <h3 className="text-base md:text-xl font-black text-white">AI Venture Lab Masterclass</h3>
-                  <p className="text-[11px] md:text-xs text-rose-300 font-semibold mt-0.5">Interactive Live Session</p>
-                </div>
-
-                {/* Event Key Info */}
-                <div className="bg-slate-950/60 rounded-xl p-3 border border-slate-800 space-y-2 text-xs md:text-sm mb-4">
-                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Calendar size={14} className="text-rose-400" /> Date:</span>
-                    <span className="font-bold text-white">Upcoming Saturday</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Globe size={14} className="text-rose-400" /> Mode:</span>
-                    <span className="font-bold text-emerald-400 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" /> Google Meet Live</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="text-slate-400 flex items-center gap-1.5"><Gift size={14} className="text-rose-400" /> WhatsApp API:</span>
-                    <span className="font-bold text-amber-300">1 Year FREE ({formatPrice(25000)})</span>
-                  </div>
-                </div>
-
-                {/* Seat Counter */}
-                <div className="bg-rose-950/40 border border-rose-800/40 rounded-lg p-2.5 mb-4 text-center">
-                  <div className="flex items-center justify-between text-[11px] font-bold mb-1">
-                    <span className="text-rose-300">Seats Reserved: 86%</span>
-                    <span className="text-amber-300 font-mono">14 Left at {formatPrice(99)}</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-amber-400 to-rose-500 w-[86%] rounded-full" />
-                  </div>
-                </div>
-
-                <button
-                  onClick={openBookingModal}
-                  className="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm md:text-base py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-                >
-                  <Lock size={16} />
-                  <span>PAY {formatPrice(99)} VIA RAZORPAY</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. MEDIA LOGOS */}
-      <section className="bg-slate-950 py-4 md:py-8 border-y border-slate-800">
-        <div className="container mx-auto max-w-6xl px-3 text-center">
-          <p className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 mb-3 md:mb-6">
-            FEATURED IN TOP MEDIA & BUSINESS PUBLICATIONS
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-12 opacity-70 hover:opacity-100 transition-all text-xs md:text-xl font-black text-slate-300 tracking-wider">
-            <span>ENTREPRENEUR</span>
-            <span>YOURSTORY</span>
-            <span>INC42</span>
-            <span>BUSINESS INSIDER</span>
-            <span>FORBES INDIA</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. HIGH-CONVERTING SECTION: JOIN LIVE MASTERCLASS AT ₹99 */}
-      <section className="py-8 md:py-16 px-3 md:px-8 bg-gradient-to-r from-rose-950 via-slate-900 to-rose-950 relative overflow-hidden border-b border-rose-500/20">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[150px] md:h-[250px] bg-rose-500/20 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <div className="bg-slate-900/90 border-2 border-rose-500/50 rounded-2xl md:rounded-3xl p-5 md:p-10 shadow-2xl backdrop-blur-xl text-center relative overflow-hidden">
-            <div className="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider mb-4 shadow-md">
-              <Tag size={14} className="fill-slate-950" />
-              SPECIAL LIMITED-TIME OFFER
-            </div>
-
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-3">
-              Join Our Live Masterclass <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 bg-clip-text text-transparent">Today</span>
-            </h2>
-
-            <p className="text-slate-300 text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-6">
-              Get live interactive AI training, {formatPrice(25000)}+ free bonuses, Certificate of Completion & 1-year WhatsApp API access for less than a cup of coffee.
+            <p className="text-slate-400 text-xs sm:text-base font-medium">
+              The distance between them isn&apos;t luck — <strong className="text-white underline decoration-cyan-400 underline-offset-4">It&apos;s knowing which bridge to cross.</strong>
             </p>
+          </motion.div>
 
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <span className="text-slate-400 line-through text-lg md:text-2xl font-bold">{formatPrice(1999)}</span>
-              <span className="text-amber-400 text-3xl md:text-5xl font-black tracking-tight">{formatPrice(99)}</span>
-              <span className="bg-rose-500/20 text-rose-300 border border-rose-400/40 text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-lg">
-                SAVE 95%
+          {/* CTA Box */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="pt-2 flex flex-col items-center gap-4 max-w-md mx-auto"
+          >
+            <button
+              onClick={openBookingModal}
+              className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-base sm:text-lg py-4.5 px-8 rounded-2xl shadow-2xl shadow-blue-600/30 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 border border-cyan-400/30 group"
+            >
+              <span>RESERVE MY SEAT — {formatPrice(99)} ONLY</span>
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+
+            <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
+              <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+                <CheckCircle2 size={14} /> LIVE Online Webinar
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1 text-amber-300 font-semibold">
+                <Star size={13} className="fill-amber-300" /> Step 1 Onto The Bridge
               </span>
             </div>
+          </motion.div>
 
-            <div className="max-w-md mx-auto">
-              <button
-                onClick={openBookingModal}
-                className="w-full bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:from-rose-600 hover:to-pink-600 text-white font-black text-base md:text-xl py-4 md:py-5 px-6 rounded-2xl shadow-2xl shadow-rose-500/40 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group border border-rose-300/30"
+          {/* Floating Glass Metaphor Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="pt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto"
+          >
+            {[
+              { icon: Cpu, label: "AI Tools", desc: "No Coding Needed" },
+              { icon: Briefcase, label: "AI Business", desc: "Idea to Launch" },
+              { icon: Rocket, label: "Marketing", desc: "Automated Ads" },
+              { icon: Bot, label: "Automation", desc: "24/7 AI Agents" },
+              { icon: Users, label: "Customers", desc: "Predictable Leads" },
+              { icon: TrendingUp, label: "Income", desc: "Scalable Freedom" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-900/60 border border-white/10 hover:border-cyan-400/40 rounded-2xl p-4 text-center backdrop-blur-xl transition-all hover:-translate-y-1 group shadow-lg"
               >
-                <Sparkles size={22} className="text-amber-300 animate-spin-slow shrink-0" />
-                <span>PAY {formatPrice(99)} & CLAIM SEAT</span>
-                <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform shrink-0" />
-              </button>
-
-              <div className="flex items-center justify-center gap-4 text-[10px] md:text-xs text-slate-400 mt-3 font-medium">
-                <span className="flex items-center gap-1 text-amber-300"><Flame size={12} /> Only 14 seats remaining</span>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-emerald-400"><ShieldCheck size={12} /> Instant Access & Bonus Included</span>
+                <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-2.5 group-hover:scale-110 transition-transform">
+                  <item.icon size={20} />
+                </div>
+                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">{item.label}</h4>
+                <p className="text-[10px] text-slate-400 mt-0.5">{item.desc}</p>
               </div>
-            </div>
-          </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* 5. PAIN POINT VS TRANSFORMATION MATRIX */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-900">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-14">
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white mb-2 md:mb-4">
-              Struggling to Scale While Managing Everyday Chaos?
+      {/* 2. SECTION 2: THE WORLD HAS CHANGED (TIMELINE ANIMATION) */}
+      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60 relative overflow-hidden">
+        <div className="container mx-auto max-w-5xl space-y-12 relative z-10">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+              HISTORICAL PARADIGM SHIFT
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              The World Has Changed. <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Will You Lead Or Be Left Behind?</span>
             </h2>
-            <p className="text-slate-400 text-xs md:text-base">
-              Without AI automation, traditional business owners work 60+ hours a week yet get stuck in bottlenecks.
+            <p className="text-slate-400 text-sm md:text-base">
+              Every major shift creates a new class of leaders. Those who cross the technological bridge early build generational wealth.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-            <div className="bg-slate-950/80 border border-rose-900/30 rounded-2xl md:rounded-3xl p-4 md:p-8 space-y-3">
-              <div className="inline-flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/30 px-2.5 py-0.5 rounded-full text-rose-400 font-bold text-[10px] md:text-xs">
-                <XCircle size={14} className="text-rose-400 shrink-0" />
-                <span>THE OLD MANUAL WAY</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {/* Connecting line */}
+            <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-blue-900 via-cyan-500 to-amber-400 -translate-y-12 z-0" />
+
+            {/* Timeline Item 1 */}
+            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center font-mono font-bold text-sm">
+                18th C.
               </div>
-              <h3 className="text-base md:text-xl font-bold text-slate-200">Constant Overwhelm & Burnout</h3>
-              <ul className="space-y-2 text-xs md:text-sm text-slate-300">
-                <li className="flex items-start gap-2">
-                  <span className="text-rose-400 font-bold mt-0.5">•</span>
-                  <span>15+ hours/week wasted writing social posts & emails manually.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-rose-400 font-bold mt-0.5">•</span>
-                  <span>Paying expensive agency fees (₹50k-₹1.5L/mo) for average results.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-rose-400 font-bold mt-0.5">•</span>
-                  <span>Missing hot customer leads due to delayed manual responses.</span>
-                </li>
-              </ul>
+              <h3 className="text-lg font-bold text-white">Industrial Revolution</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Replaced manual labor with steam & machinery. Those who embraced factories built industries; those who resisted lost relevance.
+              </p>
+              <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Era of Physical Power</div>
             </div>
 
-            <div className="bg-gradient-to-b from-slate-800 to-slate-850 border border-rose-500/40 rounded-2xl md:rounded-3xl p-4 md:p-8 space-y-3 shadow-xl">
-              <div className="inline-flex items-center gap-1.5 bg-rose-500/20 border border-rose-400/40 px-2.5 py-0.5 rounded-full text-rose-300 font-bold text-[10px] md:text-xs">
-                <Sparkles size={14} className="text-rose-300 shrink-0" />
-                <span>THE AI VENTURE LAB SYSTEM</span>
+            {/* Timeline Item 2 */}
+            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-blue-950 text-blue-400 border border-blue-800 flex items-center justify-center font-mono font-bold text-sm">
+                20th C.
               </div>
-              <h3 className="text-base md:text-xl font-bold text-white">Automated Profit & Freedom</h3>
-              <ul className="space-y-2 text-xs md:text-sm text-slate-200">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>30 Days Content in 15 Mins:</strong> Instant strategy & assets.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Zero Agency Reliance:</strong> Manage copy, graphics & ads in-house.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>24/7 AI Lead Assistant:</strong> Capture & convert leads automatically.</span>
-                </li>
-              </ul>
+              <h3 className="text-lg font-bold text-white">Internet & DotCom</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Replaced physical storefronts with websites & global e-commerce. Digital pioneers created global empires from scratch.
+              </p>
+              <div className="text-[11px] font-semibold text-blue-400 uppercase tracking-wider">Era of Digital Connectivity</div>
+            </div>
+
+            {/* Timeline Item 3 — Highlighting TODAY */}
+            <div className="bg-gradient-to-b from-blue-950/80 via-slate-900 to-slate-900 border-2 border-cyan-400/50 rounded-3xl p-6 relative z-10 space-y-4 shadow-2xl shadow-cyan-500/10">
+              <div className="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2.5 py-1 rounded-full absolute -top-3 right-6 shadow-md">
+                HAPPENING NOW
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-cyan-400 text-slate-950 flex items-center justify-center font-mono font-black text-sm">
+                TODAY
+              </div>
+              <h3 className="text-lg font-bold text-white">The AI Revolution</h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Replacing manual operational work with autonomous AI systems. One person with AI can now out-execute a 10-person agency.
+              </p>
+              <div className="text-[11px] font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1">
+                <span>People who learn AI today will lead tomorrow</span> &rarr;
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. DUAL AUDIENCE TRACKS */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-950">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-14">
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-rose-400 mb-1 block">
-              TAILORED CURRICULUM FOCUS
+      {/* 3. SECTION 3: WHAT YOU'LL LEARN (MILESTONES ON THE BRIDGE) */}
+      <section className="py-20 px-4 md:px-8 bg-[#0B1020] relative">
+        <div className="container mx-auto max-w-6xl space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-amber-400">
+              YOUR WEBINAR ROADMAP
             </span>
-            <h2 className="text-xl md:text-4xl font-black text-white">
-              Designed For Your Specific Track
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              Milestones On Your Bridge To AI Success
             </h2>
-
-            <div className="flex lg:hidden justify-center gap-2 mt-4 bg-slate-900 p-1 rounded-xl border border-slate-800 max-w-xs mx-auto">
-              <button
-                onClick={() => setActiveTrackTab('women')}
-                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all ${
-                  activeTrackTab === 'women'
-                    ? 'bg-rose-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Women Founders
-              </button>
-              <button
-                onClick={() => setActiveTrackTab('business')}
-                className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all ${
-                  activeTrackTab === 'business'
-                    ? 'bg-sky-500 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Business Owners
-              </button>
-            </div>
+            <p className="text-slate-400 text-sm md:text-base">
+              In this {formatPrice(99)} LIVE Webinar, we walk you through the 6 vital checkpoints needed to cross from uncertainty to an active AI business.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-            <div className={`bg-slate-900 border border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-8 hover:border-rose-500/40 transition-all ${activeTrackTab === 'women' ? 'block' : 'hidden lg:block'}`}>
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mb-4">
-                <HeartHandshake size={22} className="md:w-7 md:h-7" />
-              </div>
-              <h3 className="text-lg md:text-2xl font-black text-white mb-2">For Women Entrepreneurs & Founders</h3>
-              <p className="text-slate-400 text-xs md:text-sm mb-4 leading-relaxed">
-                Empower your vision, balance high performance with personal freedom, and automate personal branding.
-              </p>
-              <ul className="space-y-2 text-xs md:text-sm text-slate-300 border-t border-slate-800 pt-4">
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-rose-400 shrink-0" />
-                  <span>Automate social branding & video scripts easily.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-rose-400 shrink-0" />
-                  <span>Streamline client onboarding & customer support.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-rose-400 shrink-0" />
-                  <span>Build pitch decks & financial plans for grants/funding.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className={`bg-slate-900 border border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-8 hover:border-sky-500/40 transition-all ${activeTrackTab === 'business' ? 'block' : 'hidden lg:block'}`}>
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-4">
-                <Briefcase size={22} className="md:w-7 md:h-7" />
-              </div>
-              <h3 className="text-lg md:text-2xl font-black text-white mb-2">For Business Owners & Executives</h3>
-              <p className="text-slate-400 text-xs md:text-sm mb-4 leading-relaxed">
-                Boost bottom-line profit, deploy autonomous AI agents, and empower staff with cutting-edge tools.
-              </p>
-              <ul className="space-y-2 text-xs md:text-sm text-slate-300 border-t border-slate-800 pt-4">
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-sky-400 shrink-0" />
-                  <span>Deploy custom GPTs trained on internal business data.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-sky-400 shrink-0" />
-                  <span>Automate sales call summaries, CRM & proposal writing.</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-sky-400 shrink-0" />
-                  <span>Maximize ROI by eliminating redundant software costs.</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. SYLLABUS BREAKDOWN */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-900">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-14">
-            <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-amber-400 mb-1 block">
-              SYLLABUS BREAKDOWN
-            </span>
-            <h2 className="text-xl md:text-4xl font-black text-white mb-2">
-              What You Will Learn
-            </h2>
-          </div>
-
-          <div className="space-y-3">
+          {/* Milestone Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { num: '01', title: 'Foundational AI & Executive Prompting', desc: 'Master the 4-step framework for razor-sharp business outputs.' },
-              { num: '02', title: 'AI Marketing & Content Factory', desc: 'Generate ad copy, Canva graphics & video scripts in seconds.' },
-              { num: '03', title: 'Automated Sales & Lead Funnels', desc: 'Set up auto-responding lead magnets & WhatsApp capture.' },
-              { num: '04', title: 'Finance & Admin Automation', desc: 'Automate invoice parsing, meeting notes & vendor emails.' },
-              { num: '05', title: 'Custom AI Business Assistant', desc: 'Deploy a private AI trained on your business SOPs.' },
+              {
+                num: "01",
+                title: "AI Opportunity Mapping",
+                desc: "Discover high-margin, low-competition business opportunities created by Generative AI right now.",
+                icon: Compass,
+                color: "from-blue-500 to-indigo-600"
+              },
+              {
+                num: "02",
+                title: "24-Hour Business Validation",
+                desc: "Learn how to formulate, test, and refine a profitable business concept without upfront capital.",
+                icon: Zap,
+                color: "from-cyan-500 to-blue-600"
+              },
+              {
+                num: "03",
+                title: "Automated Content & Marketing Engine",
+                desc: "Generate 30 days of high-converting social copy, graphics & video scripts in 15 minutes.",
+                icon: Rocket,
+                color: "from-indigo-500 to-purple-600"
+              },
+              {
+                num: "04",
+                title: "24/7 AI Lead & Support Automation",
+                desc: "Setup intelligent WhatsApp & web agents that capture and convert incoming leads on autopilot.",
+                icon: Bot,
+                color: "from-purple-500 to-pink-600"
+              },
+              {
+                num: "05",
+                title: "Step-By-Step Business Execution Roadmap",
+                desc: "Get an actionable, zero-code blueprint to launch your digital brand with minimal overhead.",
+                icon: Layers,
+                color: "from-amber-400 to-orange-500"
+              },
+              {
+                num: "06",
+                title: "The Complete Transformation (AI Venture Lab)",
+                desc: "Understand how the 8-Week AI Venture Lab takes complete beginners across the bridge to scale.",
+                icon: Trophy,
+                color: "from-emerald-400 to-teal-500"
+              }
             ].map((m, idx) => (
-              <div key={idx} className="bg-slate-950 border border-slate-800 rounded-xl md:rounded-2xl p-3.5 md:p-6 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 md:w-12 md:h-12 rounded-lg bg-rose-500/10 text-rose-400 font-black text-xs md:text-lg flex items-center justify-center shrink-0">
-                    {m.num}
-                  </div>
-                  <div>
-                    <h3 className="text-xs md:text-lg font-bold text-white">{m.title}</h3>
-                    <p className="text-slate-400 text-[11px] md:text-sm line-clamp-1">{m.desc}</p>
+              <div
+                key={idx}
+                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/40 rounded-3xl p-6 space-y-4 backdrop-blur-xl hover:-translate-y-1 transition-all group shadow-xl"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-black font-mono text-slate-500 group-hover:text-cyan-400 transition-colors">{m.num}</span>
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${m.color} text-white flex items-center justify-center shadow-md`}>
+                    <m.icon size={20} />
                   </div>
                 </div>
+                <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">{m.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{m.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 8. MAJOR INCLUSION: FREE WHATSAPP API */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-950">
-        <div className="container mx-auto max-w-6xl">
-          <div className="bg-gradient-to-br from-rose-950/60 via-slate-900 to-rose-950 border-2 border-rose-500/40 rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden">
-            {/* Background Glow */}
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-rose-500/20 rounded-full blur-[100px] pointer-events-none" />
+      {/* 4. SECTION 4: IMAGINE 60 DAYS FROM TODAY (SPLIT-SCREEN COMPARISON) */}
+      <section className="py-20 px-4 md:px-8 bg-slate-950 border-y border-slate-800/60">
+        <div className="container mx-auto max-w-6xl space-y-12">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+              BEFORE VS AFTER TRANSFORMATION
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              Imagine 60 Days From Today
+            </h2>
+            <p className="text-slate-400 text-sm md:text-base">
+              Which side of the bridge will you be standing on 2 months from now?
+            </p>
 
-            <div className="text-center max-w-3xl mx-auto mb-6 md:mb-10 relative z-10">
-              <span className="bg-gradient-to-r from-amber-400 to-amber-300 text-slate-950 text-[10px] md:text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5 mb-3 shadow-md">
-                <Sparkles size={14} className="fill-slate-950" />
-                MAJOR INCLUSION - WORTH {formatPrice(25000)}
-              </span>
-              <h2 className="text-2xl md:text-5xl font-black text-white mb-3 leading-tight">
-                1-Year Free <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-pink-400 bg-clip-text text-transparent">WhatsApp API Access</span>
-              </h2>
-              <p className="text-slate-300 text-xs md:text-base leading-relaxed max-w-2xl mx-auto">
-                Get full 1-year complimentary access to the WhatsApp Business API (Worth {formatPrice(25000)}/year) absolutely FREE with your enrollment.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 relative z-10 mb-8">
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold mb-3">
-                  <Zap size={20} />
-                </div>
-                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">24/7 Auto Responses</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Auto-respond to client questions, send instant product catalogs, and handle inquiries around the clock.
-                </p>
-              </div>
-
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold mb-3">
-                  <Users size={20} />
-                </div>
-                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Lead Capture & Funnels</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Capture hot incoming leads from ads & social media directly into WhatsApp with automatic follow-up sequences.
-                </p>
-              </div>
-
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-400 flex items-center justify-center font-bold mb-3">
-                  <Gift size={20} />
-                </div>
-                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Zero Subscription Fee</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Save {formatPrice(25000)} per year. You pay ₹0 subscription for the entire first year as an eligible student.
-                </p>
-              </div>
-
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 md:p-5 hover:border-rose-500/40 transition-all shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center font-bold mb-3">
-                  <CheckCircle2 size={20} />
-                </div>
-                <h4 className="text-sm md:text-base font-bold text-white mb-1.5">Plug & Play Integration</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Easily integrate with your CRM, website, or marketing campaigns without any complex coding required.
-                </p>
-              </div>
-            </div>
-
-            <div className="text-center relative z-10">
+            {/* Mobile Toggle */}
+            <div className="flex sm:hidden justify-center gap-2 pt-4">
               <button
-                onClick={openBookingModal}
-                className="bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 hover:from-rose-600 hover:to-pink-600 text-white font-black text-sm md:text-lg px-8 py-4 rounded-xl shadow-xl shadow-rose-500/30 transition-all transform hover:-translate-y-0.5"
+                onClick={() => setSplitScreenTab('current')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${splitScreenTab === 'current' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-slate-900 text-slate-400'}`}
               >
-                PAY {formatPrice(99)} & CLAIM FREE WHATSAPP API
+                Current Life
+              </button>
+              <button
+                onClick={() => setSplitScreenTab('future')}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${splitScreenTab === 'future' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'bg-slate-900 text-slate-400'}`}
+              >
+                Future Life
               </button>
             </div>
           </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            {/* Left Column — Current Life */}
+            <div className={`bg-slate-900/60 border border-rose-900/30 rounded-3xl p-6 md:p-8 space-y-6 ${splitScreenTab === 'current' ? 'block' : 'hidden sm:block'}`}>
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
+                  <XCircle size={20} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Current Life (Before Crossing)</h3>
+                  <span className="text-xs text-rose-400 font-semibold">Stuck in Confusion & Manual Effort</span>
+                </div>
+              </div>
+
+              <ul className="space-y-4 text-xs md:text-sm text-slate-300">
+                <li className="flex items-start gap-3">
+                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
+                  <span><strong>Overwhelmed by AI Hype:</strong> Trying random free tools without a cohesive commercial strategy.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
+                  <span><strong>No Automated Customers:</strong> Reliant on manual word-of-mouth with zero predictable leads.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
+                  <span><strong>Exhausting Manual Work:</strong> Spending 60+ hours writing posts, answering emails & making decks manually.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
+                  <span><strong>No Real Business System:</strong> Just an unvalidated idea collecting dust with zero passive growth.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Right Column — Future Life */}
+            <div className={`bg-gradient-to-b from-blue-950/40 to-slate-900 border-2 border-cyan-400/50 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl shadow-cyan-500/10 ${splitScreenTab === 'future' ? 'block' : 'hidden sm:block'}`}>
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-cyan-400/10 text-cyan-300 flex items-center justify-center font-bold">
+                  <CheckCircle2 size={20} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Future Life (Across The Bridge)</h3>
+                  <span className="text-xs text-cyan-300 font-semibold">Automated AI Business & Freedom</span>
+                </div>
+              </div>
+
+              <ul className="space-y-4 text-xs md:text-sm text-slate-200">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                  <span><strong>Live Brand & Website:</strong> Professional, high-converting digital storefront operating 24/7.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                  <span><strong>WhatsApp Business API:</strong> 1-Year automated assistant nurturing and closing leads automatically.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                  <span><strong>AI Marketing Factory:</strong> 30 days of high-converting social scripts & ad graphics produced in 15 mins.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                  <span><strong>Scalable Income & Freedom:</strong> Operating with low overhead while serving clients around the clock.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 9. TESTIMONIALS */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-900">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-14">
-            <h2 className="text-xl md:text-4xl font-black text-white mb-2">
-              Real Results From Business Owners
+      {/* 5. SECTION 5: AI VENTURE LAB 8-WEEK JOURNEY (CURRICULUM ROADMAP) */}
+      <section className="py-20 px-4 md:px-8 bg-[#0B1020] relative">
+        <div className="container mx-auto max-w-6xl space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-blue-400">
+              THE FULL TRANSFORMATION
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              The 8-Week AI Venture Lab Journey
             </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
-              <div className="flex text-amber-400 gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} className="fill-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-300 text-xs italic">
-                &ldquo;Automated my entire social content & ad copy. Saved ₹1.2L/month in agency fees!&rdquo;
-              </p>
-              <div className="border-t border-slate-800/80 pt-2.5 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-rose-500/20 text-rose-300 font-bold text-xs flex items-center justify-center">PM</div>
-                <div>
-                  <h4 className="text-xs font-bold text-white">Pooja Malhotra</h4>
-                  <span className="text-[10px] text-slate-400">Founder, EcoStyle</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
-              <div className="flex text-amber-400 gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} className="fill-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-300 text-xs italic">
-                &ldquo;Deployed an AI assistant for inquiries and grew lead conversions by 34%.&rdquo;
-              </p>
-              <div className="border-t border-slate-800/80 pt-2.5 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-sky-500/20 text-sky-300 font-bold text-xs flex items-center justify-center">RK</div>
-                <div>
-                  <h4 className="text-xs font-bold text-white">Rajesh Kapoor</h4>
-                  <span className="text-[10px] text-slate-400">MD, B2B Logistics</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
-              <div className="flex text-amber-400 gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} className="fill-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-300 text-xs italic">
-                &ldquo;Zero tech background. Now I handle client proposals in 10 minutes instead of 3 hours.&rdquo;
-              </p>
-              <div className="border-t border-slate-800/80 pt-2.5 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center justify-center">SR</div>
-                <div>
-                  <h4 className="text-xs font-bold text-white">Sunita Rao</h4>
-                  <span className="text-[10px] text-slate-400">Corporate Trainer</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ⭐ CERTIFICATE OF COMPLETION SECTION */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-950 border-t border-slate-800">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center max-w-3xl mx-auto mb-8 md:mb-14">
-            <div className="inline-flex items-center gap-1.5 bg-amber-400/10 border border-amber-400/30 px-3 py-1 rounded-full text-amber-300 font-bold text-[10px] md:text-xs mb-3">
-              <Award size={14} className="text-amber-400 shrink-0" />
-              <span>OFFICIAL CERTIFICATION</span>
-            </div>
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white mb-2 md:mb-4">
-              Get Your Official Certificate of Completion
-            </h2>
-            <p className="text-slate-400 text-xs md:text-base max-w-2xl mx-auto">
-              Showcase your expertise to clients, investors, and peers with your verified digital Certificate of Completion.
+            <p className="text-slate-400 text-sm md:text-base">
+              The ₹99 webinar opens the door. The complete 8-Week AI Venture Lab ({formatPrice(10999)}) takes you step-by-step all the way across the bridge.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-center">
-            {/* Left: Certificate Features */}
-            <div className="lg:col-span-5 space-y-4">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 space-y-3 shadow-lg">
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-400/10 text-amber-400 font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    <BadgeCheck size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-bold text-white mb-1">Official Completion Certificate</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Verified digital credential validating your hands-on mastery of business AI automation.
-                    </p>
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { week: "Week 1", title: "Business Discovery", desc: "Identify & validate your high-profit AI business niche." },
+              { week: "Week 2", title: "Brand Building", desc: "Generate logos, color schemes & brand assets using AI." },
+              { week: "Week 3", title: "AI Content Engine", desc: "Build automated social media, copy & video creation workflows." },
+              { week: "Week 4", title: "Website + WhatsApp", desc: "Deploy your zero-code website & WhatsApp API lead funnel." },
+              { week: "Week 5", title: "Performance Marketing", desc: "Launch high-converting Meta & Google ad campaigns." },
+              { week: "Week 6", title: "Workflow Automation", desc: "Integrate custom AI Chatbots & automated CRM sequences." },
+              { week: "Week 7", title: "Scaling Operations", desc: "Systematize client delivery & recursive income streams." },
+              { week: "Week 8", title: "Official Business Launch", desc: "Graduation, live market launch & alumni network showcase." },
+            ].map((w, idx) => (
+              <div
+                key={idx}
+                onClick={() => setActiveRoadmapWeek(idx + 1)}
+                className={`cursor-pointer rounded-2xl p-5 border transition-all ${
+                  activeRoadmapWeek === idx + 1
+                    ? 'bg-gradient-to-b from-blue-950 to-slate-900 border-cyan-400 shadow-xl shadow-cyan-500/10'
+                    : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
+                    {w.week}
+                  </span>
+                  <Sparkles size={14} className={activeRoadmapWeek === idx + 1 ? 'text-amber-400' : 'text-slate-600'} />
                 </div>
+                <h4 className="text-base font-bold text-white mb-1">{w.title}</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className="border-t border-slate-800/80 pt-3 flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    <Award size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-bold text-white mb-1">LinkedIn & Resume Sharable</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Easily attach your verifiable credential URL to your LinkedIn profile, business website & pitch deck.
-                    </p>
-                  </div>
+      {/* 6. SECTION 6: WHAT YOU'LL BUILD (12 GRID CARDS) */}
+      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60">
+        <div className="container mx-auto max-w-6xl space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+              TANGIBLE ASSETS PRODUCED
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              What You Will Build During The Program
+            </h2>
+            <p className="text-slate-400 text-sm md:text-base">
+              You won&apos;t just learn theory. You will build and deploy 12 concrete assets for your business.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { name: "1. Business Idea & Strategy", icon: Compass },
+              { name: "2. Complete Brand Identity", icon: Sparkles },
+              { name: "3. High-Converting Landing Page", icon: Layout },
+              { name: "4. Live Website & Storefront", icon: Globe },
+              { name: "5. WhatsApp Business Suite", icon: MessageSquare },
+              { name: "6. Instagram Content Engine", icon: Share2 },
+              { name: "7. Facebook Ad Campaign Setup", icon: BarChart3 },
+              { name: "8. 24/7 AI Lead Chatbot", icon: Bot },
+              { name: "9. Omnichannel Marketing Plan", icon: Rocket },
+              { name: "10. Meta Ads Funnel Architecture", icon: TrendingUp },
+              { name: "11. Automated Customer Database", icon: Database },
+              { name: "12. Official Business Market Launch", icon: Trophy },
+            ].map((card, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/30 rounded-2xl p-4 flex items-center gap-3 transition-all hover:-translate-y-1"
+              >
+                <div className="w-10 h-10 rounded-xl bg-blue-600/10 text-cyan-300 flex items-center justify-center shrink-0 border border-blue-500/20">
+                  <card.icon size={20} />
                 </div>
+                <span className="text-xs font-bold text-slate-200">{card.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className="border-t border-slate-800/80 pt-3 flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-sky-500/10 text-sky-400 font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    <ShieldCheck size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-bold text-white mb-1">Unique QR Verification</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Includes a secure digital verification ID ensuring 100% authenticity for clients and organizations.
-                    </p>
-                  </div>
+      {/* 7. SECTION 7: LUXURY BONUS SECTION (DARK + GOLDEN GLOW) */}
+      <section className="py-20 px-4 md:px-8 bg-gradient-to-br from-[#0B1020] via-slate-950 to-[#120F24] relative overflow-hidden border-y border-amber-500/20">
+        {/* Golden Ambient Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none" />
+
+        <div className="container mx-auto max-w-5xl space-y-12 relative z-10">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="bg-amber-400/10 text-amber-300 border border-amber-400/30 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider inline-flex items-center gap-1.5 shadow-md">
+              <Gift size={14} className="text-amber-400" /> EXCLUSIVE ENROLLMENT BONUSES
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              Premium Founder Bonuses Stack
+            </h2>
+            <p className="text-slate-300 text-sm md:text-base">
+              Accelerate your growth with over {formatPrice(35000)}+ worth of exclusive tools, templates & software access.
+            </p>
+          </div>
+
+          {/* HERO BONUS CARD — WHATSAPP API */}
+          <div className="bg-gradient-to-r from-slate-900 via-amber-950/30 to-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-lg">
+              HERO BONUS — WORTH {formatPrice(25000)}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+              <div className="md:col-span-8 space-y-4">
+                <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold border border-emerald-400/30">
+                  <CheckCircle2 size={14} /> FREE 12 Months Access
+                </div>
+                <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">
+                  WhatsApp Business API Suite <span className="text-amber-400">(1-Year Free)</span>
+                </h3>
+                <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
+                  Get full 1-year complimentary access to the official WhatsApp Business API. Auto-respond to client inquiries, capture incoming ad leads, send automated catalog follow-ups, and run broadcast campaigns on autopilot.
+                </p>
+                <div className="p-3 bg-slate-950/80 rounded-xl border border-amber-400/30 text-[11px] text-amber-200 font-medium">
+                  <strong>Important Notice:</strong> This 1-Year WhatsApp API bonus (Worth {formatPrice(25000)}) is available ONLY when participants enroll in the complete 8-Week AI Venture Lab Program ({formatPrice(10999)}).
+                </div>
+              </div>
+
+              <div className="md:col-span-4 text-center bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div className="text-slate-400 text-xs font-bold">Standard Value</div>
+                <div className="text-slate-500 line-through text-lg font-bold">{formatPrice(25000)}/yr</div>
+                <div className="text-amber-400 font-black text-3xl">INCLUDED FREE</div>
+                <span className="text-[10px] text-slate-400 block">For Eligible Students</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ADDITIONAL BONUS STACK */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { title: "40+ Curated AI Tools Suite", val: formatPrice(5000), desc: "Direct directory of top AI software for graphics, video, text & code." },
+              { title: "500+ Master Prompt Library", val: formatPrice(3000), desc: "Copy-paste prompts engineered specifically for business automation." },
+              { title: "Legal & Business Templates", val: formatPrice(4000), desc: "Client proposals, contracts, invoices & SOP templates." },
+              { title: "7-Day Income Challenge", val: formatPrice(2500), desc: "Fast-track blueprint to land your first paying customer in 7 days." },
+              { title: "Private Founder Community", val: "Priceless", desc: "Lifetime access to networking, peer feedback & expert support." },
+              { title: "Verifiable Digital Certificate", val: formatPrice(2000), desc: "Official Certificate of Completion with unique QR validation." },
+            ].map((b, idx) => (
+              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-2 hover:border-amber-400/30 transition-all">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-amber-300">{b.title}</span>
+                  <span className="text-slate-400 text-[10px] font-mono">{b.val}</span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. SECTION 8: TESTIMONIALS (GLASS CARDS) */}
+      <section className="py-20 px-4 md:px-8 bg-[#0B1020]">
+        <div className="container mx-auto max-w-6xl space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+              SUCCESS STORIES ACROSS THE BRIDGE
+            </span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+              Real Results From Real Founders
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-amber-400 gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="fill-amber-400" />
+                ))}
+              </div>
+              <p className="text-xs text-slate-300 italic leading-relaxed">
+                &ldquo;I went from spending ₹1.5L/month on digital marketing agencies to running my own AI content engine. Saved over 25 hours a week and doubled my lead conversions.&rdquo;
+              </p>
+              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-600/20 text-cyan-300 font-bold flex items-center justify-center text-sm">PM</div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Pooja Malhotra</h4>
+                  <span className="text-[10px] text-slate-400">Women Entrepreneur & Founder</span>
                 </div>
               </div>
             </div>
 
-            {/* Right: High Resolution Certificate Preview Card */}
-            <div className="lg:col-span-7">
-              <div className="bg-slate-900 border-2 border-amber-400/30 rounded-2xl md:rounded-3xl p-3 md:p-4 shadow-2xl relative overflow-hidden group">
-                <div className="overflow-hidden rounded-xl bg-slate-950 border border-slate-800">
-                  <img
-                    src="/aiventurelab_certificate.png"
-                    alt="Ruzann AI Venture Lab Certificate of Completion"
-                    className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  />
+            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-amber-400 gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="fill-amber-400" />
+                ))}
+              </div>
+              <p className="text-xs text-slate-300 italic leading-relaxed">
+                &ldquo;The WhatsApp API integration changed everything. Our lead response time dropped from 4 hours to 5 seconds. We closed 18 new clients in the first month alone.&rdquo;
+              </p>
+              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-cyan-600/20 text-cyan-300 font-bold flex items-center justify-center text-sm">RK</div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Rajesh Kapoor</h4>
+                  <span className="text-[10px] text-slate-400">B2B Business Owner</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-amber-400 gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="fill-amber-400" />
+                ))}
+              </div>
+              <p className="text-xs text-slate-300 italic leading-relaxed">
+                &ldquo;I had zero coding background. The step-by-step roadmap gave me the confidence to launch my AI consulting agency. The ₹99 webinar was the best decision I made.&rdquo;
+              </p>
+              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-indigo-600/20 text-indigo-300 font-bold flex items-center justify-center text-sm">SR</div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Sunita Rao</h4>
+                  <span className="text-[10px] text-slate-400">Freelance AI Consultant</span>
                 </div>
               </div>
             </div>
@@ -858,49 +874,52 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 10. FAQ ACCORDION */}
-      <section className="py-8 md:py-20 px-3 md:px-8 bg-slate-950">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center max-w-2xl mx-auto mb-6 md:mb-14">
-            <h2 className="text-xl md:text-4xl font-black text-white mb-2">
-              Frequently Asked Questions
+      {/* 9. SECTION 9: FAQ (ACCORDION) */}
+      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60">
+        <div className="container mx-auto max-w-4xl space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+              FREQUENTLY ASKED QUESTIONS
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              Got Questions? We Have Answers.
             </h2>
           </div>
 
-          <div className="space-y-3">
-              {[
-                {
-                  q: "1. Is the WhatsApp API included with the course?",
-                  a: "Yes! Every eligible learner receives 1 year of WhatsApp API access worth ₹25,000 absolutely FREE. This allows you to automate customer communication, send notifications, manage leads, and engage with clients using WhatsApp Business as part of your learning experience."
-                },
-                {
-                  q: "2. Why is the WhatsApp API valuable?",
-                  a: "The WhatsApp API is widely used by businesses to automate customer support, lead follow-ups, appointment reminders, order updates, and marketing campaigns. Purchasing it separately can cost around ₹25,000 per year, but it's included at no additional cost with this course for eligible students."
-                },
-                {
-                  q: "3. Who is eligible for the free WhatsApp API offer?",
-                  a: "The complimentary 1-year WhatsApp API subscription is available to eligible students enrolled in this course. Please review the course details or contact our support team for any activation requirements or applicable terms."
-                },
-                {
-                  q: "4. Can I use the WhatsApp API for my own business?",
-                  a: "Absolutely! Once activated, you can integrate the WhatsApp API into your own business to communicate professionally with customers, automate workflows, and improve customer engagement while applying what you learn throughout the course."
-                },
-                {
-                  q: "5. Are there any hidden charges for the WhatsApp API?",
-                  a: "No hidden subscription fee for the API itself during the first year. Your ₹25,000 annual WhatsApp API access is included FREE with the course for eligible learners. Standard WhatsApp conversation charges or third-party platform fees (if applicable under Meta's pricing policy) are separate and are not included."
-                }
-              ].map((item, idx) => (
-              <div key={idx} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div className="space-y-4">
+            {[
+              {
+                q: "What is the difference between the ₹99 Webinar and the 8-Week AI Venture Lab?",
+                a: "The ₹99 LIVE Webinar is the FIRST STEP onto the bridge. It gives you the complete opportunity blueprint, AI business validation framework, and roadmap. The 8-Week AI Venture Lab (₹10,999) is the COMPLETE JOURNEY where we build your entire business, website, WhatsApp API, and marketing systems together hands-on."
+              },
+              {
+                q: "Do I need any technical or coding knowledge?",
+                a: "No coding or technical background is required. Everything taught uses modern no-code AI tools, drag-and-drop builders, and intuitive visual interfaces designed for non-tech founders."
+              },
+              {
+                q: "How do I claim the 1-Year WhatsApp Business API bonus?",
+                a: "The complimentary 1-Year WhatsApp Business API subscription (Worth ₹25,000) is included as an exclusive bonus when participants enroll in the complete 8-Week AI Venture Lab Program (₹10,999)."
+              },
+              {
+                q: "Will I get recordings if I miss the live webinar session?",
+                a: "Yes! While we strongly encourage attending live for real-time Q&A and interactive demonstrations, recorded session access will be provided to all registered participants."
+              },
+              {
+                q: "What certificate will I receive?",
+                a: "You will receive an official verifiable digital Certificate of Completion from Ruzann AI Venture Lab complete with a unique QR code for LinkedIn and client verification."
+              }
+            ].map((faq, idx) => (
+              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full p-4 text-left font-bold text-xs md:text-base text-white flex justify-between items-center gap-3 hover:text-rose-400"
+                  className="w-full p-5 text-left font-bold text-sm md:text-base text-white flex justify-between items-center gap-4 hover:text-cyan-300 transition-colors"
                 >
-                  <span>{item.q}</span>
-                  <ChevronDown size={16} className={`shrink-0 transition-transform ${openFaq === idx ? 'rotate-180 text-rose-400' : 'text-slate-400'}`} />
+                  <span>{faq.q}</span>
+                  <ChevronDown size={18} className={`shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180 text-cyan-400' : 'text-slate-400'}`} />
                 </button>
                 {openFaq === idx && (
-                  <div className="px-4 pb-4 text-slate-300 text-xs leading-relaxed border-t border-slate-800/60 pt-3">
-                    {item.a}
+                  <div className="px-5 pb-5 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+                    {faq.a}
                   </div>
                 )}
               </div>
@@ -909,43 +928,61 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 11. FINAL CTA */}
-      <section className="py-10 md:py-20 px-3 md:px-8 bg-gradient-to-br from-rose-950 via-slate-900 to-slate-950 text-center">
-        <div className="container mx-auto max-w-4xl space-y-4">
-          <h2 className="text-2xl md:text-5xl font-black text-white">
-            Multiply Business Output & Save 20+ Hours Weekly
+      {/* 10. SECTION 10: FINAL EMOTIONAL CTA */}
+      <section className="py-24 px-4 md:px-8 bg-gradient-to-br from-blue-950 via-[#0B1020] to-slate-950 text-center relative overflow-hidden border-t border-cyan-500/30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-blue-600/15 rounded-full blur-[180px] pointer-events-none" />
+
+        <div className="container mx-auto max-w-4xl space-y-8 relative z-10">
+          <span className="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30">
+            YOUR MOMENT OF DECISION
+          </span>
+
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+            &ldquo;Every Great Journey Begins With One Step.&rdquo;
           </h2>
-          <div>
+
+          <p className="text-slate-300 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Today you are standing at the beginning of the bridge.<br />
+            Six months from now, you will either say...<br />
+            <span className="text-cyan-300 font-bold">&ldquo;I&apos;m glad I started.&rdquo;</span> or <span className="text-rose-400 font-bold">&ldquo;I wish I had.&rdquo;</span>
+          </p>
+
+          <div className="pt-4 max-w-md mx-auto space-y-4">
             <button
               onClick={openBookingModal}
-              className="bg-gradient-to-r from-rose-500 to-pink-600 text-white font-black text-base md:text-xl px-8 py-4 rounded-xl md:rounded-2xl shadow-xl"
+              className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-lg py-5 px-8 rounded-2xl shadow-2xl shadow-blue-600/40 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 border border-cyan-400/30 group"
             >
-              PAY {formatPrice(99)} & JOIN MASTERCLASS
+              <span>RESERVE MY SEAT — {formatPrice(99)}</span>
+              <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </button>
+
+            <div className="text-xs text-slate-400 font-medium">
+              100% Risk-Free Guarantee • Instant Zoom/Meet Access Sent To Email
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 12. REGISTRATION & PAYMENT MODAL */}
+      {/* REGISTRATION & PAYMENT MODAL */}
       {isRegModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3">
-          <div className="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-5 md:p-8 relative shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-cyan-500/30 w-full max-w-md rounded-3xl p-6 md:p-8 relative shadow-2xl">
             <button
               onClick={() => setIsRegModalOpen(false)}
-              className="absolute top-3 right-3 text-slate-400 hover:text-white bg-slate-800 p-1.5 rounded-full"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition-colors"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
 
-            <div className="text-center mb-4">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-1">
-                <Sparkles size={20} />
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-blue-600/10 text-cyan-300 flex items-center justify-center mx-auto mb-2 border border-blue-500/20">
+                <Sparkles size={24} />
               </div>
-              <h3 className="text-lg font-black text-white">Reserve Your Seat</h3>
-              <p className="text-xs text-slate-400">AI Venture Lab Live Masterclass ({formatPrice(99)})</p>
+              <h3 className="text-xl font-black text-white">Reserve Your Seat</h3>
+              <p className="text-xs text-cyan-300 font-semibold mt-1">Ruzann AI Venture Lab LIVE Webinar ({formatPrice(99)})</p>
             </div>
 
-            <form onSubmit={handleRegistrationSubmit} className="space-y-3">
+            <form onSubmit={handleRegistrationSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-300 mb-1">Full Name *</label>
                 <input
@@ -954,7 +991,7 @@ export default function AIVentureLabPage() {
                   placeholder="e.g. Priya Sharma"
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -966,7 +1003,7 @@ export default function AIVentureLabPage() {
                   placeholder="priya@mybusiness.com"
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -978,20 +1015,22 @@ export default function AIVentureLabPage() {
                   placeholder="+91 98765 43210"
                   value={formData.phone}
                   onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1">Role / Background</label>
+                <label className="block text-xs font-bold text-slate-300 mb-1">Your Role / Background</label>
                 <select
                   value={formData.role}
                   onChange={e => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
                 >
                   <option value="Women Entrepreneur">Women Entrepreneur / Founder</option>
-                  <option value="Small Business Owner">Business Owner / Businessman</option>
-                  <option value="Executive / Professional">Executive / Corporate Professional</option>
+                  <option value="Small Business Owner">Small Business Owner</option>
+                  <option value="Freelancer">Freelancer / Consultant</option>
+                  <option value="Corporate Professional">Corporate Professional / Executive</option>
+                  <option value="Homemaker">Homemaker / Aspiring Founder</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
@@ -999,16 +1038,16 @@ export default function AIVentureLabPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-black py-3 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2 mt-2 text-xs md:text-sm disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 size={16} className="animate-spin" />
+                    <Loader2 size={18} className="animate-spin" />
                     <span>Opening Payment Gateway...</span>
                   </>
                 ) : (
                   <>
-                    <Lock size={14} />
+                    <Lock size={16} />
                     <span>PROCEED TO PAY {formatPrice(99)}</span>
                   </>
                 )}
@@ -1018,22 +1057,59 @@ export default function AIVentureLabPage() {
         </div>
       )}
 
-      {/* 13. STICKY MOBILE BOTTOM BAR */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 p-2.5 px-4 backdrop-blur-lg flex items-center justify-between gap-3">
+      {/* STICKY MOBILE BOTTOM BAR */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 p-3 px-4 backdrop-blur-xl flex items-center justify-between gap-3">
         <div>
-          <div className="text-[9px] text-slate-400 uppercase font-bold">Offer Closing Soon</div>
-          <div className="text-rose-400 font-black text-base">{formatPrice(99)} <span className="line-through text-slate-500 text-[10px] font-normal">{formatPrice(1999)}</span></div>
+          <div className="text-[10px] text-slate-400 uppercase font-bold">LIVE Webinar Pass</div>
+          <div className="text-cyan-300 font-black text-lg">{formatPrice(99)} <span className="line-through text-slate-500 text-xs font-normal">{formatPrice(1999)}</span></div>
         </div>
         <button
           onClick={openBookingModal}
-          className="bg-gradient-to-r from-rose-500 to-pink-600 text-white font-black text-xs px-5 py-2.5 rounded-xl shadow-lg flex items-center gap-1"
+          className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg flex items-center gap-1.5"
         >
-          <span>PAY ₹99 NOW</span>
+          <span>RESERVE SEAT</span>
           <ArrowRight size={14} />
         </button>
       </div>
 
+      {/* FLOATING WHATSAPP BUTTON */}
+      <a
+        href="https://wa.me/919876543210?text=Hi%2C%20I%20have%20a%20question%20about%20Ruzann%20AI%20Venture%20Lab%20Webinar"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-20 lg:bottom-6 right-6 z-40 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-3.5 rounded-full shadow-2xl flex items-center gap-2 transition-all transform hover:scale-110"
+        title="Chat on WhatsApp"
+      >
+        <MessageSquare size={22} className="fill-slate-950" />
+        <span className="hidden md:inline text-xs font-black">Ask Support</span>
+      </a>
+
       <Footer />
     </div>
+  );
+}
+
+// Trophy icon helper component
+function Trophy(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+      <path d="M4 22h16" />
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+    </svg>
   );
 }
