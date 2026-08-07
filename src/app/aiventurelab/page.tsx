@@ -230,18 +230,18 @@ export default function AIVentureLabPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-slate-100 font-sans selection:bg-blue-600 selection:text-white pb-20 lg:pb-0 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0c142a] text-slate-100 font-sans selection:bg-[#2363f1] selection:text-white pb-20 lg:pb-0 overflow-x-hidden">
       {/* 0. STICKY TOP URGENCY BANNER */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 border-b border-blue-500/20 text-white py-2 px-4 text-center text-xs font-semibold sticky top-0 z-50 backdrop-blur-xl flex items-center justify-center gap-3">
-        <span className="flex items-center gap-1 bg-blue-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full text-[11px] font-bold border border-cyan-400/30 animate-pulse">
-          <Flame size={12} className="text-amber-400 fill-amber-400" /> LIVE BATCH
+      <div className="bg-[#0c142a] border-b border-[#1ad8ea]/20 text-white py-2.5 px-4 text-center text-xs font-semibold sticky top-0 z-50 backdrop-blur-xl flex items-center justify-center gap-3">
+        <span className="flex items-center gap-1 bg-[#1e2842] text-[#1ad8ea] px-2.5 py-0.5 rounded-full text-[11px] font-bold border border-[#1ad8ea]/30 animate-pulse">
+          <Flame size={12} className="text-[#f9be3e] fill-[#f9be3e]" /> LIVE BATCH
         </span>
-        <span className="hidden md:inline-block bg-amber-400 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
+        <span className="hidden md:inline-block bg-[#f9be3e] text-[#0c142a] px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
           Special ₹99 Webinar Pass
         </span>
         <button
           onClick={openBookingModal}
-          className="ml-2 underline text-cyan-300 hover:text-white font-bold text-xs hidden sm:inline"
+          className="ml-2 underline text-[#1ad8ea] hover:text-white font-bold text-xs hidden sm:inline"
         >
           Claim Seat &rarr;
         </button>
@@ -250,41 +250,36 @@ export default function AIVentureLabPage() {
       <Header />
 
       {/* 1. FULL-SCREEN HERO SECTION — CROSSING THE BRIDGE */}
-      <section className="relative min-h-[92vh] pt-12 pb-20 px-4 md:px-8 flex flex-col justify-center items-center overflow-hidden bg-radial-at-c from-[#111827] via-[#0B1020] to-[#050814]">
+      <section className="relative min-h-[92vh] pt-12 pb-20 px-4 md:px-8 flex flex-col justify-center items-center overflow-hidden bg-[#0c142a]">
         {/* Glowing Ambient Light Orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-cyan-400/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#2363f1]/20 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-[#1ad8ea]/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-[#2363f1]/15 rounded-full blur-[160px] pointer-events-none" />
 
         {/* Futuristic Illuminated Bridge Canvas (SVG Graphic) */}
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-35">
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
           <svg className="w-full h-full max-w-6xl" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="bridgeGrad" x1="0%" y1="50%" x2="100%" y2="50%">
-                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.2" />
-                <stop offset="50%" stopColor="#22D3EE" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.9" />
-              </linearGradient>
-              <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#22D3EE" stopOpacity="0" />
-                <stop offset="50%" stopColor="#22D3EE" stopOpacity="1" />
-                <stop offset="100%" stopColor="#FBBF24" stopOpacity="0" />
+                <stop offset="0%" stopColor="#2363f1" stopOpacity="0.2" />
+                <stop offset="50%" stopColor="#1ad8ea" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#f9be3e" stopOpacity="0.9" />
               </linearGradient>
             </defs>
 
             {/* Left Bank — Dark & Uncertain */}
-            <path d="M 0,450 Q 200,430 350,480 L 350,600 L 0,600 Z" fill="#0F172A" opacity="0.6" />
+            <path d="M 0,450 Q 200,430 350,480 L 350,600 L 0,600 Z" fill="#1e2842" opacity="0.6" />
             <circle cx="150" cy="450" r="8" fill="#64748B" />
             <text x="100" y="490" fill="#94A3B8" fontSize="14" fontFamily="Inter" fontWeight="600">The Uncertain Side</text>
 
             {/* Right Bank — Radiant AI Future City */}
-            <path d="M 850,480 Q 1000,430 1200,450 L 1200,600 L 850,600 Z" fill="#1E293B" opacity="0.8" />
-            <circle cx="1050" cy="450" r="12" fill="#FBBF24" />
-            <text x="1000" y="490" fill="#FBBF24" fontSize="14" fontFamily="Inter" fontWeight="700">AI Powered Future</text>
+            <path d="M 850,480 Q 1000,430 1200,450 L 1200,600 L 850,600 Z" fill="#1e2842" opacity="0.8" />
+            <circle cx="1050" cy="450" r="12" fill="#f9be3e" />
+            <text x="1000" y="490" fill="#f9be3e" fontSize="14" fontFamily="Inter" fontWeight="700">AI Powered Future</text>
 
             {/* The Illuminated Cyber Bridge */}
             <path d="M 150,450 Q 600,280 1050,450" stroke="url(#bridgeGrad)" strokeWidth="6" strokeLinecap="round" />
-            <path d="M 150,455 Q 600,285 1050,455" stroke="#22D3EE" strokeWidth="2" strokeDasharray="8 8" opacity="0.8" />
+            <path d="M 150,455 Q 600,285 1050,455" stroke="#1ad8ea" strokeWidth="2" strokeDasharray="8 8" opacity="0.8" />
 
             {/* Bridge Support Pillars */}
             <line x1="400" y1="360" x2="400" y2="580" stroke="#334155" strokeWidth="2" opacity="0.5" />
@@ -298,10 +293,10 @@ export default function AIVentureLabPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-900/60 via-slate-900/80 to-indigo-900/60 border border-cyan-500/30 px-4 py-2 rounded-full text-cyan-300 font-medium text-xs md:text-sm backdrop-blur-xl shadow-xl shadow-cyan-500/10"
+            className="inline-flex items-center gap-2 bg-[#1e2842]/80 border border-[#1ad8ea]/30 px-4 py-2 rounded-full text-[#1ad8ea] font-medium text-xs md:text-sm backdrop-blur-xl shadow-xl shadow-[#1ad8ea]/10"
           >
-            <Sparkles size={16} className="text-amber-400 animate-spin-slow" />
-            <span>The Premier AI Business Transformation Webinar</span>
+            <Sparkles size={16} className="text-[#f9be3e] animate-spin-slow" />
+            <span>RUZANN AI VENTURE LAB · LIVE WEBINAR</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -312,14 +307,14 @@ export default function AIVentureLabPage() {
             className="max-w-4xl mx-auto space-y-4"
           >
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1]">
-              Every Dream Has <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-amber-300 bg-clip-text text-transparent">Two Sides.</span>
+              Every Dream Has <span className="bg-gradient-to-r from-[#1ad8ea] via-[#2363f1] to-[#f9be3e] bg-clip-text text-transparent">Two Sides.</span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-lg md:text-xl font-normal leading-relaxed max-w-3xl mx-auto">
-              On one side... <span className="text-slate-400 font-semibold">Confusion. Ideas. Fear of AI. No Direction.</span><br className="hidden sm:inline" />
-              On the other... <span className="text-cyan-300 font-bold">AI Business. Customers. Freedom. Automation. Growth.</span>
+              On one side — <span className="text-slate-400 font-semibold">Dreams. Ideas. Potential.</span><br className="hidden sm:inline" />
+              On the other — <span className="text-white font-bold">Customers. Income. Freedom.</span>
             </p>
             <p className="text-slate-400 text-xs sm:text-base font-medium">
-              The distance between them isn&apos;t luck — <strong className="text-white underline decoration-cyan-400 underline-offset-4">It&apos;s knowing which bridge to cross.</strong>
+              The distance between them isn&apos;t luck — <strong className="text-white">It&apos;s knowing <span className="text-[#f9be3e]">which bridge to cross.</span></strong>
             </p>
           </motion.div>
 
@@ -332,20 +327,16 @@ export default function AIVentureLabPage() {
           >
             <button
               onClick={openBookingModal}
-              className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-base sm:text-lg py-4.5 px-8 rounded-2xl shadow-2xl shadow-blue-600/30 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 border border-cyan-400/30 group"
+              className="w-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-black text-base sm:text-lg py-4.5 px-8 rounded-full shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:shadow-[0_15px_35px_-5px_rgba(26,216,234,0.7)] transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group"
             >
-              <span>RESERVE MY SEAT — {formatPrice(99)} ONLY</span>
+              <span>Reserve My Seat</span>
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
 
-            <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
-              <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-                <CheckCircle2 size={14} /> LIVE Online Webinar
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1 text-amber-300 font-semibold">
-                <Star size={13} className="fill-amber-300" /> Step 1 Onto The Bridge
-              </span>
+            <div className="flex items-center gap-2 text-xs font-medium">
+              <span className="text-[#f9be3e] font-bold">₹99 Only</span>
+              <span className="text-slate-500">•</span>
+              <span className="text-slate-300">LIVE Online Webinar</span>
             </div>
           </motion.div>
 
@@ -366,12 +357,12 @@ export default function AIVentureLabPage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/60 border border-white/10 hover:border-cyan-400/40 rounded-2xl p-4 text-center backdrop-blur-xl transition-all hover:-translate-y-1 group shadow-lg"
+                className="bg-[#1e2842]/60 border border-white/10 hover:border-[#1ad8ea]/40 rounded-2xl p-4 text-center backdrop-blur-xl transition-all hover:-translate-y-1 group shadow-lg"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-2.5 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-[#2363f1]/15 border border-[#2363f1]/30 text-[#1ad8ea] flex items-center justify-center mx-auto mb-2.5 group-hover:scale-110 transition-transform">
                   <item.icon size={20} />
                 </div>
-                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">{item.label}</h4>
+                <h4 className="text-xs font-bold text-white group-hover:text-[#1ad8ea] transition-colors">{item.label}</h4>
                 <p className="text-[10px] text-slate-400 mt-0.5">{item.desc}</p>
               </div>
             ))}
@@ -379,143 +370,137 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 2. SECTION 2: THE WORLD HAS CHANGED (TIMELINE ANIMATION) */}
-      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60 relative overflow-hidden">
+      {/* 2. SECTION 2: THE WORLD HAS CHANGED (LIGHT SLATE SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#f8fafc] text-slate-900 border-t border-slate-200 relative overflow-hidden">
         <div className="container mx-auto max-w-5xl space-y-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
-              HISTORICAL PARADIGM SHIFT
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2363f1] font-mono">
+              THE WORLD HAS CHANGED
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-              The World Has Changed. <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Will You Lead Or Be Left Behind?</span>
+            <h2 className="text-3xl sm:text-5xl font-black text-[#0c142a] tracking-tight leading-tight">
+              Three times in history, the ground moved. <span className="text-slate-500 font-bold">This is the third.</span>
             </h2>
-            <p className="text-slate-400 text-sm md:text-base">
+            <p className="text-slate-600 text-sm md:text-base max-w-2xl mx-auto">
               Every major shift creates a new class of leaders. Those who cross the technological bridge early build generational wealth.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {/* Connecting line */}
-            <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-blue-900 via-cyan-500 to-amber-400 -translate-y-12 z-0" />
+            <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-slate-300 via-[#2363f1] to-[#1ad8ea] -translate-y-12 z-0" />
 
             {/* Timeline Item 1 */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
-              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
-                18th C.
+            <div className="bg-white border border-slate-200/90 rounded-3xl p-7 relative z-10 space-y-4 hover:shadow-xl transition-all shadow-lg shadow-slate-200/50">
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-300 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
+                1760
               </div>
-              <h3 className="text-lg font-bold text-white">Industrial Revolution</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Replaced manual labor with steam & machinery. Those who embraced factories built industries; those who resisted lost relevance.
+              <h3 className="text-xl font-black text-[#0c142a]">Industrial Revolution</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Machines replaced muscle. Those who embraced factories built industries; those who resisted lost relevance.
               </p>
-              <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Era of Physical Power</div>
+              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Era of Physical Power</div>
             </div>
 
             {/* Timeline Item 2 */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
-              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-blue-950 text-blue-400 border border-blue-800 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
-                20th C.
+            <div className="bg-white border border-slate-200/90 rounded-3xl p-7 relative z-10 space-y-4 hover:shadow-xl transition-all shadow-lg shadow-slate-200/50">
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-blue-50 text-[#2363f1] border border-blue-200 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
+                1995
               </div>
-              <h3 className="text-lg font-bold text-white">Internet & DotCom</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Replaced physical storefronts with websites & global e-commerce. Digital pioneers created global empires from scratch.
+              <h3 className="text-xl font-black text-[#0c142a]">Internet Revolution</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Information replaced distance. Digital pioneers created global empires from scratch.
               </p>
-              <div className="text-[11px] font-semibold text-blue-400 uppercase tracking-wider">Era of Digital Connectivity</div>
+              <div className="text-[11px] font-semibold text-[#2363f1] uppercase tracking-wider">Era of Digital Connectivity</div>
             </div>
 
             {/* Timeline Item 3 — Highlighting TODAY */}
-            <div className="bg-gradient-to-b from-blue-950/80 via-slate-900 to-slate-900 border-2 border-cyan-400/50 rounded-3xl p-6 relative z-10 space-y-4 shadow-2xl shadow-cyan-500/10">
-              <div className="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2.5 py-1 rounded-full absolute -top-3 right-6 shadow-md">
+            <div className="bg-gradient-to-b from-blue-50/80 via-white to-white border-2 border-[#1ad8ea] rounded-3xl p-7 relative z-10 space-y-4 shadow-xl shadow-[#2363f1]/15">
+              <div className="inline-flex items-center gap-1.5 bg-[#f9be3e] text-[#0c142a] text-[10px] font-black uppercase px-3 py-1 rounded-full absolute -top-3 right-6 shadow-md">
                 HAPPENING NOW
               </div>
-              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-cyan-400 text-slate-950 font-mono font-black text-xs whitespace-nowrap shadow-md shadow-cyan-400/20">
-                TODAY
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-[#1ad8ea] text-[#0c142a] font-mono font-black text-xs whitespace-nowrap shadow-md shadow-[#1ad8ea]/30">
+                Now
               </div>
-              <h3 className="text-lg font-bold text-white">The AI Revolution</h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Replacing manual operational work with autonomous AI systems. One person with AI can now out-execute a 10-person agency.
+              <h3 className="text-xl font-black text-[#0c142a]">AI Revolution</h3>
+              <p className="text-xs text-slate-700 leading-relaxed">
+                Intelligence replaces effort. One person with AI can now out-execute a 10-person agency.
               </p>
-              <div className="text-[11px] font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1">
-                <span>People who learn AI today will lead tomorrow</span> &rarr;
+              <div className="text-[11px] font-bold text-[#2363f1] uppercase tracking-wider flex items-center gap-1">
+                <span>The people who learn AI today will lead tomorrow</span> &rarr;
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. SECTION 3: WHAT YOU'LL LEARN (MILESTONES ON THE BRIDGE) */}
-      <section className="py-20 px-4 md:px-8 bg-[#0B1020] relative">
+      {/* 3. SECTION 3: WHAT YOU'LL LEARN (LIGHT SLATE SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#f1f5f9] text-slate-900 border-t border-slate-200 relative">
         <div className="container mx-auto max-w-6xl space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-amber-400">
-              YOUR WEBINAR ROADMAP
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2363f1] font-mono">
+              SIX MILESTONES ON THE BRIDGE
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#0c142a] tracking-tight">
               Milestones On Your Bridge To AI Success
             </h2>
-            <p className="text-slate-400 text-sm md:text-base">
+            <p className="text-slate-600 text-sm md:text-base">
               In this {formatPrice(99)} LIVE Webinar, we walk you through the 6 vital checkpoints needed to cross from uncertainty to an active AI business.
             </p>
           </div>
 
-          {/* Milestone Cards Grid — 2 points in a row on mobile */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+          {/* Milestone Cards Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[
               {
                 num: "01",
-                title: "AI Opportunity Mapping",
-                desc: "Discover high-margin, low-competition business opportunities created by Generative AI right now.",
+                title: "AI Opportunity",
+                desc: "Where the real money is moving in the AI economy right now.",
                 icon: Compass,
-                color: "from-blue-500 to-indigo-600"
               },
               {
                 num: "02",
-                title: "24-Hour Business Validation",
-                desc: "Learn how to formulate, test, and refine a profitable business concept without upfront capital.",
+                title: "Business Ideas",
+                desc: "Find the one idea that fits your skill and market seamlessly.",
                 icon: Zap,
-                color: "from-cyan-500 to-blue-600"
               },
               {
                 num: "03",
-                title: "Automated Content Factory",
-                desc: "Generate 30 days of high-converting social copy, graphics & video scripts in 15 minutes.",
+                title: "Marketing Engine",
+                desc: "Get seen, get trusted, get customers — powered with AI.",
                 icon: Rocket,
-                color: "from-indigo-500 to-purple-600"
               },
               {
                 num: "04",
-                title: "24/7 AI Lead Automation",
-                desc: "Setup intelligent WhatsApp & web agents that capture and convert incoming leads on autopilot.",
+                title: "Automation",
+                desc: "Let intelligent 24/7 systems do the operational work while you sleep.",
                 icon: Bot,
-                color: "from-purple-500 to-pink-600"
               },
               {
                 num: "05",
-                title: "Step-By-Step Business Roadmap",
-                desc: "Get an actionable, zero-code blueprint to launch your digital brand with minimal overhead.",
+                title: "Business Roadmap",
+                desc: "A step-by-step path from zero to fully launched digital brand.",
                 icon: Layers,
-                color: "from-amber-400 to-orange-500"
               },
               {
                 num: "06",
-                title: "The Complete Transformation",
-                desc: "Understand how the 8-Week AI Venture Lab takes complete beginners across the bridge to scale.",
+                title: "The Lab Transformation",
+                desc: "How AI Venture Lab turns beginners into thriving AI entrepreneurs.",
                 icon: Trophy,
-                color: "from-emerald-400 to-teal-500"
               }
             ].map((m, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/40 rounded-2xl md:rounded-3xl p-3.5 md:p-6 space-y-2 md:space-y-4 backdrop-blur-xl hover:-translate-y-1 transition-all group shadow-xl flex flex-col justify-between"
+                className="bg-white border border-slate-200/80 hover:border-[#2363f1]/40 rounded-3xl p-5 md:p-7 space-y-4 hover:-translate-y-1 transition-all group shadow-lg shadow-slate-200/50 flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-lg md:text-2xl font-black font-mono text-slate-500 group-hover:text-cyan-400 transition-colors">{m.num}</span>
-                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-gradient-to-r ${m.color} text-white flex items-center justify-center shadow-md`}>
-                    <m.icon size={16} className="md:w-5 md:h-5" />
+                  <span className="text-2xl md:text-3xl font-black font-mono text-slate-300 group-hover:text-[#2363f1] transition-colors">{m.num}</span>
+                  <div className="w-10 h-10 rounded-xl bg-[#2363f1]/10 text-[#2363f1] flex items-center justify-center shadow-sm">
+                    <m.icon size={20} />
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xs sm:text-base md:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors leading-tight mb-1">{m.title}</h3>
-                  <p className="text-[11px] md:text-xs text-slate-400 leading-relaxed line-clamp-3 md:line-clamp-none">{m.desc}</p>
+                  <h3 className="text-base md:text-xl font-black text-[#0c142a] group-hover:text-[#2363f1] transition-colors leading-tight mb-1.5">{m.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -523,122 +508,118 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 4. SECTION 4: IMAGINE 60 DAYS FROM TODAY (SPLIT-SCREEN COMPARISON) */}
-      <section className="py-20 px-4 md:px-8 bg-slate-950 border-y border-slate-800/60">
+      {/* 4. SECTION 4: BEFORE VS AFTER (DARK INK SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#0c142a] text-white border-t border-slate-800">
         <div className="container mx-auto max-w-6xl space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#1ad8ea] font-mono">
               BEFORE VS AFTER TRANSFORMATION
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-              Imagine 60 Days From Today
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Same person. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1ad8ea] to-[#2363f1]">Different side of the bridge.</span>
             </h2>
             <p className="text-slate-400 text-sm md:text-base">
-              Which side of the bridge will you be standing on 2 months from now?
+              Which side of the bridge will you be standing on 60 days from now?
             </p>
-
-            {/* Mobile Toggle */}
-            <div className="flex sm:hidden justify-center gap-2 pt-4">
-              <button
-                onClick={() => setSplitScreenTab('current')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${splitScreenTab === 'current' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-slate-900 text-slate-400'}`}
-              >
-                Current Life
-              </button>
-              <button
-                onClick={() => setSplitScreenTab('future')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${splitScreenTab === 'future' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'bg-slate-900 text-slate-400'}`}
-              >
-                Future Life
-              </button>
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {/* Left Column — Current Life */}
-            <div className={`bg-slate-900/60 border border-rose-900/30 rounded-3xl p-6 md:p-8 space-y-6 ${splitScreenTab === 'current' ? 'block' : 'hidden sm:block'}`}>
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+            {/* Left Column — Today (Before) */}
+            <div className="bg-[#1e2842]/50 border border-slate-700/60 rounded-3xl p-6 md:p-8 space-y-6">
+              <div className="flex items-center gap-3 border-b border-slate-700/60 pb-4">
                 <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold">
                   <XCircle size={20} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Current Life (Before Crossing)</h3>
-                  <span className="text-xs text-rose-400 font-semibold">Stuck in Confusion & Manual Effort</span>
+                  <h3 className="text-xl font-black text-white">Today</h3>
+                  <span className="text-xs text-slate-400 font-medium">Before Crossing</span>
                 </div>
               </div>
 
-              <ul className="space-y-4 text-xs md:text-sm text-slate-300">
-                <li className="flex items-start gap-3">
-                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                  <span><strong>Overwhelmed by AI Hype:</strong> Trying random free tools without a cohesive commercial strategy.</span>
+              <ul className="space-y-4 text-sm text-slate-300">
+                <li className="flex items-center gap-3">
+                  <XCircle size={18} className="text-rose-400 shrink-0" />
+                  <span>Confusion & Overwhelm</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                  <span><strong>No Automated Customers:</strong> Reliant on manual word-of-mouth with zero predictable leads.</span>
+                <li className="flex items-center gap-3">
+                  <XCircle size={18} className="text-rose-400 shrink-0" />
+                  <span>No Customers</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                  <span><strong>Exhausting Manual Work:</strong> Spending 60+ hours writing posts, answering emails & making decks manually.</span>
+                <li className="flex items-center gap-3">
+                  <XCircle size={18} className="text-rose-400 shrink-0" />
+                  <span>Manual Exhausting Work</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <XCircle size={16} className="text-rose-400 shrink-0 mt-0.5" />
-                  <span><strong>No Real Business System:</strong> Just an unvalidated idea collecting dust with zero passive growth.</span>
+                <li className="flex items-center gap-3">
+                  <XCircle size={18} className="text-rose-400 shrink-0" />
+                  <span>No Active Business</span>
                 </li>
               </ul>
             </div>
 
-            {/* Right Column — Future Life */}
-            <div className={`bg-gradient-to-b from-blue-950/40 to-slate-900 border-2 border-cyan-400/50 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl shadow-cyan-500/10 ${splitScreenTab === 'future' ? 'block' : 'hidden sm:block'}`}>
-              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
-                <div className="w-10 h-10 rounded-xl bg-cyan-400/10 text-cyan-300 flex items-center justify-center font-bold">
+            {/* Right Column — Day 60 (After) */}
+            <div className="bg-gradient-to-br from-[#1e2842] via-[#0c142a] to-[#2363f1]/20 border-2 border-[#1ad8ea]/60 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl shadow-[#2363f1]/20">
+              <div className="flex items-center gap-3 border-b border-slate-700/60 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-[#1ad8ea]/20 text-[#1ad8ea] flex items-center justify-center font-bold">
                   <CheckCircle2 size={20} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Future Life (Across The Bridge)</h3>
-                  <span className="text-xs text-cyan-300 font-semibold">Automated AI Business & Freedom</span>
+                  <h3 className="text-xl font-black text-white">Day 60</h3>
+                  <span className="text-xs text-[#1ad8ea] font-semibold">Across The Bridge</span>
                 </div>
               </div>
 
-              <ul className="space-y-4 text-xs md:text-sm text-slate-200">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Live Brand & Website:</strong> Professional, high-converting digital storefront operating 24/7.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>WhatsApp Business API:</strong> 1-Year automated assistant nurturing and closing leads automatically.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>AI Marketing Factory:</strong> 30 days of high-converting social scripts & ad graphics produced in 15 mins.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Scalable Income & Freedom:</strong> Operating with low overhead while serving clients around the clock.</span>
-                </li>
-              </ul>
+              <div className="grid grid-cols-2 gap-4 text-sm text-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">Website</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">Brand</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">WhatsApp Business</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">Customers</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">Income</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">Marketing</span>
+                </div>
+                <div className="flex items-center gap-2.5 col-span-2">
+                  <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
+                  <span className="font-bold">24/7 AI Automation</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. SECTION 5: AI VENTURE LAB 8-WEEK JOURNEY (CURRICULUM ROADMAP) */}
-      <section className="py-20 px-4 md:px-8 bg-[#0B1020] relative">
+      {/* 5. SECTION 5: AI VENTURE LAB 8-WEEK JOURNEY (LIGHT SLATE SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#f8fafc] text-slate-900 border-t border-slate-200 relative">
         <div className="container mx-auto max-w-6xl space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-blue-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2363f1] font-mono">
               THE FULL TRANSFORMATION
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#0c142a] tracking-tight">
               The 8-Week AI Venture Lab Journey
             </h2>
-            <p className="text-slate-400 text-sm md:text-base">
+            <p className="text-slate-600 text-sm md:text-base">
               The ₹99 webinar opens the door. The complete 8-Week AI Venture Lab ({formatPrice(10999)}) takes you step-by-step all the way across the bridge.
             </p>
           </div>
 
-          {/* 8-Week Roadmap — 2 points in a row on mobile */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
+          {/* 8-Week Roadmap */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {[
               { week: "Week 1", title: "Business Discovery", desc: "Identify & validate your high-profit AI business niche." },
               { week: "Week 2", title: "Brand Building", desc: "Generate logos, color schemes & brand assets using AI." },
@@ -652,43 +633,47 @@ export default function AIVentureLabPage() {
               <div
                 key={idx}
                 onClick={() => setActiveRoadmapWeek(idx + 1)}
-                className={`cursor-pointer rounded-2xl p-3 md:p-5 border transition-all ${
+                className={`cursor-pointer rounded-2xl p-4 md:p-5 border transition-all ${
                   activeRoadmapWeek === idx + 1
-                    ? 'bg-gradient-to-b from-blue-950 to-slate-900 border-cyan-400 shadow-xl shadow-cyan-500/10'
-                    : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                    ? 'bg-[#0c142a] text-white border-2 border-[#1ad8ea] shadow-xl shadow-[#2363f1]/15'
+                    : 'bg-white text-slate-900 border-slate-200/90 hover:border-[#2363f1] shadow-sm'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <span className="text-[10px] md:text-[11px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
+                  <span className={`text-[10px] md:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                    activeRoadmapWeek === idx + 1
+                      ? 'bg-[#1ad8ea]/20 text-[#1ad8ea] border-[#1ad8ea]/40'
+                      : 'bg-blue-50 text-[#2363f1] border-blue-200'
+                  }`}>
                     {w.week}
                   </span>
-                  <Sparkles size={12} className={activeRoadmapWeek === idx + 1 ? 'text-amber-400' : 'text-slate-600'} />
+                  <Sparkles size={14} className={activeRoadmapWeek === idx + 1 ? 'text-[#f9be3e]' : 'text-slate-400'} />
                 </div>
-                <h4 className="text-xs sm:text-base font-bold text-white mb-1 leading-tight">{w.title}</h4>
-                <p className="text-[10px] md:text-xs text-slate-400 leading-relaxed line-clamp-2 md:line-clamp-none">{w.desc}</p>
+                <h4 className={`text-xs sm:text-base font-bold mb-1 leading-tight ${activeRoadmapWeek === idx + 1 ? 'text-white' : 'text-[#0c142a]'}`}>{w.title}</h4>
+                <p className={`text-[10px] md:text-xs leading-relaxed line-clamp-2 md:line-clamp-none ${activeRoadmapWeek === idx + 1 ? 'text-slate-300' : 'text-slate-600'}`}>{w.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. SECTION 6: WHAT YOU'LL BUILD (12 GRID CARDS) */}
-      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60">
+      {/* 6. SECTION 6: WHAT YOU'LL BUILD (LIGHT SLATE SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#f1f5f9] text-slate-900 border-t border-slate-200">
         <div className="container mx-auto max-w-6xl space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2363f1] font-mono">
               TANGIBLE ASSETS PRODUCED
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#0c142a] tracking-tight">
               What You Will Build During The Program
             </h2>
-            <p className="text-slate-400 text-sm md:text-base">
+            <p className="text-slate-600 text-sm md:text-base">
               You won&apos;t just learn theory. You will build and deploy 12 concrete assets for your business.
             </p>
           </div>
 
-          {/* 12 Build Cards — 2 points in a row on mobile */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-4">
+          {/* 12 Build Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {[
               { name: "1. Business Idea & Strategy", icon: Compass },
               { name: "2. Complete Brand Identity", icon: Sparkles },
@@ -705,40 +690,37 @@ export default function AIVentureLabPage() {
             ].map((card, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/70 border border-slate-800 hover:border-cyan-400/30 rounded-2xl p-3 md:p-4 flex items-center gap-2.5 md:gap-3 transition-all hover:-translate-y-1"
+                className="bg-white border border-slate-200/90 hover:border-[#2363f1]/40 rounded-2xl p-4 flex items-center gap-3 transition-all hover:-translate-y-1 shadow-md shadow-slate-200/40"
               >
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-blue-600/10 text-cyan-300 flex items-center justify-center shrink-0 border border-blue-500/20">
-                  <card.icon size={16} className="md:w-5 md:h-5" />
+                <div className="w-9 h-9 rounded-xl bg-[#2363f1]/10 text-[#2363f1] flex items-center justify-center shrink-0 border border-[#2363f1]/20">
+                  <card.icon size={18} />
                 </div>
-                <span className="text-[11px] md:text-xs font-bold text-slate-200 leading-tight">{card.name}</span>
+                <span className="text-xs font-bold text-[#0c142a] leading-tight">{card.name}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. SECTION 7: LUXURY BONUS SECTION (DARK + GOLDEN GLOW) */}
-      <section className="py-20 px-4 md:px-8 bg-gradient-to-br from-[#0B1020] via-slate-950 to-[#120F24] relative overflow-hidden border-y border-amber-500/20">
+      {/* 7. SECTION 7: LUXURY BONUS SECTION (DARK INK + GOLDEN GLOW) */}
+      <section className="py-24 px-4 md:px-8 bg-[#0c142a] text-white relative overflow-hidden border-y border-slate-800">
         {/* Golden Ambient Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#f9be3e]/10 rounded-full blur-[160px] pointer-events-none" />
 
         <div className="container mx-auto max-w-5xl space-y-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="bg-amber-400/10 text-amber-300 border border-amber-400/30 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider inline-flex items-center gap-1.5 shadow-md">
-              <Gift size={14} className="text-amber-400" /> EXCLUSIVE ENROLLMENT BONUSES
+            <span className="bg-[#f9be3e]/10 text-[#f9be3e] border border-[#f9be3e]/30 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5 shadow-md">
+              <Gift size={14} className="text-[#f9be3e]" /> EXCLUSIVE ENROLLMENT BONUSES
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-              Premium Founder Bonuses Stack
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              The value stack you cross with.
             </h2>
-            <p className="text-slate-300 text-sm md:text-base">
-              Accelerate your growth with over {formatPrice(35000)}+ worth of exclusive tools, templates & software access.
-            </p>
           </div>
 
           {/* HERO BONUS CARD — WHATSAPP API */}
-          <div className="bg-gradient-to-r from-slate-900 via-amber-950/30 to-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-amber-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-lg">
-              HERO BONUS — WORTH {formatPrice(25000)}
+          <div className="bg-gradient-to-r from-[#1e2842] via-[#0c142a] to-[#1e2842] border-2 border-[#f9be3e]/60 rounded-3xl p-6 md:p-10 shadow-2xl shadow-[#f9be3e]/10 relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-[#f9be3e] text-[#0c142a] font-black text-xs px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-lg">
+              Hero Bonus
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
@@ -747,71 +729,73 @@ export default function AIVentureLabPage() {
                   <CheckCircle2 size={14} /> FREE 12 Months Access
                 </div>
                 <h3 className="text-2xl md:text-4xl font-black text-white leading-tight">
-                  WhatsApp Business API Suite <span className="text-amber-400">(1-Year Free)</span>
+                  FREE 12 Months WhatsApp Business API Access
                 </h3>
                 <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-                  Get full 1-year complimentary access to the official WhatsApp Business API. Auto-respond to client inquiries, capture incoming ad leads, send automated catalog follow-ups, and run broadcast campaigns on autopilot.
+                  Automated conversations, broadcast campaigns and a real customer pipeline — running from day one.
                 </p>
-                <div className="p-3 bg-slate-950/80 rounded-xl border border-amber-400/30 text-[11px] text-amber-200 font-medium">
-                  <strong>Important Notice:</strong> This 1-Year WhatsApp API bonus (Worth {formatPrice(25000)}) is available ONLY when participants enroll in the complete 8-Week AI Venture Lab Program ({formatPrice(10999)}).
-                </div>
               </div>
 
-              <div className="md:col-span-4 text-center bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-3">
-                <div className="text-slate-400 text-xs font-bold">Standard Value</div>
-                <div className="text-slate-500 line-through text-lg font-bold">{formatPrice(25000)}/yr</div>
-                <div className="text-amber-400 font-black text-3xl">INCLUDED FREE</div>
-                <span className="text-[10px] text-slate-400 block">For Eligible Students</span>
+              <div className="md:col-span-4 text-center bg-[#0c142a]/90 border border-[#f9be3e]/40 rounded-2xl p-6 space-y-2">
+                <div className="text-slate-400 text-xs font-bold uppercase tracking-wider">Worth</div>
+                <div className="text-[#f9be3e] font-black text-3xl md:text-4xl">{formatPrice(25000)}</div>
+                <span className="text-[10px] text-slate-400 block font-semibold uppercase tracking-wider">Included Free</span>
               </div>
             </div>
           </div>
 
-          {/* ADDITIONAL BONUS STACK — 2 points in a row on mobile */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
+          {/* ADDITIONAL BONUS STACK */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
             {[
-              { title: "40+ Curated AI Tools Suite", val: formatPrice(5000), desc: "Direct directory of top AI software for graphics, video, text & code." },
-              { title: "500+ Master Prompt Library", val: formatPrice(3000), desc: "Copy-paste prompts engineered specifically for business automation." },
-              { title: "Legal & Business Templates", val: formatPrice(4000), desc: "Client proposals, contracts, invoices & SOP templates." },
-              { title: "7-Day Income Challenge", val: formatPrice(2500), desc: "Fast-track blueprint to land your first paying customer in 7 days." },
-              { title: "Private Founder Community", val: "Priceless", desc: "Lifetime access to networking, peer feedback & expert support." },
-              { title: "Verifiable Digital Certificate", val: formatPrice(2000), desc: "Official Certificate of Completion with unique QR validation." },
+              { title: "40+ AI Tools", desc: "Curated stack for every business function." },
+              { title: "Prompt Library", desc: "Battle-tested prompts you can reuse daily." },
+              { title: "Business Templates", desc: "Contracts, offers, funnels, pitch decks." },
+              { title: "Weekly Income Challenge", desc: "Momentum that converts learning to revenue." },
+              { title: "Private Community", desc: "Founders building alongside you." },
+              { title: "Certificate", desc: "Verified completion of AI Venture Lab." },
             ].map((b, idx) => (
-              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 md:p-5 space-y-1.5 md:space-y-2 hover:border-amber-400/30 transition-all flex flex-col justify-between">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1">
-                  <span className="font-bold text-amber-300 text-[11px] sm:text-xs leading-tight">{b.title}</span>
-                  <span className="text-slate-400 text-[9px] sm:text-[10px] font-mono shrink-0">{b.val}</span>
+              <div key={idx} className="bg-[#1e2842]/60 border border-slate-700/60 rounded-2xl p-4 md:p-5 space-y-2 hover:border-[#f9be3e]/40 transition-all flex flex-col justify-between">
+                <div>
+                  <h4 className="font-bold text-[#f9be3e] text-sm md:text-base leading-tight mb-1">{b.title}</h4>
+                  <p className="text-xs text-slate-300 leading-relaxed">{b.desc}</p>
                 </div>
-                <p className="text-[10px] sm:text-xs text-slate-400 leading-relaxed line-clamp-3 sm:line-clamp-none">{b.desc}</p>
               </div>
             ))}
+          </div>
+
+          {/* DISCLAIMER / NOTICE FOOTER */}
+          <div className="text-center pt-2">
+            <p className="text-xs text-slate-400 font-medium italic bg-[#1e2842]/40 border border-slate-700/50 rounded-2xl py-3 px-6 inline-block max-w-2xl">
+              These bonuses are available only when participants enroll in the complete AI Venture Lab Program ({formatPrice(10999)}).
+            </p>
           </div>
         </div>
       </section>
 
-      {/* 8. SECTION 8: TESTIMONIALS (GLASS CARDS) */}
-      <section className="py-20 px-4 md:px-8 bg-[#0B1020]">
+      {/* 8. SECTION 8: TESTIMONIALS (DARK INK SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#0c142a] text-white">
         <div className="container mx-auto max-w-6xl space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#1ad8ea] font-mono">
               SUCCESS STORIES ACROSS THE BRIDGE
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Real Results From Real Founders
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
-              <div className="flex text-amber-400 gap-1">
+            <div className="bg-[#1e2842]/60 border border-slate-700/60 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-[#f9be3e] gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-amber-400" />
+                  <Star key={i} size={16} className="fill-[#f9be3e]" />
                 ))}
               </div>
               <p className="text-xs text-slate-300 italic leading-relaxed">
                 &ldquo;I went from spending ₹1.5L/month on digital marketing agencies to running my own AI content engine. Saved over 25 hours a week and doubled my lead conversions.&rdquo;
               </p>
-              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-600/20 text-cyan-300 font-bold flex items-center justify-center text-sm">PM</div>
+              <div className="border-t border-slate-700/60 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#2363f1]/20 text-[#1ad8ea] font-bold flex items-center justify-center text-sm">PM</div>
                 <div>
                   <h4 className="text-xs font-bold text-white">Pooja Malhotra</h4>
                   <span className="text-[10px] text-slate-400">Women Entrepreneur & Founder</span>
@@ -819,17 +803,17 @@ export default function AIVentureLabPage() {
               </div>
             </div>
 
-            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
-              <div className="flex text-amber-400 gap-1">
+            <div className="bg-[#1e2842]/60 border border-slate-700/60 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-[#f9be3e] gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-amber-400" />
+                  <Star key={i} size={16} className="fill-[#f9be3e]" />
                 ))}
               </div>
               <p className="text-xs text-slate-300 italic leading-relaxed">
                 &ldquo;The WhatsApp API integration changed everything. Our lead response time dropped from 4 hours to 5 seconds. We closed 18 new clients in the first month alone.&rdquo;
               </p>
-              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-cyan-600/20 text-cyan-300 font-bold flex items-center justify-center text-sm">RK</div>
+              <div className="border-t border-slate-700/60 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#1ad8ea]/20 text-[#1ad8ea] font-bold flex items-center justify-center text-sm">RK</div>
                 <div>
                   <h4 className="text-xs font-bold text-white">Rajesh Kapoor</h4>
                   <span className="text-[10px] text-slate-400">B2B Business Owner</span>
@@ -837,17 +821,17 @@ export default function AIVentureLabPage() {
               </div>
             </div>
 
-            <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
-              <div className="flex text-amber-400 gap-1">
+            <div className="bg-[#1e2842]/60 border border-slate-700/60 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
+              <div className="flex text-[#f9be3e] gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-amber-400" />
+                  <Star key={i} size={16} className="fill-[#f9be3e]" />
                 ))}
               </div>
               <p className="text-xs text-slate-300 italic leading-relaxed">
                 &ldquo;I had zero coding background. The step-by-step roadmap gave me the confidence to launch my AI consulting agency. The ₹99 webinar was the best decision I made.&rdquo;
               </p>
-              <div className="border-t border-slate-800 pt-3 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-600/20 text-indigo-300 font-bold flex items-center justify-center text-sm">SR</div>
+              <div className="border-t border-slate-700/60 pt-3 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#2363f1]/20 text-[#1ad8ea] font-bold flex items-center justify-center text-sm">SR</div>
                 <div>
                   <h4 className="text-xs font-bold text-white">Sunita Rao</h4>
                   <span className="text-[10px] text-slate-400">Freelance AI Consultant</span>
@@ -858,14 +842,14 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 9. SECTION 9: FAQ (ACCORDION) */}
-      <section className="py-20 px-4 md:px-8 bg-slate-950 border-t border-slate-800/60">
+      {/* 9. SECTION 9: FAQ (LIGHT SLATE SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#f8fafc] text-slate-900 border-t border-slate-200">
         <div className="container mx-auto max-w-4xl space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-black uppercase tracking-widest text-cyan-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2363f1] font-mono">
               FREQUENTLY ASKED QUESTIONS
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-black text-[#0c142a] tracking-tight">
               Got Questions? We Have Answers.
             </h2>
           </div>
@@ -893,16 +877,16 @@ export default function AIVentureLabPage() {
                 a: "You will receive an official verifiable digital Certificate of Completion from Ruzann AI Venture Lab complete with a unique QR code for LinkedIn and client verification."
               }
             ].map((faq, idx) => (
-              <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
+              <div key={idx} className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-sm">
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full p-5 text-left font-bold text-sm md:text-base text-white flex justify-between items-center gap-4 hover:text-cyan-300 transition-colors"
+                  className="w-full p-5 text-left font-bold text-sm md:text-base text-[#0c142a] flex justify-between items-center gap-4 hover:text-[#2363f1] transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown size={18} className={`shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180 text-cyan-400' : 'text-slate-400'}`} />
+                  <ChevronDown size={18} className={`shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180 text-[#2363f1]' : 'text-slate-400'}`} />
                 </button>
                 {openFaq === idx && (
-                  <div className="px-5 pb-5 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+                  <div className="px-5 pb-5 text-xs md:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                     {faq.a}
                   </div>
                 )}
@@ -912,36 +896,32 @@ export default function AIVentureLabPage() {
         </div>
       </section>
 
-      {/* 10. SECTION 10: FINAL EMOTIONAL CTA */}
-      <section className="py-24 px-4 md:px-8 bg-gradient-to-br from-blue-950 via-[#0B1020] to-slate-950 text-center relative overflow-hidden border-t border-cyan-500/30">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-blue-600/15 rounded-full blur-[180px] pointer-events-none" />
+      {/* 10. SECTION 10: FINAL EMOTIONAL CTA (DARK INK SECTION) */}
+      <section className="py-24 px-4 md:px-8 bg-[#0c142a] text-center text-white relative overflow-hidden border-t border-slate-800">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[#2363f1]/15 rounded-full blur-[180px] pointer-events-none" />
 
         <div className="container mx-auto max-w-4xl space-y-8 relative z-10">
-          <span className="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30">
-            YOUR MOMENT OF DECISION
-          </span>
-
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
-            &ldquo;Every Great Journey Begins With One Step.&rdquo;
+            Every Great Journey<br />Begins With One Step.
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Today you are standing at the beginning of the bridge.<br />
-            Six months from now, you will either say...<br />
-            <span className="text-cyan-300 font-bold">&ldquo;I&apos;m glad I started.&rdquo;</span> or <span className="text-rose-400 font-bold">&ldquo;I wish I had.&rdquo;</span>
+            Today you&apos;re standing at the beginning of the bridge.<br />
+            Six months from now you&apos;ll either say...<br />
+            <span className="text-[#f9be3e] font-bold">&ldquo;I&apos;m glad I started.&rdquo;</span> or <span className="text-slate-400 font-bold">&ldquo;I wish I had.&rdquo;</span>
           </p>
 
           <div className="pt-4 max-w-md mx-auto space-y-4">
             <button
               onClick={openBookingModal}
-              className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-lg py-5 px-8 rounded-2xl shadow-2xl shadow-blue-600/40 transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 border border-cyan-400/30 group"
+              className="w-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-black text-lg py-5 px-8 rounded-full shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:shadow-[0_15px_35px_-5px_rgba(26,216,234,0.7)] transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group"
             >
-              <span>RESERVE MY SEAT — {formatPrice(99)}</span>
+              <span>Reserve My Seat</span>
               <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </button>
 
             <div className="text-xs text-slate-400 font-medium">
-              100% Risk-Free Guarantee • Instant Zoom/Meet Access Sent To Email
+              100% Risk-Free Guarantee • Instant Access Sent To Email
             </div>
           </div>
         </div>
@@ -949,21 +929,21 @@ export default function AIVentureLabPage() {
 
       {/* REGISTRATION & PAYMENT MODAL */}
       {isRegModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-cyan-500/30 w-full max-w-md rounded-3xl p-6 md:p-8 relative shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-[#0c142a]/90 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="bg-[#0c142a] border border-[#1ad8ea]/40 w-full max-w-md rounded-3xl p-6 md:p-8 relative shadow-2xl shadow-[#2363f1]/20">
             <button
               onClick={() => setIsRegModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition-colors"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white bg-[#1e2842] p-2 rounded-full transition-colors"
             >
               <X size={18} />
             </button>
 
             <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600/10 text-cyan-300 flex items-center justify-center mx-auto mb-2 border border-blue-500/20">
+              <div className="w-12 h-12 rounded-2xl bg-[#2363f1]/15 text-[#1ad8ea] flex items-center justify-center mx-auto mb-2 border border-[#2363f1]/30">
                 <Sparkles size={24} />
               </div>
               <h3 className="text-xl font-black text-white">Reserve Your Seat</h3>
-              <p className="text-xs text-cyan-300 font-semibold mt-1">Ruzann AI Venture Lab LIVE Webinar ({formatPrice(99)})</p>
+              <p className="text-xs text-[#1ad8ea] font-semibold mt-1">Ruzann AI Venture Lab LIVE Webinar ({formatPrice(99)})</p>
             </div>
 
             <form onSubmit={handleRegistrationSubmit} className="space-y-4">
@@ -975,7 +955,7 @@ export default function AIVentureLabPage() {
                   placeholder="e.g. Priya Sharma"
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full bg-[#1e2842] border border-slate-700/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#1ad8ea] transition-colors"
                 />
               </div>
 
@@ -987,7 +967,7 @@ export default function AIVentureLabPage() {
                   placeholder="priya@mybusiness.com"
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full bg-[#1e2842] border border-slate-700/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#1ad8ea] transition-colors"
                 />
               </div>
 
@@ -999,7 +979,7 @@ export default function AIVentureLabPage() {
                   placeholder="+91 98765 43210"
                   value={formData.phone}
                   onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full bg-[#1e2842] border border-slate-700/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#1ad8ea] transition-colors"
                 />
               </div>
 
@@ -1008,7 +988,7 @@ export default function AIVentureLabPage() {
                 <select
                   value={formData.role}
                   onChange={e => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full bg-[#1e2842] border border-slate-700/80 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#1ad8ea] transition-colors"
                 >
                   <option value="Women Entrepreneur">Women Entrepreneur / Founder</option>
                   <option value="Small Business Owner">Small Business Owner</option>
@@ -1022,7 +1002,7 @@ export default function AIVentureLabPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
@@ -1032,7 +1012,7 @@ export default function AIVentureLabPage() {
                 ) : (
                   <>
                     <Lock size={16} />
-                    <span>PROCEED TO PAY {formatPrice(99)}</span>
+                    <span>CONFIRM REGISTRATION ({formatPrice(99)})</span>
                   </>
                 )}
               </button>
@@ -1042,14 +1022,14 @@ export default function AIVentureLabPage() {
       )}
 
       {/* STICKY MOBILE BOTTOM BAR */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 p-3 px-4 backdrop-blur-xl flex items-center justify-between gap-3">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c142a]/95 border-t border-slate-800 p-3 px-4 backdrop-blur-xl flex items-center justify-between gap-3">
         <div>
           <div className="text-[10px] text-slate-400 uppercase font-bold">LIVE Webinar Pass</div>
-          <div className="text-cyan-300 font-black text-lg">{formatPrice(99)} <span className="line-through text-slate-500 text-xs font-normal">{formatPrice(1999)}</span></div>
+          <div className="text-[#1ad8ea] font-black text-lg">{formatPrice(99)} <span className="line-through text-slate-500 text-xs font-normal">{formatPrice(1999)}</span></div>
         </div>
         <button
           onClick={openBookingModal}
-          className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs px-5 py-3 rounded-xl shadow-lg flex items-center gap-1.5"
+          className="bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-xs px-5 py-3 rounded-full shadow-lg flex items-center gap-1.5"
         >
           <span>RESERVE SEAT</span>
           <ArrowRight size={14} />
