@@ -62,8 +62,6 @@ export default function AIVentureLabPage() {
   const { showToast } = useToast();
   const { currency, formatPrice } = useCurrency();
 
-  // Countdown timer state
-  const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 14, seconds: 35 });
   const [isRegModalOpen, setIsRegModalOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [splitScreenTab, setSplitScreenTab] = useState<'current' | 'future'>('future');
@@ -79,28 +77,14 @@ export default function AIVentureLabPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load Razorpay script & handle ticking timer
+  // Load Razorpay script
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
 
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: 59, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
-    }, 1000);
-
     return () => {
-      clearInterval(timer);
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
@@ -251,10 +235,6 @@ export default function AIVentureLabPage() {
       <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 border-b border-blue-500/20 text-white py-2 px-4 text-center text-xs font-semibold sticky top-0 z-50 backdrop-blur-xl flex items-center justify-center gap-3">
         <span className="flex items-center gap-1 bg-blue-500/20 text-cyan-300 px-2.5 py-0.5 rounded-full text-[11px] font-bold border border-cyan-400/30 animate-pulse">
           <Flame size={12} className="text-amber-400 fill-amber-400" /> LIVE BATCH
-        </span>
-        <span className="hidden sm:inline text-slate-200">Registration Closing Soon:</span>
-        <span className="font-mono bg-slate-950/80 px-2.5 py-0.5 rounded border border-cyan-500/30 text-cyan-300 font-bold text-xs tracking-wider">
-          {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
         </span>
         <span className="hidden md:inline-block bg-amber-400 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">
           Special ₹99 Webinar Pass
@@ -420,7 +400,7 @@ export default function AIVentureLabPage() {
 
             {/* Timeline Item 1 */}
             <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center font-mono font-bold text-sm">
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
                 18th C.
               </div>
               <h3 className="text-lg font-bold text-white">Industrial Revolution</h3>
@@ -432,7 +412,7 @@ export default function AIVentureLabPage() {
 
             {/* Timeline Item 2 */}
             <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 relative z-10 space-y-4 hover:border-slate-700 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-blue-950 text-blue-400 border border-blue-800 flex items-center justify-center font-mono font-bold text-sm">
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-blue-950 text-blue-400 border border-blue-800 font-mono font-bold text-xs whitespace-nowrap shadow-sm">
                 20th C.
               </div>
               <h3 className="text-lg font-bold text-white">Internet & DotCom</h3>
@@ -447,7 +427,7 @@ export default function AIVentureLabPage() {
               <div className="inline-flex items-center gap-1.5 bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2.5 py-1 rounded-full absolute -top-3 right-6 shadow-md">
                 HAPPENING NOW
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-cyan-400 text-slate-950 flex items-center justify-center font-mono font-black text-sm">
+              <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-xl bg-cyan-400 text-slate-950 font-mono font-black text-xs whitespace-nowrap shadow-md shadow-cyan-400/20">
                 TODAY
               </div>
               <h3 className="text-lg font-bold text-white">The AI Revolution</h3>
