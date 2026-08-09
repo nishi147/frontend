@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { Button } from './Button'
 import Cookies from 'js-cookie'
 import { X } from 'lucide-react'
 
 export function CookieBanner() {
+  const pathname = usePathname()
   const [showBanner, setShowBanner] = useState(false)
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export function CookieBanner() {
     setShowBanner(false)
   }
 
+  if (pathname?.startsWith('/aiventurelab')) return null
   if (!showBanner) return null
 
   return (
