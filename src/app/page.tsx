@@ -23,6 +23,7 @@ import { AdUnit } from '@/components/AdSense';
 import { SliderWrapper } from '@/components/ui/SliderWrapper';
 import AiPlayground from '@/components/sections/AiPlayground';
 import { HowToUseSection } from '@/components/sections/HowToUseSection';
+import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
 
 const HERO_IMAGES = [
   '/kid_coding_illustration_1773305191930.png',
@@ -1016,11 +1017,8 @@ export default function Home() {
           <div className="lg:col-span-7 text-left space-y-4 md:space-y-8">
             
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-[10px] md:text-sm font-black text-primary-300 shadow-lg shadow-black/10">
-              <span className="flex text-yellow-400 gap-0.5">
-                {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 md:w-3.5 md:h-3.5 fill-yellow-400 text-yellow-400" />)}
-              </span>
-              <span className="text-white/80">Loved by 10,000+ happy parents</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <TrustpilotBadge variant="hero" />
             </div>
 
             {/* Headline */}

@@ -61,6 +61,7 @@ export const Header = () => {
 
   const navLinks = [
     { href: '/', label: 'Home' },
+    { href: '/academic', label: 'Academic 1-to-1' },
     { href: '/courses', label: 'Courses', hasDropdown: true },
     { href: '/about', label: 'About Us' },
     { href: '/blog', label: 'Blog' },

@@ -8,11 +8,11 @@ import { useCurrency } from '@/context/CurrencyContext';
 export const MovingBanner = () => {
   const { formatPrice } = useCurrency();
   const messages = [
-    { text: "Unleash Your Child's Coding Potential! 🚀", icon: Rocket, color: "text-white" },
-    { text: "Join 10,000+ Happy Explorers! ✨", icon: Sparkles, color: "text-yellow-300" },
+    { text: "⭐ Rated 4.5/5 on Trustpilot by 500+ Parents!", icon: Star, color: "text-emerald-300" },
+    { text: "Unleash Your Child's Coding & Academic Potential! 🚀", icon: Rocket, color: "text-white" },
+    { text: "Join 10,000+ Happy Explorers Global! ✨", icon: Sparkles, color: "text-yellow-300" },
     { text: `Get your First Trial Session for just ${formatPrice(99)} 🎁`, icon: Trophy, color: "text-white" },
-    { text: "New Courses in AI & Robotics! 🤖", icon: Star, color: "text-secondary-300" },
-    { text: "Learning is Fun with RUZANN! 🎨", icon: Sparkles, color: "text-white" },
+    { text: "IB • IGCSE • A-Level • AP • CBSE 1-on-1 Academic Tutoring! 📚", icon: Star, color: "text-secondary-300" },
   ];
 
   // Repeat the messages to ensure a seamless loop

@@ -39,6 +39,7 @@ export const Footer = () => {
             <ul className="flex flex-col gap-4 font-bold text-white/90">
               {[
                 { label: 'Home', href: '/' },
+                { label: 'Academic (1-to-1)', href: '/academic' },
                 { label: 'About Us', href: '/about' },
                 { label: 'Courses', href: '/courses' },
                 { label: 'Reviews', href: '/#testimonials' },
