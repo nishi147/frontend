@@ -232,10 +232,12 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
                   >
                     <option value="IB">IB (International Baccalaureate)</option>
+                    <option value="ICSE">ICSE (Indian Certificate of Secondary Education)</option>
                     <option value="IGCSE">IGCSE (Cambridge / Edexcel)</option>
                     <option value="A-Level">A-Level / AS Level</option>
                     <option value="AP">AP (Advanced Placement)</option>
                     <option value="CBSE">CBSE (Central Board)</option>
+                    <option value="Languages">Languages (Arabic, English, French, Spanish)</option>
                     <option value="Other">Other International Curriculum</option>
                   </select>
                 </div>

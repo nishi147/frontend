@@ -12,7 +12,7 @@ export const MovingBanner = () => {
     { text: "Unleash Your Child's Coding & Academic Potential! 🚀", icon: Rocket, color: "text-white" },
     { text: "Join 10,000+ Happy Explorers Global! ✨", icon: Sparkles, color: "text-yellow-300" },
     { text: `Get your First Trial Session for just ${formatPrice(99)} 🎁`, icon: Trophy, color: "text-white" },
-    { text: "IB • IGCSE • A-Level • AP • CBSE 1-on-1 Academic Tutoring! 📚", icon: Star, color: "text-secondary-300" },
+    { text: "IB • ICSE • IGCSE • A-Level • AP • CBSE • Languages 1-on-1 Academic Tutoring! 📚", icon: Star, color: "text-secondary-300" },
   ];
 
   // Repeat the messages to ensure a seamless loop

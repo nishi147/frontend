@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
 import { FreeDemoModal } from '@/components/modals/FreeDemoModal';
+
 import { 
   CheckCircle2, 
   Sparkles, 
@@ -20,9 +21,18 @@ import {
   TrendingUp, 
   Award,
   ChevronRight,
+  ChevronLeft,
   DollarSign,
   HeartHandshake,
-  Flame
+  Flame,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Phone,
+  Mail,
+  MapPin,
+  MessageCircle
 } from 'lucide-react';
 
 // Easily customizable pricing configuration per user request
@@ -34,6 +44,7 @@ export default function AcademicPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [selectedCurriculum, setSelectedCurriculum] = useState('IB');
   const [activeStep, setActiveStep] = useState(0);
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   const openDemoModal = (curriculum?: string) => {
     if (curriculum) setSelectedCurriculum(curriculum);
@@ -46,16 +57,25 @@ export default function AcademicPage() {
       title: 'IB',
       name: 'IB (International Baccalaureate)',
       description: 'Personalized academic support for IB students (DP & MYP).',
-      subjects: ['Mathematics (AA/AI)', 'Physics', 'Chemistry', 'Biology', 'English & more'],
+      subjects: ['Mathematics (AA/AI)', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Languages & more'],
       badge: 'HL & SL Covered',
       focus: 'Concept depth, Internal Assessment (IA) guidance & exam paper strategy.',
+    },
+    {
+      id: 'ICSE',
+      title: 'ICSE',
+      name: 'ICSE Board',
+      description: 'Comprehensive subject mastery, structured learning & ICSE board exam prep.',
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Computer Applications & more'],
+      badge: 'Class 6 - 10 Mastery',
+      focus: 'CISCE syllabus depth, analytical problem solving & board exam excellence.',
     },
     {
       id: 'IGCSE',
       title: 'IGCSE',
       name: 'IGCSE (Cambridge & Edexcel)',
       description: 'Concept building, structured practice and exam preparation.',
-      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English & more'],
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Languages & more'],
       badge: 'Core & Extended',
       focus: 'Past paper solving, mark scheme techniques & concept clarity.',
     },
@@ -64,7 +84,7 @@ export default function AcademicPage() {
       title: 'A-LEVEL',
       name: 'A-Level & AS Level',
       description: 'Advanced subject support for academic excellence and university prep.',
-      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics & more'],
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Arabic', 'Languages & more'],
       badge: 'AS & A2 Preparation',
       focus: 'Advanced problem solving, university entrance readiness & deep understanding.',
     },
@@ -73,7 +93,7 @@ export default function AcademicPage() {
       title: 'AP',
       name: 'AP (Advanced Placement)',
       description: 'Focused academic support and AP exam preparation.',
-      subjects: ['Calculus (AB/BC)', 'Physics', 'Chemistry', 'Biology', 'Computer Science & more'],
+      subjects: ['Calculus (AB/BC)', 'Physics', 'Chemistry', 'Biology', 'Computer Science', 'English', 'Arabic & more'],
       badge: 'Target Score 5',
       focus: 'Free-response question practice & high-yield topic reinforcement.',
     },
@@ -82,7 +102,7 @@ export default function AcademicPage() {
       title: 'CBSE',
       name: 'CBSE Board',
       description: 'Strong foundations, personalized learning and board exam prep.',
-      subjects: ['Mathematics', 'Science', 'English', 'Physics', 'Chemistry', 'Biology & more'],
+      subjects: ['Mathematics', 'Science', 'English', 'Arabic', 'Physics', 'Chemistry', 'Biology & more'],
       badge: 'Class 6 - 12 Mastery',
       focus: 'NCERT foundation building, numerical practice & board exam excellence.',
     },
@@ -123,8 +143,8 @@ export default function AcademicPage() {
       accent: 'border-[#1ad8ea]/40 bg-[#1e2842]',
     },
     {
-      tag: 'IGCSE Exam Mastery',
-      text: 'An IGCSE student may need exam-focused practice.',
+      tag: 'IGCSE & ICSE Exam Mastery',
+      text: 'An IGCSE or ICSE student may need exam-focused practice.',
       accent: 'border-[#2363f1]/40 bg-[#1e2842]',
     },
     {
@@ -194,10 +214,91 @@ export default function AcademicPage() {
     },
   ];
 
+  const reviewsList = [
+    {
+      quote: "My son was struggling with IB Math HL analysis. The 1-to-1 tutor at Ruzann broke down complex calculus concepts patiently. His predicted grade jumped from a 4 to a 7!",
+      author: "Dr. Alistair Vance",
+      location: "London, UK",
+      curriculum: "IB Math HL",
+      rating: 4.8,
+    },
+    {
+      quote: "We needed urgent exam prep for IGCSE Physics and Chemistry. The tailored practice questions and flexible scheduling made all the difference. Highly recommend Ruzann!",
+      author: "Meera Subramaniam",
+      location: "Singapore",
+      curriculum: "IGCSE Sciences",
+      rating: 4.5,
+    },
+    {
+      quote: "Finding an A-Level tutor who actually understands the syllabus details was tough until we found Ruzann. The tutor is super encouraging and very structured.",
+      author: "Marcus Lindqvist",
+      location: "Dubai, UAE",
+      curriculum: "A-Level Economics & Math",
+      rating: 4.7,
+    },
+    {
+      quote: "The Arabic language classes at Ruzann are outstanding! My daughter went from struggling with basic grammar to writing fluent essays and speaking with confidence.",
+      author: "Fatima Al-Hassan",
+      location: "Abu Dhabi, UAE",
+      curriculum: "Arabic & Languages",
+      rating: 4.9,
+    },
+    {
+      quote: "ICSE Board exams felt overwhelming until we found Ruzann. The 1-to-1 attention in ICSE Physics and Math boosted my son's confidence immensely. Scored 96% in boards!",
+      author: "Rajesh Kulkarni",
+      location: "Mumbai, India",
+      curriculum: "ICSE Grade 10",
+      rating: 4.6,
+    },
+    {
+      quote: "AP Physics C calculus-based problems were intimidating. The instructor cleared every doubt with intuitive visual examples. Scored a perfect 5 on the AP exam!",
+      author: "Sarah Jenkins",
+      location: "California, USA",
+      curriculum: "AP Physics C & Calculus",
+      rating: 4.8,
+    },
+    {
+      quote: "CBSE Class 12 Chemistry numericals were a nightmare. Ruzann's tutor taught shortcut methods and NCERT deep dives. Scored 98 in Chemistry boards!",
+      author: "Ananya Sharma",
+      location: "Delhi, India",
+      curriculum: "CBSE Grade 12",
+      rating: 4.7,
+    },
+    {
+      quote: "Ruzann's personalized IB DP Biology tuition was a game changer for my IA and final exams. The tutor helped me organize my research paper step by step.",
+      author: "David Chen",
+      location: "Hong Kong",
+      curriculum: "IB DP Biology & IA",
+      rating: 4.5,
+    },
+    {
+      quote: "Learning English literature and critical analysis 1-on-1 gave my daughter the confidence to excel in her Cambridge IGCSE English exams.",
+      author: "Elena Rostova",
+      location: "Zurich, Switzerland",
+      curriculum: "IGCSE English Literature",
+      rating: 4.9,
+    },
+    {
+      quote: "The patience of the tutors at Ruzann is remarkable. My son went from fearing Mathematics to solving complex A-Level Mechanics problems on his own.",
+      author: "Tariq Mansoor",
+      location: "Doha, Qatar",
+      curriculum: "A-Level Mathematics",
+      rating: 4.6,
+    },
+  ];
+
+  const nextReview = () => {
+    setCurrentReviewIndex((prev) => (prev + 1) % reviewsList.length);
+  };
+
+  const prevReview = () => {
+    setCurrentReviewIndex((prev) => (prev - 1 + reviewsList.length) % reviewsList.length);
+  };
+
   const activeCurrData = curriculaList.find(c => c.id === selectedCurriculum) || curriculaList[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-[#2363f1] selection:text-white pb-20 lg:pb-0 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-[#2363f1] selection:text-white pb-0 overflow-x-hidden">
       <Header />
 
       {/* Top Trust Bar - Clean Light High-Contrast Style */}
@@ -259,10 +360,15 @@ export default function AcademicPage() {
 
             {/* Curricula Pill Row */}
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-black">
-              {['IB', 'IGCSE', 'A-Level', 'AP', 'CBSE'].map((curr) => (
+              {['IB', 'ICSE', 'IGCSE', 'A-Level', 'AP', 'CBSE'].map((curr) => (
                 <span 
                   key={curr} 
-                  className="px-4 py-1.5 rounded-full bg-[#1e2842] border border-[#1ad8ea]/40 text-[#1ad8ea] shadow-md hover:border-[#f9be3e] transition-colors"
+                  className="px-4 py-1.5 rounded-full bg-[#1e2842] border border-[#1ad8ea]/40 text-[#1ad8ea] shadow-md hover:border-[#f9be3e] transition-colors cursor-pointer"
+                  onClick={() => {
+                    setSelectedCurriculum(curr);
+                    const el = document.getElementById('curricula-showcase');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
                   {curr}
                 </span>
@@ -395,8 +501,8 @@ export default function AcademicPage() {
         </div>
       </section>
 
-      {/* SECTION 3: DEEP NAVY CONTRAST SECTION — One platform. Five global curricula. */}
-      <section className="py-20 px-4 md:px-8 bg-[#0c142a] text-white border-t border-slate-800">
+      {/* SECTION 3: DEEP NAVY CONTRAST SECTION — One platform. Six global curricula. */}
+      <section id="curricula-showcase" className="py-20 px-4 md:px-8 bg-[#0c142a] text-white border-t border-slate-800">
         <div className="max-w-6xl mx-auto space-y-12">
           
           <div className="text-center space-y-3">
@@ -404,12 +510,12 @@ export default function AcademicPage() {
               One platform.
             </h2>
             <h3 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#1ad8ea] via-[#2363f1] to-[#f9be3e]">
-              Five global curricula.
+              Six global curricula.
             </h3>
           </div>
 
           {/* Interactive Curricula Tabs Switcher */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
             {curriculaList.map((curr) => (
               <button
                 key={curr.id}
@@ -432,7 +538,10 @@ export default function AcademicPage() {
                 <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#0c142a] text-[#f9be3e] border border-[#f9be3e]/30 inline-block mb-2">
                   {activeCurrData.badge}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-white">{activeCurrData.name}</h3>
+                {/* Single line heading styling */}
+                <h3 className="text-lg sm:text-2xl lg:text-3xl font-black text-white sm:whitespace-nowrap tracking-tight">
+                  {activeCurrData.name}
+                </h3>
                 <p className="text-slate-300 text-xs sm:text-sm font-medium mt-1">{activeCurrData.description}</p>
               </div>
               <button
@@ -445,10 +554,17 @@ export default function AcademicPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-widest text-[#1ad8ea]">Supported Subjects:</h4>
+                <h4 className="text-xs font-black uppercase tracking-widest text-[#1ad8ea]">Supported Subjects & Languages:</h4>
                 <div className="flex flex-wrap gap-2">
                   {activeCurrData.subjects.map((sub) => (
-                    <span key={sub} className="text-xs px-3 py-1.5 rounded-xl bg-[#0c142a] border border-slate-700 font-bold text-slate-200">
+                    <span 
+                      key={sub} 
+                      className={`text-xs px-3 py-1.5 rounded-xl border font-bold ${
+                        sub === 'Arabic' || sub === 'English' || sub.includes('Languages')
+                          ? 'bg-[#2363f1]/20 border-[#2363f1] text-[#1ad8ea]'
+                          : 'bg-[#0c142a] border-slate-700 text-slate-200'
+                      }`}
+                    >
                       {sub}
                     </span>
                   ))}
@@ -524,36 +640,37 @@ export default function AcademicPage() {
       </section>
 
       {/* SECTION 5: DARK ACCENT BAND — Your child shouldn't have to fit the tutor. */}
-      <section className="py-20 px-4 md:px-8 bg-gradient-to-r from-[#0c142a] via-[#1e2842] to-[#0c142a] text-white border-t border-b border-[#1ad8ea]/20">
-        <div className="max-w-5xl mx-auto space-y-12">
+      <section className="py-10 sm:py-20 px-4 md:px-8 bg-gradient-to-r from-[#0c142a] via-[#1e2842] to-[#0c142a] text-white border-t border-b border-[#1ad8ea]/20">
+        <div className="max-w-5xl mx-auto space-y-6 sm:space-y-12">
           
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-300">
+          <div className="text-center space-y-1.5 sm:space-y-3">
+            <h2 className="text-xl sm:text-4xl md:text-5xl font-black text-slate-300">
               Your child shouldn't have to fit the tutor.
             </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-white">
+            <h3 className="text-lg sm:text-3xl md:text-4xl font-black text-white">
               The tutor should fit the child.
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* 2-Column Compact Grid on Mobile */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {studentNeeds.map((need, idx) => (
               <div 
                 key={idx}
-                className={`rounded-3xl p-6 border ${need.accent} backdrop-blur-sm space-y-2 shadow-xl hover:border-[#1ad8ea] transition-all`}
+                className={`rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border ${need.accent} backdrop-blur-sm space-y-1.5 sm:space-y-2 shadow-lg hover:border-[#1ad8ea] transition-all flex flex-col justify-between`}
               >
-                <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-[#0c142a] text-[#1ad8ea] border border-[#1ad8ea]/30 inline-block">
+                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#0c142a] text-[#1ad8ea] border border-[#1ad8ea]/30 inline-block w-max truncate max-w-full">
                   {need.tag}
                 </span>
-                <p className="text-slate-100 text-base sm:text-lg font-bold leading-relaxed pt-1">
+                <p className="text-slate-100 text-xs sm:text-base font-bold leading-snug sm:leading-relaxed">
                   "{need.text}"
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="bg-[#0c142a] p-8 rounded-3xl border border-[#1ad8ea]/30 text-center space-y-3 max-w-3xl mx-auto shadow-2xl">
-            <p className="text-lg sm:text-xl font-black text-white">
+          <div className="bg-[#0c142a] p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#1ad8ea]/30 text-center space-y-1 sm:space-y-3 max-w-3xl mx-auto shadow-xl">
+            <p className="text-xs sm:text-xl font-black text-white leading-relaxed">
               That's why every Ruzann learning journey begins by understanding <span className="text-[#f9be3e]">the student first.</span>
             </p>
           </div>
@@ -748,7 +865,7 @@ export default function AcademicPage() {
                 </div>
 
                 <p className="text-slate-500 text-xs">
-                  Available in all supported global curricula (IB, IGCSE, A-Level, AP, CBSE)
+                  Available in all supported global curricula (IB, ICSE, IGCSE, A-Level, AP, CBSE)
                 </p>
               </div>
 
@@ -791,7 +908,7 @@ export default function AcademicPage() {
         </section>
       )}
 
-      {/* SECTION 11: LIGHT PARENT REVIEWS — Trustpilot & Verified Social Proof */}
+      {/* SECTION 11: LIGHT PARENT REVIEWS — 10 Reviews Slider Carousel */}
       <section className="py-20 px-4 md:px-8 bg-white text-slate-900 border-t border-slate-200">
         <div className="max-w-6xl mx-auto space-y-12">
           
@@ -801,74 +918,100 @@ export default function AcademicPage() {
               Trusted by Parents Round the Globe
             </h2>
             <p className="text-slate-600 text-sm max-w-xl mx-auto font-medium">
-              Read how personalized 1-to-1 academic support transformed confidence and results for students in top IB, Cambridge & CBSE schools.
+              Read how personalized 1-to-1 academic support transformed confidence and results for students in top IB, ICSE, Cambridge & CBSE schools.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: "My son was struggling with IB Math HL analysis. The 1-to-1 tutor at Ruzann broke down complex calculus concepts patiently. His predicted grade jumped from a 4 to a 7!",
-                author: "Dr. Alistair Vance",
-                location: "London, UK",
-                curriculum: "IB Math HL",
-                rating: 4.5,
-              },
-              {
-                quote: "We needed urgent exam prep for IGCSE Physics and Chemistry. The tailored practice questions and flexible scheduling made all the difference. Highly recommend Ruzann!",
-                author: "Meera Subramaniam",
-                location: "Singapore",
-                curriculum: "IGCSE Sciences",
-                rating: 4.5,
-              },
-              {
-                quote: "Finding an A-Level tutor who actually understands the syllabus details was tough until we found Ruzann. The tutor is super encouraging and very structured.",
-                author: "Marcus Lindqvist",
-                location: "Dubai, UAE",
-                curriculum: "A-Level Economics & Math",
-                rating: 4.5,
-              },
-            ].map((review, i) => (
-              <div key={i} className="bg-slate-50 rounded-3xl p-6 border border-slate-200 space-y-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex items-center gap-0.5">
-                      {[1, 2, 3, 4].map((r) => (
-                        <div key={r} className="w-4 h-4 bg-[#00b67a] flex items-center justify-center rounded-[2px]">
-                          <Star size={10} className="fill-white text-white" />
-                        </div>
-                      ))}
-                      <div className="w-4 h-4 bg-[#00b67a] flex items-center justify-center rounded-[2px]">
-                        <StarHalf size={10} className="fill-white text-white" />
+          {/* 10 Reviews Slider Container (Single Box View) */}
+          <div className="relative max-w-2xl mx-auto px-4 sm:px-12">
+            {/* Nav Arrows */}
+            <button
+              onClick={prevReview}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#2363f1] hover:text-white transition-all flex items-center justify-center -ml-2 sm:-ml-5"
+              aria-label="Previous review"
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={nextReview}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#2363f1] hover:text-white transition-all flex items-center justify-center -mr-2 sm:-mr-5"
+              aria-label="Next review"
+            >
+              <ChevronRight size={22} />
+            </button>
+
+            {/* Single Review Card View */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentReviewIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.25 }}
+                className="bg-slate-50 rounded-3xl p-6 sm:p-8 border-2 border-slate-200 space-y-6 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all min-h-[220px]"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4].map((r) => (
+                          <Star key={r} size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
+                        ))}
+                        {reviewsList[currentReviewIndex].rating >= 4.8 ? (
+                          <Star size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
+                        ) : (
+                          <StarHalf size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
+                        )}
                       </div>
+                      <span className="text-xs font-black text-amber-500 ml-1">
+                        {reviewsList[currentReviewIndex].rating.toFixed(1)} / 5 Verified
+                      </span>
                     </div>
-                    <span className="text-xs font-black text-[#00b67a] ml-1">4.5 / 5 Verified</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                      {currentReviewIndex + 1} / {reviewsList.length}
+                    </span>
                   </div>
-                  <p className="text-slate-700 text-xs sm:text-sm font-medium italic leading-relaxed">
-                    "{review.quote}"
+                  <p className="text-slate-800 text-sm sm:text-base font-semibold italic leading-relaxed">
+                    "{reviewsList[currentReviewIndex].quote}"
                   </p>
                 </div>
 
                 <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
                   <div>
-                    <h5 className="font-black text-slate-900 text-sm">{review.author}</h5>
-                    <p className="text-[11px] text-slate-500">{review.location}</p>
+                    <h5 className="font-black text-slate-900 text-sm sm:text-base">{reviewsList[currentReviewIndex].author}</h5>
+                    <p className="text-xs text-slate-500">{reviewsList[currentReviewIndex].location}</p>
                   </div>
-                  <span className="text-[10px] font-bold text-[#2363f1] bg-white px-2.5 py-1 rounded-full border border-slate-200">
-                    {review.curriculum}
+                  <span className="text-xs font-bold text-[#2363f1] bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                    {reviewsList[currentReviewIndex].curriculum}
                   </span>
                 </div>
-              </div>
-            ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Slider Dots */}
+            <div className="flex items-center justify-center gap-2 pt-8">
+              {reviewsList.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentReviewIndex(idx)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    currentReviewIndex === idx
+                      ? 'w-8 bg-[#2363f1]'
+                      : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
         </div>
       </section>
 
-      {/* SECTION 12: DEEP GRADIENT FOOTER CTA & Tagline */}
-      <section className="py-20 px-4 md:px-8 bg-gradient-to-b from-[#0c142a] to-slate-950 text-white text-center relative overflow-hidden">
+      {/* SECTION 12: DEEP GRADIENT FOOTER CTA, CONTACT & SOCIAL MEDIA */}
+      <section className="py-20 px-4 md:px-8 bg-gradient-to-b from-[#0c142a] via-slate-900 to-slate-950 text-white text-center relative overflow-hidden">
         
-        <div className="max-w-4xl mx-auto space-y-8 relative z-10">
+        <div className="max-w-4xl mx-auto space-y-10 relative z-10">
           
           <div className="space-y-3">
             <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
@@ -896,24 +1039,85 @@ export default function AcademicPage() {
             </button>
 
             <p className="text-[#1ad8ea] text-xs font-black tracking-widest uppercase">
-              IB • IGCSE • A-Level • AP • CBSE
+              IB • ICSE • IGCSE • A-LEVEL • AP • CBSE • LANGUAGES
             </p>
           </div>
 
-          <div className="pt-8 space-y-2 border-t border-slate-800">
-            <h3 className="text-3xl font-black tracking-tight text-white">
-              RUZANN ACADEMIC
-            </h3>
-            <p className="text-[#1ad8ea] font-black text-base tracking-wider uppercase">
-              Learn better. Think deeper. Go further.
-            </p>
-            <div className="pt-4 text-xs font-bold text-slate-500 flex flex-wrap justify-center items-center gap-3">
-              <span>© {new Date().getFullYear()} Ruzann EdTech</span>
-              <span>•</span>
-              <a href="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
-              <span>•</span>
-              <a href="/terms-conditions" className="hover:text-slate-300 transition-colors">Terms & Conditions</a>
+          {/* Ruzann Social Media & Contact Section */}
+          <div className="pt-8 border-t border-slate-800 space-y-8 max-w-3xl mx-auto">
+            <div className="space-y-2">
+              <h3 className="text-3xl font-black tracking-tight text-white">
+                RUZANN ACADEMIC
+              </h3>
+              <p className="text-[#1ad8ea] font-black text-base tracking-wider uppercase">
+                Learn better. Think deeper. Go further.
+              </p>
             </div>
+
+            {/* Direct Contact Cards (Phone, Email, Location) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+              <a 
+                href="tel:+919960559894" 
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80 hover:border-[#1ad8ea] transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#f9be3e] group-hover:scale-110 transition-transform shrink-0">
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Phone / WhatsApp</span>
+                  <span className="text-sm font-black text-white group-hover:text-[#1ad8ea] transition-colors">+91 9960559894</span>
+                </div>
+              </a>
+
+              <a 
+                href="mailto:support@ruzann.com" 
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80 hover:border-[#1ad8ea] transition-all group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#1ad8ea] group-hover:scale-110 transition-transform shrink-0">
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Official Email</span>
+                  <span className="text-sm font-black text-white group-hover:text-[#1ad8ea] transition-colors">support@ruzann.com</span>
+                </div>
+              </a>
+
+              <div className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#2363f1] shrink-0">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Headquarters</span>
+                  <span className="text-sm font-black text-white">Pune, Maharashtra, India</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="space-y-3 pt-2">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block">Connect With Us On Social Media</span>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                {[
+                  { name: 'Instagram', Icon: Instagram, href: 'https://www.instagram.com/ruzann_edtech?igsh=cGQ2enhuMXk2MXc2', color: 'hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500' },
+                  { name: 'LinkedIn', Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/', color: 'hover:bg-blue-600' },
+                  { name: 'YouTube', Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad', color: 'hover:bg-red-600' },
+                  { name: 'Facebook', Icon: Facebook, href: 'https://www.facebook.com/share/17fzhNSYkM/', color: 'hover:bg-blue-700' },
+                  { name: 'WhatsApp', Icon: MessageCircle, href: 'https://wa.me/919960559894', color: 'hover:bg-emerald-600' }
+                ].map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white transition-all transform hover:-translate-y-1 shadow-lg ${social.color}`}
+                    title={social.name}
+                  >
+                    <social.Icon size={20} />
+                  </a>
+                ))}
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -928,3 +1132,4 @@ export default function AcademicPage() {
     </div>
   );
 }
+

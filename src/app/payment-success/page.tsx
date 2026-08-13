@@ -11,6 +11,7 @@ import { trackPurchase } from '@/utils/analytics';
 export default function PaymentSuccessPage() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    
 
     const searchParams = new URLSearchParams(window.location.search);
     const tx = searchParams.get('tx') || searchParams.get('transaction_id');

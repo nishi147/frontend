@@ -17,11 +17,11 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
   const renderStars = (size: number) => (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4].map((s) => (
-        <div key={s} className="w-4 h-4 sm:w-5 sm:h-5 bg-[#00b67a] flex items-center justify-center rounded-[2px]">
+        <div key={s} className="w-4 h-4 sm:w-5 sm:h-5 bg-[#f9be3e] flex items-center justify-center rounded-[2px]">
           <Star size={size} className="fill-white text-white" />
         </div>
       ))}
-      <div className="w-4 h-4 sm:w-5 sm:h-5 bg-[#00b67a] flex items-center justify-center rounded-[2px]">
+      <div className="w-4 h-4 sm:w-5 sm:h-5 bg-[#f9be3e] flex items-center justify-center rounded-[2px]">
         <StarHalf size={size} className="fill-white text-white" />
       </div>
     </div>
@@ -30,11 +30,11 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
   const renderSmallStars = (size: number) => (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4].map((s) => (
-        <div key={s} className="w-3.5 h-3.5 bg-[#00b67a] flex items-center justify-center rounded-[1px]">
+        <div key={s} className="w-3.5 h-3.5 bg-[#f9be3e] flex items-center justify-center rounded-[1px]">
           <Star size={size} className="fill-white text-white" />
         </div>
       ))}
-      <div className="w-3.5 h-3.5 bg-[#00b67a] flex items-center justify-center rounded-[1px]">
+      <div className="w-3.5 h-3.5 bg-[#f9be3e] flex items-center justify-center rounded-[1px]">
         <StarHalf size={size} className="fill-white text-white" />
       </div>
     </div>
@@ -48,7 +48,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
         </div>
         {renderStars(12)}
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-200">
-          <span className="font-black text-emerald-400">4.5 / 5</span>
+          <span className="font-black text-[#f9be3e]">4.5 / 5</span>
           <span className="text-slate-400">•</span>
           <span>{showReviewCount ? '500+ Parent Reviews' : 'Rated Excellent'}</span>
         </div>
@@ -58,7 +58,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
 
   if (variant === 'card') {
     return (
-      <div className={`p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100/80 flex items-center justify-between gap-4 ${className}`}>
+      <div className={`p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-center justify-between gap-4 ${className}`}>
         <div className="flex items-center gap-3">
           {renderStars(11)}
           <div>
@@ -69,7 +69,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
             <p className="text-[11px] font-medium text-slate-600">Based on 500+ verified parent reviews</p>
           </div>
         </div>
-        <ShieldCheck className="w-6 h-6 text-[#00b67a] shrink-0" />
+        <ShieldCheck className="w-6 h-6 text-[#f9be3e] shrink-0" />
       </div>
     );
   }
@@ -78,7 +78,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
     return (
       <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/60 backdrop-blur-md text-xs ${className}`}>
         {renderSmallStars(8)}
-        <span className="font-extrabold text-white text-[11px]">Trustpilot 4.5/5</span>
+        <span className="font-extrabold text-white text-[11px]">Trustpilot <span className="text-[#f9be3e]">4.5/5</span></span>
         <span className="text-slate-400 text-[10px]">• 500+ Reviews</span>
       </div>
     );
@@ -99,7 +99,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
     <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-xs ${className}`}>
       <span className="font-black text-[#00b67a] text-[11px] tracking-tight">Trustpilot</span>
       {renderSmallStars(8)}
-      <span className="font-bold text-gray-700 text-[11px]">4.5 / 5</span>
+      <span className="font-bold text-gray-800 text-[11px]">4.5 / 5</span>
     </div>
   );
 };

@@ -99,7 +99,7 @@ export const Footer = () => {
         {/* Board Tags & Copyright */}
         <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-wrap gap-4 justify-center">
-            {['IB', 'ICSE', 'CBSE', 'IGCSE'].map(tag => (
+            {['IB', 'ICSE', 'IGCSE', 'A-Level', 'AP', 'CBSE', 'Languages'].map(tag => (
               <span key={tag} className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-black tracking-widest hover:bg-white/10 cursor-default transition-all">
                 {tag}
               </span>
