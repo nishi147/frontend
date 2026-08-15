@@ -61,6 +61,23 @@ export default function AcademicPage() {
     setIsDemoModalOpen(true);
   };
 
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (searchQuery.trim()) {
+      const matched = curriculaList.find(c => 
+        c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        c.id.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      if (matched) {
+        setSelectedCurriculum(matched.id);
+      }
+    }
+    const section = document.getElementById('curricula-showcase');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Curricula & Key Stage Data
   const curriculaList = [
     {
@@ -360,6 +377,21 @@ export default function AcademicPage() {
                 >
                   Experience personalised online tutoring that cultivates deeper understanding, accelerates progress, and ensures meaningful learning outcomes across <strong className="text-[#030F40]">IB, IGCSE, A-Levels, 11+, AP, CBSE & ICSE</strong>.
                 </motion.p>
+
+                {/* Large & Bold Hero Book Free Demo CTA Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.25 }}
+                  className="pt-2"
+                >
+                  <button
+                    onClick={() => openDemoModal()}
+                    className="inline-flex items-center justify-center gap-3 bg-[#FF9B04] hover:bg-[#e08800] text-slate-950 font-black text-base sm:text-lg px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all transform tracking-tight uppercase"
+                  >
+                    <span>BOOK FREE DEMO CLASS →</span>
+                  </button>
+                </motion.div>
               </div>
 
               {/* Search Bar Element (Tutorwaves Pill Search) */}
@@ -369,7 +401,7 @@ export default function AcademicPage() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="relative max-w-xl z-20 pt-2"
               >
-                <div className="bg-[#030F40] p-1.5 rounded-full shadow-2xl shadow-blue-950/20 flex items-center gap-2">
+                <form onSubmit={handleSearchSubmit} className="bg-[#030F40] p-1.5 rounded-full shadow-2xl shadow-blue-950/20 flex items-center gap-2">
                   <div className="flex items-center gap-3 px-4 py-2 w-full">
                     <input
                       type="text"
@@ -380,15 +412,15 @@ export default function AcademicPage() {
                     />
                   </div>
                   <button
-                    onClick={() => openDemoModal(selectedCurriculum)}
-                    className="shrink-0 bg-[#1E7DBB] hover:bg-[#16669b] text-white font-extrabold text-xs py-2.5 px-6 rounded-full transition-all flex items-center gap-2"
+                    type="submit"
+                    className="shrink-0 bg-[#1E7DBB] hover:bg-[#16669b] text-white font-extrabold text-xs py-2.5 px-6 rounded-full transition-all flex items-center gap-2 cursor-pointer"
                   >
                     <span>Search</span>
                     <div className="w-6 h-6 rounded-full bg-white text-[#1E7DBB] flex items-center justify-center">
                       <Search size={12} />
                     </div>
                   </button>
-                </div>
+                </form>
 
                 {/* Quick Search Autocomplete Dropdown */}
                 {searchQuery && (
@@ -399,7 +431,7 @@ export default function AcademicPage() {
                           key={idx}
                           onClick={() => {
                             setSelectedCurriculum(item.stage);
-                            openDemoModal(item.stage);
+                            handleSearchSubmit();
                             setSearchQuery('');
                           }}
                           className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-200"
@@ -507,10 +539,10 @@ export default function AcademicPage() {
       <section className="py-12 px-4 md:px-8 bg-[#1E7DBB] text-white">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { number: '10,000+', label: 'STUDENTS TAUGHT', desc: 'Across 25+ countries' },
+            { number: '2,500+', label: 'STUDENTS TAUGHT', desc: 'Across 25+ countries' },
             { number: '98%', label: 'PASS RATE', desc: 'Grade improvements' },
             { number: '50+', label: 'SUBJECTS', desc: 'STEM & Humanities' },
-            { number: '10+ YRS', label: 'EXPERIENCE', desc: 'Since 2014' },
+            { number: '6+ YRS', label: 'EXPERIENCE', desc: 'Since 2020' },
           ].map((stat, idx) => (
             <div key={idx} className="space-y-2 p-4">
               <div className="text-4xl sm:text-5xl font-black text-[#FF9B04] tracking-tight">
@@ -539,7 +571,7 @@ export default function AcademicPage() {
               Master the Skills You Need to Thrive
             </h2>
             <p className="text-slate-600 text-base leading-relaxed font-medium">
-              Since 2014, bridging learning gaps for school and college/university students through personalized live online tutoring. Our expert tutors empower students to achieve top grade scores.
+              Since 2020, bridging learning gaps for school and college/university students through personalized live online tutoring. Our expert tutors empower students to achieve top grade scores.
             </p>
 
             <div className="space-y-4">
@@ -584,7 +616,7 @@ export default function AcademicPage() {
               <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-blue-100 shadow-xl flex items-center justify-between">
                 <div>
                   <div className="text-xs font-black text-[#030F40]">Academic Excellence</div>
-                  <div className="text-[11px] text-slate-500 font-medium">Over 10,000+ Successful Graduates</div>
+                  <div className="text-[11px] text-slate-500 font-medium">Over 2,500+ Successful Graduates</div>
                 </div>
                 <span className="bg-[#1E7DBB] text-white px-3 py-1 rounded-full text-xs font-extrabold shadow-sm">
                   98% Pass Rate
