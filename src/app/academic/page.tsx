@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
@@ -15,205 +15,201 @@ import {
   Clock, 
   ShieldCheck, 
   Star, 
-  StarHalf,
   Users, 
   Target, 
   TrendingUp, 
   Award,
   ChevronRight,
   ChevronLeft,
-  DollarSign,
-  HeartHandshake,
-  Flame,
-  Facebook,
+  Search,
+  Video,
+  Globe,
+  MapPin,
+  Play,
+  Plus,
+  Minus,
+  Phone,
+  Mail,
+  MessageCircle,
   Instagram,
   Linkedin,
   Youtube,
-  Phone,
-  Mail,
-  MapPin,
-  MessageCircle
+  Facebook,
+  Check
 } from 'lucide-react';
-
-// Easily customizable pricing configuration per user request
-// Later, to change price, edit HOURLY_RATE. To hide/remove section, set SHOW_PRICING_SECTION to false.
-const SHOW_PRICING_SECTION = true;
-const HOURLY_RATE = 12; // $12 per hour
 
 export default function AcademicPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [selectedCurriculum, setSelectedCurriculum] = useState('IB');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFaqIndex, setActiveFaqIndex] = useState<number | null>(0);
   const [activeStep, setActiveStep] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [selectedMapRegion, setSelectedMapRegion] = useState('UK & Europe');
 
   const openDemoModal = (curriculum?: string) => {
     if (curriculum) setSelectedCurriculum(curriculum);
     setIsDemoModalOpen(true);
   };
 
+  // Curricula & Key Stage Data
   const curriculaList = [
     {
       id: 'IB',
       title: 'IB',
       name: 'IB (International Baccalaureate)',
-      description: 'Personalized academic support for IB students (DP & MYP).',
-      subjects: ['Mathematics (AA/AI)', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Languages & more'],
+      description: 'Personalized academic support for IB DP & MYP students.',
+      subjects: ['Mathematics (AA/AI)', 'Physics HL/SL', 'Chemistry HL/SL', 'Biology', 'English A', 'IA & EE Guidance'],
       badge: 'HL & SL Covered',
       focus: 'Concept depth, Internal Assessment (IA) guidance & exam paper strategy.',
-    },
-    {
-      id: 'ICSE',
-      title: 'ICSE',
-      name: 'ICSE Board',
-      description: 'Comprehensive subject mastery, structured learning & ICSE board exam prep.',
-      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Computer Applications & more'],
-      badge: 'Class 6 - 10 Mastery',
-      focus: 'CISCE syllabus depth, analytical problem solving & board exam excellence.',
+      boards: ['IBO']
     },
     {
       id: 'IGCSE',
       title: 'IGCSE',
       name: 'IGCSE (Cambridge & Edexcel)',
-      description: 'Concept building, structured practice and exam preparation.',
-      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Arabic', 'Languages & more'],
+      description: 'Concept building, structured practice, and past paper drills.',
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English Lit & Lang', 'Computer Science'],
       badge: 'Core & Extended',
       focus: 'Past paper solving, mark scheme techniques & concept clarity.',
+      boards: ['CIE', 'Edexcel']
     },
     {
       id: 'A-Level',
       title: 'A-LEVEL',
-      name: 'A-Level & AS Level',
-      description: 'Advanced subject support for academic excellence and university prep.',
-      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Arabic', 'Languages & more'],
+      name: 'A-Level & AS Level (Key Stage 5)',
+      description: 'Advanced subject support for top university prep.',
+      subjects: ['Pure & Applied Maths', 'Further Maths', 'Chemistry', 'Physics', 'Biology', 'Economics'],
       badge: 'AS & A2 Preparation',
       focus: 'Advanced problem solving, university entrance readiness & deep understanding.',
+      boards: ['AQA', 'Edexcel', 'OCR']
+    },
+    {
+      id: '11Plus',
+      title: '11+ Entrance',
+      name: '11+ Grammar School Entrance',
+      description: 'Selective entrance exam prep for UK Independent & Grammar Schools.',
+      subjects: ['11+ Verbal Reasoning', '11+ Non-Verbal Reasoning', 'Primary Maths', 'Creative Writing'],
+      badge: 'CEM & GL Specialist',
+      focus: 'Speed, accuracy, and paper technique for CEM & GL Assessment exams.',
+      boards: ['CEM', 'GL Assessment', 'ISEB']
     },
     {
       id: 'AP',
       title: 'AP',
       name: 'AP (Advanced Placement)',
       description: 'Focused academic support and AP exam preparation.',
-      subjects: ['Calculus (AB/BC)', 'Physics', 'Chemistry', 'Biology', 'Computer Science', 'English', 'Arabic & more'],
+      subjects: ['Calculus (AB/BC)', 'Physics C', 'Chemistry', 'Biology', 'Computer Science A'],
       badge: 'Target Score 5',
       focus: 'Free-response question practice & high-yield topic reinforcement.',
+      boards: ['College Board']
     },
     {
       id: 'CBSE',
       title: 'CBSE',
       name: 'CBSE Board',
       description: 'Strong foundations, personalized learning and board exam prep.',
-      subjects: ['Mathematics', 'Science', 'English', 'Arabic', 'Physics', 'Chemistry', 'Biology & more'],
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English'],
       badge: 'Class 6 - 12 Mastery',
       focus: 'NCERT foundation building, numerical practice & board exam excellence.',
+      boards: ['CBSE']
     },
+    {
+      id: 'ICSE',
+      title: 'ICSE',
+      name: 'ICSE Board',
+      description: 'Comprehensive subject mastery, structured learning & ICSE board exam prep.',
+      subjects: ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Computer Applications'],
+      badge: 'Class 6 - 10 Mastery',
+      focus: 'CISCE syllabus depth, analytical problem solving & board exam excellence.',
+      boards: ['CISCE']
+    }
   ];
 
-  const tutorPillars = [
+  // Quick Subject Search Items
+  const QUICK_SEARCH_ITEMS = [
+    { title: 'GCSE Maths (Edexcel Higher)', stage: 'IGCSE', board: 'Edexcel' },
+    { title: 'A-Level Chemistry (AQA Organic)', stage: 'A-Level', board: 'AQA' },
+    { title: '11+ Non-Verbal Reasoning (GL)', stage: '11Plus', board: 'GL' },
+    { title: 'A-Level Physics (OCR A)', stage: 'A-Level', board: 'OCR' },
+    { title: 'IB Maths Analysis & Approaches (HL)', stage: 'IB', board: 'IBO' },
+    { title: 'GCSE English Literature (AQA)', stage: 'IGCSE', board: 'AQA' },
+    { title: 'AP Calculus BC', stage: 'AP', board: 'College Board' },
+  ];
+
+  const filteredSearch = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return QUICK_SEARCH_ITEMS.filter(item => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.stage.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.board.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
+
+  const activeCurrData = curriculaList.find(c => c.id === selectedCurriculum) || curriculaList[0];
+
+  // Global Map Locations Data
+  const GLOBAL_REGIONS = [
     {
-      title: 'Subject expertise',
-      desc: 'Strong subject knowledge and academic understanding.',
-      icon: Award,
+      name: 'UK & Europe',
+      students: '5,500+ Students Taught',
+      cities: ['London', 'Manchester', 'Hertfordshire', 'Edinburgh', 'Zurich'],
+      pinCoordinates: [
+        { top: '28%', left: '46%', name: 'London, UK', count: '3,200+' },
+        { top: '25%', left: '48%', name: 'Zurich, Switzerland', count: '1,100+' },
+      ]
     },
     {
-      title: 'Curriculum alignment',
-      desc: 'Lessons designed around your child\'s specific curriculum.',
-      icon: Target,
+      name: 'Middle East',
+      students: '4,200+ Students Taught',
+      cities: ['Dubai', 'Abu Dhabi', 'Doha', 'Riyadh', 'Muscat'],
+      pinCoordinates: [
+        { top: '42%', left: '60%', name: 'Dubai, UAE', count: '2,800+' },
+        { top: '44%', left: '58%', name: 'Doha, Qatar', count: '1,400+' },
+      ]
     },
     {
-      title: 'Personalized teaching',
-      desc: 'The pace, explanation and practice adapt to the student.',
+      name: 'Americas',
+      students: '3,000+ Students Taught',
+      cities: ['New York', 'California', 'Toronto', 'Vancouver', 'Texas'],
+      pinCoordinates: [
+        { top: '32%', left: '22%', name: 'New York, USA', count: '1,900+' },
+        { top: '35%', left: '16%', name: 'California, USA', count: '1,100+' },
+      ]
+    },
+    {
+      name: 'Asia Pacific',
+      students: '3,800+ Students Taught',
+      cities: ['Singapore', 'Mumbai', 'Hong Kong', 'Sydney', 'Delhi'],
+      pinCoordinates: [
+        { top: '50%', left: '72%', name: 'Singapore', count: '1,600+' },
+        { top: '46%', left: '68%', name: 'Mumbai, India', count: '2,200+' },
+      ]
+    }
+  ];
+
+  const currentMapData = GLOBAL_REGIONS.find(r => r.name === selectedMapRegion) || GLOBAL_REGIONS[0];
+
+  // Tutorwaves Inspired 3 Highlight Icon Boxes
+  const TUTORWAVES_FEATURE_BOXES = [
+    {
+      title: '1-to-1 Personalized Tutoring',
+      desc: 'Tailored learning pace, individualized attention, and custom lesson plans built around your child’s goals.',
       icon: Users,
     },
     {
-      title: 'Patient guidance',
-      desc: 'Because understanding matters more than simply finishing a chapter.',
-      icon: HeartHandshake,
+      title: 'Qualified Expert Tutors',
+      desc: 'Top 1% subject specialists, DBS checked UK teachers, and graduates from Oxford, Cambridge & Imperial.',
+      icon: Award,
     },
     {
-      title: 'Progress-focused learning',
-      desc: 'Parents gain better visibility into their child\'s learning journey.',
+      title: 'Progress Driven Learning',
+      desc: 'Regular parent feedback, weekly reports, and transparent tracking of student grade improvement.',
       icon: TrendingUp,
-    },
+    }
   ];
 
-  const studentNeeds = [
-    {
-      tag: 'Algebra & Fundamentals',
-      text: 'A student struggling with algebra may need stronger fundamentals.',
-      accent: 'border-[#1ad8ea]/40 bg-[#1e2842]',
-    },
-    {
-      tag: 'IGCSE & ICSE Exam Mastery',
-      text: 'An IGCSE or ICSE student may need exam-focused practice.',
-      accent: 'border-[#2363f1]/40 bg-[#1e2842]',
-    },
-    {
-      tag: 'IB Deep Concepts',
-      text: 'An IB student may need deeper conceptual understanding.',
-      accent: 'border-[#f9be3e]/40 bg-[#1e2842]',
-    },
-    {
-      tag: 'A-Level Problem Solving',
-      text: 'An A-Level student may need advanced problem solving.',
-      accent: 'border-[#1ad8ea]/40 bg-[#1e2842]',
-    },
-  ];
-
-  const processSteps = [
-    {
-      number: '01',
-      title: 'UNDERSTAND',
-      desc: 'We learn about your child\'s curriculum, current level and goals.',
-    },
-    {
-      number: '02',
-      title: 'MATCH',
-      desc: 'We connect your child with a suitable subject and curriculum expert.',
-    },
-    {
-      number: '03',
-      title: 'PERSONALIZE',
-      desc: 'Lessons are adapted to the student\'s learning style and pace.',
-    },
-    {
-      number: '04',
-      title: 'PRACTICE',
-      desc: 'Concepts are reinforced through guided questions and application.',
-    },
-    {
-      number: '05',
-      title: 'PROGRESS',
-      desc: 'Learning is reviewed so your child\'s journey stays on track.',
-    },
-  ];
-
-  const partnershipFeatures = [
-    {
-      title: '1-to-1 attention',
-      desc: 'Focused learning without classroom distractions.',
-    },
-    {
-      title: 'Curriculum-aligned lessons',
-      desc: 'Learning built around the curriculum your child follows.',
-    },
-    {
-      title: 'Flexible scheduling',
-      desc: 'Learn from home at convenient times.',
-    },
-    {
-      title: 'Targeted practice',
-      desc: 'Focus on the areas where your child needs the most help.',
-    },
-    {
-      title: 'Exam preparation',
-      desc: 'Prepare with greater confidence for important assessments.',
-    },
-    {
-      title: 'Parent visibility',
-      desc: 'Stay connected with your child\'s learning journey.',
-    },
-  ];
-
+  // Reviews List
   const reviewsList = [
     {
       quote: "My son was struggling with IB Math HL analysis. The 1-to-1 tutor at Ruzann broke down complex calculus concepts patiently. His predicted grade jumped from a 4 to a 7!",
@@ -237,10 +233,10 @@ export default function AcademicPage() {
       rating: 4.7,
     },
     {
-      quote: "The Arabic language classes at Ruzann are outstanding! My daughter went from struggling with basic grammar to writing fluent essays and speaking with confidence.",
-      author: "Fatima Al-Hassan",
-      location: "Abu Dhabi, UAE",
-      curriculum: "Arabic & Languages",
+      quote: "My son passed both the Henriette Barnett and QE Boys 11+ grammar school entrance tests. The targeted Verbal and Non-Verbal reasoning mock drills were invaluable.",
+      author: "Priya Sharma",
+      location: "Hertfordshire, UK",
+      curriculum: "11+ Grammar Prep",
       rating: 4.9,
     },
     {
@@ -256,35 +252,7 @@ export default function AcademicPage() {
       location: "California, USA",
       curriculum: "AP Physics C & Calculus",
       rating: 4.8,
-    },
-    {
-      quote: "CBSE Class 12 Chemistry numericals were a nightmare. Ruzann's tutor taught shortcut methods and NCERT deep dives. Scored 98 in Chemistry boards!",
-      author: "Ananya Sharma",
-      location: "Delhi, India",
-      curriculum: "CBSE Grade 12",
-      rating: 4.7,
-    },
-    {
-      quote: "Ruzann's personalized IB DP Biology tuition was a game changer for my IA and final exams. The tutor helped me organize my research paper step by step.",
-      author: "David Chen",
-      location: "Hong Kong",
-      curriculum: "IB DP Biology & IA",
-      rating: 4.5,
-    },
-    {
-      quote: "Learning English literature and critical analysis 1-on-1 gave my daughter the confidence to excel in her Cambridge IGCSE English exams.",
-      author: "Elena Rostova",
-      location: "Zurich, Switzerland",
-      curriculum: "IGCSE English Literature",
-      rating: 4.9,
-    },
-    {
-      quote: "The patience of the tutors at Ruzann is remarkable. My son went from fearing Mathematics to solving complex A-Level Mechanics problems on his own.",
-      author: "Tariq Mansoor",
-      location: "Doha, Qatar",
-      curriculum: "A-Level Mathematics",
-      rating: 4.6,
-    },
+    }
   ];
 
   const nextReview = () => {
@@ -295,226 +263,348 @@ export default function AcademicPage() {
     setCurrentReviewIndex((prev) => (prev - 1 + reviewsList.length) % reviewsList.length);
   };
 
-  const activeCurrData = curriculaList.find(c => c.id === selectedCurriculum) || curriculaList[0];
+  // FAQs
+  const UK_FAQS = [
+    {
+      q: "Are all your tutors qualified and DBS checked?",
+      a: "Yes. Every single tutor conducting academic sessions undergoes rigorous background, identity, and DBS checks. They hold degrees from top global institutions including Oxford, Cambridge, Imperial, UCL, and top state universities."
+    },
+    {
+      q: "Which exam boards and curricula do you cover?",
+      a: "We cover IB (MYP & DP), IGCSE, GCSE (AQA, Edexcel, OCR, CIE), A-Levels (AS & A2), 11+ Entrance (CEM & GL), AP, CBSE, and ICSE."
+    },
+    {
+      q: "How does the $1 Demo Class work?",
+      a: "When you book a $1 Demo Class, our academic coordinator matches your child with a dedicated 1-on-1 tutor. Your child gets a 30-minute diagnostic session with an interactive digital whiteboard and custom study plan."
+    },
+    {
+      q: "Can lessons be scheduled around school hours and weekends?",
+      a: "Yes. Lessons are completely flexible and can be booked after school hours, on weekends, or during holiday periods to fit your family's routine."
+    },
+    {
+      q: "What equipment is required for live online classes?",
+      a: "Any desktop computer, laptop, or iPad/tablet with a stable internet connection and microphone/webcam. Lessons take place in an interactive web-based classroom with dual-pen digital whiteboard."
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-[#2363f1] selection:text-white pb-0 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F4F7FF] text-slate-900 font-sans selection:bg-[#1E7DBB] selection:text-white pb-0 overflow-x-hidden">
       <Header />
 
-      {/* Top Trust Bar - Clean Light High-Contrast Style */}
-      <div className="bg-slate-100 border-b border-slate-200 py-2.5 px-4 text-center text-xs font-semibold">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-3">
-          <span className="flex items-center gap-1 bg-white text-[#2363f1] px-2.5 py-0.5 rounded-full text-[11px] font-bold border border-slate-200 shadow-sm">
-            <Flame size={12} className="text-[#f9be3e] fill-[#f9be3e]" /> TOP 1% VERIFIED TUTORS
+      {/* TOP TRUST & ANNOUNCEMENT BAR (TUTORWAVES STYLE) */}
+      <div className="bg-[#030F40] border-b border-blue-900 py-2.5 px-4 text-center text-xs font-semibold text-white shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-3 md:gap-6">
+          <span className="inline-flex items-center gap-1.5 bg-[#1E7DBB]/30 border border-[#1E7DBB]/60 text-sky-200 px-3 py-0.5 rounded-full font-bold text-[11px] uppercase tracking-wider">
+            <span className="text-base leading-none">🇬🇧</span> Live Online Academic Tutoring
           </span>
-          <TrustpilotBadge variant="compact" />
-          <span className="hidden md:inline text-slate-300">•</span>
-          <span className="text-slate-700 font-bold hidden sm:inline">100% Match Guarantee</span>
+          <span className="flex items-center gap-1 text-amber-300 font-medium">
+            <ShieldCheck size={14} className="text-emerald-400" />
+            100% DBS Checked Tutors
+          </span>
+          <span className="hidden md:inline text-slate-400">•</span>
+          <div className="inline-block transform scale-90 sm:scale-100">
+            <TrustpilotBadge variant="compact" />
+          </div>
         </div>
       </div>
 
-      {/* SECTION 1: HERO — Deep Midnight Navy background for strong first impression */}
-      <section className="relative min-h-[80vh] pt-12 pb-20 px-4 md:px-8 flex flex-col justify-center items-center overflow-hidden bg-[#0c142a] text-white">
-        {/* Ambient Glowing Orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[380px] bg-[#2363f1]/25 rounded-full blur-[150px] pointer-events-none" />
-        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-[#1ad8ea]/20 rounded-full blur-[130px] pointer-events-none" />
+      {/* HERO SECTION — EXACT TUTORWAVES LEFT-ALIGNED DESKTOP STRUCTURE */}
+      <section className="relative pt-8 pb-16 px-4 md:px-8 overflow-hidden bg-gradient-to-b from-[#F4F7FF] via-[#EEF4FF] to-[#F8FAFC]">
+        {/* Ambient Glowing Graphic Background */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[550px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-200/30 via-sky-100/10 to-transparent pointer-events-none" />
+        
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* LEFT CONTENT COLUMN — LEFT ALIGNED DESKTOP TEXT */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              
+              {/* Top Pill Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 bg-white border border-blue-200 px-4 py-1.5 rounded-full text-[#1E7DBB] text-xs font-bold shadow-sm"
+              >
+                <Sparkles size={15} className="text-[#FF9B04] fill-[#FF9B04]" />
+                <span>EXPERIENCE PERSONALISED ONLINE TUTORING</span>
+              </motion.div>
 
-        <div className="container mx-auto max-w-5xl relative z-10 text-center space-y-8">
-          
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-[#1e2842]/90 border border-[#1ad8ea]/40 px-4 py-2 rounded-full text-[#1ad8ea] font-bold text-xs md:text-sm shadow-xl shadow-[#1ad8ea]/10"
-          >
-            <Sparkles size={16} className="text-[#f9be3e]" />
-            <span>RUZANN ACADEMIC · 1-TO-1 ONLINE TUTORING</span>
-          </motion.div>
-
-          {/* Main Headline */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="space-y-3"
-          >
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1]">
-              Every Child Has <span className="bg-gradient-to-r from-[#1ad8ea] via-[#2363f1] to-[#f9be3e] bg-clip-text text-transparent">A Destination.</span>
-            </h1>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-200 tracking-tight">
-              We build the learning path to get them there.
-            </h2>
-          </motion.div>
-
-          {/* Subheading & Curricula Badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="max-w-3xl mx-auto space-y-5"
-          >
-            <h3 className="text-base sm:text-xl font-bold text-slate-300 leading-relaxed">
-              Premium 1-to-1 Online Academic Tutoring for Students Round Globe
-            </h3>
-
-            {/* Curricula Pill Row */}
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-black">
-              {['IB', 'ICSE', 'IGCSE', 'A-Level', 'AP', 'CBSE'].map((curr) => (
-                <span 
-                  key={curr} 
-                  className="px-4 py-1.5 rounded-full bg-[#1e2842] border border-[#1ad8ea]/40 text-[#1ad8ea] shadow-md hover:border-[#f9be3e] transition-colors cursor-pointer"
-                  onClick={() => {
-                    setSelectedCurriculum(curr);
-                    const el = document.getElementById('curricula-showcase');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }}
+              {/* Headline & Description Layout */}
+              <div className="space-y-4">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#030F40] tracking-tight leading-[1.1] text-left"
                 >
-                  {curr}
-                </span>
-              ))}
-            </div>
+                  Learn<br />
+                  smarter<br />
+                  with <span className="text-[#1E7DBB]">Ruzann</span>
+                </motion.h1>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Personalized academic support designed around your child's curriculum, learning needs and goals.
-            </p>
-            <p className="text-slate-400 text-xs sm:text-sm max-w-2xl mx-auto">
-              Whether your child needs to <strong className="text-white">catch up, keep up, get ahead or prepare for exams</strong>, Ruzann connects them with the right tutor and a learning path built specifically for them.
-            </p>
-          </motion.div>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-slate-600 text-sm sm:text-base font-normal leading-relaxed max-w-lg text-left"
+                >
+                  Experience personalised online tutoring that cultivates deeper understanding, accelerates progress, and ensures meaningful learning outcomes across <strong className="text-[#030F40]">IB, IGCSE, A-Levels, 11+, AP, CBSE & ICSE</strong>.
+                </motion.p>
+              </div>
 
-          {/* Hero CTA */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="pt-4 flex flex-col items-center gap-3 max-w-md mx-auto"
-          >
-            <button
-              onClick={() => openDemoModal()}
-              className="w-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-black text-base sm:text-lg py-4.5 px-8 rounded-full shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:shadow-[0_15px_35px_-5px_rgba(26,216,234,0.7)] transition-all transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group"
-            >
-              <span>BOOK A FREE DEMO CLASS</span>
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <p className="text-slate-400 text-xs italic font-medium">
-              *No obligation • Personalized learning • Expert tutors • Flexible online classes*
-            </p>
-          </motion.div>
-
-        </div>
-      </section>
-
-      {/* SECTION 2: LIGHT HIGH-CONTRAST SECTION — School gives the map. We help navigate. */}
-      <section className="py-20 px-4 md:px-8 bg-white text-slate-900 border-t border-slate-200">
-        <div className="max-w-5xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900">
-              School gives your child the map.
-            </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-[#2363f1]">
-              We help them navigate it.
-            </h3>
-          </div>
-
-          <div className="bg-slate-50 rounded-3xl p-6 md:p-10 border border-slate-200 shadow-xl space-y-6 text-slate-700 text-sm sm:text-base leading-relaxed max-w-3xl mx-auto">
-            <p className="text-lg font-bold text-slate-900 text-center">
-              Every student learns differently.
-            </p>
-            <ul className="space-y-3 font-semibold text-slate-800 max-w-xl mx-auto">
-              <li className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[#2363f1] shrink-0" />
-                <span>Some need concepts explained differently.</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[#2363f1] shrink-0" />
-                <span>Some need more practice.</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[#2363f1] shrink-0" />
-                <span>Some need confidence.</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[#2363f1] shrink-0" />
-                <span>Some need a push to reach the next level.</span>
-              </li>
-            </ul>
-
-            <div className="pt-4 border-t border-slate-200 text-center space-y-2">
-              <p className="text-slate-600">
-                At Ruzann, we don't believe every child should follow the same learning path.
-              </p>
-              <p className="text-slate-900 font-bold">
-                We first understand <span className="text-[#2363f1]">where your child is today.</span>
-              </p>
-              <p className="text-slate-900 font-bold">
-                Then we help build the path toward <span className="text-[#00b67a]">where they want to be.</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Interactive Process Pipeline Pills */}
-          <div className="pt-4 max-w-4xl mx-auto">
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {['Assess', 'Personalize', 'Teach', 'Track', 'Improve'].map((step, idx) => (
-                <React.Fragment key={step}>
+              {/* Search Bar Element (Tutorwaves Pill Search) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="relative max-w-xl z-20 pt-2"
+              >
+                <div className="bg-[#030F40] p-1.5 rounded-full shadow-2xl shadow-blue-950/20 flex items-center gap-2">
+                  <div className="flex items-center gap-3 px-4 py-2 w-full">
+                    <input
+                      type="text"
+                      placeholder="What do you want to learn?..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-transparent text-white placeholder-slate-300 text-sm focus:outline-none w-full font-medium"
+                    />
+                  </div>
                   <button
-                    onClick={() => setActiveStep(idx)}
-                    className={`px-4 py-2.5 rounded-2xl border text-xs sm:text-sm font-black flex items-center gap-2 transition-all ${
-                      activeStep === idx
-                        ? 'bg-[#0c142a] text-white border-[#2363f1] shadow-lg scale-105'
-                        : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                    }`}
+                    onClick={() => openDemoModal(selectedCurriculum)}
+                    className="shrink-0 bg-[#1E7DBB] hover:bg-[#16669b] text-white font-extrabold text-xs py-2.5 px-6 rounded-full transition-all flex items-center gap-2"
                   >
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                      activeStep === idx ? 'bg-[#2363f1] text-white' : 'bg-slate-300 text-slate-800'
-                    }`}>
-                      {idx + 1}
-                    </span>
-                    {step}
+                    <span>Search</span>
+                    <div className="w-6 h-6 rounded-full bg-white text-[#1E7DBB] flex items-center justify-center">
+                      <Search size={12} />
+                    </div>
                   </button>
-                  {idx < 4 && (
-                    <ChevronRight size={18} className="text-slate-400 hidden sm:block" />
-                  )}
-                </React.Fragment>
+                </div>
+
+                {/* Quick Search Autocomplete Dropdown */}
+                {searchQuery && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl p-3 shadow-2xl z-50 space-y-1 text-left">
+                    {filteredSearch.length > 0 ? (
+                      filteredSearch.map((item, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => {
+                            setSelectedCurriculum(item.stage);
+                            openDemoModal(item.stage);
+                            setSearchQuery('');
+                          }}
+                          className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-200"
+                        >
+                          <span className="text-sm font-bold text-slate-800">{item.title}</span>
+                          <span className="text-xs bg-[#EEF4FF] text-[#1E7DBB] border border-blue-200 px-3 py-0.5 rounded-full font-bold">
+                            {item.board}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-3 text-center text-xs text-slate-500 font-medium">
+                        No matching subjects found. Click below to book custom 1-on-1 tutoring!
+                      </div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Tutorwaves Style Connect Our Experts CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="pt-2 flex items-center gap-4"
+              >
+                <button
+                  onClick={() => openDemoModal()}
+                  className="group inline-flex items-center gap-3 text-[#1E7DBB] hover:text-[#030F40] font-extrabold text-sm transition-all"
+                >
+                  <span>Connect our experts</span>
+                  <span className="w-8 h-8 rounded-full bg-[#1E7DBB] group-hover:bg-[#030F40] text-white flex items-center justify-center transition-colors shadow-md">
+                    <ArrowRight size={14} />
+                  </span>
+                </button>
+              </motion.div>
+
+            </div>
+
+            {/* RIGHT GRAPHIC COLUMN — HERO STUDENT VISUAL ASSET */}
+            <div className="lg:col-span-5 relative flex items-center justify-center">
+              <div className="relative w-full max-w-md aspect-[4/5] rounded-[32px] overflow-hidden shadow-2xl border border-blue-100 bg-white group">
+                
+                <img 
+                  src="/images/hero-student.jpg" 
+                  alt="Learn Smarter with Ruzann - Student Online Tutoring" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+
+                {/* Floating Highlight Badge (Tutorwaves Style Glass Overlay) */}
+                <div className="absolute bottom-5 left-5 right-5 bg-[#030F40]/95 backdrop-blur-md text-white p-5 rounded-2xl shadow-xl space-y-3 border border-blue-800">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-sky-300 font-bold uppercase tracking-wider text-[10px]">Academic Excellence</span>
+                    <span className="bg-[#1E7DBB] text-white px-2.5 py-0.5 rounded-full font-bold text-[10px]">Free Demo Available</span>
+                  </div>
+                  <p className="text-xs text-slate-200 font-medium leading-relaxed">
+                    Book a free 1-on-1 diagnostic demo class and get matched with expert tutors today.
+                  </p>
+                  <button
+                    onClick={() => openDemoModal()}
+                    className="w-full py-2.5 rounded-xl bg-[#FF9B04] hover:bg-[#E08900] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                  >
+                    <span>Book Free Demo</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* TUTORWAVES 3 HIGHLIGHT ICON BOXES SECTION (BLUE ROUNDED CARDS) */}
+      <section className="py-12 px-4 md:px-8 bg-white border-t border-slate-200">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          {TUTORWAVES_FEATURE_BOXES.map((box, idx) => {
+            const IconComp = box.icon;
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="bg-[#1E7DBB] text-white rounded-[30px] p-8 space-y-4 shadow-xl hover:shadow-2xl transition-all"
+              >
+                <div className="w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-white">
+                  <IconComp size={30} />
+                </div>
+                <h3 className="text-2xl font-extrabold tracking-tight">
+                  {box.title}
+                </h3>
+                <p className="text-sm text-slate-100 leading-relaxed font-medium">
+                  {box.desc}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* TUTORWAVES STATS BANNER SECTION */}
+      <section className="py-12 px-4 md:px-8 bg-[#1E7DBB] text-white">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {[
+            { number: '10,000+', label: 'STUDENTS TAUGHT', desc: 'Across 25+ countries' },
+            { number: '98%', label: 'PASS RATE', desc: 'Grade improvements' },
+            { number: '50+', label: 'SUBJECTS', desc: 'STEM & Humanities' },
+            { number: '10+ YRS', label: 'EXPERIENCE', desc: 'Since 2014' },
+          ].map((stat, idx) => (
+            <div key={idx} className="space-y-2 p-4">
+              <div className="text-4xl sm:text-5xl font-black text-[#FF9B04] tracking-tight">
+                {stat.number}
+              </div>
+              <div className="text-xs font-extrabold tracking-widest uppercase text-white">
+                {stat.label}
+              </div>
+              <div className="text-[11px] text-slate-100 font-medium">
+                {stat.desc}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US / MASTER THE SKILLS YOU NEED TO THRIVE (TUTORWAVES SECTION) */}
+      <section className="py-20 px-4 md:px-8 bg-white border-t border-slate-200">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <div className="space-y-6">
+            <span className="text-[#1E7DBB] font-extrabold text-xs uppercase tracking-widest bg-[#EEF4FF] border border-blue-200 px-3.5 py-1 rounded-full">
+              Why Choose Us
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-[#030F40] tracking-tight leading-tight">
+              Master the Skills You Need to Thrive
+            </h2>
+            <p className="text-slate-600 text-base leading-relaxed font-medium">
+              Since 2014, bridging learning gaps for school and college/university students through personalized live online tutoring. Our expert tutors empower students to achieve top grade scores.
+            </p>
+
+            <div className="space-y-4">
+              {[
+                { title: '1-to-1 Live Interactive Classes', desc: 'Dedicated 1-on-1 attention with custom explanation for every question.' },
+                { title: 'Curriculum & Exam Board Alignment', desc: 'Lessons structured around exact mark schemes for AQA, Edexcel, OCR, IB & Cambridge.' },
+                { title: 'Recorded Sessions & Notes Access', desc: 'Review recorded lessons 24/7 before mock and final exams.' },
+                { title: 'Parent Progress Reporting', desc: 'Regular WhatsApp and email updates detailing topic performance.' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-3 bg.f8fafc p-4 rounded-2xl border border-slate-200 shadow-sm">
+                  <CheckCircle2 size={20} className="text-[#1E7DBB] shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-sm font-bold text-[#030F40]">{item.title}</div>
+                    <div className="text-xs text-slate-600 font-medium">{item.desc}</div>
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Active Step Description Card */}
-            <div className="mt-6 p-6 rounded-2xl bg-[#0c142a] text-white border border-[#2363f1]/40 text-center max-w-xl mx-auto shadow-2xl">
-              <h4 className="text-xs font-black uppercase text-[#1ad8ea] tracking-wider mb-1">
-                Step 0{activeStep + 1} — {['Assess', 'Personalize', 'Teach', 'Track', 'Improve'][activeStep]}
-              </h4>
-              <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-                {[
-                  'Diagnostic evaluation to pinpoint exact strengths, conceptual gaps, and learning style.',
-                  'A customized learning roadmap built specifically around your child\'s target curriculum and exam goals.',
-                  'Interactive 1-to-1 live sessions led by an expert subject specialist adapting to the student\'s pace.',
-                  'Regular progress checks, topic assessments, and transparent feedback report shared with parents.',
-                  'Targeted exam practice, problem-solving refinement, and continuous confidence boosting.'
-                ][activeStep]}
-              </p>
+            <div className="pt-2">
+              <button
+                onClick={() => openDemoModal()}
+                className="px-7 py-3.5 rounded-xl bg-[#030F40] hover:bg-[#1E7DBB] text-white font-extrabold text-sm shadow-lg transition-all inline-flex items-center gap-2"
+              >
+                <span>Book Free Demo Class</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Visual Graduate Student Photo Frame */}
+          <div className="relative flex items-center justify-center">
+            <div className="relative w-full max-w-lg aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-white group">
+              
+              <img 
+                src="/images/why-choose-us-graduate.jpg" 
+                alt="Master the Skills You Need to Thrive - Graduate Student Success at Ruzann" 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+
+              {/* Floating Overlay Badge */}
+              <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-blue-100 shadow-xl flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-black text-[#030F40]">Academic Excellence</div>
+                  <div className="text-[11px] text-slate-500 font-medium">Over 10,000+ Successful Graduates</div>
+                </div>
+                <span className="bg-[#1E7DBB] text-white px-3 py-1 rounded-full text-xs font-extrabold shadow-sm">
+                  98% Pass Rate
+                </span>
+              </div>
+
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* SECTION 3: DEEP NAVY CONTRAST SECTION — One platform. Six global curricula. */}
-      <section id="curricula-showcase" className="py-20 px-4 md:px-8 bg-[#0c142a] text-white border-t border-slate-800">
+      {/* CURRICULA SHOWCASE (PROGRAMS GRID) */}
+      <section id="curricula-showcase" className="py-20 px-4 md:px-8 bg-[#F4F7FF] border-t border-slate-200">
         <div className="max-w-6xl mx-auto space-y-12">
           
           <div className="text-center space-y-3">
-            <h2 className="text-3xl sm:text-5xl font-black text-white">
-              One platform.
+            <span className="text-[#1E7DBB] font-extrabold text-xs uppercase tracking-widest bg-white border border-blue-200 px-3.5 py-1 rounded-full">
+              Explore Our Programs
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-[#030F40]">
+              Curricula & Academic Programs
             </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#1ad8ea] via-[#2363f1] to-[#f9be3e]">
-              Six global curricula.
-            </h3>
+            <p className="text-slate-600 text-base font-medium max-w-2xl mx-auto">
+              Choose your child’s curriculum to view subject modules, target grade strategies, and exam board coverage.
+            </p>
           </div>
 
-          {/* Interactive Curricula Tabs Switcher */}
+          {/* Curricula Tabs Switcher */}
           <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
             {curriculaList.map((curr) => (
               <button
@@ -522,8 +612,8 @@ export default function AcademicPage() {
                 onClick={() => setSelectedCurriculum(curr.id)}
                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all ${
                   selectedCurriculum === curr.id
-                    ? 'bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] shadow-lg scale-105'
-                    : 'bg-[#1e2842] text-slate-300 hover:bg-[#1e2842]/80 border border-slate-700'
+                    ? 'bg-[#030F40] text-white shadow-lg scale-105'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
                 {curr.title}
@@ -531,22 +621,21 @@ export default function AcademicPage() {
             ))}
           </div>
 
-          {/* Active Curriculum Detailed Showcase */}
-          <div className="bg-[#1e2842] rounded-3xl p-6 sm:p-10 border border-[#1ad8ea]/30 shadow-2xl max-w-4xl mx-auto space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/60 pb-6">
+          {/* Active Curriculum Card */}
+          <div className="bg-white rounded-[30px] p-6 sm:p-10 border border-slate-200 shadow-xl max-w-4xl mx-auto space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
               <div>
-                <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#0c142a] text-[#f9be3e] border border-[#f9be3e]/30 inline-block mb-2">
+                <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-[#EEF4FF] text-[#1E7DBB] border border-blue-200 inline-block mb-2">
                   {activeCurrData.badge}
                 </span>
-                {/* Single line heading styling */}
-                <h3 className="text-lg sm:text-2xl lg:text-3xl font-black text-white sm:whitespace-nowrap tracking-tight">
+                <h3 className="text-lg sm:text-2xl lg:text-3xl font-black text-[#030F40]">
                   {activeCurrData.name}
                 </h3>
-                <p className="text-slate-300 text-xs sm:text-sm font-medium mt-1">{activeCurrData.description}</p>
+                <p className="text-slate-600 text-xs sm:text-sm font-medium mt-1">{activeCurrData.description}</p>
               </div>
               <button
                 onClick={() => openDemoModal(activeCurrData.id)}
-                className="px-6 py-3 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-xs sm:text-sm hover:opacity-90 transition-all shrink-0 shadow-lg"
+                className="px-5 py-2.5 rounded-xl bg-[#1E7DBB] hover:bg-[#030F40] text-white font-extrabold text-xs sm:text-sm transition-all shrink-0 shadow-md"
               >
                 Book Free {activeCurrData.title} Demo &rarr;
               </button>
@@ -554,16 +643,12 @@ export default function AcademicPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-widest text-[#1ad8ea]">Supported Subjects & Languages:</h4>
+                <h4 className="text-xs font-black uppercase tracking-widest text-[#1E7DBB]">Supported Subjects:</h4>
                 <div className="flex flex-wrap gap-2">
                   {activeCurrData.subjects.map((sub) => (
                     <span 
                       key={sub} 
-                      className={`text-xs px-3 py-1.5 rounded-xl border font-bold ${
-                        sub === 'Arabic' || sub === 'English' || sub.includes('Languages')
-                          ? 'bg-[#2363f1]/20 border-[#2363f1] text-[#1ad8ea]'
-                          : 'bg-[#0c142a] border-slate-700 text-slate-200'
-                      }`}
+                      className="text-xs px-3 py-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] font-bold text-slate-800"
                     >
                       {sub}
                     </span>
@@ -572,227 +657,88 @@ export default function AcademicPage() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="text-xs font-black uppercase tracking-widest text-[#f9be3e]">Target Focus:</h4>
-                <p className="text-xs sm:text-sm text-slate-300 font-semibold leading-relaxed bg-[#0c142a] p-4 rounded-xl border border-slate-700">
+                <h4 className="text-xs font-black uppercase tracking-widest text-[#FF9B04]">Target Focus:</h4>
+                <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed bg-[#F8FAFC] p-4 rounded-xl border border-slate-200">
                   {activeCurrData.focus}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="text-center pt-4">
-            <button
-              onClick={() => openDemoModal()}
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-base shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:scale-105 transition-all"
-            >
-              [ BOOK A FREE DEMO CLASS ]
-            </button>
-          </div>
-
         </div>
       </section>
 
-      {/* SECTION 4: LIGHT HIGH-CONTRAST SECTION — The right tutor can change the way a child learns. */}
-      <section className="py-20 px-4 md:px-8 bg-slate-50 text-slate-900 border-t border-slate-200">
-        <div className="max-w-5xl mx-auto space-y-12">
+      {/* GEOGRAPHIES SECTION — EXACT MATCH FROM TUTORWAVES SCREENSHOT */}
+      <section className="py-20 px-4 md:px-8 bg-white border-t border-slate-200">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 leading-tight">
-              The right tutor can change the way a child learns.
+          {/* Left Text Content */}
+          <div className="lg:col-span-5 space-y-4 text-left">
+            <span className="text-[#1e7dbb] font-medium text-sm md:text-base tracking-tight block">
+              Geographies
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#030f40] tracking-tight leading-[1.15]">
+              At Ruzann, Learning Knows No Boundaries
             </h2>
-            <p className="text-slate-600 text-base sm:text-lg font-medium">
-              That's why we don't simply assign a tutor.
-            </p>
-            <p className="text-xl sm:text-2xl font-black text-[#2363f1]">
-              We focus on finding the <span className="underline decoration-[#f9be3e] decoration-4">right learning fit</span>.
+            <p className="text-slate-600 text-sm md:text-base leading-relaxed font-normal pt-2">
+              The sun never sets on the territories of Ruzann where there are no geographical boundaries so long as the medium of communication is English. Our students extend from pole to pole: a few to point out are The USA, Canada, The UK, Sweden, the Netherlands, The Middle East, India, and Australia.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            {tutorPillars.map((pillar, idx) => (
-              <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-200 space-y-1.5 sm:space-y-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-start">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#2363f1]/10 border border-[#2363f1]/30 flex items-center justify-center text-[#2363f1] font-black shrink-0">
-                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <h4 className="text-xs sm:text-lg font-black text-slate-900 flex items-center gap-1 sm:gap-2 leading-tight sm:leading-normal">
-                  ✓ {pillar.title}
-                </h4>
-                <p className="text-[11px] sm:text-sm font-medium text-slate-600 leading-snug sm:leading-relaxed">
-                  {pillar.desc}
-                </p>
-              </div>
-            ))}
-
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-dashed border-[#2363f1]/50 space-y-1.5 sm:space-y-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-start">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#2363f1]/10 border border-[#2363f1]/30 flex items-center justify-center text-[#2363f1] font-black shrink-0">
-                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-[#2363f1]" />
-              </div>
-              <h4 className="text-xs sm:text-lg font-black text-slate-900 flex items-center gap-1 sm:gap-2 leading-tight sm:leading-normal">
-                ✓ 100% Vetted Tutors
-              </h4>
-              <p className="text-[11px] sm:text-sm font-medium text-slate-600 leading-snug sm:leading-relaxed">
-                Background checked & top 1% applicants qualify to teach.
-              </p>
+          {/* Right Dotted World Map Graphic — Exact User Image */}
+          <div className="lg:col-span-7 relative w-full flex items-center justify-center p-2">
+            <div className="relative w-full max-w-3xl bg-white rounded-3xl p-4 flex items-center justify-center border border-slate-100 shadow-sm overflow-hidden">
+              <img 
+                src="/images/geographies-map.png" 
+                alt="At Ruzann, Learning Knows No Boundaries - Global Geographies Map" 
+                className="w-full h-auto object-contain select-none"
+              />
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* SECTION 5: DARK ACCENT BAND — Your child shouldn't have to fit the tutor. */}
-      <section className="py-10 sm:py-20 px-4 md:px-8 bg-gradient-to-r from-[#0c142a] via-[#1e2842] to-[#0c142a] text-white border-t border-b border-[#1ad8ea]/20">
-        <div className="max-w-5xl mx-auto space-y-6 sm:space-y-12">
+      {/* 4-STEP PROCESS JOURNEY */}
+      <section className="py-20 px-4 md:px-8 bg-[#F4F7FF] border-t border-slate-200">
+        <div className="max-w-6xl mx-auto space-y-14">
           
-          <div className="text-center space-y-1.5 sm:space-y-3">
-            <h2 className="text-xl sm:text-4xl md:text-5xl font-black text-slate-300">
-              Your child shouldn't have to fit the tutor.
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <span className="text-[#1E7DBB] font-extrabold text-xs uppercase tracking-widest bg-white border border-blue-200 px-3.5 py-1 rounded-full">
+              Simple 4-Step Process
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-[#030F40]">
+              How Live 1-to-1 Tutoring Works
             </h2>
-            <h3 className="text-lg sm:text-3xl md:text-4xl font-black text-white">
-              The tutor should fit the child.
-            </h3>
-          </div>
-
-          {/* 2-Column Compact Grid on Mobile */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-6">
-            {studentNeeds.map((need, idx) => (
-              <div 
-                key={idx}
-                className={`rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border ${need.accent} backdrop-blur-sm space-y-1.5 sm:space-y-2 shadow-lg hover:border-[#1ad8ea] transition-all flex flex-col justify-between`}
-              >
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-[#0c142a] text-[#1ad8ea] border border-[#1ad8ea]/30 inline-block w-max truncate max-w-full">
-                  {need.tag}
-                </span>
-                <p className="text-slate-100 text-xs sm:text-base font-bold leading-snug sm:leading-relaxed">
-                  "{need.text}"
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-[#0c142a] p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#1ad8ea]/30 text-center space-y-1 sm:space-y-3 max-w-3xl mx-auto shadow-xl">
-            <p className="text-xs sm:text-xl font-black text-white leading-relaxed">
-              That's why every Ruzann learning journey begins by understanding <span className="text-[#f9be3e]">the student first.</span>
+            <p className="text-slate-600 text-base font-medium">
+              From initial consultation to exam day success in four simple steps.
             </p>
           </div>
 
-        </div>
-      </section>
-
-      {/* SECTION 6: LIGHT HIGH-CONTRAST SECTION — From "I don't understand this" to "I can solve this." */}
-      <section className="py-20 px-4 md:px-8 bg-white text-slate-900 border-t border-slate-200">
-        <div className="max-w-6xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-4">
-            <span className="text-slate-500 text-lg font-bold block">From</span>
-            <h2 className="text-3xl sm:text-5xl font-black text-rose-600">
-              “I don't understand this”
-            </h2>
-            <span className="text-slate-500 text-lg font-bold block">to</span>
-            <h3 className="text-3xl sm:text-5xl font-black text-[#2363f1]">
-              “I can solve this.”
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-            {processSteps.map((step, idx) => (
-              <div 
-                key={step.number}
-                className={`bg-slate-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 hover:border-[#2363f1] transition-all space-y-2 sm:space-y-3 relative overflow-hidden group shadow-sm hover:shadow-md flex flex-col ${
-                  idx === 4 ? 'col-span-2 sm:col-span-1 items-center text-center sm:items-start sm:text-left' : 'items-start text-left'
-                }`}
-              >
-                <div className="text-3xl sm:text-4xl font-black text-slate-300 group-hover:text-[#2363f1] transition-colors">
-                  {step.number}
-                </div>
-                <h4 className="text-xs sm:text-base font-black text-slate-900 tracking-wide">
-                  {step.title}
-                </h4>
-                <p className="text-[11px] sm:text-xs text-slate-600 font-medium leading-snug sm:leading-relaxed">
-                  {step.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 7: VIBRANT GRADIENT BANNER — Experience Ruzann before you decide. */}
-      <section className="py-20 px-4 md:px-8 bg-slate-100 border-t border-slate-200">
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#0c142a] via-[#1e2842] to-[#0c142a] text-white rounded-3xl p-8 sm:p-12 border border-[#1ad8ea]/30 text-center space-y-8 shadow-2xl relative overflow-hidden">
-          
-          <div className="space-y-3 relative z-10">
-            <h2 className="text-3xl sm:text-5xl font-black text-white">
-              Experience Ruzann before you decide.
-            </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-[#f9be3e]">
-              Your first step is completely FREE.
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-2xl mx-auto pt-2 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              'Meet the tutor.',
-              'Experience our teaching approach.',
-              'Let your child experience personalized learning.',
-              'Understand where they need support.'
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#0c142a] border border-slate-700 text-slate-200 text-sm font-bold">
-                <CheckCircle2 size={18} className="text-[#1ad8ea] shrink-0" />
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="space-y-4 pt-4 relative z-10">
-            <h4 className="text-lg font-black text-white uppercase tracking-wider">
-              BOOK YOUR FREE DEMO CLASS
-            </h4>
-            <p className="text-slate-400 text-xs font-bold">
-              No long-term commitment. No pressure to enroll.
-            </p>
-            <button
-              onClick={() => openDemoModal()}
-              className="px-10 py-4 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-base shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:scale-105 transition-all"
-            >
-              [ BOOK FREE DEMO ]
-            </button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 8: LIGHT HIGH-CONTRAST SECTION — More than tutoring. A learning partnership. */}
-      <section className="py-20 px-4 md:px-8 bg-white text-slate-900 border-t border-slate-200">
-        <div className="max-w-6xl mx-auto space-y-12">
-          
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900">
-              More than tutoring.
-            </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-[#2363f1]">
-              A learning partnership.
-            </h3>
-            <p className="text-slate-600 text-base sm:text-lg pt-2">
-              Your child's school provides the classroom.
-              <br />
-              Ruzann provides the <strong className="text-slate-900">personal attention</strong> that a classroom often cannot.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-            {partnershipFeatures.map((feat, idx) => (
+              { step: '01', title: 'Understand & Assess', desc: 'We evaluate your child’s current level, target grades, and exam board syllabus.' },
+              { step: '02', title: 'Match Ideal Tutor', desc: 'Handpicked subject specialist matched to your child’s personality and pace.' },
+              { step: '03', title: 'Interactive 1-on-1 Class', desc: 'Engaging live online sessions with interactive digital whiteboard and past paper practice.' },
+              { step: '04', title: 'Track Progress & Succeed', desc: 'Receive regular parent progress reports and watch grade boundaries improve.' },
+            ].map((stepItem, idx) => (
               <div 
-                key={idx}
-                className="bg-slate-50 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 border border-slate-200 space-y-1.5 sm:space-y-3 hover:bg-white hover:border-[#2363f1] transition-all shadow-sm hover:shadow-md flex flex-col justify-start"
+                key={idx} 
+                className="bg-white border border-slate-200 p-6 rounded-[25px] space-y-4 flex flex-col justify-between shadow-sm"
               >
-                <h4 className="text-xs sm:text-lg font-black text-slate-900 flex items-center gap-1.5 sm:gap-2 leading-tight sm:leading-normal">
-                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#2363f1] shrink-0" />
-                  {feat.title}
-                </h4>
-                <p className="text-[11px] sm:text-sm font-medium text-slate-600 leading-snug sm:leading-relaxed">
-                  {feat.desc}
-                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl font-black text-[#1E7DBB]">{stepItem.step}</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#EEF4FF] border border-blue-200 flex items-center justify-center text-[#1E7DBB] shadow-sm">
+                      <CheckCircle2 size={20} />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-[#030F40]">{stepItem.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">{stepItem.desc}</p>
+                </div>
+                <div className="pt-4 border-t border-slate-200 text-[11px] font-bold text-slate-500 flex items-center gap-1">
+                  <CheckCircle2 size={13} className="text-emerald-600" /> Step {idx + 1} of 4
+                </div>
               </div>
             ))}
           </div>
@@ -800,147 +746,35 @@ export default function AcademicPage() {
         </div>
       </section>
 
-      {/* SECTION 9: DEEP NAVY SHOWCASE — The goal isn't just a better grade. */}
-      <section className="py-20 px-4 md:px-8 bg-[#0c142a] text-white border-t border-slate-800 text-center">
-        <div className="max-w-4xl mx-auto space-y-10">
-          
-          <div className="space-y-3">
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-300">
-              The goal isn't just a better grade.
-            </h2>
-            <h3 className="text-2xl sm:text-4xl font-black text-white">
-              It's a child who understands why.
-            </h3>
-          </div>
-
-          <div className="space-y-4 max-w-2xl mx-auto text-slate-300 text-base sm:text-lg font-medium leading-relaxed bg-[#1e2842] p-8 rounded-3xl border border-[#1ad8ea]/30 shadow-2xl">
-            <p>Because when a child understands the concept,</p>
-            <p className="text-[#1ad8ea] font-bold text-xl">confidence follows.</p>
-            <p>When confidence follows,</p>
-            <p className="text-[#2363f1] font-bold text-xl">they participate.</p>
-            <p>When they participate,</p>
-            <p className="text-[#f9be3e] font-bold text-xl">they improve.</p>
-            <p>And when they improve, they begin to believe:</p>
-            
-            <div className="pt-6">
-              <h2 className="text-4xl sm:text-6xl font-black bg-gradient-to-r from-[#1ad8ea] via-[#2363f1] to-[#f9be3e] bg-clip-text text-transparent tracking-tight">
-                “I CAN DO THIS.”
-              </h2>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 10: LIGHT PRICING SECTION ($12/hr) */}
-      {SHOW_PRICING_SECTION && (
-        <section id="pricing" className="py-20 px-4 md:px-8 bg-slate-50 text-slate-900 border-t border-slate-200">
-          <div className="max-w-5xl mx-auto space-y-12">
-            
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-300 text-[#2363f1] text-xs font-black uppercase tracking-wider shadow-sm">
-                <DollarSign size={14} className="text-[#2363f1]" /> Transparent & Flexible Pricing
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-black text-slate-900">
-                Simple, Honest Hourly Rate
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base">
-                No hidden setup fees, no lock-in contracts. Pay only for the live 1-to-1 tutoring sessions your child needs.
-              </p>
-            </div>
-
-            {/* High-Contrast Pricing Card */}
-            <div className="max-w-xl mx-auto bg-white rounded-3xl p-8 sm:p-10 border-2 border-[#2363f1] shadow-2xl relative overflow-hidden text-slate-900">
-              
-              <div className="absolute top-0 right-0 bg-gradient-to-l from-[#2363f1] to-[#1ad8ea] text-[#0c142a] text-[10px] font-black uppercase tracking-widest px-6 py-1.5 rounded-bl-2xl">
-                1-to-1 Live Academic Class
-              </div>
-
-              <div className="text-center space-y-4 pt-2">
-                <h3 className="text-xl font-bold text-slate-800">Personalized 1-on-1 Academic Tutoring</h3>
-                
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl sm:text-6xl font-black text-slate-900">${HOURLY_RATE}</span>
-                  <span className="text-[#2363f1] font-bold text-lg">/ hour</span>
-                </div>
-
-                <p className="text-slate-500 text-xs">
-                  Available in all supported global curricula (IB, ICSE, IGCSE, A-Level, AP, CBSE)
-                </p>
-              </div>
-
-              <div className="space-y-3 pt-6 my-6 border-t border-slate-200 text-sm text-slate-700">
-                {[
-                  '100% Dedicated 1-to-1 Live Expert Tutor',
-                  'Curriculum & Exam Board Specific Material',
-                  'Free Academic Diagnostic & Assessment',
-                  'Flexible Scheduling (Reschedule anytime free)',
-                  'Detailed Parent Progress Reports after every topic',
-                  'Homework & Past Paper Exam Solving Support'
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <CheckCircle2 size={18} className="text-[#2363f1] shrink-0" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2 text-center space-y-3">
-                <button
-                  onClick={() => openDemoModal()}
-                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-base shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
-                >
-                  START WITH A FREE DEMO CLASS
-                </button>
-                <p className="text-slate-500 text-xs font-medium">
-                  Try a 1-to-1 demo class for free before purchasing any session package.
-                </p>
-              </div>
-
-            </div>
-
-            {/* Trustpilot Badge below pricing */}
-            <div className="flex justify-center pt-2">
-              <TrustpilotBadge variant="compact" className="max-w-md w-full justify-center py-2.5 shadow-sm" />
-            </div>
-
-          </div>
-        </section>
-      )}
-
-      {/* SECTION 11: LIGHT PARENT REVIEWS — 10 Reviews Slider Carousel */}
-      <section className="py-20 px-4 md:px-8 bg-white text-slate-900 border-t border-slate-200">
+      {/* PARENT REVIEWS CAROUSEL */}
+      <section className="py-20 px-4 md:px-8 bg-white border-t border-slate-200">
         <div className="max-w-6xl mx-auto space-y-12">
           
           <div className="text-center space-y-4">
-            <TrustpilotBadge variant="compact" />
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 pt-2">
+            <h2 className="text-3xl sm:text-5xl font-black text-[#030F40]">
               Trusted by Parents Round the Globe
             </h2>
             <p className="text-slate-600 text-sm max-w-xl mx-auto font-medium">
-              Read how personalized 1-to-1 academic support transformed confidence and results for students in top IB, ICSE, Cambridge & CBSE schools.
+              Read how personalized 1-to-1 academic support transformed confidence and results.
             </p>
           </div>
 
-          {/* 10 Reviews Slider Container (Single Box View) */}
           <div className="relative max-w-2xl mx-auto px-4 sm:px-12">
-            {/* Nav Arrows */}
             <button
               onClick={prevReview}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#2363f1] hover:text-white transition-all flex items-center justify-center -ml-2 sm:-ml-5"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#1E7DBB] hover:text-white transition-all flex items-center justify-center -ml-2 sm:-ml-5"
               aria-label="Previous review"
             >
               <ChevronLeft size={22} />
             </button>
             <button
               onClick={nextReview}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#2363f1] hover:text-white transition-all flex items-center justify-center -mr-2 sm:-mr-5"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-slate-300 shadow-xl text-slate-700 hover:bg-[#1E7DBB] hover:text-white transition-all flex items-center justify-center -mr-2 sm:-mr-5"
               aria-label="Next review"
             >
               <ChevronRight size={22} />
             </button>
 
-            {/* Single Review Card View */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentReviewIndex}
@@ -948,56 +782,46 @@ export default function AcademicPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.25 }}
-                className="bg-slate-50 rounded-3xl p-6 sm:p-8 border-2 border-slate-200 space-y-6 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all min-h-[220px]"
+                className="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 border-2 border-slate-200 space-y-6 flex flex-col justify-between shadow-lg min-h-[220px]"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4].map((r) => (
-                          <Star key={r} size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
-                        ))}
-                        {reviewsList[currentReviewIndex].rating >= 4.8 ? (
-                          <Star size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
-                        ) : (
-                          <StarHalf size={18} className="fill-[#f9be3e] text-[#f9be3e]" />
-                        )}
-                      </div>
-                      <span className="text-xs font-black text-amber-500 ml-1">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((r) => (
+                        <Star key={r} size={18} className="fill-[#FF9B04] text-[#FF9B04]" />
+                      ))}
+                      <span className="text-xs font-black text-amber-600 ml-1">
                         {reviewsList[currentReviewIndex].rating.toFixed(1)} / 5 Verified
                       </span>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
                       {currentReviewIndex + 1} / {reviewsList.length}
                     </span>
                   </div>
-                  <p className="text-slate-800 text-sm sm:text-base font-semibold italic leading-relaxed">
+                  <p className="text-[#030F40] text-sm sm:text-base font-semibold italic leading-relaxed">
                     "{reviewsList[currentReviewIndex].quote}"
                   </p>
                 </div>
 
                 <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
                   <div>
-                    <h5 className="font-black text-slate-900 text-sm sm:text-base">{reviewsList[currentReviewIndex].author}</h5>
-                    <p className="text-xs text-slate-500">{reviewsList[currentReviewIndex].location}</p>
+                    <h5 className="font-black text-[#030F40] text-sm sm:text-base">{reviewsList[currentReviewIndex].author}</h5>
+                    <p className="text-xs text-slate-500 font-medium">{reviewsList[currentReviewIndex].location}</p>
                   </div>
-                  <span className="text-xs font-bold text-[#2363f1] bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                  <span className="text-xs font-bold text-[#1E7DBB] bg-[#EEF4FF] px-3 py-1 rounded-full border border-blue-200 shadow-sm">
                     {reviewsList[currentReviewIndex].curriculum}
                   </span>
                 </div>
               </motion.div>
             </AnimatePresence>
 
-            {/* Slider Dots */}
             <div className="flex items-center justify-center gap-2 pt-8">
               {reviewsList.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentReviewIndex(idx)}
                   className={`h-2.5 rounded-full transition-all ${
-                    currentReviewIndex === idx
-                      ? 'w-8 bg-[#2363f1]'
-                      : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                    currentReviewIndex === idx ? 'w-8 bg-[#1E7DBB]' : 'w-2.5 bg-slate-300'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
@@ -1008,111 +832,157 @@ export default function AcademicPage() {
         </div>
       </section>
 
-      {/* SECTION 12: DEEP GRADIENT FOOTER CTA, CONTACT & SOCIAL MEDIA */}
-      <section className="py-20 px-4 md:px-8 bg-gradient-to-b from-[#0c142a] via-slate-900 to-slate-950 text-white text-center relative overflow-hidden">
-        
+      {/* PARENT FAQS ACCORDION */}
+      <section className="py-20 px-4 md:px-8 bg-[#F4F7FF] border-t border-slate-200">
+        <div className="max-w-4xl mx-auto space-y-12">
+          
+          <div className="text-center space-y-4">
+            <span className="text-[#1E7DBB] font-extrabold text-xs uppercase tracking-widest bg-white border border-blue-200 px-3.5 py-1 rounded-full">
+              Parent FAQs
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-[#030F40]">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {UK_FAQS.map((faq, idx) => {
+              const isOpen = activeFaqIndex === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+                >
+                  <button
+                    onClick={() => setActiveFaqIndex(isOpen ? null : idx)}
+                    className="w-full p-5 text-left font-bold text-[#030F40] text-base sm:text-lg flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    <div className="w-8 h-8 rounded-full bg-[#EEF4FF] flex items-center justify-center text-[#1E7DBB] shrink-0">
+                      {isOpen ? <Minus size={16} /> : <Plus size={16} />}
+                    </div>
+                  </button>
+
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="px-5 pb-5 text-sm text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3"
+                      >
+                        {faq.a}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* FOOTER CTA & GLOBAL CONTACT LOCATIONS BANNER — EXACT #1E7DBB BRAND BLUE THEME */}
+      <section className="py-20 px-4 md:px-8 bg-[#1E7DBB] text-white text-center relative overflow-hidden border-t border-sky-600">
         <div className="max-w-4xl mx-auto space-y-10 relative z-10">
           
           <div className="space-y-3">
             <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
-              Your child's next chapter starts with one FREE class.
+              Start Your Child's Journey With A Free Demo Class.
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-              You don't need to commit to a program to discover whether Ruzann is right for your child.
+            <p className="text-sky-100 text-sm sm:text-base max-w-2xl mx-auto font-medium">
+              Meet the tutor, experience the live 1-on-1 teaching, and get a custom academic diagnostic.
             </p>
           </div>
 
-          <div className="bg-[#1e2842] rounded-3xl p-8 border border-[#1ad8ea]/30 space-y-6 shadow-2xl max-w-2xl mx-auto">
-            <h3 className="text-2xl font-black text-[#f9be3e]">
-              Start with a FREE personalized demo.
+          <div className="bg-[#030F40] rounded-3xl p-8 border border-blue-900 space-y-6 shadow-2xl max-w-2xl mx-auto">
+            <h3 className="text-2xl sm:text-3xl font-black text-[#FF9B04]">
+              Start with a Free personalized demo.
             </h3>
-            
-            <p className="text-slate-200 text-sm font-bold">
-              Meet the tutor. Experience the teaching. Discover the difference.
-            </p>
 
             <button
               onClick={() => openDemoModal()}
-              className="w-full sm:w-auto px-10 py-4 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-base shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:scale-105 transition-all"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#FF9B04] hover:bg-[#E08900] text-white font-extrabold text-sm shadow-lg hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
             >
-              [ BOOK YOUR FREE DEMO CLASS ]
+              <span>Book Free Demo Class</span>
+              <ArrowRight size={16} />
             </button>
 
-            <p className="text-[#1ad8ea] text-xs font-black tracking-widest uppercase">
-              IB • ICSE • IGCSE • A-LEVEL • AP • CBSE • LANGUAGES
+            <p className="text-sky-300 text-xs font-black tracking-widest uppercase">
+              IB • IGCSE • A-LEVEL • 11+ • AP • CBSE • ICSE
             </p>
           </div>
 
-          {/* Ruzann Social Media & Contact Section */}
-          <div className="pt-8 border-t border-slate-800 space-y-8 max-w-3xl mx-auto">
+          {/* Social Media & Contact Section */}
+          <div className="pt-8 border-t border-blue-400/40 space-y-8 max-w-3xl mx-auto">
             <div className="space-y-2">
               <h3 className="text-3xl font-black tracking-tight text-white">
                 RUZANN ACADEMIC
               </h3>
-              <p className="text-[#1ad8ea] font-black text-base tracking-wider uppercase">
+              <p className="text-sky-200 font-extrabold text-sm tracking-wider uppercase">
                 Learn better. Think deeper. Go further.
               </p>
             </div>
 
-            {/* Direct Contact Cards (Phone, Email, Location) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
               <a 
                 href="tel:+919960559894" 
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80 hover:border-[#1ad8ea] transition-all group"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[#030F40]/70 border border-blue-400/30 hover:border-white shadow-lg transition-all group backdrop-blur-md"
               >
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#f9be3e] group-hover:scale-110 transition-transform shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#FF9B04] group-hover:scale-110 transition-transform shrink-0">
                   <Phone size={20} />
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Phone / WhatsApp</span>
-                  <span className="text-sm font-black text-white group-hover:text-[#1ad8ea] transition-colors">+91 9960559894</span>
+                  <span className="text-[10px] uppercase font-bold text-sky-200 block">Phone / WhatsApp</span>
+                  <span className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">+91 9960559894</span>
                 </div>
               </a>
 
               <a 
                 href="mailto:support@ruzann.com" 
-                className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80 hover:border-[#1ad8ea] transition-all group"
+                className="flex items-center gap-3 p-4 rounded-2xl bg-[#030F40]/70 border border-blue-400/30 hover:border-white shadow-lg transition-all group backdrop-blur-md"
               >
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#1ad8ea] group-hover:scale-110 transition-transform shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-sky-300 group-hover:scale-110 transition-transform shrink-0">
                   <Mail size={20} />
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Official Email</span>
-                  <span className="text-sm font-black text-white group-hover:text-[#1ad8ea] transition-colors">support@ruzann.com</span>
+                  <span className="text-[10px] uppercase font-bold text-sky-200 block">Official Email</span>
+                  <span className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">support@ruzann.com</span>
                 </div>
               </a>
 
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-[#1e2842]/80 border border-slate-700/80">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#2363f1] shrink-0">
+              <div className="flex items-center gap-3 p-4 rounded-2xl bg-[#030F40]/70 border border-blue-400/30 shadow-lg backdrop-blur-md">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-sky-300 shrink-0">
                   <MapPin size={20} />
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Headquarters</span>
+                  <span className="text-[10px] uppercase font-bold text-sky-200 block">Headquarters</span>
                   <span className="text-sm font-black text-white">Pune, Maharashtra, India</span>
                 </div>
               </div>
             </div>
 
-            {/* Social Media Links */}
             <div className="space-y-3 pt-2">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block">Connect With Us On Social Media</span>
-              <div className="flex flex-wrap items-center justify-center gap-4">
+              <span className="text-xs font-bold text-sky-100 uppercase tracking-widest block">Connect With Us On Social Media</span>
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 {[
-                  { name: 'Instagram', Icon: Instagram, href: 'https://www.instagram.com/ruzann_edtech?igsh=cGQ2enhuMXk2MXc2', color: 'hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500' },
-                  { name: 'LinkedIn', Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/', color: 'hover:bg-blue-600' },
-                  { name: 'YouTube', Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad', color: 'hover:bg-red-600' },
-                  { name: 'Facebook', Icon: Facebook, href: 'https://www.facebook.com/share/17fzhNSYkM/', color: 'hover:bg-blue-700' },
-                  { name: 'WhatsApp', Icon: MessageCircle, href: 'https://wa.me/919960559894', color: 'hover:bg-emerald-600' }
+                  { name: 'Instagram', Icon: Instagram, href: 'https://www.instagram.com/ruzann_edtech?igsh=cGQ2enhuMXk2MXc2', color: 'hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white' },
+                  { name: 'LinkedIn', Icon: Linkedin, href: 'https://www.linkedin.com/company/ruzann/', color: 'hover:bg-blue-800 hover:text-white' },
+                  { name: 'YouTube', Icon: Youtube, href: 'https://youtube.com/@ruzannedtech?si=IgxPDTVmDtDVpxad', color: 'hover:bg-red-600 hover:text-white' },
+                  { name: 'Facebook', Icon: Facebook, href: 'https://www.facebook.com/share/17fzhNSYkM/', color: 'hover:bg-blue-900 hover:text-white' },
+                  { name: 'WhatsApp', Icon: MessageCircle, href: 'https://wa.me/919960559894', color: 'hover:bg-emerald-600 hover:text-white' }
                 ].map((social) => (
                   <a
                     key={social.name}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white transition-all transform hover:-translate-y-1 shadow-lg ${social.color}`}
+                    className={`w-10 h-10 rounded-full bg-white/15 border border-white/20 text-white flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-sm ${social.color}`}
                     title={social.name}
                   >
-                    <social.Icon size={20} />
+                    <social.Icon size={18} />
                   </a>
                 ))}
               </div>
@@ -1123,13 +993,13 @@ export default function AcademicPage() {
         </div>
       </section>
 
-      {/* Free Demo Modal */}
+      {/* FREE DEMO MODAL */}
       <FreeDemoModal
         isOpen={isDemoModalOpen}
         onClose={() => setIsDemoModalOpen(false)}
         defaultCurriculum={selectedCurriculum}
       />
+
     </div>
   );
 }
-

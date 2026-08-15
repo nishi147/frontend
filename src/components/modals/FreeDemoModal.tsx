@@ -213,17 +213,38 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="+44 7123 456789"
                       required
                       className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-semibold focus:outline-none focus:border-[#1ad8ea]"
                     />
                   </div>
                 </div>
+              </div>
 
-                {/* Curriculum */}
+              {/* Grade & Curriculum */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    Target Curriculum <span className="text-[#f9be3e]">*</span>
+                    Grade / Year Group
+                  </label>
+                  <select
+                    name="grade"
+                    value={formData.grade}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
+                  >
+                    <option value="Primary / 11+">Primary / 11+ Entrance (Years 1-6)</option>
+                    <option value="Key Stage 3">Key Stage 3 (Years 7-9)</option>
+                    <option value="GCSE / Grade 9-10">GCSE / IGCSE (Years 10-11)</option>
+                    <option value="A-Level / Grade 11-12">A-Level / AS & A2 (Years 12-13)</option>
+                    <option value="IB Diploma">IB Diploma (MYP / DP)</option>
+                    <option value="AP / College">AP / College Entrance</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
+                    Curriculum / Exam Board
                   </label>
                   <select
                     name="curriculum"
@@ -232,34 +253,17 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
                   >
                     <option value="IB">IB (International Baccalaureate)</option>
-                    <option value="ICSE">ICSE (Indian Certificate of Secondary Education)</option>
+                    <option value="GCSE / Edexcel">GCSE (Edexcel / Pearson)</option>
+                    <option value="GCSE / AQA">GCSE (AQA Board)</option>
+                    <option value="GCSE / OCR">GCSE (OCR Board)</option>
+                    <option value="A-Level">A-Level (AS & A2)</option>
+                    <option value="11+ Entrance">11+ Entrance (CEM / GL)</option>
+                    <option value="ICSE">ICSE Board</option>
                     <option value="IGCSE">IGCSE (Cambridge / Edexcel)</option>
-                    <option value="A-Level">A-Level / AS Level</option>
                     <option value="AP">AP (Advanced Placement)</option>
-                    <option value="CBSE">CBSE (Central Board)</option>
-                    <option value="Languages">Languages (Arabic, English, French, Spanish)</option>
-                    <option value="Other">Other International Curriculum</option>
+                    <option value="CBSE">CBSE Board</option>
                   </select>
                 </div>
-
-                {/* Grade Level */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    Student's Grade Level
-                  </label>
-                  <select
-                    name="grade"
-                    value={formData.grade}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
-                  >
-                    <option value="Grade 1-5">Primary (Grades 1-5)</option>
-                    <option value="Grade 6-8">Middle School (Grades 6-8)</option>
-                    <option value="Grade 9-10">High School / IGCSE / MYP (Grades 9-10)</option>
-                    <option value="Grade 11-12">Senior / IB DP / A-Level / AP (Grades 11-12)</option>
-                  </select>
-                </div>
-
               </div>
 
               {/* Subject */}
@@ -289,7 +293,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-black text-base shadow-[0_10px_30px_-10px_rgba(35,99,241,0.6)] hover:shadow-[0_15px_35px_-5px_rgba(26,216,234,0.7)] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-extrabold text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <span>Booking your free class...</span>
@@ -300,7 +304,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                   )}
                 </button>
                 <p className="text-center text-[11px] text-slate-400 font-medium mt-2">
-                  🔒 Zero spam guarantee. We respect your privacy. No payment required.
+                  🔒 Zero spam guarantee. We respect your privacy. No credit card required.
                 </p>
               </div>
 

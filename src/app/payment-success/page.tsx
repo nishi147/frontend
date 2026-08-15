@@ -61,7 +61,7 @@ export default function PaymentSuccessPage() {
               <h1 className="text-5xl font-black mb-4">Payment Successful! 🌈</h1>
               <p className="text-xl font-bold text-green-50">Welcome to the magical RUZANN family!</p>
            </div>
-           
+             
            <CardContent className="p-12">
               <div className="space-y-8">
                  <div className="flex items-start gap-6">
