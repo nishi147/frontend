@@ -15,6 +15,7 @@ import {
   Clock, 
   ShieldCheck, 
   Star, 
+  StarHalf,
   Users, 
   Target, 
   TrendingUp, 
@@ -787,9 +788,16 @@ export default function AcademicPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((r) => (
-                        <Star key={r} size={18} className="fill-[#FF9B04] text-[#FF9B04]" />
-                      ))}
+                      {[1, 2, 3, 4, 5].map((starIndex) => {
+                        const rating = reviewsList[currentReviewIndex].rating;
+                        if (starIndex <= Math.floor(rating)) {
+                          return <Star key={starIndex} size={18} className="fill-[#FF9B04] text-[#FF9B04]" />;
+                        } else if (starIndex - 0.5 <= rating) {
+                          return <StarHalf key={starIndex} size={18} className="fill-[#FF9B04] text-[#FF9B04]" />;
+                        } else {
+                          return <Star key={starIndex} size={18} className="text-slate-300 fill-slate-100" />;
+                        }
+                      })}
                       <span className="text-xs font-black text-amber-600 ml-1">
                         {reviewsList[currentReviewIndex].rating.toFixed(1)} / 5 Verified
                       </span>
