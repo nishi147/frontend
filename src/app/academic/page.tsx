@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
@@ -47,6 +47,14 @@ export default function AcademicPage() {
   const [activeStep, setActiveStep] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [selectedMapRegion, setSelectedMapRegion] = useState('UK & Europe');
+
+  // Auto-play review slider every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentReviewIndex((prev) => (prev + 1) % 6);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   const openDemoModal = (curriculum?: string) => {
     if (curriculum) setSelectedCurriculum(curriculum);
@@ -275,8 +283,8 @@ export default function AcademicPage() {
       a: "We cover IB (MYP & DP), IGCSE, GCSE (AQA, Edexcel, OCR, CIE), A-Levels (AS & A2), 11+ Entrance (CEM & GL), AP, CBSE, and ICSE."
     },
     {
-      q: "How does the $1 Demo Class work?",
-      a: "When you book a $1 Demo Class, our academic coordinator matches your child with a dedicated 1-on-1 tutor. Your child gets a 30-minute diagnostic session with an interactive digital whiteboard and custom study plan."
+      q: "How does the Free Demo Class work?",
+      a: "When you book a Free Demo Class, our academic coordinator matches your child with a dedicated 1-on-1 tutor. Your child gets a 30-minute diagnostic session with an interactive digital whiteboard and custom study plan."
     },
     {
       q: "Can lessons be scheduled around school hours and weekends?",
@@ -296,7 +304,7 @@ export default function AcademicPage() {
       <div className="bg-[#030F40] border-b border-blue-900 py-2.5 px-4 text-center text-xs font-semibold text-white shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-3 md:gap-6">
           <span className="inline-flex items-center gap-1.5 bg-[#1E7DBB]/30 border border-[#1E7DBB]/60 text-sky-200 px-3 py-0.5 rounded-full font-bold text-[11px] uppercase tracking-wider">
-            <span className="text-base leading-none">🇬🇧</span> Live Online Academic Tutoring
+            Live Online Academic Tutoring
           </span>
           <span className="flex items-center gap-1 text-amber-300 font-medium">
             <ShieldCheck size={14} className="text-emerald-400" />

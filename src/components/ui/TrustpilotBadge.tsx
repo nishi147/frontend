@@ -48,7 +48,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
         </div>
         {renderStars(12)}
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-200">
-          <span className="font-black text-[#00b67a]">4.5 / 5</span>
+          <span className="font-black text-[#00b67a]">4.8 / 5</span>
           <span className="text-slate-400">•</span>
           <span>{showReviewCount ? '500+ Parent Reviews' : 'Rated Excellent'}</span>
         </div>
@@ -63,7 +63,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
           {renderStars(11)}
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black text-slate-900">4.5 out of 5 stars</span>
+              <span className="text-xs font-black text-slate-900">4.8 out of 5 stars</span>
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Trustpilot</span>
             </div>
             <p className="text-[11px] font-medium text-slate-600">Based on 500+ verified parent reviews</p>
@@ -78,7 +78,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
     return (
       <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/60 backdrop-blur-md text-xs ${className}`}>
         {renderSmallStars(8)}
-        <span className="font-extrabold text-white text-[11px]">Trustpilot <span className="text-[#00b67a]">4.5/5</span></span>
+        <span className="font-extrabold text-white text-[11px]">Trustpilot <span className="text-[#00b67a]">4.8/5</span></span>
         <span className="text-slate-400 text-[10px]">• 500+ Reviews</span>
       </div>
     );
@@ -88,7 +88,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
     return (
       <div className={`inline-flex items-center gap-2 ${className}`}>
         {renderStars(10)}
-        <span className="text-xs font-black text-slate-800">4.5/5 on</span>
+        <span className="text-xs font-black text-slate-800">4.8/5 on</span>
         <span className="text-xs font-extrabold text-[#00b67a] tracking-tight">Trustpilot</span>
       </div>
     );
@@ -99,7 +99,7 @@ export const TrustpilotBadge: React.FC<TrustpilotBadgeProps> = ({
     <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-xs ${className}`}>
       <span className="font-black text-[#00b67a] text-[11px] tracking-tight">Trustpilot</span>
       {renderSmallStars(8)}
-      <span className="font-bold text-gray-800 text-[11px]">4.5 / 5</span>
+      <span className="font-bold text-gray-800 text-[11px]">4.8 / 5</span>
     </div>
   );
 };

@@ -83,59 +83,59 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0c142a]/90 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#0c142a] rounded-3xl shadow-2xl border border-[#1ad8ea]/30 overflow-hidden my-8 text-slate-100">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8 text-slate-900">
         
-        {/* Top Header with AI Venture Lab Gradient (#2363f1 -> #1ad8ea) */}
-        <div className="bg-gradient-to-r from-[#0c142a] via-[#1e2842] to-[#0c142a] border-b border-[#1ad8ea]/20 p-6 md:p-8 relative">
+        {/* Top Header with Soft Light Theme Background */}
+        <div className="bg-gradient-to-r from-[#F4F7FF] via-[#EEF4FF] to-[#F8FAFC] border-b border-slate-200 p-6 md:p-8 relative">
           <button
             onClick={resetAndClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#1e2842] hover:bg-[#2363f1] border border-[#1ad8ea]/30 flex items-center justify-center text-white transition-all"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-[#1E7DBB] border border-slate-200 hover:border-[#1E7DBB] flex items-center justify-center text-slate-600 hover:text-white transition-all shadow-sm"
             aria-label="Close"
           >
             <X size={20} />
           </button>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e2842] border border-[#1ad8ea]/30 text-xs font-black text-[#1ad8ea] uppercase tracking-wider mb-3">
-            <Sparkles size={14} className="text-[#f9be3e]" /> 100% Free • No Credit Card Required
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-blue-200 text-xs font-black text-[#1E7DBB] uppercase tracking-wider mb-3 shadow-sm">
+            <Sparkles size={14} className="text-[#FF9B04] fill-[#FF9B04]" /> 100% Free • No Credit Card Required
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-tight">
+          <h3 className="text-2xl md:text-3xl font-black text-[#030F40] tracking-tight leading-tight">
             Book Your Child's Free 1-to-1 Demo Class
           </h3>
-          <p className="text-slate-300 text-xs md:text-sm font-medium mt-1">
+          <p className="text-slate-600 text-xs md:text-sm font-medium mt-1">
             Meet an expert tutor, get an academic diagnostic assessment, and build a tailored learning path.
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <TrustpilotBadge variant="dark" />
-            <span className="text-[11px] font-bold text-[#1ad8ea] flex items-center gap-1">
-              <ShieldCheck size={14} className="text-[#1ad8ea]" /> Top 1% Verified Tutors
+            <TrustpilotBadge variant="compact" />
+            <span className="text-[11px] font-bold text-[#1E7DBB] flex items-center gap-1 bg-white border border-blue-200 px-2.5 py-1 rounded-full shadow-sm">
+              <ShieldCheck size={14} className="text-emerald-500" /> Top 1% Verified Tutors
             </span>
           </div>
         </div>
 
         {/* Form Body or Success View */}
-        <div className="p-6 md:p-8 bg-[#0c142a]">
+        <div className="p-6 md:p-8 bg-white">
           {isSubmitted ? (
             <div className="text-center py-8 space-y-5">
-              <div className="w-16 h-16 bg-[#1ad8ea]/10 border border-[#1ad8ea]/30 text-[#1ad8ea] rounded-full flex items-center justify-center mx-auto animate-bounce">
+              <div className="w-16 h-16 bg-[#EEF4FF] border border-blue-200 text-[#1E7DBB] rounded-full flex items-center justify-center mx-auto animate-bounce shadow-sm">
                 <CheckCircle size={36} />
               </div>
-              <h4 className="text-2xl font-black text-white">Your Free Demo is Reserved! 🎉</h4>
-              <p className="text-slate-300 text-sm max-w-md mx-auto font-medium">
-                Thank you, <span className="font-bold text-[#f9be3e]">{formData.parentName}</span>! Our Academic Coordinator is matching <span className="font-bold text-[#1ad8ea]">{formData.studentName}</span> with the perfect {formData.curriculum} tutor.
+              <h4 className="text-2xl font-black text-[#030F40]">Your Free Demo is Reserved! 🎉</h4>
+              <p className="text-slate-600 text-sm max-w-md mx-auto font-medium">
+                Thank you, <span className="font-bold text-[#030F40]">{formData.parentName}</span>! Our Academic Coordinator is matching <span className="font-bold text-[#1E7DBB]">{formData.studentName}</span> with the perfect {formData.curriculum} tutor.
               </p>
-              <div className="bg-[#1e2842]/90 p-4 rounded-2xl border border-[#1ad8ea]/20 text-xs text-slate-300 max-w-md mx-auto text-left space-y-2">
-                <div className="flex items-center gap-2 font-bold text-[#1ad8ea]">
-                  <Clock size={14} className="text-[#f9be3e]" /> What happens next?
+              <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-slate-200 text-xs text-slate-700 max-w-md mx-auto text-left space-y-2">
+                <div className="flex items-center gap-2 font-bold text-[#030F40]">
+                  <Clock size={14} className="text-[#FF9B04]" /> What happens next?
                 </div>
                 <p>1. We will reach out on WhatsApp/Call ({formData.phone}) within 2 hours to confirm your convenient time slot.</p>
                 <p>2. You'll receive a 1-to-1 Zoom link & personalized pre-lesson diagnostic sheet.</p>
               </div>
               <button
                 onClick={resetAndClose}
-                className="px-8 py-3 rounded-full bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] text-[#0c142a] font-black text-sm hover:opacity-90 transition-all shadow-md"
+                className="px-8 py-3 rounded-full bg-[#1E7DBB] hover:bg-[#030F40] text-white font-black text-sm hover:opacity-95 transition-all shadow-md"
               >
                 Back to Ruzann Academic
               </button>
@@ -146,11 +146,11 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 
                 {/* Parent Name */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    Parent's Full Name <span className="text-[#f9be3e]">*</span>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                    Parent's Full Name <span className="text-[#FF9B04]">*</span>
                   </label>
                   <div className="relative">
-                    <User size={16} className="absolute left-3 top-3 text-[#1ad8ea]" />
+                    <User size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
                     <input
                       type="text"
                       name="parentName"
@@ -158,18 +158,18 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                       onChange={handleChange}
                       placeholder="e.g. Sarah Jenkins"
                       required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-semibold focus:outline-none focus:border-[#1ad8ea]"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Student Name */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    Student's Name <span className="text-[#f9be3e]">*</span>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                    Student's Name <span className="text-[#FF9B04]">*</span>
                   </label>
                   <div className="relative">
-                    <User size={16} className="absolute left-3 top-3 text-[#1ad8ea]" />
+                    <User size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
                     <input
                       type="text"
                       name="studentName"
@@ -177,18 +177,18 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                       onChange={handleChange}
                       placeholder="e.g. Alex Jenkins"
                       required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-semibold focus:outline-none focus:border-[#1ad8ea]"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    Email Address <span className="text-[#f9be3e]">*</span>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                    Email Address <span className="text-[#FF9B04]">*</span>
                   </label>
                   <div className="relative">
-                    <Mail size={16} className="absolute left-3 top-3 text-[#1ad8ea]" />
+                    <Mail size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
                     <input
                       type="email"
                       name="email"
@@ -196,18 +196,18 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                       onChange={handleChange}
                       placeholder="sarah@example.com"
                       required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-semibold focus:outline-none focus:border-[#1ad8ea]"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Phone */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
-                    WhatsApp / Phone Number <span className="text-[#f9be3e]">*</span>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                    WhatsApp / Phone Number <span className="text-[#FF9B04]">*</span>
                   </label>
                   <div className="relative">
-                    <Phone size={16} className="absolute left-3 top-3 text-[#1ad8ea]" />
+                    <Phone size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
                     <input
                       type="tel"
                       name="phone"
@@ -215,7 +215,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                       onChange={handleChange}
                       placeholder="+44 7123 456789"
                       required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-semibold focus:outline-none focus:border-[#1ad8ea]"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
@@ -224,14 +224,14 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
               {/* Grade & Curriculum */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
                     Grade / Year Group
                   </label>
                   <select
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
                     <option value="Primary / 11+">Primary / 11+ Entrance (Years 1-6)</option>
                     <option value="Key Stage 3">Key Stage 3 (Years 7-9)</option>
@@ -243,14 +243,14 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
                     Curriculum / Exam Board
                   </label>
                   <select
                     name="curriculum"
                     value={formData.curriculum}
                     onChange={handleChange}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
                     <option value="IB">IB (International Baccalaureate)</option>
                     <option value="GCSE / Edexcel">GCSE (Edexcel / Pearson)</option>
@@ -268,14 +268,14 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
 
               {/* Subject */}
               <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-slate-300 mb-1">
+                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
                   Primary Subject Needing Support
                 </label>
                 <select
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#1e2842] border border-slate-700 text-white text-sm font-bold focus:outline-none focus:border-[#1ad8ea]"
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                 >
                   <option value="Mathematics">Mathematics (AA / AI / Additional Math / Calculus)</option>
                   <option value="Physics">Physics</option>
@@ -293,7 +293,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#2363f1] to-[#1ad8ea] hover:from-[#1ad8ea] hover:to-[#2363f1] text-[#0c142a] font-extrabold text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-[#1E7DBB] hover:bg-[#030F40] text-white font-extrabold text-sm sm:text-base shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <span>Booking your free class...</span>
@@ -303,7 +303,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     </>
                   )}
                 </button>
-                <p className="text-center text-[11px] text-slate-400 font-medium mt-2">
+                <p className="text-center text-[11px] text-slate-500 font-medium mt-2">
                   🔒 Zero spam guarantee. We respect your privacy. No credit card required.
                 </p>
               </div>
