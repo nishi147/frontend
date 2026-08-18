@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { X, Calendar, User, Phone, Mail, BookOpen, CheckCircle, Sparkles, ShieldCheck, Clock, Award } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, BookOpen, CheckCircle, Sparkles, ShieldCheck, Clock, Award, MessageCircle, Globe } from 'lucide-react';
 import api from '@/utils/api';
 import { useToast } from '@/context/ToastContext';
 import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
@@ -29,7 +29,8 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
     grade: 'Grade 9-10',
     curriculum: defaultCurriculum,
     subject: 'Mathematics',
-    demoTiming: '6:00 PM - 7:00 PM EST (USA East)',
+    location: 'UK & Europe (BST / GMT)',
+    demoTiming: 'Flexible / Coordinate via WhatsApp',
     notes: '',
   });
 
@@ -55,7 +56,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
         source: 'Website',
         notes: [
           {
-            text: `Academic Page Free Demo | Student: ${formData.studentName} | Grade: ${formData.grade} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Preferred Slot: ${formData.demoTiming}`
+            text: `Academic Page Free Demo | Student: ${formData.studentName} | Grade: ${formData.grade} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Location: ${formData.location} | Preferred Slot: ${formData.demoTiming}`
           }
         ]
       });
@@ -84,6 +85,10 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
     setIsSubmitted(false);
     onClose();
   };
+
+  const whatsappMessage = encodeURIComponent(
+    `Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for ${formData.studentName || 'my child'} (${formData.curriculum || 'IB'}). Can we coordinate a convenient time slot?`
+  );
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
@@ -136,12 +141,24 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 <p>1. We will reach out on WhatsApp/Call ({formData.phone}) within 2 hours to confirm your convenient time slot.</p>
                 <p>2. You'll receive a 1-to-1 Zoom link & personalized pre-lesson diagnostic sheet.</p>
               </div>
-              <button
-                onClick={resetAndClose}
-                className="px-8 py-3 rounded-full bg-[#1E7DBB] hover:bg-[#030F40] text-white font-black text-sm hover:opacity-95 transition-all shadow-md"
-              >
-                Back to Ruzann Academic
-              </button>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <button
+                  onClick={resetAndClose}
+                  className="px-6 py-3 rounded-full bg-[#1E7DBB] hover:bg-[#030F40] text-white font-black text-sm hover:opacity-95 transition-all shadow-md w-full sm:w-auto"
+                >
+                  Back to Ruzann Academic
+                </button>
+                <a
+                  href={`https://wa.me/919960559894?text=${whatsappMessage}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-sm transition-all shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
+                >
+                  <MessageCircle size={18} />
+                  <span>Chat on WhatsApp Now</span>
+                </a>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -269,32 +286,52 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 </div>
               </div>
 
-              {/* Subject & Timing Grid */}
+              {/* Subject */}
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                  Primary Subject Needing Support
+                </label>
+                <select
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
+                >
+                  <option value="Mathematics">Mathematics (AA / AI / Additional Math / Calculus)</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Chemistry">Chemistry</option>
+                  <option value="Biology">Biology</option>
+                  <option value="English">English Literature & Language</option>
+                  <option value="Computer Science">Computer Science & Programming</option>
+                  <option value="Economics">Economics & Business</option>
+                  <option value="Multiple Subjects">Multiple Subjects</option>
+                </select>
+              </div>
+
+              {/* Location & Flexible Preferred Timing Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Primary Subject Needing Support
+                    Your Location / Time Zone <span className="text-[#FF9B04]">*</span>
                   </label>
                   <select
-                    name="subject"
-                    value={formData.subject}
+                    name="location"
+                    value={formData.location}
                     onChange={handleChange}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
-                    <option value="Mathematics">Mathematics (AA / AI / Additional Math / Calculus)</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Biology">Biology</option>
-                    <option value="English">English Literature & Language</option>
-                    <option value="Computer Science">Computer Science & Programming</option>
-                    <option value="Economics">Economics & Business</option>
-                    <option value="Multiple Subjects">Multiple Subjects</option>
+                    <option value="UK & Europe (BST / GMT / CET)">🇬🇧 UK & Europe (BST / GMT)</option>
+                    <option value="USA & Canada (EST / PST / CST)">🇺🇸 USA & Canada (EST / PST)</option>
+                    <option value="India (IST)">🇮🇳 India (IST)</option>
+                    <option value="UAE & Gulf (GST)">🇦🇪 UAE & Gulf (GST)</option>
+                    <option value="Australia & Asia Pacific (AEST / SGT)">🇦🇺 Australia & Asia Pacific</option>
+                    <option value="Other Location">🌍 Other Location / Flexible</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Preferred Demo Slot & Time Zone <span className="text-[#FF9B04]">*</span>
+                    Preferred Demo Time Slot <span className="text-[#FF9B04]">*</span>
                   </label>
                   <select
                     name="demoTiming"
@@ -302,19 +339,19 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     onChange={handleChange}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
-                    <option value="6:00 PM - 7:00 PM EST (USA East)">6:00 PM - 7:00 PM EST (USA East)</option>
-                    <option value="6:00 AM - 7:00 AM EST (USA East)">6:00 AM - 7:00 AM EST (USA East)</option>
-                    <option value="6:00 PM - 7:00 PM IST (India)">6:00 PM - 7:00 PM IST (India)</option>
-                    <option value="6:00 AM - 7:00 AM IST (India)">6:00 AM - 7:00 AM IST (India)</option>
-                    <option value="6:00 PM - 7:00 PM GST (Dubai / Middle East)">6:00 PM - 7:00 PM GST (Dubai / Middle East)</option>
-                    <option value="6:00 PM - 7:00 PM BST / GMT (UK & Europe)">6:00 PM - 7:00 PM BST / GMT (UK & Europe)</option>
-                    <option value="Flexible / Contact for Other Time Zone">Flexible / Contact for Other Time Zone</option>
+                    <option value="Flexible / Coordinate via WhatsApp">Flexible / Coordinate via WhatsApp</option>
+                    <option value="Morning Slot (8:00 AM - 12:00 PM)">Morning Slot (8:00 AM - 12:00 PM)</option>
+                    <option value="Afternoon Slot (12:00 PM - 5:00 PM)">Afternoon Slot (12:00 PM - 5:00 PM)</option>
+                    <option value="Evening Slot (5:00 PM - 9:00 PM)">Evening Slot (5:00 PM - 9:00 PM)</option>
+                    <option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option>
+                    <option value="6:00 AM - 7:00 AM">6:00 AM - 7:00 AM</option>
+                    <option value="Custom Time Slot">Custom Time Slot</option>
                   </select>
                 </div>
               </div>
 
               {/* Submit Button */}
-              <div className="pt-2">
+              <div className="pt-2 space-y-3">
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -328,7 +365,24 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     </>
                   )}
                 </button>
-                <p className="text-center text-[11px] text-slate-500 font-medium mt-2">
+
+                {/* Direct WhatsApp Option as requested by user */}
+                <div className="p-3 bg-[#E8F9EE] border border-[#25D366]/40 rounded-2xl text-center space-y-1.5">
+                  <div className="text-xs font-bold text-slate-800">
+                    Prefer custom timings or instant booking on WhatsApp?
+                  </div>
+                  <a
+                    href={`https://wa.me/919960559894?text=${whatsappMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full py-2 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold text-xs shadow-md transition-all"
+                  >
+                    <MessageCircle size={16} />
+                    <span>Chat Directly on WhatsApp for Custom Slot</span>
+                  </a>
+                </div>
+
+                <p className="text-center text-[11px] text-slate-500 font-medium mt-1">
                   🔒 Zero spam guarantee. We respect your privacy. No credit card required.
                 </p>
               </div>
