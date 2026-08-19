@@ -116,7 +116,6 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <TrustpilotBadge variant="compact" />
             <span className="text-[11px] font-bold text-[#1E7DBB] flex items-center gap-1 bg-white border border-blue-200 px-2.5 py-1 rounded-full shadow-sm">
               <ShieldCheck size={14} className="text-emerald-500" /> Top 1% Verified Tutors
             </span>
@@ -253,10 +252,10 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     onChange={handleChange}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
-                    <option value="Primary / 11+">Primary / 11+ Entrance (Years 1-6)</option>
-                    <option value="Key Stage 3">Key Stage 3 (Years 7-9)</option>
-                    <option value="GCSE / Grade 9-10">GCSE / IGCSE (Years 10-11)</option>
-                    <option value="A-Level / Grade 11-12">A-Level / AS & A2 (Years 12-13)</option>
+                    <option value="Primary / Grade 1-4">Primary / 11+ Entrance (Grade 1-4)</option>
+                    <option value="Key Stage 3 / Grade 5-8">Key Stage 3 (Grade 5-8)</option>
+                    <option value="GCSE / Grade 9-10">GCSE / IGCSE (Grade 9-10)</option>
+                    <option value="A-Level / Grade 11-12">A-Level / AS & A2 (Grade 11-12)</option>
                     <option value="IB Diploma">IB Diploma (MYP / DP)</option>
                     <option value="AP / College">AP / College Entrance</option>
                   </select>

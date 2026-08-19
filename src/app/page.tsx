@@ -1016,11 +1016,6 @@ export default function Home() {
           {/* Left Column: Core Value Proposition & CTAs */}
           <div className="lg:col-span-7 text-left space-y-4 md:space-y-8">
             
-            {/* Trust Badge */}
-            <div className="flex flex-wrap items-center gap-3">
-              <TrustpilotBadge variant="hero" />
-            </div>
-
             {/* Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-[4.25rem] font-baloo font-black text-white leading-[1.1] tracking-tight drop-shadow-sm">
               Empower Your Child <br />

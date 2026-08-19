@@ -327,10 +327,6 @@ export default function AcademicPage() {
             <ShieldCheck size={14} className="text-emerald-400" />
             100% DBS Checked Tutors
           </span>
-          <span className="hidden md:inline text-slate-400">•</span>
-          <div className="inline-block transform scale-90 sm:scale-100">
-            <TrustpilotBadge variant="compact" />
-          </div>
         </div>
       </div>
 

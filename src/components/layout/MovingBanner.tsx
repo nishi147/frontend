@@ -8,7 +8,7 @@ import { useCurrency } from '@/context/CurrencyContext';
 export const MovingBanner = () => {
   const { formatPrice } = useCurrency();
   const messages = [
-    { text: "⭐ Rated 4.5/5 on Trustpilot by 500+ Parents!", icon: Star, color: "text-emerald-300" },
+    { text: "⭐ Rated 4.8/5 by 500+ Happy Parents!", icon: Star, color: "text-emerald-300" },
     { text: "Unleash Your Child's Coding & Academic Potential! 🚀", icon: Rocket, color: "text-white" },
     { text: "Join 10,000+ Happy Explorers Global! ✨", icon: Sparkles, color: "text-yellow-300" },
     { text: `Get your First Trial Session for just ${formatPrice(99)} 🎁`, icon: Trophy, color: "text-white" },
