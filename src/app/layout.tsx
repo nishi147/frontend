@@ -13,7 +13,7 @@ import GoogleAnalyticsHandler from "@/components/GoogleAnalyticsHandler";
 import AdSense from "@/components/AdSense";
 import { Suspense } from "react";
 import Script from "next/script";
-import { CookieBanner } from "@/components/ui/CookieBanner";
+
 
 const baloo = Baloo_2({ 
   subsets: ["latin"],
@@ -74,7 +74,6 @@ export default function RootLayout({
                 <IntroOfferProvider>
                   {children}
                   <IntroOfferModal />
-                  <CookieBanner />
                 </IntroOfferProvider>
               </CurrencyProvider>
             </ToastProvider>
