@@ -24,9 +24,10 @@ export const BlogSection = () => {
             setBlogs(publishedBlogs.map((b: any) => ({
               ...b,
               id: b._id,
+              slug: b.slug || b._id,
               tag: b.category || 'General',
               author: b.author || 'Ruzann Team',
-              readTime: b.readTime || '5 min read'
+              readTime: b.readTimeText || `${b.readingTime || 5} min read`
             })));
           }
         }
@@ -55,7 +56,6 @@ export const BlogSection = () => {
           </button>
           
           <div className="w-full h-full flex items-center justify-center">
-             {/* Placeholder for real video - using a stylish message */}
              <div className="text-center p-8">
                 <div className="w-24 h-24 bg-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
                   <Play size={40} className="text-white ml-2" fill="currentColor" />
@@ -76,7 +76,6 @@ export const BlogSection = () => {
     <section className="py-24 px-4 bg-white overflow-hidden" id="blog">
       {activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />}
       <div className="max-w-7xl mx-auto">
-        {/* ... */}
         <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 text-left">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full text-primary-600 font-bold mb-3">
@@ -95,7 +94,7 @@ export const BlogSection = () => {
         {/* Blog Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-24">
           {blogs.map((post) => (
-            <Link key={post.id} href={`/blog/${post.id}`} className="group">
+            <Link key={post.id} href={`/blog/${post.slug || post.id}`} className="group">
               <Card className="h-full border-2 border-gray-100 rounded-[2.5rem] overflow-hidden hover:border-primary-300 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-100 bg-white">
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={post.image || "/blog_post_coding_kids_1774005427109.png"} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
