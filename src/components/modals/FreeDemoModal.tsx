@@ -21,6 +21,8 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const [formData, setFormData] = useState({
     parentName: '',
     studentName: '',
@@ -30,7 +32,8 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
     curriculum: defaultCurriculum,
     subject: 'Mathematics',
     location: 'UK & Europe (BST / GMT)',
-    demoTiming: 'Flexible / Coordinate via WhatsApp',
+    demoDate: todayStr,
+    demoTiming: 'Evening Slot (5:00 PM - 9:00 PM)',
     notes: '',
   });
 
@@ -56,7 +59,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
         source: 'Website',
         notes: [
           {
-            text: `Academic Page Free Demo | Student: ${formData.studentName} | Grade: ${formData.grade} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Location: ${formData.location} | Preferred Slot: ${formData.demoTiming}`
+            text: `Academic Page Free Demo | Student: ${formData.studentName} | Grade: ${formData.grade} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Location: ${formData.location} | Date: ${formData.demoDate} | Preferred Slot: ${formData.demoTiming}`
           }
         ]
       });
@@ -87,7 +90,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for ${formData.studentName || 'my child'} (${formData.curriculum || 'IB'}). Can we coordinate a convenient time slot?`
+    `Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for ${formData.studentName || 'my child'} (${formData.curriculum || 'IB'}) on ${formData.demoDate || 'preferred date'} (${formData.demoTiming}). Can we coordinate this time slot?`
   );
 
   return (
@@ -307,30 +310,51 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 </select>
               </div>
 
-              {/* Location & Flexible Preferred Timing Grid */}
+              {/* Location */}
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                  Your Location / Time Zone <span className="text-[#FF9B04]">*</span>
+                </label>
+                <select
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
+                >
+                  <option value="UK & Europe (BST / GMT / CET)">🇬🇧 UK & Europe (BST / GMT)</option>
+                  <option value="USA & Canada (EST / PST / CST)">🇺🇸 USA & Canada (EST / PST)</option>
+                  <option value="India (IST)">🇮🇳 India (IST)</option>
+                  <option value="UAE & Gulf (GST)">🇦🇪 UAE & Gulf (GST)</option>
+                  <option value="Australia & Asia Pacific (AEST / SGT)">🇦🇺 Australia & Asia Pacific</option>
+                  <option value="Other Location">🌍 Other Location / Flexible</option>
+                </select>
+              </div>
+
+              {/* Preferred Demo Date & Time Slot Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Calendar Date Field */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Your Location / Time Zone <span className="text-[#FF9B04]">*</span>
+                    Preferred Demo Date <span className="text-[#FF9B04]">*</span>
                   </label>
-                  <select
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                  >
-                    <option value="UK & Europe (BST / GMT / CET)">🇬🇧 UK & Europe (BST / GMT)</option>
-                    <option value="USA & Canada (EST / PST / CST)">🇺🇸 USA & Canada (EST / PST)</option>
-                    <option value="India (IST)">🇮🇳 India (IST)</option>
-                    <option value="UAE & Gulf (GST)">🇦🇪 UAE & Gulf (GST)</option>
-                    <option value="Australia & Asia Pacific (AEST / SGT)">🇦🇺 Australia & Asia Pacific</option>
-                    <option value="Other Location">🌍 Other Location / Flexible</option>
-                  </select>
+                  <div className="relative">
+                    <Calendar size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
+                    <input
+                      type="date"
+                      name="demoDate"
+                      min={todayStr}
+                      value={formData.demoDate}
+                      onChange={handleChange}
+                      required
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors cursor-pointer"
+                    />
+                  </div>
                 </div>
 
+                {/* Time Slot Field */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Preferred Demo Time Slot <span className="text-[#FF9B04]">*</span>
+                    Preferred Time Slot <span className="text-[#FF9B04]">*</span>
                   </label>
                   <select
                     name="demoTiming"
@@ -338,12 +362,10 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     onChange={handleChange}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
-                    <option value="Flexible / Coordinate via WhatsApp">Flexible / Coordinate via WhatsApp</option>
-                    <option value="Morning Slot (8:00 AM - 12:00 PM)">Morning Slot (8:00 AM - 12:00 PM)</option>
-                    <option value="Afternoon Slot (12:00 PM - 5:00 PM)">Afternoon Slot (12:00 PM - 5:00 PM)</option>
                     <option value="Evening Slot (5:00 PM - 9:00 PM)">Evening Slot (5:00 PM - 9:00 PM)</option>
-                    <option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option>
-                    <option value="6:00 AM - 7:00 AM">6:00 AM - 7:00 AM</option>
+                    <option value="Afternoon Slot (12:00 PM - 5:00 PM)">Afternoon Slot (12:00 PM - 5:00 PM)</option>
+                    <option value="Morning Slot (8:00 AM - 12:00 PM)">Morning Slot (8:00 AM - 12:00 PM)</option>
+                    <option value="Flexible / Coordinate via WhatsApp">Flexible / Coordinate via WhatsApp</option>
                     <option value="Custom Time Slot">Custom Time Slot</option>
                   </select>
                 </div>

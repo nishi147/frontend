@@ -56,6 +56,13 @@ export default function AcademicPage() {
     return () => clearInterval(timer);
   }, []);
 
+  // Listen for open-free-demo-modal from Header
+  useEffect(() => {
+    const handleOpenDemo = () => setIsDemoModalOpen(true);
+    window.addEventListener('open-free-demo-modal', handleOpenDemo);
+    return () => window.removeEventListener('open-free-demo-modal', handleOpenDemo);
+  }, []);
+
   const openDemoModal = (curriculum?: string) => {
     if (curriculum) setSelectedCurriculum(curriculum);
     setIsDemoModalOpen(true);
@@ -225,7 +232,7 @@ export default function AcademicPage() {
     },
     {
       title: 'Qualified Expert Tutors',
-      desc: 'Top 1% subject specialists, DBS checked UK teachers, and graduates from Oxford, Cambridge & Imperial.',
+      desc: 'Top 1% subject specialists, background-verified UK teachers, and graduates from Oxford, Cambridge & Imperial.',
       icon: Award,
     },
     {
@@ -292,8 +299,8 @@ export default function AcademicPage() {
   // FAQs
   const UK_FAQS = [
     {
-      q: "Are all your tutors qualified and DBS checked?",
-      a: "Yes. Every single tutor conducting academic sessions undergoes rigorous background, identity, and DBS checks. They hold degrees from top global institutions including Oxford, Cambridge, Imperial, UCL, and top state universities."
+      q: "Are all your tutors qualified and background checked?",
+      a: "Yes. Every single tutor conducting academic sessions undergoes rigorous background, identity, and qualification checks. They hold degrees from top global institutions including Oxford, Cambridge, Imperial, UCL, and top state universities."
     },
     {
       q: "Which exam boards and curricula do you cover?",
@@ -322,10 +329,6 @@ export default function AcademicPage() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-3 md:gap-6">
           <span className="inline-flex items-center gap-1.5 bg-[#1E7DBB]/30 border border-[#1E7DBB]/60 text-sky-200 px-3 py-0.5 rounded-full font-bold text-[11px] uppercase tracking-wider">
             Live Online Academic Tutoring
-          </span>
-          <span className="flex items-center gap-1 text-amber-300 font-medium">
-            <ShieldCheck size={14} className="text-emerald-400" />
-            100% DBS Checked Tutors
           </span>
         </div>
       </div>
@@ -374,19 +377,30 @@ export default function AcademicPage() {
                   Experience personalised online tutoring that cultivates deeper understanding, accelerates progress, and ensures meaningful learning outcomes across <strong className="text-[#030F40]">IB, IGCSE, A-Levels, 11+, AP, CBSE & ICSE</strong>.
                 </motion.p>
 
-                {/* Large & Bold Hero Book Free Demo CTA Button */}
+                {/* Large & Bold Hero Book Free Demo CTA Button & WhatsApp Direct Booking */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.25 }}
-                  className="pt-2"
+                  className="pt-2 flex flex-wrap items-center gap-3"
                 >
                   <button
                     onClick={() => openDemoModal()}
-                    className="inline-flex items-center justify-center gap-3 bg-[#FF9B04] hover:bg-[#e08800] text-slate-950 font-black text-base sm:text-lg px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all transform tracking-tight uppercase"
+                    className="inline-flex items-center justify-center gap-3 bg-[#FF9B04] hover:bg-[#e08800] text-slate-950 font-black text-base sm:text-lg px-7 py-4 rounded-2xl shadow-xl shadow-amber-500/20 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all transform tracking-tight uppercase"
                   >
                     <span>BOOK FREE DEMO CLASS →</span>
                   </button>
+
+                  <a
+                    href={`https://wa.me/919960559894?text=${encodeURIComponent("Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for my child. Can you help coordinate a slot?")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-base sm:text-lg px-6 py-4 rounded-2xl shadow-xl shadow-emerald-500/20 hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all transform tracking-tight"
+                    title="Book Free Demo via WhatsApp"
+                  >
+                    <MessageCircle size={22} />
+                    <span>Book on WhatsApp</span>
+                  </a>
                 </motion.div>
               </div>
 

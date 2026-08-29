@@ -3,15 +3,25 @@
 import React from 'react';
 import { Sparkles, Rocket, Star, Trophy } from 'lucide-react';
 
+import { usePathname } from 'next/navigation';
 import { useCurrency } from '@/context/CurrencyContext';
 
 export const MovingBanner = () => {
   const { formatPrice } = useCurrency();
+  const pathname = usePathname();
+  const isAcademic = pathname === '/academic' || pathname?.startsWith('/academic');
+
   const messages = [
     { text: "⭐ Rated 4.8/5 by 500+ Happy Parents!", icon: Star, color: "text-emerald-300" },
     { text: "Unleash Your Child's Coding & Academic Potential! 🚀", icon: Rocket, color: "text-white" },
     { text: "Join 10,000+ Happy Explorers Global! ✨", icon: Sparkles, color: "text-yellow-300" },
-    { text: `Get your First Trial Session for just ${formatPrice(99)} 🎁`, icon: Trophy, color: "text-white" },
+    { 
+      text: isAcademic 
+        ? "Get your First Free Trial Session 🎁" 
+        : `Get your First Trial Session for just ${formatPrice(99)} 🎁`, 
+      icon: Trophy, 
+      color: "text-white" 
+    },
     { text: "IB • ICSE • IGCSE • A-Level • AP • CBSE • Languages 1-on-1 Academic Tutoring! 📚", icon: Star, color: "text-secondary-300" },
   ];
 
