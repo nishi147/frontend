@@ -1055,10 +1055,10 @@ export default function Home() {
                 </button>
               </Link>
               <button 
-                onClick={() => setIsEnquiryOpen(true)}
+                onClick={() => openIntroModal()}
                 className="w-full sm:w-auto text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 hover:bg-white/20 font-bold text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
               >
-                Book Demo <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                Book Free Trial <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </button>
             </div>
 
@@ -1068,7 +1068,7 @@ export default function Home() {
                 onClick={openIntroModal}
                 className="text-primary-400 hover:text-primary-300 underline font-bold cursor-pointer transition-colors bg-transparent border-none p-0 outline-none flex items-center gap-1"
               >
-                Claim the {formatPrice(99)} offer here <Sparkles className="w-3.5 h-3.5 text-primary-400 animate-pulse" />
+                Claim your Free Trial here <Sparkles className="w-3.5 h-3.5 text-primary-400 animate-pulse" />
               </button>
             </div>
 
@@ -1750,7 +1750,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-primary-500/10 text-primary-400 border border-primary-500/20 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
                 💬
               </div>
-              <h3 className="text-2xl font-black text-white">Book Demo / Enquire</h3>
+              <h3 className="text-2xl font-black text-white">Book Free Trial / Enquire</h3>
               <p className="text-sm font-bold text-gray-400 mt-1">Get in touch with our learning experts.</p>
             </div>
             
@@ -1800,7 +1800,7 @@ export default function Home() {
                     value={enquiryForm.subject}
                     onChange={(e) => setEnquiryForm({...enquiryForm, subject: e.target.value})}
                   >
-                    <option value="Demo">Book Demo Session 🎁</option>
+                    <option value="Demo">Book Free Trial Session 🎁</option>
                     <option value="Courses">Course Enquiry 📚</option>
                     <option value="Pricing">Fee Details & Offers 💰</option>
                     <option value="General">Other General Enquiry 👋</option>

@@ -63,8 +63,8 @@ export default function ResultReport({
   // 2. Custom text depending on categorization
   const getInsights = () => {
     const ctaText = isParent 
-      ? `Your child shows strong potential for future-ready skills. Discover how Ruzann can help transform this potential into real-world AI, Coding, Robotics, and Innovation skills through a Live Demo Class for just ₹99.`
-      : `You show strong potential for future-ready skills. Discover how Ruzann can help transform this potential into real-world AI, Coding, Robotics, and Innovation skills through a Live Demo Class for just ₹99.`;
+      ? `Your child shows strong potential for future-ready skills. Discover how Ruzann can help transform this potential into real-world AI, Coding, Robotics, and Innovation skills through a Free Live Demo Class.`
+      : `You show strong potential for future-ready skills. Discover how Ruzann can help transform this potential into real-world AI, Coding, Robotics, and Innovation skills through a Free Live Demo Class.`;
 
     switch (category) {
       case 'Future Innovator':
@@ -380,7 +380,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
                 LIMITED OFFER OFFERED DIRECTLY
               </span>
               <h4 className="font-baloo font-black text-xl text-white">
-                🎓 Live Demo Class – {formatPrice(99)} Only
+                🎓 Free Live Demo Class
               </h4>
               <p className="text-xs font-bold text-slate-400 mt-1">
                 Schedule a convenient hour slot with an expert teacher.
@@ -397,7 +397,7 @@ I'd like to ${type === 'counselor' ? 'speak to a counselor' : 'chat on WhatsApp'
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    <Calendar size={16} /> Book Live Demo – {formatPrice(99)}
+                    <Calendar size={16} /> Book Free Live Demo
                   </>
                 )}
               </button>

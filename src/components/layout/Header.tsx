@@ -73,11 +73,7 @@ export const Header = () => {
   const isAcademic = pathname === '/academic' || pathname?.startsWith('/academic');
 
   const handleTrialClick = () => {
-    if (isAcademic) {
-      window.dispatchEvent(new CustomEvent('open-free-demo-modal'));
-    } else {
-      openIntroModal();
-    }
+    window.dispatchEvent(new CustomEvent('open-free-demo-modal'));
   };
 
   return (
@@ -184,7 +180,7 @@ export const Header = () => {
                 onClick={handleTrialClick}
                 className="px-4 py-2 sm:px-5 sm:py-2 rounded-full bg-[#E91E63] hover:bg-[#D81B60] text-white text-[10px] sm:text-xs md:text-sm font-black transition-all shadow-md uppercase tracking-wide border-b-4 border-[#D81B60] active:border-b-0 active:translate-y-1"
               >
-                {isAcademic ? 'FREE TRIAL' : `Trial ${formatPrice(99)}`}
+                FREE TRIAL
               </button>
             </div>
           ) : (
@@ -263,7 +259,7 @@ export const Header = () => {
                   onClick={() => { handleTrialClick(); setIsMenuOpen(false); }}
                   className="w-full py-3 rounded-xl bg-[#E91E63] text-white font-bold hover:bg-[#D81B60] transition-all shadow"
                 >
-                  {isAcademic ? 'Book Free Trial' : `Book Trial ${formatPrice(99)}`}
+                  Book Free Trial
                 </button>
               </>
             ) : (

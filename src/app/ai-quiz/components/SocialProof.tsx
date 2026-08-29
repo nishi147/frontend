@@ -26,7 +26,7 @@ export default function SocialProof() {
       parent: "Ananya Sen",
       student: "Ishaan (Age 11)",
       city: "Delhi",
-      text: "Ishaan's report highlighted his innovative thinking but showed logic needed work. We booked the ₹99 demo class, and the mentor was fantastic at explaining the concepts.",
+      text: "Ishaan's report highlighted his innovative thinking but showed logic needed work. We booked the Free Trial demo class, and the mentor was fantastic at explaining the concepts.",
       rating: 5,
       avatar: "/review_woman_maroon.jpg",
       studentAvatar: "/review_boy_white.jpg"

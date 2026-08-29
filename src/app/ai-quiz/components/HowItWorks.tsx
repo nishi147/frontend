@@ -27,7 +27,7 @@ export default function HowItWorks() {
     },
     {
       num: "04",
-      title: "Reserve ₹99 Demo Class",
+      title: "Reserve Free Demo Class",
       desc: "Activate a 1-on-1 live session with our AI expert mentors to build their first practical project.",
       icon: CalendarCheck,
       color: "bg-[#FCE4EC] text-[#E91E63] border-[#FFD1DA]",

@@ -132,7 +132,7 @@ export default function ThankYou({
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
-                <Calendar size={16} /> RESERVE DEMO CLASS – {formatPrice(99)} ONLY
+                <Calendar size={16} /> RESERVE FREE TRIAL CLASS
               </>
             )}
           </button>

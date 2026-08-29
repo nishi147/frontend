@@ -16,9 +16,7 @@ export const MovingBanner = () => {
     { text: "Unleash Your Child's Coding & Academic Potential! 🚀", icon: Rocket, color: "text-white" },
     { text: "Join 10,000+ Happy Explorers Global! ✨", icon: Sparkles, color: "text-yellow-300" },
     { 
-      text: isAcademic 
-        ? "Get your First Free Trial Session 🎁" 
-        : `Get your First Trial Session for just ${formatPrice(99)} 🎁`, 
+      text: "Get your First Free Trial Session 🎁", 
       icon: Trophy, 
       color: "text-white" 
     },
