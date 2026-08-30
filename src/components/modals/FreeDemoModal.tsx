@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { X, Calendar, User, Phone, Mail, BookOpen, CheckCircle, Sparkles, ShieldCheck, Clock, Award, MessageCircle, Globe } from 'lucide-react';
+import { X, Calendar, User, Phone, Mail, CheckCircle, Sparkles, ShieldCheck, Clock, MessageCircle } from 'lucide-react';
 import api from '@/utils/api';
 import { useToast } from '@/context/ToastContext';
-import { TrustpilotBadge } from '@/components/ui/TrustpilotBadge';
 
 interface FreeDemoModalProps {
   isOpen: boolean;
@@ -24,16 +23,12 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
   const todayStr = new Date().toISOString().split('T')[0];
 
   const [formData, setFormData] = useState({
-    parentName: '',
     studentName: '',
     email: '',
     phone: '',
-    grade: 'Grade 9-10',
     curriculum: defaultCurriculum,
     subject: 'Mathematics',
-    location: 'UK & Europe (BST / GMT)',
     demoDate: todayStr,
-    demoTiming: 'Evening Slot (5:00 PM - 9:00 PM)',
     notes: '',
   });
 
@@ -45,7 +40,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.parentName || !formData.phone || !formData.email || !formData.studentName) {
+    if (!formData.phone || !formData.email || !formData.studentName) {
       showToast('Please fill in all required fields.', 'error');
       return;
     }
@@ -53,13 +48,13 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
     setIsSubmitting(true);
     try {
       await api.post('/api/leads', {
-        name: formData.parentName,
+        name: formData.studentName,
         email: formData.email,
         phone: formData.phone,
         source: 'Website',
         notes: [
           {
-            text: `Academic Page Free Demo | Student: ${formData.studentName} | Grade: ${formData.grade} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Location: ${formData.location} | Date: ${formData.demoDate} | Preferred Slot: ${formData.demoTiming}`
+            text: `Academic Page Free Demo | Student: ${formData.studentName} | Curriculum: ${formData.curriculum} | Subject: ${formData.subject} | Date: ${formData.demoDate}`
           }
         ]
       });
@@ -67,7 +62,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
       // Silently subscribe to email list if backend supports it
       api.post('/api/klaviyo/subscribe', {
         email: formData.email,
-        firstName: formData.parentName.split(' ')[0],
+        firstName: formData.studentName.split(' ')[0],
         phone: formData.phone,
         source: 'Academic Free Demo'
       }).catch(() => {});
@@ -90,7 +85,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for ${formData.studentName || 'my child'} (${formData.curriculum || 'IB'}) on ${formData.demoDate || 'preferred date'} (${formData.demoTiming}). Can we coordinate this time slot?`
+    `Hi Ruzann Academic! I would like to book a Free 1-on-1 Demo Class for ${formData.studentName || 'my child'} (${formData.curriculum || 'IB'}) on ${formData.demoDate || 'preferred date'}. Can we coordinate this demo class?`
   );
 
   return (
@@ -134,7 +129,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
               </div>
               <h4 className="text-2xl font-black text-[#030F40]">Your Free Demo is Reserved! 🎉</h4>
               <p className="text-slate-600 text-sm max-w-md mx-auto font-medium">
-                Thank you, <span className="font-bold text-[#030F40]">{formData.parentName}</span>! Our Academic Coordinator is matching <span className="font-bold text-[#1E7DBB]">{formData.studentName}</span> with the perfect {formData.curriculum} tutor.
+                Thank you, <span className="font-bold text-[#030F40]">{formData.studentName}</span>! Our Academic Coordinator is matching you with the perfect {formData.curriculum} tutor.
               </p>
               <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-slate-200 text-xs text-slate-700 max-w-md mx-auto text-left space-y-2">
                 <div className="flex items-center gap-2 font-bold text-[#030F40]">
@@ -164,46 +159,28 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              
+              {/* Student Name */}
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                  Student's Name <span className="text-[#FF9B04]">*</span>
+                </label>
+                <div className="relative">
+                  <User size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
+                  <input
+                    type="text"
+                    name="studentName"
+                    value={formData.studentName}
+                    onChange={handleChange}
+                    placeholder="e.g. Alex Jenkins"
+                    required
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* Email & Phone Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
-                {/* Parent Name */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Parent's Full Name <span className="text-[#FF9B04]">*</span>
-                  </label>
-                  <div className="relative">
-                    <User size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
-                    <input
-                      type="text"
-                      name="parentName"
-                      value={formData.parentName}
-                      onChange={handleChange}
-                      placeholder="e.g. Sarah Jenkins"
-                      required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Student Name */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Student's Name <span className="text-[#FF9B04]">*</span>
-                  </label>
-                  <div className="relative">
-                    <User size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
-                    <input
-                      type="text"
-                      name="studentName"
-                      value={formData.studentName}
-                      onChange={handleChange}
-                      placeholder="e.g. Alex Jenkins"
-                      required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                    />
-                  </div>
-                </div>
-
                 {/* Email */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
@@ -243,27 +220,8 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                 </div>
               </div>
 
-              {/* Grade & Curriculum */}
+              {/* Curriculum & Subject Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Grade / Year Group
-                  </label>
-                  <select
-                    name="grade"
-                    value={formData.grade}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                  >
-                    <option value="Primary / Grade 1-4">Primary / 11+ Entrance (Grade 1-4)</option>
-                    <option value="Key Stage 3 / Grade 5-8">Key Stage 3 (Grade 5-8)</option>
-                    <option value="GCSE / Grade 9-10">GCSE / IGCSE (Grade 9-10)</option>
-                    <option value="A-Level / Grade 11-12">A-Level / AS & A2 (Grade 11-12)</option>
-                    <option value="IB Diploma">IB Diploma (MYP / DP)</option>
-                    <option value="AP / College">AP / College Entrance</option>
-                  </select>
-                </div>
-
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
                     Curriculum / Exam Board
@@ -286,88 +244,45 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                     <option value="CBSE">CBSE Board</option>
                   </select>
                 </div>
-              </div>
 
-              {/* Subject */}
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                  Primary Subject Needing Support
-                </label>
-                <select
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                >
-                  <option value="Mathematics">Mathematics (AA / AI / Additional Math / Calculus)</option>
-                  <option value="Physics">Physics</option>
-                  <option value="Chemistry">Chemistry</option>
-                  <option value="Biology">Biology</option>
-                  <option value="English">English Literature & Language</option>
-                  <option value="Computer Science">Computer Science & Programming</option>
-                  <option value="Economics">Economics & Business</option>
-                  <option value="Multiple Subjects">Multiple Subjects</option>
-                </select>
-              </div>
-
-              {/* Location */}
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                  Your Location / Time Zone <span className="text-[#FF9B04]">*</span>
-                </label>
-                <select
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
-                >
-                  <option value="UK & Europe (BST / GMT / CET)">🇬🇧 UK & Europe (BST / GMT)</option>
-                  <option value="USA & Canada (EST / PST / CST)">🇺🇸 USA & Canada (EST / PST)</option>
-                  <option value="India (IST)">🇮🇳 India (IST)</option>
-                  <option value="UAE & Gulf (GST)">🇦🇪 UAE & Gulf (GST)</option>
-                  <option value="Australia & Asia Pacific (AEST / SGT)">🇦🇺 Australia & Asia Pacific</option>
-                  <option value="Other Location">🌍 Other Location / Flexible</option>
-                </select>
-              </div>
-
-              {/* Preferred Demo Date & Time Slot Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Calendar Date Field */}
                 <div>
                   <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Preferred Demo Date <span className="text-[#FF9B04]">*</span>
-                  </label>
-                  <div className="relative">
-                    <Calendar size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
-                    <input
-                      type="date"
-                      name="demoDate"
-                      min={todayStr}
-                      value={formData.demoDate}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                {/* Time Slot Field */}
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
-                    Preferred Time Slot <span className="text-[#FF9B04]">*</span>
+                    Primary Subject Needing Support
                   </label>
                   <select
-                    name="demoTiming"
-                    value={formData.demoTiming}
+                    name="subject"
+                    value={formData.subject}
                     onChange={handleChange}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-bold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors"
                   >
-                    <option value="Evening Slot (5:00 PM - 9:00 PM)">Evening Slot (5:00 PM - 9:00 PM)</option>
-                    <option value="Afternoon Slot (12:00 PM - 5:00 PM)">Afternoon Slot (12:00 PM - 5:00 PM)</option>
-                    <option value="Morning Slot (8:00 AM - 12:00 PM)">Morning Slot (8:00 AM - 12:00 PM)</option>
-                    <option value="Flexible / Coordinate via WhatsApp">Flexible / Coordinate via WhatsApp</option>
-                    <option value="Custom Time Slot">Custom Time Slot</option>
+                    <option value="Mathematics">Mathematics (AA / AI / Additional Math / Calculus)</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                    <option value="English">English Literature & Language</option>
+                    <option value="Computer Science">Computer Science & Programming</option>
+                    <option value="Economics">Economics & Business</option>
+                    <option value="Multiple Subjects">Multiple Subjects</option>
                   </select>
+                </div>
+              </div>
+
+              {/* Preferred Demo Date */}
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#030F40] mb-1">
+                  Preferred Demo Date <span className="text-[#FF9B04]">*</span>
+                </label>
+                <div className="relative">
+                  <Calendar size={16} className="absolute left-3 top-3 text-[#1E7DBB]" />
+                  <input
+                    type="date"
+                    name="demoDate"
+                    min={todayStr}
+                    value={formData.demoDate}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[#F8FAFC] border border-slate-300 text-slate-900 text-sm font-semibold focus:outline-none focus:border-[#1E7DBB] focus:bg-white transition-colors cursor-pointer"
+                  />
                 </div>
               </div>
 
@@ -387,7 +302,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
                   )}
                 </button>
 
-                {/* Direct WhatsApp Option as requested by user */}
+                {/* Direct WhatsApp Option */}
                 <div className="p-3 bg-[#E8F9EE] border border-[#25D366]/40 rounded-2xl text-center space-y-1.5">
                   <div className="text-xs font-bold text-slate-800">
                     Prefer custom timings or instant booking on WhatsApp?
@@ -416,3 +331,4 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({
     </div>
   );
 };
+
