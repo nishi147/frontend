@@ -7,6 +7,7 @@ import { Play, ArrowRight, BookOpen, Clock, User, Star, Quote, X } from 'lucide-
 import Link from 'next/link';
 import api from '@/utils/api';
 
+
 export const BlogSection = () => {
   const [activeVideo, setActiveVideo] = useState<any>(null);
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -71,6 +72,7 @@ export const BlogSection = () => {
       </div>
     );
   };
+  
 
   return (
     <section className="py-24 px-4 bg-white overflow-hidden" id="blog">

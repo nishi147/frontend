@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -10,6 +10,7 @@ import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import api from '@/utils/api';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ArticleContentRenderer } from '@/components/blog/ArticleContentRenderer';
 
 // Utility for slug generation
 const generateSlug = (text: string) => {
@@ -52,8 +53,66 @@ export default function AdminBlogsPage() {
   const [imagePreview, setImagePreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [imageInputMode, setImageInputMode] = useState<'file' | 'url'>('file');
-  const [videoInputMode, setVideoInputMode] = useState<'file' | 'url'>('url');
   const [seoScore, setSeoScore] = useState(0);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleFormatText = (type: 'bold' | 'italic' | 'list' | 'heading' | 'link') => {
+    const textarea = contentRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = formData.content.substring(start, end);
+
+    let prefix = '';
+    let suffix = '';
+    let defaultText = '';
+
+    switch (type) {
+      case 'bold':
+        prefix = '**';
+        suffix = '**';
+        defaultText = 'Bold Text';
+        break;
+      case 'italic':
+        prefix = '*';
+        suffix = '*';
+        defaultText = 'Italic Text';
+        break;
+      case 'heading':
+        prefix = '\n## ';
+        suffix = '\n';
+        defaultText = 'Section Heading';
+        break;
+      case 'list':
+        prefix = '\n- ';
+        suffix = '\n- Item 2\n';
+        defaultText = 'Item 1';
+        break;
+      case 'link':
+        prefix = '[';
+        suffix = '](https://example.com)';
+        defaultText = 'Link Text';
+        break;
+    }
+
+    const replacement = selectedText 
+      ? `${prefix}${selectedText}${suffix}`
+      : `${prefix}${defaultText}${suffix}`;
+
+    const newContent = 
+      formData.content.substring(0, start) + 
+      replacement + 
+      formData.content.substring(end);
+
+    setFormData((prev) => ({ ...prev, content: newContent }));
+
+    setTimeout(() => {
+      textarea.focus();
+      const newCursorPos = start + prefix.length + (selectedText ? selectedText.length : defaultText.length);
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
 
   const fetchBlogs = async () => {
     try {
@@ -308,7 +367,7 @@ export default function AdminBlogsPage() {
               
               {activeModalTab === 'preview' ? (
                 <div className="p-8 overflow-y-auto space-y-6">
-                  <div className="border border-gray-100 rounded-3xl p-8 bg-gray-50/50">
+                  <div className="border border-gray-100 rounded-3xl p-8 bg-white shadow-sm">
                     <span className="px-4 py-1 bg-primary-100 text-primary-600 rounded-full text-xs font-black uppercase tracking-widest">
                       {formData.category}
                     </span>
@@ -319,10 +378,8 @@ export default function AdminBlogsPage() {
                         <img src={imagePreview} alt="Cover Preview" className="w-full h-full object-cover" />
                       </div>
                     )}
-                    <div className="prose prose-lg max-w-none text-gray-700">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {formData.content || '_No content written yet._'}
-                      </ReactMarkdown>
+                    <div className="w-full pt-4 border-t border-gray-100">
+                      <ArticleContentRenderer content={formData.content || '_No content written yet._'} />
                     </div>
                   </div>
                 </div>
@@ -537,19 +594,17 @@ export default function AdminBlogsPage() {
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Article Content (Markdown Supported)</label>
                       <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl">
                         {[
-                          { icon: Bold, action: '**Bold Text**', label: 'Bold' },
-                          { icon: Italic, action: '_Italic Text_', label: 'Italic' },
-                          { icon: List, action: '\n- Item 1\n- Item 2\n', label: 'List' },
-                          { icon: Type, action: '\n## Section Title\n', label: 'Heading' },
-                          { icon: LinkIcon, action: '[Link Title](https://)', label: 'Link' }
+                          { icon: Bold, type: 'bold' as const, label: 'Bold (wrap selection)' },
+                          { icon: Italic, type: 'italic' as const, label: 'Italic (wrap selection)' },
+                          { icon: List, type: 'list' as const, label: 'List' },
+                          { icon: Type, type: 'heading' as const, label: 'Heading' },
+                          { icon: LinkIcon, type: 'link' as const, label: 'Link' }
                         ].map((tool, i) => (
                           <button
                             key={i}
                             type="button"
-                            onClick={() => {
-                              setFormData({ ...formData, content: formData.content + tool.action });
-                            }}
-                            className="p-1.5 hover:bg-white rounded-lg transition-all text-gray-500 hover:text-primary-500"
+                            onClick={() => handleFormatText(tool.type)}
+                            className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-primary-600 font-bold active:scale-95 cursor-pointer"
                             title={tool.label}
                           >
                             <tool.icon size={16} />
@@ -558,6 +613,7 @@ export default function AdminBlogsPage() {
                       </div>
                     </div>
                     <textarea
+                      ref={contentRef}
                       required
                       value={formData.content}
                       onChange={(e) => setFormData({...formData, content: e.target.value})}
