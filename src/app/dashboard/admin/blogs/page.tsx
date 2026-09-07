@@ -53,6 +53,7 @@ export default function AdminBlogsPage() {
   const [imagePreview, setImagePreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [imageInputMode, setImageInputMode] = useState<'file' | 'url'>('file');
+  const [videoInputMode, setVideoInputMode] = useState<'file' | 'url'>('file');
   const [seoScore, setSeoScore] = useState(0);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
