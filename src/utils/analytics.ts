@@ -1,7 +1,7 @@
 // Centralized tracking utility for Meta Pixel and Google Analytics
 
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1210254384412672';
-export const GA_MEASUREMENT_ID = 'G-JK7E9ELJNE';
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-FL4SPG0JKB';
 
 /**
  * Tracks a custom event in Meta Pixel and Google Analytics

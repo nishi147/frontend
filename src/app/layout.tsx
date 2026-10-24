@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${baloo.variable} ${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}>
-        <GoogleAnalytics gaId="G-JK7E9ELJNE" />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-FL4SPG0JKB"} />
         <GoogleAnalyticsHandler />
         <AdSense />
         <Suspense fallback={null}>
